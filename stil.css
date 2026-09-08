@@ -1,0 +1,195 @@
+:root {
+      --akzent: #7c3aed;
+      --akzent-dunkel: #6d28d9;
+      --text-dunkel: #1f2330;
+      --text-hell: #6b7280;
+    }
+    * { box-sizing: border-box; }
+    html, body { min-height: 100%; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      max-width: 480px; margin: 0 auto; padding: 28px 16px 48px;
+      min-height: 100vh;
+      background: linear-gradient(160deg, #4338ca 0%, #7c3aed 45%, #db2777 100%);
+      background-attachment: fixed;
+      color: var(--text-dunkel);
+    }
+    input, button {
+      font-size: 1rem; padding: 10px 12px; margin: 4px 0;
+      border-radius: 12px; border: 1px solid #d8dbe3; font-family: inherit;
+    }
+    input:focus { outline: none; border-color: var(--akzent); box-shadow: 0 0 0 3px rgba(124,58,237,0.18); }
+    button {
+      cursor: pointer; border: none; background: var(--akzent); color: #fff;
+      font-weight: 600; transition: transform .05s ease, background .15s ease;
+    }
+    button:hover { background: var(--akzent-dunkel); }
+    button:active { transform: scale(0.97); }
+    button:disabled { opacity: 0.5; cursor: not-allowed; }
+    .fehler-text, #start-error { color: #c0392b; font-size: 0.9rem; }
+    ul { padding-left: 0; list-style: none; margin: 0; }
+    li { padding: 0; margin-bottom: 10px; }
+    li:last-child { margin-bottom: 0; }
+    .kategorie { color: #888; font-size: 0.9rem; text-transform: uppercase; }
+    #top-bar { text-align: right; margin-bottom: 10px; }
+    #top-bar button {
+      font-size: 0.8rem; padding: 6px 14px; border-radius: 999px;
+      background: rgba(255,255,255,0.18); color: #fff; border: 1px solid rgba(255,255,255,0.4);
+    }
+    #top-bar button:hover { background: rgba(255,255,255,0.28); }
+    #app-version { color: rgba(255,255,255,0.75); }
+    #debug-log {
+      color: #c0392b; font-size: 0.8rem; white-space: pre-wrap; word-break: break-word;
+      background: #fff; padding: 10px 14px; border-radius: 12px;
+    }
+
+    .bildschirm-karte {
+      background: #fff; border-radius: 24px; padding: 26px 22px;
+      box-shadow: 0 20px 45px rgba(17, 12, 46, 0.35);
+    }
+    .start-hero { text-align: center; margin-bottom: 18px; }
+    .start-icon { line-height: 1; margin-bottom: 4px; }
+    .app-icon { border-radius: 18px; box-shadow: 0 6px 16px rgba(17,12,46,0.25); }
+    .start-hero h1 { margin: 4px 0 2px; font-size: 1.6rem; }
+    .start-tagline { color: var(--text-hell); margin: 0; font-size: 0.95rem; }
+    .feld-label { display: block; font-size: 0.85rem; font-weight: 600; color: #4b5061; margin: 14px 0 4px; }
+    .feld-label input { display: block; width: 100%; margin-top: 6px; }
+    .btn-primaer { width: 100%; padding: 14px; font-size: 1.05rem; border-radius: 14px; }
+    .btn-sekundaer {
+      width: 100%; background: transparent; color: var(--akzent);
+      border: 2px solid var(--akzent); font-weight: 700;
+    }
+    .btn-sekundaer:hover { background: rgba(124,58,237,0.08); }
+    .frage-zusatz { font-size: 0.68em; font-weight: 600; color: var(--text-hell); }
+    .btn-flach {
+      background: transparent; color: var(--akzent); border: 2px solid var(--akzent);
+      font-size: 0.85rem; padding: 8px 14px; font-weight: 700;
+    }
+    .btn-flach:hover { background: rgba(124,58,237,0.08); }
+    .trenner { display: flex; align-items: center; gap: 10px; color: #a7abb8; font-size: 0.8rem; margin: 18px 0 6px; }
+    .trenner::before, .trenner::after { content: ""; flex: 1; height: 1px; background: #e7e8ee; }
+    .code-eingabe { text-align: center; letter-spacing: 4px; font-size: 1.2rem; font-weight: 700; }
+
+    .auswahl-reihe { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0 16px; }
+    .farb-swatch {
+      width: 36px; height: 36px; border-radius: 50%; border: 2px solid rgba(0,0,0,0.15);
+      padding: 0; cursor: pointer;
+    }
+    .farb-swatch.ausgewaehlt { border-color: #333; border-width: 3px; }
+    .farb-swatch.vergeben, .icon-swatch.vergeben { opacity: 0.3; cursor: not-allowed; }
+    .icon-swatch {
+      width: 52px; height: 52px; border-radius: 50%; border: 3px solid #ddd;
+      background: #f5f5f5; font-size: 1.3rem; cursor: pointer; overflow: hidden;
+      padding: 0; display: flex; align-items: center; justify-content: center; line-height: 1;
+    }
+    .icon-swatch.ausgewaehlt { border-color: var(--akzent); }
+    .avatar-bild { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .avatar-bild-text { display: flex; align-items: center; justify-content: center; font-size: 1.3rem; }
+
+    .spieler-karte {
+      display: flex; align-items: center; gap: 12px;
+      width: 100%; min-height: 60px; padding: 12px 18px; border-radius: 18px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+    }
+    .spieler-punkte {
+      font-weight: 800; font-size: 1.8rem; line-height: 1; flex-shrink: 0;
+      font-variant-numeric: tabular-nums;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.35);
+    }
+    /* Nur für die rechte (Gesamt-)Punktzahl: eine kräftige Display-Schrift ("Phosphate" selbst ist eine
+       Apple-Systemschrift ohne freie Web-Lizenz - "Bungee" ist die zugängliche Alternative mit
+       ähnlich kräftigem, blockigem Charakter). Bungee hat keine echte Kursive, deshalb wird hier
+       gezielt (nur für diese Zahl) font-style: italic gesetzt - der Browser kippt sie automatisch
+       schräg ("synthetische Kursive"). */
+    .spieler-punkte-gesamt {
+      font-family: "Bungee", sans-serif;
+      font-style: italic;
+      font-size: 2.3rem;
+      letter-spacing: 0.5px;
+      text-shadow: 2px 2px 0 rgba(0,0,0,0.25);
+    }
+    .spieler-info { display: flex; align-items: center; gap: 10px; min-width: 0; flex: 1; }
+    .spieler-icon {
+      width: 36px; height: 36px; border-radius: 50%; object-fit: cover; flex-shrink: 0;
+      border: 2px solid rgba(255,255,255,0.6);
+    }
+    .spieler-icon-text {
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem; border: none;
+    }
+    .spieler-text { display: flex; flex-direction: column; min-width: 0; }
+    .spieler-name {
+      font-weight: 700; font-size: 1.05rem; white-space: nowrap;
+      overflow: hidden; text-overflow: ellipsis;
+    }
+    .spieler-extra {
+      font-size: 0.78rem; opacity: 0.85; white-space: nowrap;
+      overflow: hidden; text-overflow: ellipsis;
+    }
+
+    .schalter-zeile { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+    .schalter { position: relative; width: 48px; height: 28px; flex-shrink: 0; }
+    .schalter input {
+      position: absolute; opacity: 0; width: 100%; height: 100%; margin: 0;
+      cursor: pointer; z-index: 1;
+    }
+    .schalter-regler {
+      position: absolute; inset: 0; background: #cfd3dc; border-radius: 999px;
+      transition: background .15s ease; pointer-events: none;
+    }
+    .schalter-regler::after {
+      content: ""; position: absolute; top: 3px; left: 3px; width: 22px; height: 22px;
+      background: #fff; border-radius: 50%; transition: transform .15s ease;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    }
+    .schalter input:checked + .schalter-regler { background: var(--akzent); }
+    .schalter input:checked + .schalter-regler::after { transform: translateX(20px); }
+    .schalter-text { font-weight: 700; }
+    .schalter-hinweis { display: block; font-size: 0.75rem; color: var(--text-hell); margin-top: 4px; }
+
+    .dummkopf-wahl { cursor: pointer; }
+    .dummkopf-wahl .spieler-karte { transition: box-shadow .15s ease, transform .05s ease; }
+    .dummkopf-wahl:active .spieler-karte { transform: scale(0.98); }
+    .dummkopf-wahl.gewaehlt .spieler-karte { box-shadow: 0 0 0 4px var(--akzent); }
+
+    .kategorien-aktionen { display: flex; gap: 8px; margin: 8px 0 0; }
+    .kategorien-aktionen button { flex: 1; font-size: 0.8rem; padding: 7px 8px; }
+    .kategorien-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 8px 0 16px; }
+    .kategorie-kachel {
+      position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 3px; padding: 10px 4px; border-radius: 14px; border: 2px solid transparent;
+      background: #f6f4fb; cursor: pointer; text-align: center;
+    }
+    .kategorie-emoji { font-size: 28px; line-height: 32px; }
+    .kategorie-kachel-name { font-size: 0.7rem; font-weight: 700; color: var(--text-dunkel); line-height: 1.15; }
+    .kategorie-kachel-anzahl { font-size: 0.62rem; color: var(--text-hell); }
+    .kategorie-kachel.ausgewaehlt { border-color: var(--akzent); background: #efe9ff; }
+    .kategorie-stimmen {
+      position: absolute; top: 4px; right: 4px; background: var(--akzent); color: #fff;
+      font-size: 0.65rem; font-weight: 800; min-width: 18px; height: 18px; border-radius: 999px;
+      display: flex; align-items: center; justify-content: center; padding: 0 4px;
+    }
+
+    /* ---------- allgemeine Textbausteine ---------- */
+    .hinweis-text { color: var(--text-hell); font-size: 0.85rem; margin: 0 0 6px; }
+    .feld-titel { font-weight: 600; font-size: 0.9rem; margin: 14px 0 2px; }
+    .fortschritt { color: #888; font-size: 0.9rem; }
+
+    /* ---------- Spielauswahl in der Lobby ---------- */
+    .spiele-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin: 8px 0 4px; }
+    .spiel-kachel {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 4px; padding: 18px 10px; border-radius: 18px; border: 2px solid transparent;
+      background: #f6f4fb; cursor: pointer; text-align: center;
+      transition: transform .05s ease, border-color .15s ease, background .15s ease;
+    }
+    .spiel-kachel:hover { border-color: var(--akzent); background: #efe9ff; }
+    .spiel-kachel:active { transform: scale(0.98); }
+    .spiel-kachel.passiv { cursor: default; opacity: 0.75; }
+    .spiel-kachel.passiv:hover { border-color: transparent; background: #f6f4fb; }
+    .spiel-emoji { font-size: 34px; line-height: 38px; }
+    .spiel-name { font-size: 0.95rem; font-weight: 800; color: var(--text-dunkel); }
+    .spiel-beschreibung { font-size: 0.7rem; color: var(--text-hell); line-height: 1.2; }
+
+    /* Abstand zwischen mehreren Karten (Lobby + laufendes Spiel) */
+    #spiel-wurzel > .bildschirm-karte { margin-top: 0; }

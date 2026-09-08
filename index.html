@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Partyspiele</title>
+
+  <!-- Damit die Seite auf dem Handy als App gestartet werden kann -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#4338ca">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Partyspiele">
+  <link rel="apple-touch-icon" href="bilder/apple-touch-icon.png">
+  <link rel="icon" href="bilder/icon-192.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="stil.css">
+</head>
+<body>
+
+  <div id="top-bar" hidden>
+    <button id="btn-verlassen">Raum verlassen</button>
+  </div>
+
+  <p id="app-version"></p>
+  <p id="debug-log" hidden></p>
+
+  <!-- ---------- Start ---------- -->
+  <div id="start-screen" class="bildschirm-karte">
+    <div class="start-hero">
+      <div class="start-icon">
+        <img src="bilder/icon-192.png" width="72" height="72" alt="" class="app-icon">
+      </div>
+      <h1>Partyspiele</h1>
+      <p class="start-tagline">Ein Raum, ein Abend, viele Spiele</p>
+    </div>
+
+    <label class="feld-label">Dein Name
+      <input id="input-name" placeholder="z. B. Niklas" autocomplete="nickname">
+    </label>
+
+    <button id="btn-erstellen" class="btn-primaer">Neuen Raum erstellen</button>
+
+    <div class="trenner"><span>oder</span></div>
+
+    <label class="feld-label">Code eines bestehenden Raums
+      <input id="input-code" placeholder="1234" maxlength="4" inputmode="numeric" pattern="[0-9]*" class="code-eingabe">
+    </label>
+    <button id="btn-beitreten" class="btn-sekundaer">Beitreten</button>
+
+    <p id="start-error"></p>
+  </div>
+
+  <!-- ---------- Lobby: wer spielt mit + Spielauswahl ---------- -->
+  <div id="lobby-screen" class="bildschirm-karte" hidden>
+    <h1>Warteraum</h1>
+    <p>Raum-Code: <strong id="anzeige-code"></strong></p>
+    <p class="hinweis-text">Gib diesen Code deinen Freunden, damit sie beitreten können.</p>
+
+    <p class="feld-titel">Deine Farbe:</p>
+    <div id="farb-auswahl" class="auswahl-reihe"></div>
+
+    <p class="feld-titel">Dein Profilbild:</p>
+    <div id="icon-auswahl" class="auswahl-reihe"></div>
+    <p id="avatar-hinweis" class="fehler-text"></p>
+
+    <h3>Mitspieler</h3>
+    <ul id="spielerliste"></ul>
+
+    <h3>Spiel auswählen</h3>
+    <p id="spielauswahl-hinweis" class="hinweis-text"></p>
+    <div id="spiele-grid" class="spiele-grid"></div>
+    <p id="lobby-fehler" class="fehler-text"></p>
+  </div>
+
+  <!-- ---------- Hierhin rendert das jeweils laufende Spiel ---------- -->
+  <div id="spiel-wurzel"></div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>

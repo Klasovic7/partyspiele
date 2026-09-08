@@ -1,0 +1,17 @@
+{
+  "name": "Partyspiele",
+  "short_name": "Partyspiele",
+  "description": "Multiplayer-Partyspiele für den Abend mit Freunden.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#4338ca",
+  "theme_color": "#4338ca",
+  "lang": "de",
+  "icons": [
+    { "src": "bilder/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "bilder/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "bilder/icon-512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
