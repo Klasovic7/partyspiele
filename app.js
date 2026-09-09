@@ -9,7 +9,7 @@ import {
 } from "./kern/ui.js";
 import { SPIELE, spielInfo } from "./spiele/register.js";
 
-export const APP_VERSION = "v26";
+export const APP_VERSION = "v27";
 document.getElementById("app-version").textContent = "Version " + APP_VERSION;
 
 // ---------- DOM ----------
@@ -156,7 +156,7 @@ function renderIconAuswahl() {
 async function waehleSpiel(id) {
   if (!zustand.istLeiter || !zustand.code) return;
   const info = spielInfo(id);
-  if (!info) return;
+  if (!info || info.kommtBald) return;
   if (zustand.spieler.length < info.minSpieler) {
     lobbyFehler.textContent = `Für ${info.name} braucht ihr mindestens ${info.minSpieler} Spieler.`;
     return;
@@ -178,12 +178,14 @@ function renderSpieleAuswahl() {
   SPIELE.forEach((spiel) => {
     const div = document.createElement("div");
     const zuWenige = zustand.spieler.length < spiel.minSpieler;
-    div.className = "spiel-kachel" + (zustand.istLeiter && !zuWenige ? "" : " passiv");
+    const klickbar = zustand.istLeiter && !zuWenige && !spiel.kommtBald;
+    div.className = "spiel-kachel" + (klickbar ? "" : " passiv") + (spiel.kommtBald ? " kommt-bald" : "");
     div.innerHTML =
       `<span class="spiel-emoji">${spiel.emoji}</span>` +
       `<span class="spiel-name">${escapeHtml(spiel.name)}</span>` +
-      `<span class="spiel-beschreibung">${escapeHtml(spiel.beschreibung)}</span>`;
-    if (zustand.istLeiter && !zuWenige) div.addEventListener("click", () => waehleSpiel(spiel.id));
+      `<span class="spiel-beschreibung">${escapeHtml(spiel.beschreibung)}</span>` +
+      (spiel.kommtBald ? `<span class="spiel-badge">bald verfügbar</span>` : "");
+    if (klickbar) div.addEventListener("click", () => waehleSpiel(spiel.id));
     spieleGrid.appendChild(div);
   });
 }
