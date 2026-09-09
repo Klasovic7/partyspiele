@@ -92,6 +92,39 @@ function normalisiereAntwort(text) {
     .replace(/\s+/g, " ");
 }
 
+function mischeFragenOhneAehnlicheNachbarn(fragenListe) {
+  const gruppen = new Map();
+  fragenListe.forEach((frage, fragenIndex) => {
+    const gruppe = frage.gruppe || `einzeln-${fragenIndex}`;
+    if (!gruppen.has(gruppe)) gruppen.set(gruppe, []);
+    gruppen.get(gruppe).push(fragenIndex);
+  });
+
+  // Zuerst die Fragen innerhalb jeder Gruppe mischen.
+  gruppen.forEach((indizes) => {
+    for (let i = indizes.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [indizes[i], indizes[j]] = [indizes[j], indizes[i]];
+    }
+  });
+
+  const ergebnis = [];
+  let letzteGruppe = null;
+  while (ergebnis.length < fragenListe.length) {
+    const moeglicheGruppen = [...gruppen.entries()]
+      .filter(([gruppe, indizes]) => gruppe !== letzteGruppe && indizes.length > 0);
+    const auswahl = moeglicheGruppen.length > 0
+      ? moeglicheGruppen
+      : [...gruppen.entries()].filter(([, indizes]) => indizes.length > 0);
+    const groessterRest = Math.max(...auswahl.map(([, indizes]) => indizes.length));
+    const kandidaten = auswahl.filter(([, indizes]) => indizes.length === groessterRest);
+    const [gruppe, indizes] = kandidaten[Math.floor(Math.random() * kandidaten.length)];
+    ergebnis.push(indizes.pop());
+    letzteGruppe = gruppe;
+  }
+  return ergebnis;
+}
+
 export async function starten(uebergebeneApi) {
   api = uebergebeneApi;
   el.wurzel = api.wurzel;
@@ -214,11 +247,7 @@ async function spielStarten() {
   if (!Number.isFinite(anzahl) || anzahl < 1) anzahl = 1;
   if (anzahl > fragen.length) anzahl = fragen.length;
 
-  const gemischt = fragen.map((_, i) => i);
-  for (let i = gemischt.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [gemischt[i], gemischt[j]] = [gemischt[j], gemischt[i]];
-  }
+  const gemischt = mischeFragenOhneAehnlicheNachbarn(fragen);
 
   $("dg-starten").disabled = true;
   try {
@@ -468,4 +497,7 @@ function zeigeEndstand() {
 }
 
 // Für kleine lokale Tests exportiert; die Spiellogik nutzt dieselben Funktionen.
-export { normalisiereAntwort, antwortenPassenZusammen, berechnePunkteFuerAntworten };
+export {
+  normalisiereAntwort, antwortenPassenZusammen, berechnePunkteFuerAntworten,
+  mischeFragenOhneAehnlicheNachbarn
+};
