@@ -152,6 +152,13 @@
     .dummkopf-wahl:active .spieler-karte { transform: scale(0.98); }
     .dummkopf-wahl.gewaehlt .spieler-karte { box-shadow: 0 0 0 4px var(--akzent); }
 
+    /* ---------- Denk gleich! ---------- */
+    #dg-antwort { width: 100%; }
+    .dg-regel {
+      margin: 10px 0 18px; padding: 10px 12px; border-radius: 12px;
+      background: #f6f4fb; color: var(--text-hell); font-size: 0.82rem; line-height: 1.35;
+    }
+
     .kategorien-aktionen { display: flex; gap: 8px; margin: 8px 0 0; }
     .kategorien-aktionen button { flex: 1; font-size: 0.8rem; padding: 7px 8px; }
     .kategorien-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 8px 0 16px; }
