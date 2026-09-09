@@ -42,6 +42,7 @@ const VORLAGE = `
     </p>
     <p id="dg-frage-fehler" class="fehler-text"></p>
     <p id="dg-frage-status"></p>
+    <p><button id="dg-andere-frage" class="btn-flach" hidden>Andere Frage</button></p>
   </div>
 
   <div id="dg-ergebnis-screen" class="bildschirm-karte" hidden>
@@ -69,6 +70,7 @@ let antwortenUnsub = null;
 
 let status = null;
 let index = -1;
+let frageVersion = 0;
 let reihenfolge = [];
 let anzahlFragen = 0;
 let ausgewertetAusgeloest = false;
@@ -141,7 +143,8 @@ export async function starten(uebergebeneApi) {
 
   if (api.istLeiter && !api.raum?.dgStatus) {
     await updateDoc(api.raumRef(), {
-      dgStatus: "setup", dgFragenIndex: 0, dgReihenfolge: [], dgAnzahlFragen: 0
+      dgStatus: "setup", dgFragenIndex: 0, dgFrageVersion: 0,
+      dgReihenfolge: [], dgAnzahlFragen: 0
     });
   }
 }
@@ -154,6 +157,7 @@ function verdrahteBedienelemente() {
   $("dg-antwort").addEventListener("keydown", (e) => {
     if (e.key === "Enter") antwortAbsenden();
   });
+  $("dg-andere-frage").addEventListener("click", andereFrage);
   $("dg-weiter").addEventListener("click", weiter);
 }
 
@@ -172,6 +176,7 @@ export function beenden() {
   alleAntworten = [];
   status = null;
   index = -1;
+  frageVersion = 0;
   reihenfolge = [];
   anzahlFragen = 0;
   ausgewertetAusgeloest = false;
@@ -192,8 +197,10 @@ export function raumDaten(daten) {
   anzahlFragen = daten.dgAnzahlFragen ?? 0;
 
   const neuerIndex = daten.dgFragenIndex ?? 0;
-  if (status === "frage_aktiv" && index !== neuerIndex) {
+  const neueVersion = daten.dgFrageVersion ?? 0;
+  if (status === "frage_aktiv" && (index !== neuerIndex || frageVersion !== neueVersion)) {
     index = neuerIndex;
+    frageVersion = neueVersion;
     $("dg-antwort").value = "";
     $("dg-antwort").disabled = false;
     $("dg-absenden").disabled = false;
@@ -201,6 +208,7 @@ export function raumDaten(daten) {
     ausgewertetAusgeloest = false;
   } else if (status === "ausgewertet") {
     index = neuerIndex;
+    frageVersion = neueVersion;
   }
 
   alleVerstecken();
@@ -255,6 +263,7 @@ async function spielStarten() {
     await updateDoc(api.raumRef(), {
       dgStatus: "frage_aktiv",
       dgFragenIndex: 0,
+      dgFrageVersion: 0,
       dgReihenfolge: gemischt.slice(0, anzahl),
       dgAnzahlFragen: anzahl
     });
@@ -277,7 +286,8 @@ async function zurueck() {
   try {
     await raeumeSpieldatenAuf();
     await updateDoc(api.raumRef(), {
-      dgStatus: null, dgFragenIndex: 0, dgReihenfolge: [], dgAnzahlFragen: 0
+      dgStatus: null, dgFragenIndex: 0, dgFrageVersion: 0,
+      dgReihenfolge: [], dgAnzahlFragen: 0
     });
     await api.zurueckZurAuswahl();
   } catch (e) {
@@ -291,6 +301,7 @@ function zeigeFrage(pos) {
   if (!frage) return;
   $("dg-frage-fortschritt").textContent = `Frage ${pos + 1} von ${anzahlFragen}`;
   $("dg-frage-text").textContent = frage.frage;
+  $("dg-andere-frage").hidden = !api.istLeiter;
 }
 
 async function antwortAbsenden() {
@@ -311,6 +322,7 @@ async function antwortAbsenden() {
       spielerId: api.spielerId,
       spielerName: api.spielerName,
       fragenIndex: index,
+      frageVersion,
       antwort,
       normalisiert,
       zeitpunkt: serverTimestamp()
@@ -322,9 +334,91 @@ async function antwortAbsenden() {
   }
 }
 
+function mischeZahlen(werte) {
+  const gemischt = [...werte];
+  for (let i = gemischt.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [gemischt[i], gemischt[j]] = [gemischt[j], gemischt[i]];
+  }
+  return gemischt;
+}
+
+function hatKeineAehnlichenNachbarn(fragenListe, indizes) {
+  for (let i = 1; i < indizes.length; i++) {
+    if (fragenListe[indizes[i - 1]]?.gruppe === fragenListe[indizes[i]]?.gruppe) return false;
+  }
+  return true;
+}
+
+function findeAndereFragenReihenfolge(fragenListe, aktuelleReihenfolge, aktuellePosition) {
+  const verwendet = new Set(aktuelleReihenfolge);
+  const unbenutzt = mischeZahlen(
+    fragenListe.map((_, fragenIndex) => fragenIndex)
+      .filter((fragenIndex) => !verwendet.has(fragenIndex))
+  );
+
+  for (const neuerFragenIndex of unbenutzt) {
+    const versuch = [...aktuelleReihenfolge];
+    versuch[aktuellePosition] = neuerFragenIndex;
+    if (hatKeineAehnlichenNachbarn(fragenListe, versuch)) return versuch;
+  }
+
+  const spaeterePositionen = mischeZahlen(
+    aktuelleReihenfolge.map((_, position) => position)
+      .filter((position) => position > aktuellePosition)
+  );
+  for (const ziel of spaeterePositionen) {
+    const versuch = [...aktuelleReihenfolge];
+    [versuch[aktuellePosition], versuch[ziel]] = [versuch[ziel], versuch[aktuellePosition]];
+    if (hatKeineAehnlichenNachbarn(fragenListe, versuch)) return versuch;
+  }
+  return null;
+}
+
+// Tauscht die aktuelle Frage aus. Bevorzugt wird eine noch nicht eingeplante
+// Frage; wenn alle 250 Fragen gespielt werden, wird mit einer späteren Position
+// getauscht. In beiden Fällen bleibt die Trennung ähnlicher Fragegruppen erhalten.
+async function andereFrage() {
+  if (!api.istLeiter || status !== "frage_aktiv" || index < 0) return;
+  const knopf = $("dg-andere-frage");
+  knopf.disabled = true;
+  $("dg-frage-fehler").textContent = "";
+
+  try {
+    const neueReihenfolge = findeAndereFragenReihenfolge(fragen, reihenfolge, index);
+
+    if (!neueReihenfolge) {
+      $("dg-frage-fehler").textContent =
+        "Es ist keine passende andere Frage mehr verfügbar.";
+      knopf.disabled = false;
+      return;
+    }
+
+    const alteAntworten = alleAntworten.filter((a) =>
+      a.fragenIndex === index && (a.frageVersion ?? 0) === frageVersion
+    );
+    await Promise.all(alteAntworten.map((antwort) =>
+      deleteDoc(doc(api.db, "raeume", api.code, "dgAntworten", `${antwort.spielerId}_${index}`))
+    ));
+    alleAntworten = alleAntworten.filter((a) =>
+      a.fragenIndex !== index || (a.frageVersion ?? 0) !== frageVersion
+    );
+
+    await updateDoc(api.raumRef(), {
+      dgReihenfolge: neueReihenfolge,
+      dgFrageVersion: increment(1)
+    });
+  } catch (e) {
+    zeigeDebug("Fehler beim Wechseln der Frage: " + e.message);
+  }
+  knopf.disabled = false;
+}
+
 function antwortenDieserRunde(pos) {
   const aktiveIds = new Set(spielerListe.map((s) => s.id));
-  return alleAntworten.filter((a) => a.fragenIndex === pos && aktiveIds.has(a.spielerId));
+  return alleAntworten.filter((a) =>
+    a.fragenIndex === pos && (a.frageVersion ?? 0) === frageVersion && aktiveIds.has(a.spielerId)
+  );
 }
 
 function berechneRundenpunkte(pos) {
@@ -499,5 +593,5 @@ function zeigeEndstand() {
 // Für kleine lokale Tests exportiert; die Spiellogik nutzt dieselben Funktionen.
 export {
   normalisiereAntwort, antwortenPassenZusammen, berechnePunkteFuerAntworten,
-  mischeFragenOhneAehnlicheNachbarn
+  mischeFragenOhneAehnlicheNachbarn, findeAndereFragenReihenfolge
 };
