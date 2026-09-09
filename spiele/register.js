@@ -19,15 +19,12 @@ export const SPIELE = [
     laden: () => import("./schaetzfragen/spiel.js")
   },
   {
-    // Noch ohne eigenes Spielmodul - "kommtBald" macht die Kachel sichtbar,
-    // aber nicht anklickbar. Sobald spiele/denk-gleich/spiel.js existiert,
-    // hier "kommtBald" entfernen und ein "laden" ergänzen (wie oben bei Schätzfragen).
     id: "denk-gleich",
     name: "Denk gleich!",
     emoji: "🧠",
-    beschreibung: "Bald verfügbar",
-    minSpieler: 1,
-    kommtBald: true
+    beschreibung: "Gleiche Antwort, gleiche Punkte!",
+    minSpieler: 2,
+    laden: () => import("./denk-gleich/spiel.js")
   }
 ];
 
