@@ -316,6 +316,57 @@ function verfuegbareFragenAnzahl() {
   return fragen.filter((f) => kategorien.includes(f.kategorie)).length;
 }
 
+function mischeIndizes(werte) {
+  const gemischt = [...werte];
+  for (let i = gemischt.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [gemischt[i], gemischt[j]] = [gemischt[j], gemischt[i]];
+  }
+  return gemischt;
+}
+
+function maximaleFragenOhneKategorieNachbarn(fragenListe, kategorieIds) {
+  const anzahlen = kategorieIds
+    .map((kategorie) => fragenListe.filter((frage) => frage.kategorie === kategorie).length)
+    .filter((anzahl) => anzahl > 0);
+  const gesamt = anzahlen.reduce((summe, anzahl) => summe + anzahl, 0);
+  if (anzahlen.length <= 1) return gesamt;
+
+  const groessteKategorie = Math.max(...anzahlen);
+  const andereFragen = gesamt - groessteKategorie;
+  return andereFragen + Math.min(groessteKategorie, andereFragen + 1);
+}
+
+function baueReihenfolgeOhneKategorieNachbarn(fragenListe, passendeIndizes, gewuenschteAnzahl) {
+  const gruppen = new Map();
+  passendeIndizes.forEach((fragenIndex) => {
+    const kategorie = fragenListe[fragenIndex].kategorie;
+    if (!gruppen.has(kategorie)) gruppen.set(kategorie, []);
+    gruppen.get(kategorie).push(fragenIndex);
+  });
+  gruppen.forEach((indizes, kategorie) => gruppen.set(kategorie, mischeIndizes(indizes)));
+
+  const zielAnzahl = Math.min(gewuenschteAnzahl, passendeIndizes.length);
+  const ergebnis = [];
+  let letzteKategorie = null;
+  while (ergebnis.length < zielAnzahl) {
+    let auswahl = [...gruppen.entries()]
+      .filter(([kategorie, indizes]) => kategorie !== letzteKategorie && indizes.length > 0);
+    // Nur bei genau einer gewählten Kategorie darf dieselbe Kategorie erneut folgen.
+    if (auswahl.length === 0 && gruppen.size === 1) {
+      auswahl = [...gruppen.entries()].filter(([, indizes]) => indizes.length > 0);
+    }
+    if (auswahl.length === 0) break;
+
+    const groessterRest = Math.max(...auswahl.map(([, indizes]) => indizes.length));
+    const kandidaten = auswahl.filter(([, indizes]) => indizes.length === groessterRest);
+    const [kategorie, indizes] = kandidaten[Math.floor(Math.random() * kandidaten.length)];
+    ergebnis.push(indizes.pop());
+    letzteKategorie = kategorie;
+  }
+  return ergebnis;
+}
+
 function zeigeSetup() {
   const eigener = spielerListe.find((s) => s.id === api.spielerId);
   const eigeneStimmen = eigener?.kategorieStimmen || [];
@@ -342,14 +393,19 @@ function zeigeSetup() {
   });
 
   const verfuegbar = verfuegbareFragenAnzahl();
+  const maximalSpielbar = maximaleFragenOhneKategorieNachbarn(fragen, kategorien);
   const anzahlFeld = $("sf-anzahl");
-  anzahlFeld.max = Math.max(1, verfuegbar);
-  if (!anzahlManuellGesetzt) anzahlFeld.value = Math.max(1, verfuegbar);
-  else if (verfuegbar > 0 && parseInt(anzahlFeld.value, 10) > verfuegbar) anzahlFeld.value = verfuegbar;
+  anzahlFeld.max = Math.max(1, maximalSpielbar);
+  if (!anzahlManuellGesetzt) anzahlFeld.value = Math.max(1, maximalSpielbar);
+  else if (maximalSpielbar > 0 && parseInt(anzahlFeld.value, 10) > maximalSpielbar) {
+    anzahlFeld.value = maximalSpielbar;
+  }
 
   $("sf-anzahl-hinweis").textContent = verfuegbar === 0
     ? "Noch keine Kategorie ausgewählt."
-    : `${verfuegbar} Frage${verfuegbar === 1 ? "" : "n"} insgesamt in den ausgewählten Kategorien verfügbar.`;
+    : maximalSpielbar < verfuegbar
+      ? `${verfuegbar} Fragen verfügbar. Ohne gleiche Kategorien direkt hintereinander können davon höchstens ${maximalSpielbar} gespielt werden.`
+      : `${verfuegbar} Frage${verfuegbar === 1 ? "" : "n"} insgesamt in den ausgewählten Kategorien verfügbar.`;
 
   $("sf-anzahl-zeile").hidden = !api.istLeiter;
   $("sf-dummkopf-zeile").hidden = !api.istLeiter;
@@ -370,16 +426,11 @@ async function spielStarten() {
 
   $("sf-starten").disabled = true;
   try {
-    // Mischen (Fisher-Yates) und auf die gewünschte Anzahl kürzen.
-    const gemischt = [...passende];
-    for (let i = gemischt.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [gemischt[i], gemischt[j]] = [gemischt[j], gemischt[i]];
-    }
-
     let anzahl = parseInt($("sf-anzahl").value, 10);
     if (!Number.isFinite(anzahl) || anzahl < 1) anzahl = 1;
-    if (anzahl > gemischt.length) anzahl = gemischt.length;
+    const maximalSpielbar = maximaleFragenOhneKategorieNachbarn(fragen, kategorien);
+    if (anzahl > maximalSpielbar) anzahl = maximalSpielbar;
+    const gemischt = baueReihenfolgeOhneKategorieNachbarn(fragen, passende, anzahl);
 
     // Reste einer vorherigen Runde entfernen und Punkte auf 0 setzen.
     await raeumeSpieldatenAuf();
@@ -388,7 +439,7 @@ async function spielStarten() {
       sfStatus: dummkopfModus ? "dummkopf_wahl" : "frage_aktiv",
       sfFragenIndex: 0,
       sfAnzahlFragen: anzahl,
-      sfReihenfolge: gemischt.slice(0, anzahl),
+      sfReihenfolge: gemischt,
       sfFrageVersion: 0
     });
   } catch (e) {
@@ -523,33 +574,59 @@ async function schaetzungAbsenden() {
 }
 
 // Tauscht die aktuelle Frage gegen eine andere aus (z. B. wenn die Runde sie kannte).
+function hatKeineKategorieNachbarn(indizes) {
+  if (kategorien.length <= 1) return true;
+  for (let i = 1; i < indizes.length; i++) {
+    if (fragen[indizes[i - 1]].kategorie === fragen[indizes[i]].kategorie) return false;
+  }
+  return true;
+}
+
 async function andereFrage() {
   if (!api.istLeiter) return;
   $("sf-andere-frage").disabled = true;
   $("sf-frage-fehler").textContent = "";
 
   try {
-    const neue = [...reihenfolge];
+    let neue = null;
 
     // Fall 1: Es gibt Fragen der gewählten Kategorien, die diese Runde gar nicht vorkommen.
     const verwendet = new Set(reihenfolge);
-    const unbenutzt = fragen.map((f, i) => i)
-      .filter((i) => kategorien.includes(fragen[i].kategorie) && !verwendet.has(i));
+    const unbenutzt = mischeIndizes(
+      fragen.map((f, i) => i)
+        .filter((i) => kategorien.includes(fragen[i].kategorie) && !verwendet.has(i))
+    );
 
-    if (unbenutzt.length > 0) {
-      neue[index] = unbenutzt[Math.floor(Math.random() * unbenutzt.length)];
-    } else {
-      // Fall 2: Der komplette Pool ist eingeplant - dann mit einer noch nicht
-      // gespielten Position von hinten tauschen, damit keine Frage verloren geht.
-      const spaeter = [];
-      for (let i = index + 1; i < neue.length; i++) spaeter.push(i);
-      if (spaeter.length === 0) {
-        $("sf-frage-fehler").textContent = "Das ist die letzte Frage - es gibt keine andere Frage zum Tauschen mehr.";
-        $("sf-andere-frage").disabled = false;
-        return;
+    for (const neuerFragenIndex of unbenutzt) {
+      const versuch = [...reihenfolge];
+      versuch[index] = neuerFragenIndex;
+      if (hatKeineKategorieNachbarn(versuch)) {
+        neue = versuch;
+        break;
       }
-      const ziel = spaeter[Math.floor(Math.random() * spaeter.length)];
-      [neue[index], neue[ziel]] = [neue[ziel], neue[index]];
+    }
+
+    // Fall 2: Mit einer noch nicht gespielten Position tauschen. Der Tausch wird
+    // nur übernommen, wenn auch danach keine gleichen Kategorien nebeneinanderliegen.
+    if (!neue) {
+      const spaeter = mischeIndizes(
+        reihenfolge.map((_, position) => position).filter((position) => position > index)
+      );
+      for (const ziel of spaeter) {
+        const versuch = [...reihenfolge];
+        [versuch[index], versuch[ziel]] = [versuch[ziel], versuch[index]];
+        if (hatKeineKategorieNachbarn(versuch)) {
+          neue = versuch;
+          break;
+        }
+      }
+    }
+
+    if (!neue) {
+      $("sf-frage-fehler").textContent =
+        "Es ist keine passende andere Frage mehr verfügbar.";
+      $("sf-andere-frage").disabled = false;
+      return;
     }
 
     for (const a of alleAntworten.filter((a) => a.fragenIndex === index)) {
@@ -701,3 +778,6 @@ function zeigeEndstand() {
   $("sf-nochmal").hidden = !api.istLeiter;
   $("sf-endstand-warten").hidden = api.istLeiter;
 }
+
+// Für lokale Logiktests exportiert; das Spiel selbst verwendet dieselben Funktionen.
+export { maximaleFragenOhneKategorieNachbarn, baueReihenfolgeOhneKategorieNachbarn };
