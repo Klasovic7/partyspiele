@@ -45,8 +45,8 @@ Diesen Link schickst du deinen Kumpels.
 
 **Bei jeder späteren Änderung:**
 
-1. In `sw.js` die Zeile `const CACHE_NAME = "partyspiele-v30";` hochzählen
-   (`v31`, `v32` …) und in `app.js` `APP_VERSION` entsprechend anpassen.
+1. In `sw.js` die Zeile `const CACHE_NAME = "partyspiele-v31";` hochzählen
+   (`v32`, `v33` …) und in `app.js` `APP_VERSION` entsprechend anpassen.
    Ohne diesen Schritt sehen die anderen unter Umständen noch die alte Version.
 2. Die geänderten Dateien im Repo hochladen (**Add file → Upload files**,
    gleichnamige Dateien werden ersetzt) und **Commit changes**.
