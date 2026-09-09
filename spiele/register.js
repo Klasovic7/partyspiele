@@ -17,6 +17,17 @@ export const SPIELE = [
     beschreibung: "Wer tippt am nächsten dran?",
     minSpieler: 1,
     laden: () => import("./schaetzfragen/spiel.js")
+  },
+  {
+    // Noch ohne eigenes Spielmodul - "kommtBald" macht die Kachel sichtbar,
+    // aber nicht anklickbar. Sobald spiele/denk-gleich/spiel.js existiert,
+    // hier "kommtBald" entfernen und ein "laden" ergänzen (wie oben bei Schätzfragen).
+    id: "denk-gleich",
+    name: "Denk gleich!",
+    emoji: "🧠",
+    beschreibung: "Bald verfügbar",
+    minSpieler: 1,
+    kommtBald: true
   }
 ];
 
