@@ -1,0 +1,420 @@
+// ============================================================================
+//  Denk gleich!
+// ----------------------------------------------------------------------------
+//  Alle beantworten dieselbe offene Frage. Für jede andere Person mit derselben
+//  Antwort gibt es einen Punkt. Alle spielspezifischen Raumfelder beginnen mit
+//  "dg"; Antworten liegen getrennt in der Subcollection "dgAntworten".
+// ============================================================================
+import {
+  doc, setDoc, updateDoc, deleteDoc, collection, getDocs, onSnapshot,
+  serverTimestamp, increment, writeBatch
+} from "../../kern/firebase.js";
+import { spielerKarte, zeigeDebug } from "../../kern/ui.js";
+
+const VORLAGE = `
+  <div id="dg-setup" class="bildschirm-karte" hidden>
+    <h1>🧠 Denk gleich!</h1>
+    <p class="hinweis-text">Beantwortet dieselbe Frage und versucht, auf das Gleiche zu kommen.</p>
+    <p class="dg-regel">Für jede andere Person mit derselben Antwort bekommst du einen Punkt.
+      Drei gleiche Antworten bringen diesen drei Spielern also jeweils zwei Punkte.</p>
+
+    <p id="dg-anzahl-zeile" hidden>
+      <label>Anzahl Fragen:
+        <input id="dg-anzahl" type="number" inputmode="numeric" min="1" style="width:78px;">
+      </label><br>
+      <span id="dg-anzahl-hinweis" class="hinweis-text"></span>
+    </p>
+
+    <p id="dg-setup-fehler" class="fehler-text"></p>
+    <p><button id="dg-starten" class="btn-primaer" hidden>Spiel starten</button></p>
+    <p id="dg-setup-warten" hidden><em>Warte, bis der Spielleiter das Spiel startet …</em></p>
+    <p><button id="dg-abbrechen" class="btn-flach" hidden>Zurück zur Spielauswahl</button></p>
+  </div>
+
+  <div id="dg-frage-screen" class="bildschirm-karte" hidden>
+    <p class="kategorie">Denk gleich!</p>
+    <p class="fortschritt" id="dg-frage-fortschritt"></p>
+    <h2 id="dg-frage-text"></h2>
+    <p>
+      <input id="dg-antwort" type="text" maxlength="80" autocomplete="off"
+        placeholder="Deine Antwort">
+      <button id="dg-absenden" class="btn-primaer">Antwort absenden</button>
+    </p>
+    <p id="dg-frage-fehler" class="fehler-text"></p>
+    <p id="dg-frage-status"></p>
+  </div>
+
+  <div id="dg-ergebnis-screen" class="bildschirm-karte" hidden>
+    <p class="kategorie">Denk gleich!</p>
+    <p class="fortschritt" id="dg-erg-fortschritt"></p>
+    <h2 id="dg-erg-frage"></h2>
+    <ul id="dg-erg-liste"></ul>
+    <p><button id="dg-weiter" hidden>Weiter</button></p>
+  </div>
+
+  <div id="dg-endstand-screen" class="bildschirm-karte" hidden>
+    <h1>Endstand</h1>
+    <ul id="dg-endstand-liste"></ul>
+    <p><button id="dg-nochmal" class="btn-primaer" hidden>Zurück zur Spielauswahl</button></p>
+    <p id="dg-endstand-warten" hidden><em>Der Spielleiter wählt gleich das nächste Spiel …</em></p>
+  </div>
+`;
+
+let api = null;
+let fragen = [];
+let el = {};
+let spielerListe = [];
+let alleAntworten = [];
+let antwortenUnsub = null;
+
+let status = null;
+let index = -1;
+let reihenfolge = [];
+let anzahlFragen = 0;
+let ausgewertetAusgeloest = false;
+
+const $ = (id) => el.wurzel.querySelector("#" + id);
+
+function frageAn(pos) {
+  return fragen[reihenfolge[pos]];
+}
+
+// Gleiche Bedeutung bei typischen Schreibunterschieden: Groß-/Kleinschreibung,
+// mehrere Leerzeichen, Satzzeichen, Akzente und zum Beispiel "Fußball"/"Fussball".
+function normalisiereAntwort(text) {
+  return String(text ?? "")
+    .normalize("NFKD")
+    .replace(/\p{M}/gu, "")
+    .toLocaleLowerCase("de-DE")
+    .replace(/ß/g, "ss")
+    .replace(/[^\p{L}\p{N}]+/gu, " ")
+    .trim()
+    .replace(/\s+/g, " ");
+}
+
+export async function starten(uebergebeneApi) {
+  api = uebergebeneApi;
+  el.wurzel = api.wurzel;
+  el.wurzel.innerHTML = VORLAGE;
+
+  if (fragen.length === 0) {
+    const antwort = await fetch(new URL("fragen.json", import.meta.url));
+    if (!antwort.ok) throw new Error("fragen.json konnte nicht geladen werden");
+    fragen = await antwort.json();
+  }
+
+  verdrahteBedienelemente();
+  starteListener();
+
+  if (api.istLeiter && !api.raum?.dgStatus) {
+    await updateDoc(api.raumRef(), {
+      dgStatus: "setup", dgFragenIndex: 0, dgReihenfolge: [], dgAnzahlFragen: 0
+    });
+  }
+}
+
+function verdrahteBedienelemente() {
+  $("dg-starten").addEventListener("click", spielStarten);
+  $("dg-abbrechen").addEventListener("click", zurueck);
+  $("dg-nochmal").addEventListener("click", zurueck);
+  $("dg-absenden").addEventListener("click", antwortAbsenden);
+  $("dg-antwort").addEventListener("keydown", (e) => {
+    if (e.key === "Enter") antwortAbsenden();
+  });
+  $("dg-weiter").addEventListener("click", weiter);
+}
+
+function starteListener() {
+  antwortenUnsub = onSnapshot(collection(api.db, "raeume", api.code, "dgAntworten"), (snap) => {
+    alleAntworten = [];
+    snap.forEach((d) => alleAntworten.push(d.data()));
+    aktualisiereAntworten();
+  });
+}
+
+export function beenden() {
+  if (antwortenUnsub) { antwortenUnsub(); antwortenUnsub = null; }
+  el = {};
+  spielerListe = [];
+  alleAntworten = [];
+  status = null;
+  index = -1;
+  reihenfolge = [];
+  anzahlFragen = 0;
+  ausgewertetAusgeloest = false;
+}
+
+export function spieler(liste) {
+  spielerListe = liste;
+  if (!el.wurzel) return;
+  if (status === "ausgewertet" && index >= 0) zeigeErgebnisListe(index);
+  if (status === "beendet") zeigeEndstand();
+  aktualisiereAntworten();
+}
+
+export function raumDaten(daten) {
+  if (!daten || !el.wurzel) return;
+  status = daten.dgStatus ?? null;
+  reihenfolge = daten.dgReihenfolge ?? [];
+  anzahlFragen = daten.dgAnzahlFragen ?? 0;
+
+  const neuerIndex = daten.dgFragenIndex ?? 0;
+  if (status === "frage_aktiv" && index !== neuerIndex) {
+    index = neuerIndex;
+    $("dg-antwort").value = "";
+    $("dg-antwort").disabled = false;
+    $("dg-absenden").disabled = false;
+    $("dg-frage-fehler").textContent = "";
+    ausgewertetAusgeloest = false;
+  } else if (status === "ausgewertet") {
+    index = neuerIndex;
+  }
+
+  alleVerstecken();
+  if (status === "setup" || !status) {
+    zeigeSetup();
+    $("dg-setup").hidden = false;
+  } else if (status === "frage_aktiv") {
+    zeigeFrage(index);
+    $("dg-frage-screen").hidden = false;
+    aktualisiereAntworten();
+  } else if (status === "ausgewertet") {
+    zeigeErgebnis(index);
+    $("dg-ergebnis-screen").hidden = false;
+  } else if (status === "beendet") {
+    zeigeEndstand();
+    $("dg-endstand-screen").hidden = false;
+  }
+}
+
+function alleVerstecken() {
+  ["dg-setup", "dg-frage-screen", "dg-ergebnis-screen", "dg-endstand-screen"]
+    .forEach((id) => { $(id).hidden = true; });
+}
+
+function zeigeSetup() {
+  const anzahlFeld = $("dg-anzahl");
+  anzahlFeld.max = fragen.length;
+  if (!anzahlFeld.value) anzahlFeld.value = fragen.length;
+  $("dg-anzahl-hinweis").textContent = `${fragen.length} Fragen stehen zur Verfügung.`;
+  $("dg-anzahl-zeile").hidden = !api.istLeiter;
+  $("dg-starten").hidden = !api.istLeiter;
+  $("dg-abbrechen").hidden = !api.istLeiter;
+  $("dg-setup-warten").hidden = api.istLeiter;
+}
+
+async function spielStarten() {
+  $("dg-setup-fehler").textContent = "";
+  if (spielerListe.length < 2) {
+    $("dg-setup-fehler").textContent = "Für Denk gleich! braucht ihr mindestens zwei Spieler.";
+    return;
+  }
+
+  let anzahl = parseInt($("dg-anzahl").value, 10);
+  if (!Number.isFinite(anzahl) || anzahl < 1) anzahl = 1;
+  if (anzahl > fragen.length) anzahl = fragen.length;
+
+  const gemischt = fragen.map((_, i) => i);
+  for (let i = gemischt.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [gemischt[i], gemischt[j]] = [gemischt[j], gemischt[i]];
+  }
+
+  $("dg-starten").disabled = true;
+  try {
+    await raeumeSpieldatenAuf();
+    await updateDoc(api.raumRef(), {
+      dgStatus: "frage_aktiv",
+      dgFragenIndex: 0,
+      dgReihenfolge: gemischt.slice(0, anzahl),
+      dgAnzahlFragen: anzahl
+    });
+  } catch (e) {
+    zeigeDebug("Fehler beim Start: " + e.message);
+  }
+  $("dg-starten").disabled = false;
+}
+
+async function raeumeSpieldatenAuf() {
+  const snap = await getDocs(collection(api.db, "raeume", api.code, "dgAntworten"));
+  await Promise.all(snap.docs.map((d) => deleteDoc(d.ref)));
+  alleAntworten = [];
+  await Promise.all(spielerListe.map((s) => updateDoc(api.spielerRef(s.id), { punkte: 0 })));
+}
+
+async function zurueck() {
+  const knopf = status === "beendet" ? $("dg-nochmal") : $("dg-abbrechen");
+  knopf.disabled = true;
+  try {
+    await raeumeSpieldatenAuf();
+    await updateDoc(api.raumRef(), {
+      dgStatus: null, dgFragenIndex: 0, dgReihenfolge: [], dgAnzahlFragen: 0
+    });
+    await api.zurueckZurAuswahl();
+  } catch (e) {
+    zeigeDebug("Fehler beim Zurückkehren: " + e.message);
+    knopf.disabled = false;
+  }
+}
+
+function zeigeFrage(pos) {
+  const frage = frageAn(pos);
+  if (!frage) return;
+  $("dg-frage-fortschritt").textContent = `Frage ${pos + 1} von ${anzahlFragen}`;
+  $("dg-frage-text").textContent = frage.frage;
+}
+
+async function antwortAbsenden() {
+  if (status !== "frage_aktiv" || index < 0) return;
+  const feld = $("dg-antwort");
+  const antwort = feld.value.trim();
+  const normalisiert = normalisiereAntwort(antwort);
+  if (!normalisiert) {
+    $("dg-frage-fehler").textContent = "Bitte gib zuerst eine Antwort ein.";
+    return;
+  }
+
+  $("dg-frage-fehler").textContent = "";
+  feld.disabled = true;
+  $("dg-absenden").disabled = true;
+  try {
+    await setDoc(doc(api.db, "raeume", api.code, "dgAntworten", `${api.spielerId}_${index}`), {
+      spielerId: api.spielerId,
+      spielerName: api.spielerName,
+      fragenIndex: index,
+      antwort,
+      normalisiert,
+      zeitpunkt: serverTimestamp()
+    });
+  } catch (e) {
+    feld.disabled = false;
+    $("dg-absenden").disabled = false;
+    zeigeDebug("Fehler beim Absenden: " + e.message);
+  }
+}
+
+function antwortenDieserRunde(pos) {
+  const aktiveIds = new Set(spielerListe.map((s) => s.id));
+  return alleAntworten.filter((a) => a.fragenIndex === pos && aktiveIds.has(a.spielerId));
+}
+
+function berechneRundenpunkte(pos) {
+  return berechnePunkteFuerAntworten(antwortenDieserRunde(pos));
+}
+
+function berechnePunkteFuerAntworten(antworten) {
+  const gruppen = new Map();
+  antworten.forEach((antwort) => {
+    const schluessel = antwort.normalisiert || normalisiereAntwort(antwort.antwort);
+    if (!gruppen.has(schluessel)) gruppen.set(schluessel, []);
+    gruppen.get(schluessel).push(antwort.spielerId);
+  });
+
+  const ergebnis = {};
+  gruppen.forEach((ids) => ids.forEach((id) => { ergebnis[id] = ids.length - 1; }));
+  return ergebnis;
+}
+
+async function aktualisiereAntworten() {
+  if (!el.wurzel || index < 0) return;
+  const antworten = antwortenDieserRunde(index);
+  const eigeneAntwort = antworten.find((a) => a.spielerId === api.spielerId);
+  if (status === "frage_aktiv" && eigeneAntwort) {
+    $("dg-antwort").value = eigeneAntwort.antwort;
+    $("dg-antwort").disabled = true;
+    $("dg-absenden").disabled = true;
+  }
+  $("dg-frage-status").textContent =
+    `${eigeneAntwort ? "Deine Antwort ist gespeichert. " : ""}${antworten.length} von ${spielerListe.length} haben geantwortet`;
+  if (status === "ausgewertet") zeigeErgebnisListe(index);
+
+  if (api.istLeiter && status === "frage_aktiv" && !ausgewertetAusgeloest &&
+      spielerListe.length >= 2 && antworten.length >= spielerListe.length) {
+    ausgewertetAusgeloest = true;
+    try {
+      const punkte = berechneRundenpunkte(index);
+      const batch = writeBatch(api.db);
+      Object.entries(punkte).forEach(([id, wert]) => {
+        batch.update(api.spielerRef(id), { punkte: increment(wert) });
+      });
+      batch.update(api.raumRef(), { dgStatus: "ausgewertet" });
+      await batch.commit();
+    } catch (e) {
+      ausgewertetAusgeloest = false;
+      zeigeDebug("Fehler bei der Auswertung: " + e.message);
+    }
+  }
+}
+
+function formatiertePunkte(punkte) {
+  return punkte > 0 ? `+${punkte}` : "0";
+}
+
+function zeigeErgebnisListe(pos) {
+  if (!el.wurzel) return;
+  const rundenpunkte = berechneRundenpunkte(pos);
+  const sortiert = [...antwortenDieserRunde(pos)].sort((a, b) => {
+    const punkteDifferenz = (rundenpunkte[b.spielerId] ?? 0) - (rundenpunkte[a.spielerId] ?? 0);
+    if (punkteDifferenz !== 0) return punkteDifferenz;
+    const antwortDifferenz = (a.normalisiert || "").localeCompare(b.normalisiert || "", "de");
+    if (antwortDifferenz !== 0) return antwortDifferenz;
+    return a.spielerName.localeCompare(b.spielerName, "de");
+  });
+
+  const liste = $("dg-erg-liste");
+  liste.innerHTML = "";
+  sortiert.forEach((antwort) => {
+    const s = spielerListe.find((x) => x.id === antwort.spielerId);
+    const li = document.createElement("li");
+    li.innerHTML = spielerKarte(
+      antwort.spielerName,
+      s?.farbe,
+      s?.icon,
+      formatiertePunkte(rundenpunkte[antwort.spielerId] ?? 0),
+      { extra: `Antwort: ${antwort.antwort}`, punkteRechts: s ? (s.punkte ?? 0) : "?" }
+    );
+    liste.appendChild(li);
+  });
+}
+
+function zeigeErgebnis(pos) {
+  const frage = frageAn(pos);
+  if (!frage) return;
+  $("dg-erg-fortschritt").textContent = `Frage ${pos + 1} von ${anzahlFragen}`;
+  $("dg-erg-frage").textContent = frage.frage;
+  zeigeErgebnisListe(pos);
+  $("dg-weiter").hidden = !api.istLeiter;
+  $("dg-weiter").textContent = pos + 1 >= anzahlFragen ? "Endstand anzeigen" : "Nächste Frage";
+}
+
+async function weiter() {
+  $("dg-weiter").disabled = true;
+  try {
+    const naechster = index + 1;
+    if (naechster >= anzahlFragen) {
+      await updateDoc(api.raumRef(), { dgStatus: "beendet" });
+    } else {
+      await updateDoc(api.raumRef(), { dgStatus: "frage_aktiv", dgFragenIndex: naechster });
+    }
+  } catch (e) {
+    zeigeDebug("Fehler beim Weiterschalten: " + e.message);
+  }
+  $("dg-weiter").disabled = false;
+}
+
+function zeigeEndstand() {
+  if (!el.wurzel) return;
+  const sortiert = [...spielerListe].sort((a, b) => (b.punkte ?? 0) - (a.punkte ?? 0));
+  const liste = $("dg-endstand-liste");
+  liste.innerHTML = "";
+  sortiert.forEach((s) => {
+    const li = document.createElement("li");
+    li.innerHTML = spielerKarte(s.name, s.farbe, s.icon, s.punkte ?? 0);
+    liste.appendChild(li);
+  });
+  $("dg-nochmal").hidden = !api.istLeiter;
+  $("dg-endstand-warten").hidden = api.istLeiter;
+}
+
+// Für kleine lokale Tests exportiert; die Spiellogik nutzt dieselben Funktionen.
+export { normalisiereAntwort, berechnePunkteFuerAntworten };
