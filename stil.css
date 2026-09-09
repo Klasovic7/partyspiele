@@ -187,9 +187,14 @@
     .spiel-kachel:active { transform: scale(0.98); }
     .spiel-kachel.passiv { cursor: default; opacity: 0.75; }
     .spiel-kachel.passiv:hover { border-color: transparent; background: #f6f4fb; }
+    .spiel-kachel.kommt-bald { position: relative; opacity: 0.55; }
     .spiel-emoji { font-size: 34px; line-height: 38px; }
     .spiel-name { font-size: 0.95rem; font-weight: 800; color: var(--text-dunkel); }
     .spiel-beschreibung { font-size: 0.7rem; color: var(--text-hell); line-height: 1.2; }
+    .spiel-badge {
+      font-size: 0.6rem; font-weight: 700; letter-spacing: 0.02em; text-transform: uppercase;
+      color: #fff; background: var(--akzent); border-radius: 999px; padding: 2px 8px; margin-top: 2px;
+    }
 
     /* Abstand zwischen mehreren Karten (Lobby + laufendes Spiel) */
     #spiel-wurzel > .bildschirm-karte { margin-top: 0; }
