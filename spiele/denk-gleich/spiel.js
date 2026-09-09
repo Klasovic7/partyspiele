@@ -302,16 +302,67 @@ function berechneRundenpunkte(pos) {
   return berechnePunkteFuerAntworten(antwortenDieserRunde(pos));
 }
 
-function berechnePunkteFuerAntworten(antworten) {
-  const gruppen = new Map();
-  antworten.forEach((antwort) => {
-    const schluessel = antwort.normalisiert || normalisiereAntwort(antwort.antwort);
-    if (!gruppen.has(schluessel)) gruppen.set(schluessel, []);
-    gruppen.get(schluessel).push(antwort.spielerId);
-  });
+function editierAbstand(a, b) {
+  if (a === b) return 0;
+  if (!a.length) return b.length;
+  if (!b.length) return a.length;
 
+  let vorherigeZeile = Array.from({ length: b.length + 1 }, (_, i) => i);
+  for (let i = 1; i <= a.length; i++) {
+    const aktuelleZeile = [i];
+    for (let j = 1; j <= b.length; j++) {
+      aktuelleZeile[j] = Math.min(
+        aktuelleZeile[j - 1] + 1,
+        vorherigeZeile[j] + 1,
+        vorherigeZeile[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)
+      );
+    }
+    vorherigeZeile = aktuelleZeile;
+  }
+  return vorherigeZeile[b.length];
+}
+
+function antwortenPassenZusammen(a, b) {
+  const normalA = normalisiereAntwort(a);
+  const normalB = normalisiereAntwort(b);
+  if (!normalA || !normalB) return false;
+  if (normalA === normalB) return true;
+
+  const woerterA = normalA.split(" ");
+  const woerterB = normalB.split(" ");
+  const [kurz, lang] = woerterA.length <= woerterB.length
+    ? [woerterA, woerterB]
+    : [woerterB, woerterA];
+
+  // Eine vollständige Kurzform zählt: "Cola" passt zu "Coca Cola" und
+  // "Pate" zu "Der Pate". Verglichen werden ganze Wörter, damit zum Beispiel
+  // "Rot" nicht versehentlich zu "Brot" passt.
+  if (kurz.every((wort) => lang.includes(wort))) return true;
+
+  // Getrennt- und Zusammenschreibung sowie kleine Tippfehler bei längeren
+  // Antworten ausgleichen, ohne sehr kurze Wörter zu großzügig zu behandeln.
+  const kompaktA = woerterA.join("");
+  const kompaktB = woerterB.join("");
+  if (kompaktA === kompaktB) return true;
+
+  const laenge = Math.max(kompaktA.length, kompaktB.length);
+  const erlaubterAbstand = laenge >= 10 ? 2 : laenge >= 5 ? 1 : 0;
+  return erlaubterAbstand > 0 && editierAbstand(kompaktA, kompaktB) <= erlaubterAbstand;
+}
+
+function berechnePunkteFuerAntworten(antworten) {
   const ergebnis = {};
-  gruppen.forEach((ids) => ids.forEach((id) => { ergebnis[id] = ids.length - 1; }));
+  antworten.forEach((antwort) => { ergebnis[antwort.spielerId] = 0; });
+
+  // Jede passende Paarung zählt für beide Beteiligten genau einen Punkt.
+  for (let i = 0; i < antworten.length; i++) {
+    for (let j = i + 1; j < antworten.length; j++) {
+      if (antwortenPassenZusammen(antworten[i].antwort, antworten[j].antwort)) {
+        ergebnis[antworten[i].spielerId] += 1;
+        ergebnis[antworten[j].spielerId] += 1;
+      }
+    }
+  }
   return ergebnis;
 }
 
@@ -417,4 +468,4 @@ function zeigeEndstand() {
 }
 
 // Für kleine lokale Tests exportiert; die Spiellogik nutzt dieselben Funktionen.
-export { normalisiereAntwort, berechnePunkteFuerAntworten };
+export { normalisiereAntwort, antwortenPassenZusammen, berechnePunkteFuerAntworten };
