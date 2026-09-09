@@ -1,10 +1,10 @@
 // Service Worker: macht die App installierbar und offline startfähig.
 //
-// WICHTIG bei Änderungen: die Zahl in CACHE_NAME hochzählen (z. B. v27 -> v28).
+// WICHTIG bei Änderungen: die Zahl in CACHE_NAME hochzählen (z. B. v28 -> v29).
 // Nur dann wirft der Browser den alten Zwischenspeicher weg und alle Spieler
 // bekommen zuverlässig die neue Version. Das ist der einzige Handgriff, den man
 // nach dem Bearbeiten von Dateien nicht vergessen darf.
-const CACHE_NAME = "partyspiele-v27";
+const CACHE_NAME = "partyspiele-v28";
 
 const DATEIEN = [
   "./",
@@ -17,6 +17,8 @@ const DATEIEN = [
   "spiele/register.js",
   "spiele/schaetzfragen/spiel.js",
   "spiele/schaetzfragen/fragen.json",
+  "spiele/denk-gleich/spiel.js",
+  "spiele/denk-gleich/fragen.json",
   "bilder/icon-192.png",
   "bilder/icon-512.png",
   "bilder/icon-512-maskable.png",
