@@ -341,6 +341,72 @@
       background: #f6f4fb; color: var(--text-hell); font-size: 0.82rem; line-height: 1.35;
     }
 
+    /* ---------- 10 Treffer! ---------- */
+    .zt-regel {
+      margin: 10px 0 18px; padding: 10px 12px; border-radius: 12px;
+      background: #f6f4fb; color: var(--text-hell); font-size: 0.82rem; line-height: 1.35;
+    }
+    .zt-team-grid, .zt-punkte-grid {
+      display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px;
+    }
+    .zt-team {
+      padding: 12px; border-radius: 16px; border: 2px solid transparent;
+    }
+    .zt-team h2, .zt-team h3 { margin: 0 0 8px; }
+    .zt-team li { margin-bottom: 4px; font-size: 0.86rem; font-weight: 700; }
+    .zt-team-blau { color: #173a75; background: #dbeafe; border-color: #93c5fd; }
+    .zt-team-orange { color: #7c2d12; background: #ffedd5; border-color: #fdba74; }
+    .zt-team.gewinner { box-shadow: 0 0 0 3px #f5c518; }
+    .zt-begriff {
+      margin: 10px 0; padding: 18px 12px; border-radius: 18px;
+      color: #fff; background: linear-gradient(135deg, #6d28d9, #db2777);
+      text-align: center; line-height: 1.1;
+      box-shadow: 0 8px 18px rgba(70, 35, 130, 0.22);
+    }
+    .zt-aktive-einheit { margin: 12px 0; text-align: center; font-size: 1.05rem; font-weight: 800; }
+    .zt-rater-ansicht { padding: 16px; border-radius: 18px; background: #f6f4fb; text-align: center; }
+    .zt-treffer-zaehler { display: flex; align-items: baseline; justify-content: center; gap: 7px; }
+    .zt-treffer-zaehler strong { color: var(--akzent); font-size: 3.4rem; line-height: 1; }
+    .zt-treffer-zaehler span { color: var(--text-hell); font-weight: 700; }
+    .zt-treffer-grid {
+      display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin: 12px 0;
+    }
+    .zt-treffer {
+      min-height: 54px; margin: 0; padding: 9px 10px; display: flex; align-items: center; gap: 7px;
+      border: 2px solid transparent; border-radius: 13px; color: var(--text-dunkel);
+      background: #f6f4fb; text-align: left; line-height: 1.15;
+    }
+    .zt-treffer:hover { color: var(--text-dunkel); background: #efe9ff; border-color: #c4b5fd; }
+    .zt-treffer.getroffen {
+      color: #14532d; background: #dcfce7; border-color: #22c55e;
+    }
+    .zt-treffer.getroffen:hover { color: #14532d; background: #d1fae5; }
+    .zt-treffer:disabled { opacity: 1; cursor: default; }
+    .zt-treffer:disabled:hover { background: #f6f4fb; border-color: transparent; }
+    .zt-treffer.getroffen:disabled:hover { background: #dcfce7; border-color: #22c55e; }
+    .zt-haken {
+      width: 22px; height: 22px; flex: 0 0 22px; display: flex; align-items: center; justify-content: center;
+      border: 2px solid #c8ccd5; border-radius: 50%; font-size: 0.8rem;
+    }
+    .zt-treffer.getroffen .zt-haken { color: #fff; background: #16a34a; border-color: #16a34a; }
+    .zt-runden-status, .zt-runden-ergebnis { text-align: center; font-weight: 800; }
+    .zt-runden-ergebnis { font-size: 1.08rem; }
+    #zt-zwischenstand { margin-top: 22px; }
+    .zt-punkteliste { margin: 0; }
+    .zt-punkte-team {
+      padding: 14px; border-radius: 16px; text-align: center;
+    }
+    .zt-punkte-team span, .zt-punkte-team strong { display: block; }
+    .zt-punkte-team span { font-size: 0.82rem; font-weight: 700; }
+    .zt-punkte-team strong { margin-top: 4px; font-size: 2rem; line-height: 1; }
+    .zt-team-endstand { display: grid; gap: 12px; }
+    .zt-team-endstand .zt-team { text-align: center; }
+    .zt-team-punkte { display: block; font-size: 3rem; line-height: 1; }
+
+    @media (max-width: 360px) {
+      .zt-treffer-grid { grid-template-columns: 1fr; }
+    }
+
     .kategorien-aktionen { display: flex; gap: 8px; margin: 8px 0 0; }
     .kategorien-aktionen button { flex: 1; font-size: 0.8rem; padding: 7px 8px; }
     .kategorien-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 8px 0 16px; }
