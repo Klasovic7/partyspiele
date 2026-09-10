@@ -647,10 +647,10 @@ function zwischenstandHtml(mitRundenpunkten = true) {
   const sortiert = [...spielerListe].sort((a, b) =>
     (punkte[b.id] ?? 0) - (punkte[a.id] ?? 0)
   );
-  return `<ul class="zt-punkteliste">` + sortiert.map((spieler) => {
+  return `<ul class="zt-punkteliste">` + sortiert.map((spieler, index) => {
     const gesamt = punkte[spieler.id] ?? 0;
     if (!mitRundenpunkten) {
-      return `<li>${spielerKarte(spieler.name, spieler.farbe, spieler.icon, gesamt)}</li>`;
+      return `<li>${spielerKarte(spieler.name, spieler.farbe, spieler.icon, gesamt, { rang: index + 1 })}</li>`;
     }
     const hinzugekommen = spieler.id === aktiveId ? rundenpunkte : 0;
     return `<li>${spielerKarte(
