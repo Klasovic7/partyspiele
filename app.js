@@ -9,7 +9,7 @@ import {
 } from "./kern/ui.js";
 import { SPIELE, spielInfo } from "./spiele/register.js";
 
-export const APP_VERSION = "v42";
+export const APP_VERSION = "v43";
 document.getElementById("app-version").textContent = "Version " + APP_VERSION;
 
 // ---------- DOM ----------
@@ -100,9 +100,27 @@ let raumUnsubscribe = null;
 let spielerUnsubscribe = null;
 let aktivesSpielModul = null;
 let aktivesSpielId = null;
+let raumSyncIntervall = null;
+let raumSyncAbrufLaeuft = false;
+let letzteRaumSignatur = null;
 
 function raumRef() { return doc(db, RAEUME, zustand.code); }
 function spielerRef(id = spielerId) { return doc(db, RAEUME, zustand.code, "spieler", id); }
+
+function stabilerSignaturWert(wert) {
+  if (Array.isArray(wert)) return wert.map(stabilerSignaturWert);
+  if (wert && typeof wert.toMillis === "function") return wert.toMillis();
+  if (wert && typeof wert === "object") {
+    return Object.fromEntries(Object.keys(wert).sort().map((key) =>
+      [key, stabilerSignaturWert(wert[key])]
+    ));
+  }
+  return wert;
+}
+
+function raumSignatur(daten) {
+  return JSON.stringify(stabilerSignaturWert(daten));
+}
 
 // ---------- Vollbild-Profilwahl (Farbe + Profilbild) ----------
 const profilEntwurf = { farbe: zustand.farbe, icon: zustand.icon };
@@ -460,11 +478,33 @@ function starteListener(code) {
     aktivesSpielModul?.spieler?.(zustand.spieler);
   });
 
+  const uebernehmeRaum = (daten) => {
+    letzteRaumSignatur = raumSignatur(daten);
+    reagiereAufRaum(daten);
+  };
+
   raumUnsubscribe = onSnapshot(raumRef(), (snap) => {
     const daten = snap.data();
     if (!daten) return;
-    reagiereAufRaum(daten);
-  });
+    uebernehmeRaum(daten);
+  }, (e) => zeigeDebug("Echtzeit-Synchronisation unterbrochen: " + e.message));
+
+  // Auf einzelnen mobilen Browsern kann der Firestore-Stream einschlafen.
+  // Dieser Rückfall lädt nur dann neu, wenn sich der Raum wirklich verändert hat.
+  if (raumSyncIntervall) clearInterval(raumSyncIntervall);
+  letzteRaumSignatur = null;
+  raumSyncIntervall = setInterval(async () => {
+    if (raumSyncAbrufLaeuft || zustand.code !== code) return;
+    raumSyncAbrufLaeuft = true;
+    try {
+      const snap = await getDoc(doc(db, RAEUME, code));
+      const daten = snap.data();
+      if (daten && raumSignatur(daten) !== letzteRaumSignatur && zustand.code === code) {
+        uebernehmeRaum(daten);
+      }
+    } catch { /* Der Snapshot-Listener bleibt der Hauptweg. */ }
+    raumSyncAbrufLaeuft = false;
+  }, 2000);
 }
 
 function betreteRaum(code, name) {
@@ -490,6 +530,9 @@ async function verlasseRaum() {
 
   if (raumUnsubscribe) { raumUnsubscribe(); raumUnsubscribe = null; }
   if (spielerUnsubscribe) { spielerUnsubscribe(); spielerUnsubscribe = null; }
+  if (raumSyncIntervall) { clearInterval(raumSyncIntervall); raumSyncIntervall = null; }
+  raumSyncAbrufLaeuft = false;
+  letzteRaumSignatur = null;
   entladeSpiel();
 
   if (zustand.code) {
