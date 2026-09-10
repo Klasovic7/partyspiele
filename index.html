@@ -7,7 +7,7 @@
 
   <!-- Damit die Seite auf dem Handy als App gestartet werden kann -->
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#4338ca">
+  <meta name="theme-color" content="#292526">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -17,7 +17,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,800;1,800&family=Bungee&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="stil.css">
 </head>
 <body>
@@ -46,6 +46,11 @@
     <div class="start-aktionen">
       <button id="btn-erstellen" class="btn-primaer">Neuen Raum erstellen</button>
       <button id="btn-beitreten-oeffnen" class="btn-sekundaer">Raum beitreten</button>
+    </div>
+
+    <div class="start-deko" aria-hidden="true">
+      <strong>Aus Freunden<br>werden Spieler</strong>
+      <span>🎲</span><span>🎲</span>
     </div>
 
     <p id="start-error"></p>
@@ -109,7 +114,7 @@
     <p class="hinweis-text">Gib diesen Code deinen Freunden, damit sie beitreten können.</p>
 
     <h3>Mitspieler</h3>
-    <ul id="spielerliste"></ul>
+    <ul id="spielerliste" class="lobby-spielerleiste"></ul>
 
     <h3>Spiel auswählen</h3>
     <p id="spielauswahl-hinweis" class="hinweis-text"></p>
