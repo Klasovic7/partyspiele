@@ -1,10 +1,10 @@
 // Service Worker: macht die App installierbar und offline startfähig.
 //
-// WICHTIG bei Änderungen: die Zahl in CACHE_NAME hochzählen (z. B. v33 -> v34).
+// WICHTIG bei Änderungen: die Zahl in CACHE_NAME hochzählen (z. B. v34 -> v35).
 // Nur dann wirft der Browser den alten Zwischenspeicher weg und alle Spieler
 // bekommen zuverlässig die neue Version. Das ist der einzige Handgriff, den man
 // nach dem Bearbeiten von Dateien nicht vergessen darf.
-const CACHE_NAME = "partyspiele-v33";
+const CACHE_NAME = "partyspiele-v34";
 
 const DATEIEN = [
   "./",
@@ -23,8 +23,8 @@ const DATEIEN = [
   "bilder/icon-512.png",
   "bilder/icon-512-maskable.png",
   "bilder/apple-touch-icon.png",
-  "bilder/avatar1.jpg", "bilder/avatar2.jpg", "bilder/avatar3.jpg", "bilder/avatar4.jpg",
-  "bilder/avatar5.jpg", "bilder/avatar6.jpg", "bilder/avatar7.jpg", "bilder/avatar8.jpg"
+  "bilder/avatar1-hd.jpg", "bilder/avatar2-hd.jpg", "bilder/avatar3-hd.jpg", "bilder/avatar4-hd.jpg",
+  "bilder/avatar5-hd.jpg", "bilder/avatar6-hd.jpg", "bilder/avatar7-hd.jpg", "bilder/avatar8-hd.jpg"
 ];
 
 self.addEventListener("install", (event) => {
