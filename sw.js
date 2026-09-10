@@ -1,10 +1,10 @@
 // Service Worker: macht die App installierbar und offline startfähig.
 //
-// WICHTIG bei Änderungen: die Zahl in CACHE_NAME hochzählen (z. B. v37 -> v38).
+// WICHTIG bei Änderungen: die Zahl in CACHE_NAME hochzählen (z. B. v38 -> v39).
 // Nur dann wirft der Browser den alten Zwischenspeicher weg und alle Spieler
 // bekommen zuverlässig die neue Version. Das ist der einzige Handgriff, den man
 // nach dem Bearbeiten von Dateien nicht vergessen darf.
-const CACHE_NAME = "partyspiele-v37";
+const CACHE_NAME = "partyspiele-v38";
 
 const DATEIEN = [
   "./",
@@ -19,12 +19,15 @@ const DATEIEN = [
   "spiele/schaetzfragen/fragen.json",
   "spiele/denk-gleich/spiel.js",
   "spiele/denk-gleich/fragen.json",
+  "spiele/zehn-treffer/spiel.js",
+  "spiele/zehn-treffer/logik.js",
+  "spiele/zehn-treffer/fragen.json",
   "bilder/icon-192.png",
   "bilder/icon-512.png",
   "bilder/icon-512-maskable.png",
   "bilder/apple-touch-icon.png",
-  "bilder/avatar1-hd.jpg?v=37", "bilder/avatar2-hd.jpg?v=37", "bilder/avatar3-hd.jpg?v=37", "bilder/avatar4-hd.jpg?v=37",
-  "bilder/avatar5-hd.jpg?v=37", "bilder/avatar6-hd.jpg?v=37", "bilder/avatar7-hd.jpg?v=37", "bilder/avatar8-hd.jpg?v=37"
+  "bilder/avatar1-hd.jpg?v=38", "bilder/avatar2-hd.jpg?v=38", "bilder/avatar3-hd.jpg?v=38", "bilder/avatar4-hd.jpg?v=38",
+  "bilder/avatar5-hd.jpg?v=38", "bilder/avatar6-hd.jpg?v=38", "bilder/avatar7-hd.jpg?v=38", "bilder/avatar8-hd.jpg?v=38"
 ];
 
 self.addEventListener("install", (event) => {
