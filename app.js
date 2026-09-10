@@ -9,7 +9,7 @@ import {
 } from "./kern/ui.js";
 import { SPIELE, spielInfo } from "./spiele/register.js";
 
-export const APP_VERSION = "v43";
+export const APP_VERSION = "v44";
 document.getElementById("app-version").textContent = "Version " + APP_VERSION;
 
 // ---------- DOM ----------
@@ -504,7 +504,7 @@ function starteListener(code) {
       }
     } catch { /* Der Snapshot-Listener bleibt der Hauptweg. */ }
     raumSyncAbrufLaeuft = false;
-  }, 2000);
+  }, 1000);
 }
 
 function betreteRaum(code, name) {
