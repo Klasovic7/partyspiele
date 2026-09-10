@@ -5,7 +5,7 @@
 //  Assoziationen. Die Gegenseite sieht die zehn gesuchten Treffer und markiert
 //  sie live. Alle Felder dieses Spiels im Raum-Dokument beginnen mit "zt".
 // ============================================================================
-import { updateDoc, runTransaction } from "../../kern/firebase.js";
+import { updateDoc, runTransaction, serverTimestamp } from "../../kern/firebase.js";
 import { escapeHtml, spielerKarte, zeigeDebug } from "../../kern/ui.js";
 import {
   mischeListe, erstelleTeams, bereinigeTreffer, aktiveSpielerId, aktivesTeam
@@ -13,8 +13,10 @@ import {
 
 const TEAMS = {
   blau: { name: "Team Blau", emoji: "🔵" },
-  orange: { name: "Team Orange", emoji: "🟠" }
+  rot: { name: "Team Rot", emoji: "🔴" }
 };
+
+const RUNDEN_DAUER_SEKUNDEN = 40;
 
 const VORLAGE = `
   <div id="zt-setup" class="bildschirm-karte" hidden>
@@ -40,9 +42,9 @@ const VORLAGE = `
           <h3>🔵 Team Blau</h3>
           <ul id="zt-team-blau"></ul>
         </section>
-        <section class="zt-team zt-team-orange">
-          <h3>🟠 Team Orange</h3>
-          <ul id="zt-team-orange"></ul>
+        <section class="zt-team zt-team-rot">
+          <h3>🔴 Team Rot</h3>
+          <ul id="zt-team-rot"></ul>
         </section>
       </div>
       <p><button id="zt-teams-mischen" class="btn-flach" hidden>Teams neu mischen</button></p>
@@ -66,6 +68,10 @@ const VORLAGE = `
     <p class="fortschritt" id="zt-fortschritt"></p>
     <h1 id="zt-begriff" class="zt-begriff"></h1>
     <p id="zt-aktive-einheit" class="zt-aktive-einheit"></p>
+    <div id="zt-timer" class="zt-timer" role="timer" aria-label="40 Sekunden verbleiben">
+      <strong id="zt-timer-zahl">40</strong>
+      <span>Sekunden</span>
+    </div>
 
     <div id="zt-rater-ansicht" class="zt-rater-ansicht" hidden>
       <div class="zt-treffer-zaehler"><strong id="zt-rater-anzahl">0</strong><span>von 10</span></div>
@@ -118,10 +124,16 @@ let aktiveId = null;
 let aktivesTeamId = null;
 let getroffen = [];
 let punkte = {};
-let teamPunkte = { blau: 0, orange: 0 };
+let teamPunkte = { blau: 0, rot: 0 };
 let rundenpunkte = 0;
 let rundeBeendenLaeuft = false;
 let anzahlManuellGesetzt = false;
+let rundenStartMs = null;
+let timerIntervall = null;
+let timerRundenSchluessel = null;
+let letzterSignalton = null;
+let audioKontext = null;
+let audioFreischaltListener = null;
 
 const $ = (id) => el.wurzel.querySelector("#" + id);
 
@@ -135,6 +147,111 @@ function spielerNachId(id) {
 
 function teamInfo(id) {
   return TEAMS[id] ?? { name: "Unbekanntes Team", emoji: "" };
+}
+
+function normalisiereTeam(team) {
+  return team === "orange" ? "rot" : team;
+}
+
+function normalisiereTeams(werte) {
+  return Object.fromEntries(
+    Object.entries(werte || {}).map(([spielerId, team]) => [spielerId, normalisiereTeam(team)])
+  );
+}
+
+function normalisiereTeamPunkte(werte) {
+  return {
+    blau: werte?.blau ?? 0,
+    rot: werte?.rot ?? werte?.orange ?? 0
+  };
+}
+
+function zeitpunktInMillis(wert) {
+  if (Number.isFinite(wert)) return wert;
+  if (typeof wert?.toMillis === "function") return wert.toMillis();
+  if (Number.isFinite(wert?.seconds)) {
+    return wert.seconds * 1000 + Math.floor((wert.nanoseconds ?? 0) / 1e6);
+  }
+  return null;
+}
+
+function audioAktivieren() {
+  const AudioContext = window.AudioContext || window.webkitAudioContext;
+  if (!AudioContext) return;
+  try {
+    if (!audioKontext) audioKontext = new AudioContext();
+    if (audioKontext.state === "suspended") audioKontext.resume().catch(() => {});
+  } catch { /* Der visuelle Countdown bleibt als Rückfall aktiv. */ }
+}
+
+function spieleSignalton(restsekunden) {
+  audioAktivieren();
+  if (!audioKontext || audioKontext.state !== "running") return;
+  try {
+    const jetzt = audioKontext.currentTime;
+    const oscillator = audioKontext.createOscillator();
+    const lautstaerke = audioKontext.createGain();
+    const istSchlusston = restsekunden === 0;
+    oscillator.type = istSchlusston ? "square" : "sine";
+    oscillator.frequency.setValueAtTime(istSchlusston ? 420 : 880, jetzt);
+    if (istSchlusston) oscillator.frequency.exponentialRampToValueAtTime(180, jetzt + 0.48);
+    lautstaerke.gain.setValueAtTime(0.0001, jetzt);
+    lautstaerke.gain.exponentialRampToValueAtTime(0.18, jetzt + 0.02);
+    lautstaerke.gain.exponentialRampToValueAtTime(0.0001, jetzt + (istSchlusston ? 0.52 : 0.13));
+    oscillator.connect(lautstaerke);
+    lautstaerke.connect(audioKontext.destination);
+    oscillator.start(jetzt);
+    oscillator.stop(jetzt + (istSchlusston ? 0.54 : 0.15));
+  } catch { /* Der visuelle Countdown bleibt als Rückfall aktiv. */ }
+}
+
+function verbleibendeSekunden() {
+  if (!rundenStartMs) return RUNDEN_DAUER_SEKUNDEN;
+  const ende = rundenStartMs + RUNDEN_DAUER_SEKUNDEN * 1000;
+  return Math.max(0, Math.ceil((ende - Date.now()) / 1000));
+}
+
+function aktualisiereTimer() {
+  if (!el.wurzel || status !== "runde") return;
+  const timer = $("zt-timer");
+  const anzeige = $("zt-timer-zahl");
+  const rundenKarte = $("zt-runde");
+  if (!timer || !anzeige || !rundenKarte) return;
+
+  const restsekunden = verbleibendeSekunden();
+  anzeige.textContent = restsekunden;
+  timer.setAttribute("aria-label", `${restsekunden} Sekunden verbleiben`);
+  timer.classList.toggle("warnung", restsekunden > 0 && restsekunden <= 5);
+  timer.classList.toggle("abgelaufen", restsekunden === 0);
+  rundenKarte.classList.toggle("zt-countdown-warnung", restsekunden <= 5);
+
+  if (restsekunden <= 5 && restsekunden !== letzterSignalton) {
+    letzterSignalton = restsekunden;
+    spieleSignalton(restsekunden);
+    if (restsekunden > 0) navigator.vibrate?.(55);
+  }
+
+  if (restsekunden === 0) {
+    el.wurzel.querySelectorAll("#zt-treffer-grid .zt-treffer")
+      .forEach((knopf) => { knopf.disabled = true; });
+    if (api.istLeiter) rundeBeenden();
+  }
+}
+
+function starteRundenTimer() {
+  const schluessel = `${rundenIndex}:${rundenStartMs ?? "wartet"}`;
+  if (timerRundenSchluessel !== schluessel) {
+    timerRundenSchluessel = schluessel;
+    letzterSignalton = null;
+  }
+  if (!timerIntervall) timerIntervall = window.setInterval(aktualisiereTimer, 100);
+  aktualisiereTimer();
+}
+
+function stoppeRundenTimer() {
+  if (timerIntervall) window.clearInterval(timerIntervall);
+  timerIntervall = null;
+  $("zt-runde")?.classList.remove("zt-countdown-warnung");
 }
 
 export async function starten(uebergebeneApi) {
@@ -155,13 +272,15 @@ export async function starten(uebergebeneApi) {
       ztStatus: "setup", ztTeammodus: false, ztTeams: {},
       ztReihenfolge: [], ztSpielerReihenfolge: [], ztStartTeam: "blau",
       ztRundenIndex: 0, ztAnzahlRunden: 0, ztAktiveId: null, ztAktivesTeam: null,
-      ztGetroffen: [], ztPunkte: {}, ztTeamPunkte: { blau: 0, orange: 0 },
-      ztRundenpunkte: 0
+      ztGetroffen: [], ztPunkte: {}, ztTeamPunkte: { blau: 0, rot: 0 },
+      ztRundenpunkte: 0, ztRundenStart: null
     });
   }
 }
 
 function verdrahteBedienelemente() {
+  audioFreischaltListener = audioAktivieren;
+  el.wurzel.addEventListener("pointerdown", audioFreischaltListener);
   $("zt-teammodus").addEventListener("change", teammodusUmschalten);
   $("zt-teams-mischen").addEventListener("click", teamsNeuMischen);
   $("zt-anzahl").addEventListener("input", () => { anzahlManuellGesetzt = true; });
@@ -173,6 +292,13 @@ function verdrahteBedienelemente() {
 }
 
 export function beenden() {
+  stoppeRundenTimer();
+  if (audioFreischaltListener && el.wurzel) {
+    el.wurzel.removeEventListener("pointerdown", audioFreischaltListener);
+  }
+  audioFreischaltListener = null;
+  audioKontext?.close?.().catch(() => {});
+  audioKontext = null;
   el = {};
   karten = [];
   spielerListe = [];
@@ -189,10 +315,13 @@ export function beenden() {
   aktivesTeamId = null;
   getroffen = [];
   punkte = {};
-  teamPunkte = { blau: 0, orange: 0 };
+  teamPunkte = { blau: 0, rot: 0 };
   rundenpunkte = 0;
   rundeBeendenLaeuft = false;
   anzahlManuellGesetzt = false;
+  rundenStartMs = null;
+  timerRundenSchluessel = null;
+  letzterSignalton = null;
 }
 
 export function spieler(liste) {
@@ -206,18 +335,19 @@ export function raumDaten(daten) {
   raum = daten;
   status = daten.ztStatus ?? null;
   teammodus = !!daten.ztTeammodus;
-  teams = daten.ztTeams ?? {};
+  teams = normalisiereTeams(daten.ztTeams);
   reihenfolge = daten.ztReihenfolge ?? [];
   spielerReihenfolge = daten.ztSpielerReihenfolge ?? [];
-  startTeam = daten.ztStartTeam ?? "blau";
+  startTeam = normalisiereTeam(daten.ztStartTeam) ?? "blau";
   rundenIndex = daten.ztRundenIndex ?? 0;
   anzahlRunden = daten.ztAnzahlRunden ?? 0;
   aktiveId = daten.ztAktiveId ?? null;
-  aktivesTeamId = daten.ztAktivesTeam ?? null;
+  aktivesTeamId = normalisiereTeam(daten.ztAktivesTeam) ?? null;
   getroffen = bereinigeTreffer(daten.ztGetroffen, 10);
   punkte = daten.ztPunkte ?? {};
-  teamPunkte = daten.ztTeamPunkte ?? { blau: 0, orange: 0 };
+  teamPunkte = normalisiereTeamPunkte(daten.ztTeamPunkte);
   rundenpunkte = daten.ztRundenpunkte ?? 0;
+  rundenStartMs = zeitpunktInMillis(daten.ztRundenStart);
 
   renderAktuellenStatus();
 
@@ -228,6 +358,7 @@ export function raumDaten(daten) {
 
 function renderAktuellenStatus() {
   if (!el.wurzel) return;
+  if (status !== "runde") stoppeRundenTimer();
   ["zt-setup", "zt-runde", "zt-auswertung", "zt-endstand"]
     .forEach((id) => { $(id).hidden = true; });
 
@@ -250,10 +381,10 @@ function aktuelleTeamsVollstaendig() {
   if (spielerListe.length < 2) return false;
   const ids = new Set(spielerListe.map((spieler) => spieler.id));
   const eingeteilt = Object.entries(teams)
-    .filter(([id, team]) => ids.has(id) && (team === "blau" || team === "orange"));
+    .filter(([id, team]) => ids.has(id) && (team === "blau" || team === "rot"));
   return eingeteilt.length === spielerListe.length &&
     eingeteilt.some(([, team]) => team === "blau") &&
-    eingeteilt.some(([, team]) => team === "orange");
+    eingeteilt.some(([, team]) => team === "rot");
 }
 
 async function teammodusUmschalten() {
@@ -306,7 +437,7 @@ function zeigeSetup() {
   $("zt-teams-mischen").hidden = !api.istLeiter;
   if (teammodus) {
     rendereTeamListe("blau");
-    rendereTeamListe("orange");
+    rendereTeamListe("rot");
   }
 
   const anzahlFeld = $("zt-anzahl");
@@ -334,7 +465,7 @@ async function spielStarten() {
     ? erstelleTeams(spielerListe.map((spieler) => spieler.id))
     : teams;
   const neueSpielerReihenfolge = mischeListe(spielerListe.map((spieler) => spieler.id));
-  const neuerStart = Math.random() < 0.5 ? "blau" : "orange";
+  const neuerStart = Math.random() < 0.5 ? "blau" : "rot";
   const ersteAktiveId = teammodus ? null : neueSpielerReihenfolge[0];
   const erstesAktivesTeam = teammodus ? aktivesTeam(
     neuerStart, 0, neueTeams, spielerListe.map((spieler) => spieler.id)
@@ -355,8 +486,9 @@ async function spielStarten() {
       ztAktivesTeam: erstesAktivesTeam,
       ztGetroffen: [],
       ztPunkte: Object.fromEntries(spielerListe.map((spieler) => [spieler.id, 0])),
-      ztTeamPunkte: { blau: 0, orange: 0 },
-      ztRundenpunkte: 0
+      ztTeamPunkte: { blau: 0, rot: 0 },
+      ztRundenpunkte: 0,
+      ztRundenStart: serverTimestamp()
     });
   } catch (e) {
     zeigeDebug("Fehler beim Start: " + e.message);
@@ -405,7 +537,7 @@ function rendereTreffer(container, klickbar) {
 }
 
 function zeigeRunde() {
-   const karte = karteAn(rundenIndex);
+  const karte = karteAn(rundenIndex);
   if (!karte) return;
   const rolle = eigeneRolle();
   $("zt-fortschritt").textContent = `Begriff ${rundenIndex + 1} von ${anzahlRunden}`;
@@ -421,16 +553,19 @@ function zeigeRunde() {
   $("zt-runden-status").textContent = `${getroffen.length} von 10 Treffern`;
   $("zt-runde-beenden").hidden = !api.istLeiter;
   rendereTreffer($("zt-treffer-grid"), rolle === "jury");
+  starteRundenTimer();
 }
 
 async function setzeTreffer(trefferIndex, sollGetroffenSein) {
-  if (status !== "runde" || eigeneRolle() !== "jury") return;
+  if (status !== "runde" || eigeneRolle() !== "jury" || verbleibendeSekunden() === 0) return;
   try {
     await runTransaction(api.db, async (transaktion) => {
       const ref = api.raumRef();
       const snap = await transaktion.get(ref);
       const daten = snap.data();
       if (!daten || daten.ztStatus !== "runde" || (daten.ztRundenIndex ?? 0) !== rundenIndex) return;
+      const startMs = zeitpunktInMillis(daten.ztRundenStart);
+      if (startMs && Date.now() >= startMs + RUNDEN_DAUER_SEKUNDEN * 1000) return;
       const aktuelle = bereinigeTreffer(daten.ztGetroffen, 10);
       const bereitsDabei = aktuelle.includes(trefferIndex);
       if (sollGetroffenSein === bereitsDabei) return;
@@ -457,10 +592,10 @@ async function rundeBeenden() {
 
       const anzahlTreffer = bereinigeTreffer(daten.ztGetroffen, 10).length;
       const neuePunkte = { ...(daten.ztPunkte ?? {}) };
-      const neueTeamPunkte = { blau: 0, orange: 0, ...(daten.ztTeamPunkte ?? {}) };
+      const neueTeamPunkte = normalisiereTeamPunkte(daten.ztTeamPunkte);
       if (daten.ztTeammodus) {
-        const team = daten.ztAktivesTeam;
-        if (team === "blau" || team === "orange") {
+        const team = normalisiereTeam(daten.ztAktivesTeam);
+        if (team === "blau" || team === "rot") {
           neueTeamPunkte[team] = (neueTeamPunkte[team] ?? 0) + anzahlTreffer;
         }
       } else if (daten.ztAktiveId) {
@@ -471,7 +606,8 @@ async function rundeBeenden() {
         ztStatus: "auswertung",
         ztRundenpunkte: anzahlTreffer,
         ztPunkte: neuePunkte,
-        ztTeamPunkte: neueTeamPunkte
+        ztTeamPunkte: neueTeamPunkte,
+        ztRundenStart: null
       });
     });
   } catch (e) {
@@ -532,7 +668,8 @@ async function weiter() {
           ? aktivesTeam(startTeam, naechsterIndex, teams, ids)
           : null,
         ztGetroffen: [],
-        ztRundenpunkte: 0
+        ztRundenpunkte: 0,
+        ztRundenStart: serverTimestamp()
       });
     }
   } catch (e) {
@@ -545,7 +682,7 @@ function teamEndstandHtml() {
   const sortiert = Object.keys(TEAMS).sort((a, b) =>
     (teamPunkte[b] ?? 0) - (teamPunkte[a] ?? 0)
   );
-  const gleichstand = (teamPunkte.blau ?? 0) === (teamPunkte.orange ?? 0);
+  const gleichstand = (teamPunkte.blau ?? 0) === (teamPunkte.rot ?? 0);
   return `<div class="zt-team-endstand">` + sortiert.map((team, index) => {
     const mitglieder = spielerListe.filter((spieler) => teams[spieler.id] === team);
     return `<section class="zt-team zt-team-${team} ${!gleichstand && index === 0 ? "gewinner" : ""}">` +
@@ -572,7 +709,8 @@ async function zurueck() {
       ztStatus: null, ztTeammodus: false, ztTeams: {}, ztReihenfolge: [],
       ztSpielerReihenfolge: [], ztRundenIndex: 0, ztAnzahlRunden: 0,
       ztAktiveId: null, ztAktivesTeam: null, ztGetroffen: [],
-      ztPunkte: {}, ztTeamPunkte: { blau: 0, orange: 0 }, ztRundenpunkte: 0
+      ztPunkte: {}, ztTeamPunkte: { blau: 0, rot: 0 }, ztRundenpunkte: 0,
+      ztRundenStart: null
     });
     await api.zurueckZurAuswahl();
   } catch (e) {
