@@ -15,6 +15,9 @@ spiele/schaetzfragen/spiel.js    das Spiel Schätzfragen
 spiele/schaetzfragen/fragen.json 610 Fragen
 spiele/denk-gleich/spiel.js       das Spiel Denk gleich!
 spiele/denk-gleich/fragen.json    250 Fragen
+spiele/zehn-treffer/spiel.js      das Spiel 10 Treffer!
+spiele/zehn-treffer/logik.js      Team-, Treffer- und Rotationslogik
+spiele/zehn-treffer/fragen.json   5 Begriffe mit je 10 Treffern
 bilder/                          Profilbilder und App-Icons
 ```
 
@@ -45,8 +48,8 @@ Diesen Link schickst du deinen Kumpels.
 
 **Bei jeder späteren Änderung:**
 
-1. In `sw.js` die Zeile `const CACHE_NAME = "partyspiele-v37";` hochzählen
-   (`v38`, `v39` …) und in `app.js` `APP_VERSION` entsprechend anpassen.
+1. In `sw.js` die Zeile `const CACHE_NAME = "partyspiele-v38";` hochzählen
+   (`v39`, `v40` …) und in `app.js` `APP_VERSION` entsprechend anpassen.
    Ohne diesen Schritt sehen die anderen unter Umständen noch die alte Version.
 2. Die geänderten Dateien im Repo hochladen (**Add file → Upload files**,
    gleichnamige Dateien werden ersetzt) und **Commit changes**.
