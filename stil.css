@@ -464,10 +464,17 @@
       margin: -8px 0 16px; padding: 7px 11px; border-radius: 999px;
       font-size: .78rem;
     }
-    .rd-wechsel-aktionen {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 8px 0 4px;
+    .rd-kategorie-wechsel { margin: 8px 0 4px; }
+    .rd-kategorie-wechsel button { width: 100%; margin: 0; padding: 8px 10px; font-size: .76rem; }
+    .rd-letztes-ergebnis {
+      display: flex; align-items: center; justify-content: space-between; gap: 10px;
+      margin: 8px 0; padding: 9px 12px; border: 2px solid; border-radius: 13px;
     }
-    .rd-wechsel-aktionen button { margin: 0; padding: 8px 6px; font-size: .76rem; }
+    .rd-letztes-ergebnis[hidden] { display: none; }
+    .rd-letztes-ergebnis.richtig { color: #14532d; border-color: #22c55e; background: #dcfce7; }
+    .rd-letztes-ergebnis.falsch { color: #7f1d1d; border-color: #ef4444; background: #fee2e2; }
+    .rd-letztes-ergebnis strong { flex: 0 0 auto; font-size: .86rem; }
+    .rd-letztes-ergebnis span { font-size: .76rem; line-height: 1.25; text-align: right; }
     .rd-sortierbereich {
       display: grid; grid-template-columns: 58px minmax(0, 1fr); gap: 9px;
       align-items: stretch; margin: 12px 0 22px;
@@ -531,10 +538,6 @@
     .rd-reihe-aufgeloest { margin: 12px 0 20px; }
     .rd-punkteliste { display: grid; gap: 8px; margin: 8px 0 18px; padding: 0; list-style: none; }
     .rd-punkteliste li { margin: 0; }
-
-    @media (max-width: 360px) {
-      .rd-wechsel-aktionen { grid-template-columns: 1fr; }
-    }
 
     .kategorien-aktionen { display: flex; gap: 8px; margin: 8px 0 0; }
     .kategorien-aktionen button { flex: 1; font-size: 0.8rem; padding: 7px 8px; }
