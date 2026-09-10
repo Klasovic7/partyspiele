@@ -25,6 +25,14 @@ export const SPIELE = [
     beschreibung: "Gleiche Antwort, gleiche Punkte!",
     minSpieler: 2,
     laden: () => import("./denk-gleich/spiel.js")
+  },
+  {
+    id: "zehn-treffer",
+    name: "10 Treffer!",
+    emoji: "💥",
+    beschreibung: "Ein Begriff, zehn gesuchte Treffer!",
+    minSpieler: 2,
+    laden: () => import("./zehn-treffer/spiel.js")
   }
 ];
 
