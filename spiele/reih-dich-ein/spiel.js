@@ -47,9 +47,6 @@ const VORLAGE = `
     <div class="rd-kandidat">
       <strong id="rd-kandidat"></strong>
     </div>
-    <p class="rd-kategorie-wechsel">
-      <button id="rd-andere-kategorie" class="btn-flach" hidden>Andere Kategorie</button>
-    </p>
     <p id="rd-runde-fehler" class="fehler-text"></p>
     <div class="rd-sortierbereich">
       <aside class="rd-skala" aria-label="Sortierrichtung">
@@ -58,6 +55,9 @@ const VORLAGE = `
       <div id="rd-reihe" class="rd-reihe"></div>
     </div>
     <div id="rd-zwischenstand"></div>
+    <p class="rd-kategorie-wechsel">
+      <button id="rd-andere-kategorie" class="btn-flach" hidden>Andere Kategorie</button>
+    </p>
   </div>
 
   <div id="rd-feedback" class="bildschirm-karte" hidden>
@@ -310,13 +310,37 @@ async function spielStarten() {
   }
 }
 
-function punktestandHtml() {
+function formatiertePunkte(wert) {
+  const punktewert = Number(wert) || 0;
+  return punktewert > 0 ? `+${punktewert}` : `${punktewert}`;
+}
+
+function kategorienPunkte() {
+  const aenderungen = {};
+  Object.values(ergebnisse).forEach((ergebnis) => {
+    if (!ergebnis?.spielerId) return;
+    aenderungen[ergebnis.spielerId] = (aenderungen[ergebnis.spielerId] ?? 0) +
+      (ergebnis.richtig ? 1 : -1);
+  });
+  return aenderungen;
+}
+
+function punktestandHtml(mitKategorienPunkten = true) {
   const sortiert = [...spielerListe].sort((a, b) =>
     (punkte[b.id] ?? 0) - (punkte[a.id] ?? 0)
   );
-  return `<ul class="rd-punkteliste">${sortiert.map((spieler) =>
-    `<li>${spielerKarte(spieler.name, spieler.farbe, spieler.icon, punkte[spieler.id] ?? 0)}</li>`
-  ).join("")}</ul>`;
+  const aenderungen = kategorienPunkte();
+  return `<ul class="rd-punkteliste">${sortiert.map((spieler) => {
+    const gesamt = punkte[spieler.id] ?? 0;
+    return `<li>${mitKategorienPunkten
+      ? spielerKarte(
+          spieler.name, spieler.farbe, spieler.icon,
+          formatiertePunkte(aenderungen[spieler.id] ?? 0),
+          { punkteRechts: gesamt }
+        )
+      : spielerKarte(spieler.name, spieler.farbe, spieler.icon, gesamt)
+    }</li>`;
+  }).join("")}</ul>`;
 }
 
 function begriffKarteHtml(begriff, hervorgehoben = false) {
@@ -626,7 +650,7 @@ async function naechsteKategorie() {
 }
 
 function zeigeEndstand() {
-  $("rd-endstand-inhalt").innerHTML = punktestandHtml();
+  $("rd-endstand-inhalt").innerHTML = punktestandHtml(false);
   $("rd-nochmal").hidden = !api.istLeiter;
   $("rd-endstand-warten").hidden = api.istLeiter;
 }
