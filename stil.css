@@ -477,19 +477,17 @@
       color: #5b21b6; background: #ede9fe; font-size: 0.78rem;
     }
     .rd-aktiver-spieler {
-      margin: 12px 0; padding: 9px 12px; border-radius: 13px;
-      color: #fff; background: var(--akzent); text-align: center; font-weight: 800;
+      margin: 12px 0;
     }
+    .rd-aktiver-spieler .spieler-karte { min-height: 78px; padding: 7px 13px 7px 8px; border-radius: 17px; }
+    .rd-aktiver-spieler .spieler-icon { width: 62px; height: 62px; }
+    .rd-aktiver-spieler .spieler-name { font-size: 1.08rem; }
     .rd-kandidat {
-      display: flex; flex-direction: column; align-items: center; gap: 4px;
-      margin: 12px 0; padding: 17px 14px; border-radius: 19px; text-align: center;
+      margin: 10px 0 12px; padding: 17px 14px; border-radius: 19px; text-align: center;
       color: #fff; background: linear-gradient(135deg, #6d28d9, #a855f7);
       box-shadow: 0 10px 22px rgba(109,40,217,.2);
     }
-    .rd-kandidat span { opacity: .8; font-size: .72rem; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; }
     .rd-kandidat strong { font-size: 1.5rem; line-height: 1.15; }
-    .rd-kandidat small { opacity: .82; font-size: .7rem; }
-    .rd-anweisung { text-align: center; }
     .rd-zurueck {
       margin: -8px 0 16px; padding: 7px 11px; border-radius: 999px;
       font-size: .78rem;
@@ -580,12 +578,20 @@
     .rd-ergebnis-meta {
       padding-top: 7px; border-top: 1px solid #eeeaf4; color: var(--text-hell); font-size: .8rem;
     }
-    .rd-ergebnis-meta strong {
+    .rd-ergebnis-spieler { flex: 1; min-width: 0; }
+    .rd-ergebnis-spieler.neutral { padding: 7px 3px; }
+    .rd-ergebnis-spieler .spieler-karte {
+      min-height: 48px; padding: 4px 9px 4px 5px; border-radius: 13px; box-shadow: none;
+    }
+    .rd-ergebnis-spieler .spieler-info { gap: 8px; }
+    .rd-ergebnis-spieler .spieler-icon { width: 40px; height: 40px; border-width: 2px; }
+    .rd-ergebnis-spieler .spieler-name { font-size: .82rem; }
+    .rd-ergebnis-meta > strong {
       min-width: 42px; padding: 4px 9px; border-radius: 999px; text-align: center; font-size: .82rem;
     }
-    .rd-ergebnis-meta strong.richtig { color: #166534; background: #dcfce7; }
-    .rd-ergebnis-meta strong.falsch { color: #991b1b; background: #fee2e2; }
-    .rd-ergebnis-meta strong.neutral { color: #64748b; background: #f1f5f9; }
+    .rd-ergebnis-meta > strong.richtig { color: #166534; background: #dcfce7; }
+    .rd-ergebnis-meta > strong.falsch { color: #991b1b; background: #fee2e2; }
+    .rd-ergebnis-meta > strong.neutral { color: #64748b; background: #f1f5f9; }
     .rd-punkteliste { display: grid; gap: 8px; margin: 8px 0 18px; padding: 0; list-style: none; }
     .rd-punkteliste li { margin: 0; }
 
