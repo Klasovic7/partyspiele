@@ -16,14 +16,14 @@ export const FARBEN = [
 // Profilbilder liegen als echte Dateien in bilder/ - der Browser cacht sie dann
 // einzeln und die Startseite bleibt klein. In Firestore steht nur die id ("avatar1").
 export const AVATARE = [
-  { id: "avatar1", bild: "bilder/avatar1-hd.jpg?v=35", vorname: "Jens",      nachname: "Jeremies" },
-  { id: "avatar2", bild: "bilder/avatar2-hd.jpg?v=35", vorname: "Marco",     nachname: "Reus" },
-  { id: "avatar3", bild: "bilder/avatar3-hd.jpg?v=35", vorname: "Timothy",   nachname: "Chandler" },
-  { id: "avatar4", bild: "bilder/avatar4-hd.jpg?v=35", vorname: "Lothar",    nachname: "Matthäus" },
-  { id: "avatar5", bild: "bilder/avatar5-hd.jpg?v=35", vorname: "Christian", nachname: "Wörns" },
-  { id: "avatar6", bild: "bilder/avatar6-hd.jpg?v=35", vorname: "Martin",    nachname: "Hinteregger" },
-  { id: "avatar7", bild: "bilder/avatar7-hd.jpg?v=35", vorname: "",          nachname: "Ailton" },
-  { id: "avatar8", bild: "bilder/avatar8-hd.jpg?v=35", vorname: "Niklas",    nachname: "Süle" }
+  { id: "avatar1", bild: "bilder/avatar1-hd.jpg?v=37", vorname: "Jens",      nachname: "Jeremies" },
+  { id: "avatar2", bild: "bilder/avatar2-hd.jpg?v=37", vorname: "Marco",     nachname: "Reus" },
+  { id: "avatar3", bild: "bilder/avatar3-hd.jpg?v=37", vorname: "Timothy",   nachname: "Chandler" },
+  { id: "avatar4", bild: "bilder/avatar4-hd.jpg?v=37", vorname: "Lothar",    nachname: "Matthäus" },
+  { id: "avatar5", bild: "bilder/avatar5-hd.jpg?v=37", vorname: "Christian", nachname: "Wörns" },
+  { id: "avatar6", bild: "bilder/avatar6-hd.jpg?v=37", vorname: "Martin",    nachname: "Hinteregger" },
+  { id: "avatar7", bild: "bilder/avatar7-hd.jpg?v=37", vorname: "",          nachname: "Ailton" },
+  { id: "avatar8", bild: "bilder/avatar8-hd.jpg?v=37", vorname: "Niklas",    nachname: "Süle" }
 ];
 
 export function avatarBild(id) {
@@ -61,6 +61,17 @@ export function textFarbeFuer(hex) {
   return (0.299 * r + 0.587 * g + 0.114 * b) / 255 > 0.6 ? "#222" : "#fff";
 }
 
+// Erzeugt für jede Spielerfarbe eine hellere und eine dunklere Variante.
+// Dadurch bleibt das Zackenmuster bei allen zehn auswählbaren Farben sichtbar.
+function mischeSpielerFarbe(hex, zielwert, anteil) {
+  if (!/^#[0-9a-f]{6}$/i.test(hex)) return hex;
+  const kanal = (start) => Math.round(start + (zielwert - start) * anteil);
+  const r = kanal(parseInt(hex.slice(1, 3), 16));
+  const g = kanal(parseInt(hex.slice(3, 5), 16));
+  const b = kanal(parseInt(hex.slice(5, 7), 16));
+  return `rgb(${r}, ${g}, ${b})`;
+}
+
 // Die abgerundete Kachel mit Farbe, Profilbild, Name und großer Punktzahl links.
 // Alle Kacheln sind gleich breit, unabhängig von der Länge des Namens.
 // optionen.extra        - zweite Zeile unter dem Namen (z. B. die Schätzung)
@@ -69,6 +80,8 @@ export function textFarbeFuer(hex) {
 export function spielerKarte(name, farbe, icon, punkte, optionen = {}) {
   const sichereFarbe = farbe || "#7f8c8d";
   const textFarbe = textFarbeFuer(sichereFarbe);
+  const dunkleZacke = mischeSpielerFarbe(sichereFarbe, 0, 0.38);
+  const helleZacke = mischeSpielerFarbe(sichereFarbe, 255, 0.34);
   const linksHtml = optionen.punkteLinks === false
     ? ""
     : `<div class="spieler-punkte">${escapeHtml(String(punkte ?? 0))}</div>`;
@@ -78,7 +91,10 @@ export function spielerKarte(name, farbe, icon, punkte, optionen = {}) {
     : "";
 
   return (
-    `<div class="spieler-karte" style="background:${sichereFarbe}; color:${textFarbe}">` +
+    `<div class="spieler-karte" style="--spieler-farbe:${sichereFarbe}; --spieler-dunkel:${dunkleZacke}; --spieler-hell:${helleZacke}; color:${textFarbe}">` +
+      `<span class="spieler-zacken" aria-hidden="true">` +
+        `<span></span><span></span><span></span><span></span><span></span>` +
+      `</span>` +
       linksHtml +
       `<div class="spieler-info">` +
         avatarHtml(icon, "spieler-icon") +
