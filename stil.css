@@ -653,3 +653,197 @@
 
     /* Abstand zwischen mehreren Karten (Lobby + laufendes Spiel) */
     #spiel-wurzel > .bildschirm-karte { margin-top: 0; }
+
+    /* ======================================================================
+       Designsystem v49 – ruhige Spielflächen, klare Spieler und große Spiele
+       Die Hintergrundfarbe bleibt absichtlich eine einzelne Variable.
+       ====================================================================== */
+    :root {
+      --app-hintergrund: #292526;
+      --app-hintergrund-hell: #3a3234;
+      --flaeche: #fffaf1;
+      --flaeche-klar: #fffdf8;
+      --linie: #e9dfd4;
+      --koralle: #ff604c;
+    }
+
+    html { background: var(--app-hintergrund); }
+    body {
+      max-width: 520px;
+      background:
+        radial-gradient(circle at 12% 5%, rgba(255,255,255,.075), transparent 24%),
+        linear-gradient(165deg, var(--app-hintergrund-hell), var(--app-hintergrund) 55%);
+    }
+    #app-version { color: rgba(255,255,255,.68); }
+    .bildschirm-karte {
+      background: var(--flaeche);
+      border: 1px solid rgba(255,255,255,.6);
+      box-shadow: 0 22px 50px rgba(8, 6, 16, .34);
+    }
+
+    /* Ruhiger Startbildschirm mit großzügigen Abständen und wenigen Motiven. */
+    #start-screen {
+      position: relative; isolation: isolate; overflow: hidden;
+      min-height: min(790px, calc(100dvh - 96px));
+      display: flex; flex-direction: column;
+      padding: 44px 28px 26px;
+      background:
+        radial-gradient(circle at 12% 2%, rgba(192,73,218,.76) 0 12%, transparent 12.4%),
+        radial-gradient(circle at 96% 1%, rgba(255,197,99,.78) 0 11%, transparent 11.4%),
+        var(--flaeche);
+    }
+    #start-screen::before {
+      content: ""; position: absolute; z-index: -1; left: -56px; bottom: -68px;
+      width: 190px; height: 190px; border-radius: 44% 56% 42% 58%;
+      background: #ff735d; transform: rotate(18deg);
+    }
+    #start-screen .start-hero { margin-bottom: 22px; }
+    #start-screen .app-icon { width: 92px; height: 92px; border-radius: 24px; }
+    #start-screen .start-hero h1 { margin-top: 14px; font-size: 2.15rem; letter-spacing: -.03em; }
+    #start-screen .start-tagline { font-size: 1rem; }
+    #start-screen .feld-label { margin-top: 18px; color: var(--text-dunkel); font-size: .92rem; }
+    #start-screen input { min-height: 54px; background: rgba(255,255,255,.72); }
+    #start-screen .start-aktionen { margin-top: 20px; }
+    #start-screen .btn-primaer {
+      min-height: 58px; background: linear-gradient(135deg, #ff785f, var(--koralle));
+      box-shadow: 0 9px 20px rgba(255,96,76,.24);
+    }
+    #start-screen .btn-primaer:hover { background: linear-gradient(135deg, #ff806a, #ee4e3c); }
+    #start-screen .btn-sekundaer { min-height: 55px; background: rgba(255,255,255,.5); }
+    .start-deko {
+      position: relative; min-height: 154px; margin-top: auto; padding-top: 48px;
+      color: #bc5148; font-size: 1.05rem; line-height: 1.15;
+      text-transform: uppercase; transform: rotate(-4deg);
+    }
+    .start-deko strong { display: block; width: 145px; letter-spacing: .02em; }
+    .start-deko span {
+      position: absolute; right: 7px; bottom: -1px; font-size: 4.7rem;
+      filter: drop-shadow(0 8px 9px rgba(55,29,32,.16)); transform: rotate(-12deg);
+    }
+    .start-deko span:last-child { right: 77px; bottom: -12px; font-size: 3.8rem; transform: rotate(17deg); }
+
+    /* Die Lobby zeigt Personen als horizontale, scrollbare Gruppe. */
+    #lobby-screen { padding: 30px 24px; }
+    #lobby-screen > h1 { margin: 0 0 12px; font-size: 2.2rem; letter-spacing: -.035em; }
+    #lobby-screen > h3 { margin: 26px 0 9px; font-size: 1.35rem; }
+    .lobby-spielerleiste {
+      display: flex; align-items: flex-start; gap: 18px; overflow-x: auto;
+      margin: 0 -5px; padding: 7px 5px 12px; scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+    .lobby-spielerleiste::-webkit-scrollbar { display: none; }
+    .lobby-spieler {
+      width: 66px; flex: 0 0 66px; display: flex; flex-direction: column; align-items: center;
+      margin: 0; color: var(--text-dunkel); text-align: center;
+    }
+    .lobby-avatar-rahmen {
+      position: relative; width: 62px; height: 62px; display: block; padding: 3px;
+      border: 3px solid var(--spieler-farbe); border-radius: 50%; background: #fff;
+      box-shadow: 0 6px 13px rgba(36,28,45,.17);
+    }
+    .lobby-avatar { width: 100%; height: 100%; display: block; border-radius: 50%; object-fit: cover; }
+    .lobby-avatar-text { align-items: center; justify-content: center; font-size: 1rem; }
+    .lobby-krone {
+      position: absolute; top: -15px; right: -7px; color: #f7b928; font-size: 1.25rem;
+      text-shadow: 0 2px 2px rgba(0,0,0,.18); transform: rotate(10deg);
+    }
+    .lobby-spieler strong {
+      width: 82px; margin-top: 7px; font-size: .76rem; white-space: nowrap;
+      overflow: hidden; text-overflow: ellipsis;
+    }
+    .lobby-spieler small { margin-top: 2px; color: var(--text-hell); font-size: .62rem; line-height: 1.05; }
+    .lobby-warten-plus {
+      width: 62px; height: 62px; display: grid; place-items: center; border: 2px solid #aeb5c7;
+      border-radius: 50%; color: #64708c; background: #f3f4f8; font-size: 2.2rem; font-weight: 300;
+    }
+
+    /* Größere Spielkacheln – Spielname und Symbol bilden den Blickfang. */
+    .spiele-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .spiel-kachel {
+      min-height: 174px; gap: 8px; padding: 22px 12px; border: 1px solid var(--linie);
+      border-radius: 22px; background: var(--flaeche-klar);
+      box-shadow: 0 8px 18px rgba(42,30,39,.07);
+    }
+    .spiel-kachel:hover { background: #f7f0ff; }
+    .spiel-emoji { font-size: 46px; line-height: 50px; }
+    .spiel-name { font-family: "Barlow Condensed", sans-serif; font-size: 1.38rem; line-height: 1; }
+    .spiel-beschreibung { max-width: 150px; font-size: .75rem; line-height: 1.25; }
+
+    /* Gemeinsame Punktezeile: Änderung/Platz links, Spielerfarbe in Ring und Balken,
+       Gesamtstand rechts in der Display-Schrift. */
+    .spieler-zacken { display: none; }
+    .spieler-karte {
+      min-height: 78px; gap: 10px; padding: 9px 14px 9px 10px; border-radius: 18px;
+      color: #f8faff; background: linear-gradient(145deg, #182039, #111629);
+      border: 1px solid rgba(131,148,202,.2); box-shadow: 0 8px 19px rgba(12,14,27,.18);
+    }
+    .spieler-karte::after { display: none; }
+    .spieler-punkte {
+      width: 36px; height: 36px; display: grid; place-items: center; padding: 0;
+      border: 2px solid rgba(255,255,255,.42); border-radius: 50%; background: var(--spieler-farbe);
+      font-size: .9rem; text-shadow: none;
+    }
+    .spieler-punkte.positiv { color: #052e16; background: #61e59a; border-color: #b9f8d2; }
+    .spieler-punkte.negativ { color: #4c0519; background: #fb7185; border-color: #fecdd3; }
+    .spieler-info { gap: 10px; }
+    .spieler-icon {
+      width: 52px; height: 52px; border: 3px solid var(--spieler-farbe);
+      box-shadow: 0 0 0 2px rgba(255,255,255,.88), 0 4px 12px rgba(0,0,0,.28);
+    }
+    .spieler-name { font-size: .93rem; }
+    .spieler-extra { margin-top: 1px; color: #bec7df; font-size: .69rem; }
+    .spieler-fortschritt {
+      width: 100%; height: 7px; display: block; overflow: hidden; margin-top: 7px;
+      border-radius: 999px; background: #303955;
+    }
+    .spieler-fortschritt i {
+      height: 100%; display: block; border-radius: inherit; background: var(--spieler-farbe);
+      box-shadow: 0 0 8px color-mix(in srgb, var(--spieler-farbe), transparent 30%);
+    }
+    .spieler-punkte-gesamt {
+      min-width: 31px; flex: 0 0 auto; color: #fff; font-family: "Bungee", sans-serif;
+      font-size: 1.65rem; font-style: normal; line-height: 1; text-align: right;
+      text-shadow: none;
+    }
+    .spieler-identitaet { min-height: 70px; }
+    .spieler-identitaet .spieler-info { flex: 1; }
+    .spieler-identitaet .spieler-icon { width: 52px; height: 52px; }
+    .spieler-identitaet .spieler-name { font-size: 1rem; }
+
+    /* Ruhigere Spieloberflächen mit großen, plakativen Titeln. */
+    #spiel-wurzel .bildschirm-karte { padding: 25px 21px; background: var(--flaeche); }
+    #spiel-wurzel .bildschirm-karte > h1,
+    #spiel-wurzel .rd-kategorie-kopf h1 {
+      font-family: "Barlow Condensed", sans-serif; font-size: clamp(2.15rem, 10vw, 3rem);
+      line-height: .98; letter-spacing: -.02em;
+    }
+    #spiel-wurzel .bildschirm-karte > h1 { margin-top: 8px; }
+    .kategorie-kachel, .zt-rater-ansicht, .dg-regel, .zt-regel, .rd-regel {
+      background: var(--flaeche-klar); border: 1px solid var(--linie);
+    }
+    .rd-kategorie-kopf {
+      padding: 18px; border: 1px solid #ded4ff; background: #f8f4ff; box-shadow: none;
+    }
+    .rd-kandidat, .zt-begriff {
+      color: #29194b; border: 1px solid #d8c7ff;
+      background: linear-gradient(145deg, #f3edff, #e7dcff); box-shadow: none;
+    }
+    .rd-punkteliste, .zt-punkteliste { gap: 9px; }
+    #rd-zwischenstand > h3, #zt-zwischenstand > h3 { margin-top: 24px; font-size: 1.35rem; }
+
+    @media (max-width: 370px) {
+      body { padding-inline: 10px; }
+      #lobby-screen, #spiel-wurzel .bildschirm-karte { padding-inline: 17px; }
+      .spiel-kachel { min-height: 154px; padding-inline: 8px; }
+      .spiel-name { font-size: 1.2rem; }
+      .spieler-karte { padding-right: 10px; }
+      .spieler-punkte { width: 32px; height: 32px; }
+      .spieler-icon { width: 46px; height: 46px; }
+    }
+
+    @media (max-height: 720px) {
+      #start-screen { min-height: 620px; padding-top: 30px; }
+      .start-deko { min-height: 104px; padding-top: 22px; }
+      .start-deko span { font-size: 3.5rem; }
+      .start-deko span:last-child { font-size: 2.8rem; }
+    }
