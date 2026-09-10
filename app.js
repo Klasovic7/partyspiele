@@ -5,11 +5,11 @@ import {
   serverTimestamp, runTransaction
 } from "./kern/firebase.js";
 import {
-  FARBEN, AVATARE, escapeHtml, spielerKarte, textFarbeFuer, zeigeDebug, erzeugeZufallsId
+  FARBEN, AVATARE, escapeHtml, avatarHtml, textFarbeFuer, zeigeDebug, erzeugeZufallsId
 } from "./kern/ui.js";
 import { SPIELE, spielInfo } from "./spiele/register.js";
 
-export const APP_VERSION = "v48";
+export const APP_VERSION = "v49";
 document.getElementById("app-version").textContent = "Version " + APP_VERSION;
 
 // ---------- DOM ----------
@@ -393,9 +393,21 @@ function renderLobby() {
   spielerliste.innerHTML = "";
   zustand.spieler.forEach((s) => {
     const li = document.createElement("li");
-    li.innerHTML = spielerKarte(s.name, s.farbe, s.icon, 0, { punkteLinks: false });
+    li.className = "lobby-spieler";
+    li.style.setProperty("--spieler-farbe", s.farbe || "#7f8c8d");
+    const istSpielleiter = zustand.raum?.leiterId === s.id;
+    li.innerHTML =
+      `<span class="lobby-avatar-rahmen">${avatarHtml(s.icon, "lobby-avatar")}` +
+        (istSpielleiter ? `<span class="lobby-krone" aria-label="Spielleiter">♛</span>` : "") +
+      `</span>` +
+      `<strong>${escapeHtml(s.name)}</strong>` +
+      (istSpielleiter ? `<small>Spielleiter</small>` : "");
     spielerliste.appendChild(li);
   });
+  const wartet = document.createElement("li");
+  wartet.className = "lobby-spieler lobby-spieler-wartet";
+  wartet.innerHTML = `<span class="lobby-warten-plus">+</span><strong>Weitere</strong><small>Spieler …</small>`;
+  spielerliste.appendChild(wartet);
   renderSpieleAuswahl();
 }
 
