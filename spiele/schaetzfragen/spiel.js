@@ -770,9 +770,9 @@ function zeigeEndstand() {
   const sortiert = [...spielerListe].sort((a, b) => (b.punkte ?? 0) - (a.punkte ?? 0));
   const liste = $("sf-endstand-liste");
   liste.innerHTML = "";
-  sortiert.forEach((s) => {
+  sortiert.forEach((s, index) => {
     const li = document.createElement("li");
-    li.innerHTML = spielerKarte(s.name, s.farbe, s.icon, s.punkte ?? 0);
+    li.innerHTML = spielerKarte(s.name, s.farbe, s.icon, s.punkte ?? 0, { rang: index + 1 });
     liste.appendChild(li);
   });
   $("sf-nochmal").hidden = !api.istLeiter;
