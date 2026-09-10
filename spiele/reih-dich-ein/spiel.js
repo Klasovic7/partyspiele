@@ -39,17 +39,14 @@ const VORLAGE = `
       <p id="rd-frage"></p>
       <strong id="rd-richtung"></strong>
     </div>
-    <p id="rd-aktiver-spieler" class="rd-aktiver-spieler"></p>
+    <div id="rd-aktiver-spieler" class="rd-aktiver-spieler"></div>
     <div id="rd-letztes-ergebnis" class="rd-letztes-ergebnis" hidden>
       <strong id="rd-letztes-ergebnis-titel"></strong>
       <span id="rd-letztes-ergebnis-text"></span>
     </div>
     <div class="rd-kandidat">
-      <span>Neuer Begriff</span>
       <strong id="rd-kandidat"></strong>
-      <small>Der Wert bleibt bis zur Auflösung geheim.</small>
     </div>
-    <p id="rd-anweisung" class="hinweis-text rd-anweisung"></p>
     <p class="rd-kategorie-wechsel">
       <button id="rd-andere-kategorie" class="btn-flach" hidden>Andere Kategorie</button>
     </p>
@@ -376,18 +373,27 @@ function rendereKategorieErgebnis(container) {
 
     const meta = document.createElement("div");
     meta.className = "rd-ergebnis-meta";
-    const spielerName = document.createElement("span");
+    const spielerAnzeige = document.createElement("div");
+    spielerAnzeige.className = "rd-ergebnis-spieler";
     const wertung = document.createElement("strong");
     if (ergebnis) {
-      spielerName.textContent = ergebnis.spielerName || spielerNachId(ergebnis.spielerId)?.name || "Spieler";
+      const spieler = spielerNachId(ergebnis.spielerId);
+      spielerAnzeige.innerHTML = spielerKarte(
+        ergebnis.spielerName || spieler?.name || "Spieler",
+        ergebnis.spielerFarbe || spieler?.farbe,
+        ergebnis.spielerIcon || spieler?.icon,
+        0,
+        { punkteLinks: false }
+      );
       wertung.className = ergebnis.richtig ? "richtig" : "falsch";
       wertung.textContent = ergebnis.richtig ? "+1" : "−1";
     } else {
-      spielerName.textContent = begriffId === karte.startId ? "Startbegriff" : "Nicht erfasst";
+      spielerAnzeige.classList.add("neutral");
+      spielerAnzeige.textContent = begriffId === karte.startId ? "Startbegriff" : "Nicht erfasst";
       wertung.className = "neutral";
       wertung.textContent = "–";
     }
-    meta.append(spielerName, wertung);
+    meta.append(spielerAnzeige, wertung);
     zeile.append(kopf, meta);
     container.appendChild(zeile);
   }
@@ -397,7 +403,6 @@ function zeigeRunde() {
   const karte = aktuelleKarte();
   const kandidat = aktuellerBegriff();
   if (!karte || !kandidat) return;
-  const istAktiv = api.spielerId === aktiveId;
   const aktiverSpieler = spielerNachId(aktiveId);
   $("rd-fortschritt").textContent = rundenFortschritt();
   $("rd-titel").textContent = karte.titel;
@@ -406,7 +411,9 @@ function zeigeRunde() {
   const [oben, unten] = skalenBeschriftung(karte);
   $("rd-skala-oben").textContent = oben;
   $("rd-skala-unten").textContent = unten;
-  $("rd-aktiver-spieler").textContent = `${aktiverSpieler?.name ?? "Ein Spieler"} ist dran`;
+  $("rd-aktiver-spieler").innerHTML = aktiverSpieler
+    ? spielerKarte(`${aktiverSpieler.name} ist dran`, aktiverSpieler.farbe, aktiverSpieler.icon, 0, { punkteLinks: false })
+    : "Ein Spieler ist dran";
   const ergebnisBox = $("rd-letztes-ergebnis");
   if (typeof letzteRichtig === "boolean") {
     const letzterSpieler = spielerNachId(letzterSpielerId);
@@ -420,9 +427,6 @@ function zeigeRunde() {
     ergebnisBox.hidden = true;
   }
   $("rd-kandidat").textContent = kandidat.name;
-  $("rd-anweisung").textContent = istAktiv
-    ? "Tippe auf die Stelle, an die der neue Begriff gehört."
-    : `Warte auf die Entscheidung von ${aktiverSpieler?.name ?? "dem aktiven Spieler"}.`;
   rendereReihe($("rd-reihe"), true);
   $("rd-andere-kategorie").hidden = !api.istLeiter;
   $("rd-andere-kategorie").disabled = aktionLaeuft;
@@ -514,13 +518,16 @@ async function waehlePosition(index) {
         naechsterZug,
         geladeneSpielerIds.length ? geladeneSpielerIds : spielReihenfolge
       );
+      const aktuellerSpieler = spielerNachId(api.spielerId);
       const ergebnis = {
         rdPunkte: neuePunkte,
         rdErgebnisse: {
           ...(daten.rdErgebnisse ?? {}),
           [begriffId]: {
             spielerId: api.spielerId,
-            spielerName: api.spielerName || spielerNachId(api.spielerId)?.name || "Spieler",
+            spielerName: api.spielerName || aktuellerSpieler?.name || "Spieler",
+            spielerFarbe: aktuellerSpieler?.farbe ?? null,
+            spielerIcon: aktuellerSpieler?.icon ?? null,
             richtig
           }
         },
