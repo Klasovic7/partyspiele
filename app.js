@@ -9,7 +9,7 @@ import {
 } from "./kern/ui.js";
 import { SPIELE, spielInfo } from "./spiele/register.js";
 
-export const APP_VERSION = "v35";
+export const APP_VERSION = "v37";
 document.getElementById("app-version").textContent = "Version " + APP_VERSION;
 
 // ---------- DOM ----------
@@ -29,7 +29,6 @@ const startError = document.getElementById("start-error");
 const anzeigeCode = document.getElementById("anzeige-code");
 const farbKarussell = document.getElementById("farb-karussell");
 const iconKarussell = document.getElementById("icon-karussell");
-const farbName = document.getElementById("farb-name");
 const profilVorname = document.getElementById("profil-vorname");
 const profilNachname = document.getElementById("profil-nachname");
 const avatarHinweis = document.getElementById("avatar-hinweis");
@@ -163,7 +162,7 @@ function renderFarbKarussell() {
   farbKarussell.innerHTML = "";
   if (!optionen.length) {
     profilEntwurf.farbe = null;
-    farbName.textContent = "Keine Farbe mehr frei";
+    farbKarussell.setAttribute("aria-label", "Keine Farbe mehr frei");
     btnFarbeZurueck.disabled = true;
     btnFarbeWeiter.disabled = true;
     return;
@@ -173,7 +172,7 @@ function renderFarbKarussell() {
   if (index < 0) index = 0;
   profilEntwurf.farbe = optionen[index].hex;
   setzeProfilHintergrund(optionen[index]);
-  farbName.textContent = optionen[index].name;
+  farbKarussell.setAttribute("aria-label", `Ausgewählte Farbe: ${optionen[index].name}`);
 
   karussellEintraege(optionen, index).forEach(({ option, position }) => {
     const btn = document.createElement("button");
