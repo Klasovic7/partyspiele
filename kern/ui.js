@@ -72,35 +72,48 @@ function mischeSpielerFarbe(hex, zielwert, anteil) {
   return `rgb(${r}, ${g}, ${b})`;
 }
 
-// Die abgerundete Kachel mit Farbe, Profilbild, Name und großer Punktzahl links.
-// Alle Kacheln sind gleich breit, unabhängig von der Länge des Namens.
+// Kompakte Spielerzeile nach dem gemeinsamen Designsystem: Farbring am Profil,
+// eine farbige Fortschrittslinie und die Gesamtpunkte gut sichtbar rechts.
 // optionen.extra        - zweite Zeile unter dem Namen (z. B. die Schätzung)
 // optionen.punkteRechts - zweite große Zahl ganz rechts (z. B. Gesamtpunktstand)
 // optionen.punkteLinks  - false blendet die linke Zahl aus (z. B. in der Lobby)
+// optionen.rang         - Platzierung für Endstände, wenn es keine Rundenpunkte gibt
 export function spielerKarte(name, farbe, icon, punkte, optionen = {}) {
   const sichereFarbe = farbe || "#7f8c8d";
-  const textFarbe = textFarbeFuer(sichereFarbe);
-  const dunkleZacke = mischeSpielerFarbe(sichereFarbe, 0, 0.38);
-  const helleZacke = mischeSpielerFarbe(sichereFarbe, 255, 0.34);
-  const linksHtml = optionen.punkteLinks === false
+  const nurIdentitaet = optionen.punkteLinks === false;
+  const hatGesamtpunkte = optionen.punkteRechts !== undefined;
+  const gesamtpunkte = hatGesamtpunkte ? optionen.punkteRechts : punkte;
+  const numerischePunkte = Number(gesamtpunkte);
+  const fortschritt = Number.isFinite(numerischePunkte)
+    ? Math.max(9, Math.min(100, 18 + Math.max(0, numerischePunkte) * 11))
+    : 18;
+  const linkeAnzeige = hatGesamtpunkte ? punkte : optionen.rang;
+  const linksKlasse = String(linkeAnzeige ?? "").trim().startsWith("+")
+    ? " positiv"
+    : String(linkeAnzeige ?? "").trim().startsWith("-") || String(linkeAnzeige ?? "").trim().startsWith("−")
+      ? " negativ"
+      : "";
+  const linksHtml = nurIdentitaet || linkeAnzeige === undefined
     ? ""
-    : `<div class="spieler-punkte">${escapeHtml(String(punkte ?? 0))}</div>`;
+    : `<div class="spieler-punkte${linksKlasse}">${escapeHtml(String(linkeAnzeige))}</div>`;
   const extraHtml = optionen.extra ? `<span class="spieler-extra">${escapeHtml(optionen.extra)}</span>` : "";
-  const rechtsHtml = optionen.punkteRechts !== undefined
-    ? `<div class="spieler-punkte spieler-punkte-gesamt">${escapeHtml(String(optionen.punkteRechts))}</div>`
-    : "";
+  const balkenHtml = nurIdentitaet ? "" :
+    `<span class="spieler-fortschritt" aria-hidden="true"><i style="width:${fortschritt}%"></i></span>`;
+  const rechtsHtml = nurIdentitaet
+    ? ""
+    : `<div class="spieler-punkte-gesamt">${escapeHtml(String(gesamtpunkte ?? 0))}</div>`;
+
+  const kartenKlasse = nurIdentitaet ? " spieler-identitaet" : " spieler-punktestand";
 
   return (
-    `<div class="spieler-karte" style="--spieler-farbe:${sichereFarbe}; --spieler-dunkel:${dunkleZacke}; --spieler-hell:${helleZacke}; color:${textFarbe}">` +
-      `<span class="spieler-zacken" aria-hidden="true">` +
-        `<span></span><span></span><span></span><span></span><span></span>` +
-      `</span>` +
+    `<div class="spieler-karte${kartenKlasse}" style="--spieler-farbe:${sichereFarbe}">` +
       linksHtml +
       `<div class="spieler-info">` +
         avatarHtml(icon, "spieler-icon") +
         `<div class="spieler-text">` +
           `<span class="spieler-name">${escapeHtml(name)}</span>` +
           extraHtml +
+          balkenHtml +
         `</div>` +
       `</div>` +
       rechtsHtml +
