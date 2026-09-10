@@ -40,16 +40,19 @@ const VORLAGE = `
       <strong id="rd-richtung"></strong>
     </div>
     <p id="rd-aktiver-spieler" class="rd-aktiver-spieler"></p>
+    <div id="rd-letztes-ergebnis" class="rd-letztes-ergebnis" hidden>
+      <strong id="rd-letztes-ergebnis-titel"></strong>
+      <span id="rd-letztes-ergebnis-text"></span>
+    </div>
     <div class="rd-kandidat">
       <span>Neuer Begriff</span>
       <strong id="rd-kandidat"></strong>
       <small>Der Wert bleibt bis zur Auflösung geheim.</small>
     </div>
     <p id="rd-anweisung" class="hinweis-text rd-anweisung"></p>
-    <div class="rd-wechsel-aktionen">
-      <button id="rd-anderer-begriff" class="btn-flach" hidden>Anderer Begriff</button>
+    <p class="rd-kategorie-wechsel">
       <button id="rd-andere-kategorie" class="btn-flach" hidden>Andere Kategorie</button>
-    </div>
+    </p>
     <p id="rd-runde-fehler" class="fehler-text"></p>
     <div class="rd-sortierbereich">
       <aside class="rd-skala" aria-label="Sortierrichtung">
@@ -71,8 +74,7 @@ const VORLAGE = `
     <p id="rd-feedback-richtung" class="hinweis-text"></p>
     <div id="rd-feedback-reihe" class="rd-reihe rd-reihe-aufgeloest"></div>
     <div id="rd-feedback-punkte"></div>
-    <p><button id="rd-weiter" hidden>Nächster Begriff</button></p>
-    <p id="rd-feedback-warten" hidden><em>Der Spielleiter schaltet gleich weiter …</em></p>
+    <p><em>Der nächste Spieler wird automatisch geladen …</em></p>
   </div>
 
   <div id="rd-endstand" class="bildschirm-karte" hidden>
@@ -101,6 +103,7 @@ let aktiveId = null;
 let punkte = {};
 let letzteRichtig = null;
 let letzterBegriffId = null;
+let letzterSpielerId = null;
 let verworfeneKategorien = [];
 let aktionLaeuft = false;
 let anzahlManuellGesetzt = false;
@@ -139,7 +142,8 @@ function neueKategorieDaten(karte) {
     rdBegriffIndex: 0,
     rdSortierteIds: [startId],
     rdLetzteRichtig: null,
-    rdLetzterBegriffId: null
+    rdLetzterBegriffId: null,
+    rdLetzterSpielerId: null
   };
 }
 
@@ -162,6 +166,7 @@ export async function starten(uebergebeneApi) {
       rdKategorieIndex: 0, rdBegriffeReihenfolge: [], rdBegriffIndex: 0,
       rdSortierteIds: [], rdSpielerReihenfolge: [], rdZugIndex: 0,
       rdAktiveId: null, rdPunkte: {}, rdLetzteRichtig: null, rdLetzterBegriffId: null,
+      rdLetzterSpielerId: null,
       rdVerworfeneKategorien: []
     });
   }
@@ -172,8 +177,6 @@ function verdrahteBedienelemente() {
   $("rd-starten").addEventListener("click", spielStarten);
   $("rd-abbrechen").addEventListener("click", zurueck);
   $("rd-nochmal").addEventListener("click", zurueck);
-  $("rd-weiter").addEventListener("click", weiter);
-  $("rd-anderer-begriff").addEventListener("click", andererBegriff);
   $("rd-andere-kategorie").addEventListener("click", andereKategorie);
 }
 
@@ -195,6 +198,7 @@ export function beenden() {
   punkte = {};
   letzteRichtig = null;
   letzterBegriffId = null;
+  letzterSpielerId = null;
   verworfeneKategorien = [];
   aktionLaeuft = false;
   anzahlManuellGesetzt = false;
@@ -233,8 +237,15 @@ export function raumDaten(daten) {
   punkte = daten.rdPunkte ?? {};
   letzteRichtig = typeof daten.rdLetzteRichtig === "boolean" ? daten.rdLetzteRichtig : null;
   letzterBegriffId = daten.rdLetzterBegriffId ?? null;
+  letzterSpielerId = daten.rdLetzterSpielerId ?? null;
   verworfeneKategorien = daten.rdVerworfeneKategorien ?? [];
   renderAktuellenStatus();
+
+  // Spielstände aus der vorherigen Version können noch im manuellen
+  // Feedback-Schritt stehen. Der Spielleiter führt sie einmalig weiter.
+  if (api.istLeiter && status === "feedback" && !aktionLaeuft) {
+    altesFeedbackAutomatischFortsetzen();
+  }
 }
 
 function renderAktuellenStatus() {
@@ -337,7 +348,7 @@ function rendereReihe(container, mitPositionen) {
     if (index < sortierteIds.length) {
       const begriff = begriffNachId(karte, sortierteIds[index]);
       const wrapper = document.createElement("div");
-      wrapper.innerHTML = begriffKarteHtml(begriff, !mitPositionen && begriff?.id === letzterBegriffId);
+      wrapper.innerHTML = begriffKarteHtml(begriff, begriff?.id === letzterBegriffId);
       container.appendChild(wrapper.firstElementChild);
     }
   }
@@ -357,62 +368,25 @@ function zeigeRunde() {
   $("rd-skala-oben").textContent = oben;
   $("rd-skala-unten").textContent = unten;
   $("rd-aktiver-spieler").textContent = `${aktiverSpieler?.name ?? "Ein Spieler"} ist dran`;
+  const ergebnisBox = $("rd-letztes-ergebnis");
+  if (typeof letzteRichtig === "boolean") {
+    const letzterSpieler = spielerNachId(letzterSpielerId);
+    ergebnisBox.hidden = false;
+    ergebnisBox.className = `rd-letztes-ergebnis ${letzteRichtig ? "richtig" : "falsch"}`;
+    $("rd-letztes-ergebnis-titel").textContent = letzteRichtig ? "Richtig: +1" : "Falsch: −1";
+    $("rd-letztes-ergebnis-text").textContent =
+      `${letzterSpieler?.name ?? "Der vorherige Spieler"} hat ${letzteRichtig ? "richtig" : "falsch"} eingeordnet.`;
+  } else {
+    ergebnisBox.hidden = true;
+  }
   $("rd-kandidat").textContent = kandidat.name;
   $("rd-anweisung").textContent = istAktiv
     ? "Tippe auf die Stelle, an die der neue Begriff gehört."
     : `Warte auf die Entscheidung von ${aktiverSpieler?.name ?? "dem aktiven Spieler"}.`;
   rendereReihe($("rd-reihe"), true);
-  $("rd-anderer-begriff").hidden = !api.istLeiter;
-  $("rd-anderer-begriff").disabled = aktionLaeuft;
   $("rd-andere-kategorie").hidden = !api.istLeiter;
   $("rd-andere-kategorie").disabled = aktionLaeuft;
   $("rd-zwischenstand").innerHTML = `<h3>Zwischenstand</h3>${punktestandHtml()}`;
-}
-
-async function andererBegriff() {
-  if (!api.istLeiter || status !== "runde" || aktionLaeuft) return;
-  const knopf = $("rd-anderer-begriff");
-  knopf.disabled = true;
-  $("rd-runde-fehler").textContent = "";
-  const erwarteteKategorie = kategorienReihenfolge[kategorieIndex];
-  const erwarteterBegriff = begriffeReihenfolge[begriffIndex];
-  aktionLaeuft = true;
-  let keinErsatz = false;
-  try {
-    await runTransaction(api.db, async (transaktion) => {
-      keinErsatz = false;
-      const ref = api.raumRef();
-      const snap = await transaktion.get(ref);
-      const daten = snap.data();
-      if (!daten || daten.rdStatus !== "runde") return;
-
-      const katIndex = daten.rdKategorieIndex ?? 0;
-      const kartenReihenfolge = daten.rdKategorienReihenfolge ?? [];
-      const begriffPos = daten.rdBegriffIndex ?? 0;
-      const begriffsReihenfolge = daten.rdBegriffeReihenfolge ?? [];
-      if (kartenReihenfolge[katIndex] !== erwarteteKategorie ||
-          begriffsReihenfolge[begriffPos] !== erwarteterBegriff) return;
-
-      if (begriffPos + 1 >= begriffsReihenfolge.length) {
-        keinErsatz = true;
-        return;
-      }
-      const neueBegriffsReihenfolge = [...begriffsReihenfolge];
-      neueBegriffsReihenfolge.splice(begriffPos, 1);
-      transaktion.update(ref, {
-        rdBegriffeReihenfolge: neueBegriffsReihenfolge,
-        rdLetzteRichtig: null,
-        rdLetzterBegriffId: null
-      });
-    });
-    if (keinErsatz) {
-      $("rd-runde-fehler").textContent = "In dieser Kategorie ist kein weiterer Begriff verfügbar.";
-    }
-  } catch (e) {
-    zeigeDebug("Begriff konnte nicht gewechselt werden: " + e.message);
-  }
-  aktionLaeuft = false;
-  renderAktuellenStatus();
 }
 
 async function andereKategorie() {
@@ -489,14 +463,52 @@ async function waehlePosition(index) {
       const richtig = index === richtigerIndex;
       const neuePunkte = { ...(daten.rdPunkte ?? {}) };
       neuePunkte[api.spielerId] = punkteNachAntwort(neuePunkte[api.spielerId], richtig);
-
-      transaktion.update(ref, {
-        rdStatus: "feedback",
-        rdSortierteIds: fuegeEin(aktuelleReihe, begriffId, richtigerIndex),
+      const neueReihe = fuegeEin(aktuelleReihe, begriffId, richtigerIndex);
+      const aktuellerBegriffIndex = daten.rdBegriffIndex ?? 0;
+      const begriffsReihenfolge = daten.rdBegriffeReihenfolge ?? [];
+      const naechsterZug = (daten.rdZugIndex ?? 0) + 1;
+      const spielReihenfolge = daten.rdSpielerReihenfolge ?? [];
+      const geladeneSpielerIds = spielerListe.map((spieler) => spieler.id);
+      const naechsteAktiveId = aktiveSpielerId(
+        spielReihenfolge,
+        naechsterZug,
+        geladeneSpielerIds.length ? geladeneSpielerIds : spielReihenfolge
+      );
+      const ergebnis = {
         rdPunkte: neuePunkte,
         rdLetzteRichtig: richtig,
-        rdLetzterBegriffId: begriffId
-      });
+        rdLetzterBegriffId: begriffId,
+        rdLetzterSpielerId: api.spielerId
+      };
+
+      if (aktuellerBegriffIndex + 1 < begriffsReihenfolge.length) {
+        transaktion.update(ref, {
+          ...ergebnis,
+          rdStatus: "runde",
+          rdSortierteIds: neueReihe,
+          rdBegriffIndex: aktuellerBegriffIndex + 1,
+          rdZugIndex: naechsterZug,
+          rdAktiveId: naechsteAktiveId
+        });
+      } else if (katIndex + 1 < (daten.rdAnzahlKategorien ?? 0)) {
+        const naechsterKategorieIndex = katIndex + 1;
+        const naechsteKarte = karten[(daten.rdKategorienReihenfolge ?? [])[naechsterKategorieIndex]];
+        transaktion.update(ref, {
+          ...neueKategorieDaten(naechsteKarte),
+          ...ergebnis,
+          rdStatus: "runde",
+          rdKategorieIndex: naechsterKategorieIndex,
+          rdZugIndex: naechsterZug,
+          rdAktiveId: naechsteAktiveId
+        });
+      } else {
+        transaktion.update(ref, {
+          ...ergebnis,
+          rdStatus: "beendet",
+          rdSortierteIds: neueReihe,
+          rdAktiveId: null
+        });
+      }
     });
   } catch (e) {
     zeigeDebug("Position konnte nicht gespeichert werden: " + e.message);
@@ -519,47 +531,59 @@ function zeigeFeedback() {
   $("rd-feedback-richtung").textContent = `${karte.frage} · ${karte.richtung}`;
   rendereReihe($("rd-feedback-reihe"), false);
   $("rd-feedback-punkte").innerHTML = `<h3>Zwischenstand</h3>${punktestandHtml()}`;
-  $("rd-weiter").hidden = !api.istLeiter;
-  $("rd-feedback-warten").hidden = api.istLeiter;
-  $("rd-weiter").textContent = begriffIndex + 1 < begriffeReihenfolge.length
-    ? "Nächster Begriff"
-    : (kategorieIndex + 1 < anzahlKategorien ? "Nächste Kategorie" : "Endstand anzeigen");
 }
 
-async function weiter() {
+async function altesFeedbackAutomatischFortsetzen() {
   if (!api.istLeiter || status !== "feedback" || aktionLaeuft) return;
   aktionLaeuft = true;
-  $("rd-weiter").disabled = true;
-  const naechsterZug = zugIndex + 1;
-  const vorhandeneIds = spielerListe.map((spieler) => spieler.id);
   try {
-    if (begriffIndex + 1 < begriffeReihenfolge.length) {
-      await updateDoc(api.raumRef(), {
-        rdStatus: "runde",
-        rdBegriffIndex: begriffIndex + 1,
-        rdZugIndex: naechsterZug,
-        rdAktiveId: aktiveSpielerId(spielerReihenfolge, naechsterZug, vorhandeneIds),
-        rdLetzteRichtig: null,
-        rdLetzterBegriffId: null
-      });
-    } else if (kategorieIndex + 1 < anzahlKategorien) {
-      const naechsteKategorie = kategorieIndex + 1;
-      await updateDoc(api.raumRef(), {
-        rdStatus: "runde",
-        rdKategorieIndex: naechsteKategorie,
-        ...neueKategorieDaten(karten[kategorienReihenfolge[naechsteKategorie]]),
-        rdZugIndex: naechsterZug,
-        rdAktiveId: aktiveSpielerId(spielerReihenfolge, naechsterZug, vorhandeneIds)
-      });
-    } else {
-      await updateDoc(api.raumRef(), { rdStatus: "beendet", rdAktiveId: null });
-    }
+    await runTransaction(api.db, async (transaktion) => {
+      const ref = api.raumRef();
+      const snap = await transaktion.get(ref);
+      const daten = snap.data();
+      if (!daten || daten.rdStatus !== "feedback") return;
+
+      const aktuellerBegriffIndex = daten.rdBegriffIndex ?? 0;
+      const katIndex = daten.rdKategorieIndex ?? 0;
+      const naechsterZug = (daten.rdZugIndex ?? 0) + 1;
+      const spielReihenfolge = daten.rdSpielerReihenfolge ?? [];
+      const geladeneSpielerIds = spielerListe.map((spieler) => spieler.id);
+      const naechsteAktiveId = aktiveSpielerId(
+        spielReihenfolge,
+        naechsterZug,
+        geladeneSpielerIds.length ? geladeneSpielerIds : spielReihenfolge
+      );
+      const letzterSpieler = daten.rdAktiveId ?? null;
+
+      if (aktuellerBegriffIndex + 1 < (daten.rdBegriffeReihenfolge ?? []).length) {
+        transaktion.update(ref, {
+          rdStatus: "runde",
+          rdBegriffIndex: aktuellerBegriffIndex + 1,
+          rdZugIndex: naechsterZug,
+          rdAktiveId: naechsteAktiveId,
+          rdLetzterSpielerId: letzterSpieler
+        });
+      } else if (katIndex + 1 < (daten.rdAnzahlKategorien ?? 0)) {
+        const naechsterKategorieIndex = katIndex + 1;
+        const naechsteKarte = karten[(daten.rdKategorienReihenfolge ?? [])[naechsterKategorieIndex]];
+        transaktion.update(ref, {
+          ...neueKategorieDaten(naechsteKarte),
+          rdStatus: "runde",
+          rdKategorieIndex: naechsterKategorieIndex,
+          rdZugIndex: naechsterZug,
+          rdAktiveId: naechsteAktiveId,
+          rdLetzteRichtig: daten.rdLetzteRichtig ?? null,
+          rdLetzterBegriffId: daten.rdLetzterBegriffId ?? null,
+          rdLetzterSpielerId: letzterSpieler
+        });
+      } else {
+        transaktion.update(ref, { rdStatus: "beendet", rdAktiveId: null });
+      }
+    });
   } catch (e) {
-    zeigeDebug("Fehler beim Weiterschalten: " + e.message);
-    $("rd-weiter").disabled = false;
+    zeigeDebug("Alter Spielstand konnte nicht automatisch fortgesetzt werden: " + e.message);
   }
   aktionLaeuft = false;
-  renderAktuellenStatus();
 }
 
 function zeigeEndstand() {
@@ -577,6 +601,7 @@ async function zurueck() {
       rdKategorieIndex: 0, rdBegriffeReihenfolge: [], rdBegriffIndex: 0,
       rdSortierteIds: [], rdSpielerReihenfolge: [], rdZugIndex: 0,
       rdAktiveId: null, rdPunkte: {}, rdLetzteRichtig: null, rdLetzterBegriffId: null,
+      rdLetzterSpielerId: null,
       rdVerworfeneKategorien: []
     });
     await api.zurueckZurAuswahl();
