@@ -9,7 +9,7 @@ import {
 } from "./kern/ui.js";
 import { SPIELE, spielInfo } from "./spiele/register.js";
 
-export const APP_VERSION = "v41";
+export const APP_VERSION = "v42";
 document.getElementById("app-version").textContent = "Version " + APP_VERSION;
 
 // ---------- DOM ----------
