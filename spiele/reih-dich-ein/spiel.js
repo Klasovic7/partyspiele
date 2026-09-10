@@ -7,7 +7,8 @@
 import { updateDoc, runTransaction } from "../../kern/firebase.js";
 import { escapeHtml, spielerKarte, zeigeDebug } from "../../kern/ui.js";
 import {
-  mischeListe, begriffNachId, richtigerEinfuegeIndex, fuegeEin, aktiveSpielerId
+  mischeListe, begriffNachId, richtigerEinfuegeIndex, fuegeEin, aktiveSpielerId,
+  punkteNachAntwort
 } from "./logik.js";
 
 const VORLAGE = `
@@ -15,7 +16,7 @@ const VORLAGE = `
     <h1>↕️ Reih dich ein!</h1>
     <p class="hinweis-text">Setzt jeden neuen Begriff an die richtige Stelle der Reihe.</p>
     <p class="rd-regel">Ein Startbegriff ist bereits eingeordnet. Danach ist immer ein Spieler dran.
-      Eine richtige Position kostet nichts – bei einer falschen Position gibt es einen Minuspunkt.</p>
+      Eine richtige Position gibt einen Pluspunkt – bei einer falschen Position gibt es einen Minuspunkt.</p>
 
     <p id="rd-anzahl-zeile" hidden>
       <label>Anzahl Kategorien:
@@ -45,7 +46,14 @@ const VORLAGE = `
       <small>Der Wert bleibt bis zur Auflösung geheim.</small>
     </div>
     <p id="rd-anweisung" class="hinweis-text rd-anweisung"></p>
-    <div id="rd-reihe" class="rd-reihe"></div>
+    <p><button id="rd-anderer-begriff" class="btn-flach" hidden>Anderer Begriff</button></p>
+    <p id="rd-runde-fehler" class="fehler-text"></p>
+    <div class="rd-sortierbereich">
+      <aside class="rd-skala" aria-label="Sortierrichtung">
+        <span id="rd-skala-oben"></span><i></i><span id="rd-skala-unten"></span>
+      </aside>
+      <div id="rd-reihe" class="rd-reihe"></div>
+    </div>
     <div id="rd-zwischenstand"></div>
   </div>
 
@@ -66,7 +74,7 @@ const VORLAGE = `
 
   <div id="rd-endstand" class="bildschirm-karte" hidden>
     <h1>🏁 Endstand</h1>
-    <p class="hinweis-text">Wer die wenigsten Fehler gemacht hat, gewinnt.</p>
+    <p class="hinweis-text">Wer die meisten Punkte gesammelt hat, gewinnt.</p>
     <div id="rd-endstand-inhalt"></div>
     <p><button id="rd-nochmal" class="btn-primaer" hidden>Zurück zur Spielauswahl</button></p>
     <p id="rd-endstand-warten" hidden><em>Der Spielleiter wählt gleich das nächste Spiel …</em></p>
@@ -90,6 +98,7 @@ let aktiveId = null;
 let punkte = {};
 let letzteRichtig = null;
 let letzterBegriffId = null;
+let verworfeneKategorien = [];
 let aktionLaeuft = false;
 let anzahlManuellGesetzt = false;
 let spielerwechselLaeuft = false;
@@ -110,6 +119,12 @@ function spielerNachId(id) {
 
 function rundenFortschritt() {
   return `Kategorie ${kategorieIndex + 1} von ${anzahlKategorien} · Begriff ${begriffIndex + 1} von ${begriffeReihenfolge.length}`;
+}
+
+function skalenBeschriftung(karte) {
+  return Array.isArray(karte?.skala) && karte.skala.length === 2
+    ? karte.skala
+    : ["ANFANG", "ENDE"];
 }
 
 function neueKategorieDaten(karte) {
@@ -143,7 +158,8 @@ export async function starten(uebergebeneApi) {
       rdStatus: "setup", rdKategorienReihenfolge: [], rdAnzahlKategorien: 0,
       rdKategorieIndex: 0, rdBegriffeReihenfolge: [], rdBegriffIndex: 0,
       rdSortierteIds: [], rdSpielerReihenfolge: [], rdZugIndex: 0,
-      rdAktiveId: null, rdPunkte: {}, rdLetzteRichtig: null, rdLetzterBegriffId: null
+      rdAktiveId: null, rdPunkte: {}, rdLetzteRichtig: null, rdLetzterBegriffId: null,
+      rdVerworfeneKategorien: []
     });
   }
 }
@@ -154,6 +170,7 @@ function verdrahteBedienelemente() {
   $("rd-abbrechen").addEventListener("click", zurueck);
   $("rd-nochmal").addEventListener("click", zurueck);
   $("rd-weiter").addEventListener("click", weiter);
+  $("rd-anderer-begriff").addEventListener("click", andererBegriff);
 }
 
 export function beenden() {
@@ -174,6 +191,7 @@ export function beenden() {
   punkte = {};
   letzteRichtig = null;
   letzterBegriffId = null;
+  verworfeneKategorien = [];
   aktionLaeuft = false;
   anzahlManuellGesetzt = false;
   spielerwechselLaeuft = false;
@@ -211,6 +229,7 @@ export function raumDaten(daten) {
   punkte = daten.rdPunkte ?? {};
   letzteRichtig = typeof daten.rdLetzteRichtig === "boolean" ? daten.rdLetzteRichtig : null;
   letzterBegriffId = daten.rdLetzterBegriffId ?? null;
+  verworfeneKategorien = daten.rdVerworfeneKategorien ?? [];
   renderAktuellenStatus();
 }
 
@@ -270,7 +289,8 @@ async function spielStarten() {
       rdSpielerReihenfolge: reihenfolge,
       rdZugIndex: 0,
       rdAktiveId: aktiveSpielerId(reihenfolge, 0, spielerListe.map((spieler) => spieler.id)),
-      rdPunkte: Object.fromEntries(spielerListe.map((spieler) => [spieler.id, 0]))
+      rdPunkte: Object.fromEntries(spielerListe.map((spieler) => [spieler.id, 0])),
+      rdVerworfeneKategorien: []
     });
   } catch (e) {
     zeigeDebug("Spiel konnte nicht gestartet werden: " + e.message);
@@ -329,17 +349,73 @@ function zeigeRunde() {
   $("rd-titel").textContent = karte.titel;
   $("rd-frage").textContent = karte.frage;
   $("rd-richtung").textContent = karte.richtung;
+  const [oben, unten] = skalenBeschriftung(karte);
+  $("rd-skala-oben").textContent = oben;
+  $("rd-skala-unten").textContent = unten;
   $("rd-aktiver-spieler").textContent = `${aktiverSpieler?.name ?? "Ein Spieler"} ist dran`;
   $("rd-kandidat").textContent = kandidat.name;
   $("rd-anweisung").textContent = istAktiv
     ? "Tippe auf die Stelle, an die der neue Begriff gehört."
     : `Warte auf die Entscheidung von ${aktiverSpieler?.name ?? "dem aktiven Spieler"}.`;
   rendereReihe($("rd-reihe"), true);
+  $("rd-anderer-begriff").hidden = !api.istLeiter;
+  $("rd-anderer-begriff").disabled = aktionLaeuft;
   $("rd-zwischenstand").innerHTML = `<h3>Zwischenstand</h3>${punktestandHtml()}`;
+}
+
+async function andererBegriff() {
+  if (!api.istLeiter || status !== "runde" || aktionLaeuft) return;
+  const knopf = $("rd-anderer-begriff");
+  knopf.disabled = true;
+  $("rd-runde-fehler").textContent = "";
+  const erwarteteKategorie = kategorienReihenfolge[kategorieIndex];
+  aktionLaeuft = true;
+  let keinErsatz = false;
+  try {
+    await runTransaction(api.db, async (transaktion) => {
+      keinErsatz = false;
+      const ref = api.raumRef();
+      const snap = await transaktion.get(ref);
+      const daten = snap.data();
+      if (!daten || daten.rdStatus !== "runde") return;
+
+      const katIndex = daten.rdKategorieIndex ?? 0;
+      const aktuelleReihenfolge = daten.rdKategorienReihenfolge ?? [];
+      if (aktuelleReihenfolge[katIndex] !== erwarteteKategorie) return;
+
+      const verwendet = new Set(aktuelleReihenfolge);
+      const bisherVerworfen = daten.rdVerworfeneKategorien ?? [];
+      const verworfen = new Set(bisherVerworfen);
+      const moegliche = mischeListe(karten.map((_, index) => index).filter((index) =>
+        !verwendet.has(index) && !verworfen.has(index)
+      ));
+      if (!moegliche.length) {
+        keinErsatz = true;
+        return;
+      }
+
+      const neueReihenfolge = [...aktuelleReihenfolge];
+      neueReihenfolge[katIndex] = moegliche[0];
+      transaktion.update(ref, {
+        rdKategorienReihenfolge: neueReihenfolge,
+        rdVerworfeneKategorien: [...bisherVerworfen, erwarteteKategorie],
+        ...neueKategorieDaten(karten[moegliche[0]])
+      });
+    });
+    if (keinErsatz) {
+      $("rd-runde-fehler").textContent = "Es ist kein anderer ungespielter Begriff mehr verfügbar.";
+    }
+  } catch (e) {
+    zeigeDebug("Begriff konnte nicht gewechselt werden: " + e.message);
+  }
+  aktionLaeuft = false;
+  renderAktuellenStatus();
 }
 
 async function waehlePosition(index) {
   if (status !== "runde" || api.spielerId !== aktiveId || aktionLaeuft) return;
+  const erwarteteKategorie = kategorienReihenfolge[kategorieIndex];
+  const erwarteterBegriff = begriffeReihenfolge[begriffIndex];
   aktionLaeuft = true;
   renderAktuellenStatus();
   try {
@@ -350,15 +426,17 @@ async function waehlePosition(index) {
       if (!daten || daten.rdStatus !== "runde" || daten.rdAktiveId !== api.spielerId) return;
 
       const katIndex = daten.rdKategorieIndex ?? 0;
-      const karte = karten[(daten.rdKategorienReihenfolge ?? [])[katIndex]];
+      const kartenIndex = (daten.rdKategorienReihenfolge ?? [])[katIndex];
+      const karte = karten[kartenIndex];
       const begriffId = (daten.rdBegriffeReihenfolge ?? [])[daten.rdBegriffIndex ?? 0];
       const aktuelleReihe = daten.rdSortierteIds ?? [];
-      if (!karte || !begriffId || !Number.isInteger(index) || index < 0 || index > aktuelleReihe.length) return;
+      if (kartenIndex !== erwarteteKategorie || begriffId !== erwarteterBegriff || !karte ||
+          !Number.isInteger(index) || index < 0 || index > aktuelleReihe.length) return;
 
       const richtigerIndex = richtigerEinfuegeIndex(karte, aktuelleReihe, begriffId);
       const richtig = index === richtigerIndex;
       const neuePunkte = { ...(daten.rdPunkte ?? {}) };
-      if (!richtig) neuePunkte[api.spielerId] = (neuePunkte[api.spielerId] ?? 0) - 1;
+      neuePunkte[api.spielerId] = punkteNachAntwort(neuePunkte[api.spielerId], richtig);
 
       transaktion.update(ref, {
         rdStatus: "feedback",
@@ -383,7 +461,7 @@ function zeigeFeedback() {
   $("rd-feedback-box").className = `rd-feedback-box ${letzteRichtig ? "richtig" : "falsch"}`;
   $("rd-feedback-titel").textContent = letzteRichtig ? "Richtig eingeordnet!" : "Leider falsch eingeordnet";
   $("rd-feedback-text").textContent = letzteRichtig
-    ? `${spieler?.name ?? "Der Spieler"} bleibt ohne Minuspunkt.`
+    ? `${spieler?.name ?? "Der Spieler"} erhält einen Pluspunkt.`
     : `${spieler?.name ?? "Der Spieler"} erhält einen Minuspunkt. Die richtige Position ist markiert.`;
   $("rd-feedback-kategorie").textContent = karte.titel;
   $("rd-feedback-richtung").textContent = `${karte.frage} · ${karte.richtung}`;
@@ -446,7 +524,8 @@ async function zurueck() {
       rdStatus: null, rdKategorienReihenfolge: [], rdAnzahlKategorien: 0,
       rdKategorieIndex: 0, rdBegriffeReihenfolge: [], rdBegriffIndex: 0,
       rdSortierteIds: [], rdSpielerReihenfolge: [], rdZugIndex: 0,
-      rdAktiveId: null, rdPunkte: {}, rdLetzteRichtig: null, rdLetzterBegriffId: null
+      rdAktiveId: null, rdPunkte: {}, rdLetzteRichtig: null, rdLetzterBegriffId: null,
+      rdVerworfeneKategorien: []
     });
     await api.zurueckZurAuswahl();
   } catch (e) {
