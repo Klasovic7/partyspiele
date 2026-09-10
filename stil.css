@@ -5,6 +5,7 @@
       --text-hell: #6b7280;
     }
     * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
     html, body { min-height: 100%; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -688,16 +689,19 @@
       display: flex; flex-direction: column;
       padding: 44px 28px 26px;
       background:
-        radial-gradient(circle at 12% 2%, rgba(192,73,218,.76) 0 12%, transparent 12.4%),
-        radial-gradient(circle at 96% 1%, rgba(255,197,99,.78) 0 11%, transparent 11.4%),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 390 800' preserveAspectRatio='none'%3E%3Cpath fill='%23bd58d7' d='M0 0h142c2 41-18 64-47 75C60 88 43 110 0 105Z'/%3E%3Cpath fill='%23ffc969' d='M286 0h104v108c-32-8-37-34-62-45-27-12-37-34-42-63Z'/%3E%3Cpath fill='%23ff735d' d='M0 677c39-9 72 2 91 31 20 31 45 53 69 92H0Z'/%3E%3C/svg%3E") center / 100% 100% no-repeat,
         var(--flaeche);
     }
     #start-screen::before {
-      content: ""; position: absolute; z-index: -1; left: -56px; bottom: -68px;
-      width: 190px; height: 190px; border-radius: 44% 56% 42% 58%;
-      background: #ff735d; transform: rotate(18deg);
+      display: none;
     }
-    #start-screen .start-hero { margin-bottom: 22px; }
+    #start-screen::after {
+      display: none;
+    }
+    #start-screen .start-hero { position: relative; margin-bottom: 22px; }
+    #start-screen .start-hero::before {
+      display: none;
+    }
     #start-screen .app-icon { width: 92px; height: 92px; border-radius: 24px; }
     #start-screen .start-hero h1 { margin-top: 14px; font-size: 2.15rem; letter-spacing: -.03em; }
     #start-screen .start-tagline { font-size: 1rem; }
@@ -726,6 +730,16 @@
     #lobby-screen { padding: 30px 24px; }
     #lobby-screen > h1 { margin: 0 0 12px; font-size: 2.2rem; letter-spacing: -.035em; }
     #lobby-screen > h3 { margin: 26px 0 9px; font-size: 1.35rem; }
+    .lobby-code {
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+      margin: 17px 0 11px; padding: 12px 16px; border: 1px solid #ded3c9;
+      border-radius: 17px; background: #f3ece4; box-shadow: inset 0 1px 0 rgba(255,255,255,.72);
+    }
+    .lobby-code span { color: #5f6170; font-size: .78rem; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; }
+    .lobby-code strong {
+      color: #5b21b6; font-family: "Bungee", sans-serif; font-size: 2rem;
+      line-height: 1; letter-spacing: .09em;
+    }
     .lobby-spielerleiste {
       display: flex; align-items: flex-start; gap: 18px; overflow-x: auto;
       margin: 0 -5px; padding: 7px 5px 12px; scrollbar-width: none;
