@@ -975,14 +975,15 @@
     ]
   },
   {
-    "id": "din-papier", "titel": "DIN-A-Papierformate", "frage": "Länge der längeren Seite", "richtung": "Von klein nach groß", "skala": ["KLEIN", "GROSS"], "startId": "din-a5",
+    "id": "harry-potter-buecher", "titel": "Harry-Potter-Bücher", "frage": "Jahr der englischen Erstveröffentlichung", "richtung": "Vom ersten zum letzten Buch", "skala": ["FRÜH", "SPÄT"], "startId": "feuerkelch-buch",
     "begriffe": [
-      { "id": "din-a10", "name": "DIN A10", "wert": 37, "wertText": "37 mm" }, { "id": "din-a9", "name": "DIN A9", "wert": 52, "wertText": "52 mm" },
-      { "id": "din-a8", "name": "DIN A8", "wert": 74, "wertText": "74 mm" }, { "id": "din-a7", "name": "DIN A7", "wert": 105, "wertText": "105 mm" },
-      { "id": "din-a6", "name": "DIN A6", "wert": 148, "wertText": "148 mm" }, { "id": "din-a5", "name": "DIN A5", "wert": 210, "wertText": "210 mm" },
-      { "id": "din-a4", "name": "DIN A4", "wert": 297, "wertText": "297 mm" }, { "id": "din-a3", "name": "DIN A3", "wert": 420, "wertText": "420 mm" },
-      { "id": "din-a2", "name": "DIN A2", "wert": 594, "wertText": "594 mm" }, { "id": "din-a1", "name": "DIN A1", "wert": 841, "wertText": "841 mm" },
-      { "id": "din-a0", "name": "DIN A0", "wert": 1189, "wertText": "1.189 mm" }
+      { "id": "stein-der-weisen-buch", "name": "Der Stein der Weisen", "wert": 1997, "wertText": "1997" },
+      { "id": "kammer-des-schreckens-buch", "name": "Die Kammer des Schreckens", "wert": 1998, "wertText": "1998" },
+      { "id": "gefangene-von-askaban-buch", "name": "Der Gefangene von Askaban", "wert": 1999, "wertText": "1999" },
+      { "id": "feuerkelch-buch", "name": "Der Feuerkelch", "wert": 2000, "wertText": "2000" },
+      { "id": "orden-des-phoenix-buch", "name": "Der Orden des Phönix", "wert": 2003, "wertText": "2003" },
+      { "id": "halbblutprinz-buch", "name": "Der Halbblutprinz", "wert": 2005, "wertText": "2005" },
+      { "id": "heiligtuemer-des-todes-buch", "name": "Die Heiligtümer des Todes", "wert": 2007, "wertText": "2007" }
     ]
   },
   {
