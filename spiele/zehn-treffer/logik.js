@@ -9,7 +9,7 @@ export function mischeListe(werte, zufall = Math.random) {
 
 export function erstelleTeams(spielerIds, zufall = Math.random) {
   const gemischt = mischeListe(spielerIds, zufall);
-  return Object.fromEntries(gemischt.map((id, index) => [id, index % 2 === 0 ? "blau" : "orange"]));
+  return Object.fromEntries(gemischt.map((id, index) => [id, index % 2 === 0 ? "blau" : "rot"]));
 }
 
 export function bereinigeTreffer(treffer, anzahl = 10) {
@@ -26,14 +26,15 @@ export function aktiveSpielerId(reihenfolge, rundenIndex, vorhandeneIds) {
 }
 
 export function aktivesTeam(startTeam, rundenIndex, teams, vorhandeneIds) {
-  const erstes = startTeam === "orange" ? "orange" : "blau";
-  const anderes = erstes === "blau" ? "orange" : "blau";
+  const normalisiere = (team) => team === "orange" ? "rot" : team;
+  const erstes = normalisiere(startTeam) === "rot" ? "rot" : "blau";
+  const anderes = erstes === "blau" ? "rot" : "blau";
   const bevorzugt = rundenIndex % 2 === 0 ? erstes : anderes;
   const vorhanden = new Set(vorhandeneIds);
   const hatMitglieder = (team) => Object.entries(teams || {})
-    .some(([id, wert]) => wert === team && vorhanden.has(id));
+    .some(([id, wert]) => normalisiere(wert) === team && vorhanden.has(id));
   if (hatMitglieder(bevorzugt)) return bevorzugt;
-  return hatMitglieder(bevorzugt === "blau" ? "orange" : "blau")
-    ? (bevorzugt === "blau" ? "orange" : "blau")
+  return hatMitglieder(bevorzugt === "blau" ? "rot" : "blau")
+    ? (bevorzugt === "blau" ? "rot" : "blau")
     : null;
 }
