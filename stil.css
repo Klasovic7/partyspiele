@@ -56,24 +56,29 @@
       --profil-hell: #60a5fa;
       --profil-dunkel: #1e3a8a;
       --profil-text: #fff;
+      --strahlen-x: 50%;
+      --strahlen-y: 62%;
       position: fixed; inset: 0; z-index: 50; overflow-x: hidden; overflow-y: auto;
       display: grid; grid-template-rows: 1fr; min-height: 100dvh;
       padding: max(58px, env(safe-area-inset-top)) 18px max(96px, env(safe-area-inset-bottom));
       color: var(--profil-text);
-      background: radial-gradient(circle at 50% 35%, var(--profil-hell) 0, var(--profil-farbe) 44%, var(--profil-dunkel) 100%);
+      background: radial-gradient(circle at var(--strahlen-x) var(--strahlen-y), var(--profil-hell) 0, var(--profil-farbe) 44%, var(--profil-dunkel) 100%);
       isolation: isolate;
     }
     #profil-screen::before {
-      content: ""; position: fixed; z-index: -2; inset: -35vmax;
+      content: ""; position: fixed; z-index: -2; inset: 0;
       background:
         repeating-conic-gradient(
-          from -8deg at 50% 35%,
-          rgba(255,255,255,0.20) 0deg 7deg,
-          transparent 7deg 15deg,
-          rgba(0,0,0,0.11) 15deg 16deg,
-          transparent 16deg 23deg
+          from -11deg at var(--strahlen-x) var(--strahlen-y),
+          rgba(255,255,255,0.29) 0deg 5deg,
+          rgba(255,255,255,0.08) 5deg 11deg,
+          rgba(0,0,0,0.17) 11deg 12deg,
+          transparent 12deg 19deg,
+          rgba(0,0,0,0.12) 19deg 25deg,
+          rgba(255,255,255,0.13) 25deg 32deg,
+          rgba(0,0,0,0.18) 32deg 33deg,
+          transparent 33deg 40deg
         );
-      transform: rotate(-2deg);
       pointer-events: none;
     }
     #profil-screen::after {
@@ -136,7 +141,10 @@
       width: 82px; height: 82px; border-radius: 50%;
     }
     .icon-option.mitte { width: 154px; height: 154px; }
-    .icon-option img { width: 100%; height: 100%; display: block; object-fit: cover; }
+    .icon-option img {
+      width: 100%; height: 100%; display: block; object-fit: cover;
+      filter: saturate(1.03) contrast(1.03);
+    }
     .profil-spielername {
       min-height: 56px; margin: 3px 0 0; text-align: center;
       text-shadow: 0 3px 10px rgba(0,0,0,0.35);
