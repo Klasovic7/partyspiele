@@ -9,7 +9,7 @@ import {
 } from "./kern/ui.js";
 import { SPIELE, spielInfo } from "./spiele/register.js";
 
-export const APP_VERSION = "v46";
+export const APP_VERSION = "v47";
 document.getElementById("app-version").textContent = "Version " + APP_VERSION;
 
 // ---------- DOM ----------
@@ -446,6 +446,16 @@ function entladeSpiel() {
   spielWurzel.innerHTML = "";
 }
 
+function aktualisiereRaumNavigation(spielId) {
+  const imSpiel = Boolean(spielId);
+  btnVerlassen.textContent = imSpiel ? "← Zurück ins Hauptmenü" : "Raum verlassen";
+  btnVerlassen.disabled = false;
+  // Das Zurückkehren aus einem Spiel ändert den gemeinsamen Raumzustand und
+  // bleibt deshalb dem Spielleiter vorbehalten. Im Hauptmenü darf jeder den
+  // Raum für sich verlassen.
+  topBar.hidden = imSpiel && !zustand.istLeiter;
+}
+
 // ---------- Reaktion auf Änderungen am Raum ----------
 function reagiereAufRaum(daten) {
   zustand.raum = daten;
@@ -459,6 +469,7 @@ function reagiereAufRaum(daten) {
   }
 
   const spielId = daten.aktuellesSpiel ?? null;
+  aktualisiereRaumNavigation(spielId);
 
   if (spielId !== aktivesSpielId) {
     entladeSpiel();
@@ -573,7 +584,24 @@ async function verlasseRaum() {
   btnProfilVerlassen.disabled = false;
 }
 
-btnVerlassen.addEventListener("click", verlasseRaum);
+async function raumNavigationAusfuehren() {
+  const spielId = zustand.raum?.aktuellesSpiel ?? null;
+  if (!spielId) {
+    await verlasseRaum();
+    return;
+  }
+  if (!zustand.istLeiter) return;
+
+  btnVerlassen.disabled = true;
+  try {
+    await updateDoc(raumRef(), { aktuellesSpiel: null, phase: "lobby" });
+  } catch (e) {
+    zeigeDebug("Hauptmenü konnte nicht geöffnet werden: " + e.message);
+    btnVerlassen.disabled = false;
+  }
+}
+
+btnVerlassen.addEventListener("click", raumNavigationAusfuehren);
 btnProfilVerlassen.addEventListener("click", verlasseRaum);
 
 // ---------- Raum erstellen / beitreten ----------
