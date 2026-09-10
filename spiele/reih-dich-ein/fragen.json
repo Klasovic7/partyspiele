@@ -4,6 +4,7 @@
     "titel": "Planeten",
     "frage": "Entfernung von der Sonne",
     "richtung": "Von nah nach fern",
+    "skala": ["NAH", "WEIT"],
     "startId": "mars",
     "begriffe": [
       { "id": "merkur", "name": "Merkur", "wert": 1, "wertText": "1. Planet" },
@@ -21,6 +22,7 @@
     "titel": "Berge",
     "frage": "Höhe über dem Meeresspiegel",
     "richtung": "Vom niedrigsten zum höchsten",
+    "skala": ["NIEDRIG", "HOCH"],
     "startId": "mont-blanc",
     "begriffe": [
       { "id": "brocken", "name": "Brocken", "wert": 1141, "wertText": "1.141 m" },
@@ -40,6 +42,7 @@
     "titel": "Filmklassiker",
     "frage": "Jahr des Kinostarts",
     "richtung": "Vom ältesten zum neuesten Film",
+    "skala": ["ALT", "NEU"],
     "startId": "titanic",
     "begriffe": [
       { "id": "der-weisse-hai", "name": "Der weiße Hai", "wert": 1975, "wertText": "1975" },
@@ -59,6 +62,7 @@
     "titel": "Harry-Potter-Filme",
     "frage": "Reihenfolge der Kinostarts",
     "richtung": "Vom ersten zum letzten Teil",
+    "skala": ["FRÜH", "SPÄT"],
     "startId": "feuerkelch",
     "begriffe": [
       { "id": "stein-der-weisen", "name": "Der Stein der Weisen", "wert": 1, "wertText": "Teil 1 · 2001" },
@@ -76,6 +80,7 @@
     "titel": "Spielkonsolen",
     "frage": "Erste Veröffentlichung",
     "richtung": "Von alt nach neu",
+    "skala": ["ALT", "NEU"],
     "startId": "playstation",
     "begriffe": [
       { "id": "nes", "name": "Nintendo NES", "wert": 1983, "wertText": "1983" },
@@ -95,6 +100,7 @@
     "titel": "Chemische Elemente",
     "frage": "Ordnungszahl im Periodensystem",
     "richtung": "Von klein nach groß",
+    "skala": ["KLEIN", "GROSS"],
     "startId": "aluminium",
     "begriffe": [
       { "id": "wasserstoff", "name": "Wasserstoff", "wert": 1, "wertText": "Ordnungszahl 1" },
@@ -114,6 +120,7 @@
     "titel": "Olympische Sommerspiele",
     "frage": "Jahr der Austragung",
     "richtung": "Von früh nach spät",
+    "skala": ["FRÜH", "SPÄT"],
     "startId": "rom",
     "begriffe": [
       { "id": "berlin", "name": "Berlin", "wert": 1936, "wertText": "1936" },
@@ -133,6 +140,7 @@
     "titel": "Fußball-Weltmeister",
     "frage": "Jahr des ersten WM-Titels",
     "richtung": "Vom frühesten zum spätesten ersten Titel",
+    "skala": ["FRÜH", "SPÄT"],
     "startId": "brasilien",
     "begriffe": [
       { "id": "uruguay", "name": "Uruguay", "wert": 1930, "wertText": "1930" },
@@ -150,6 +158,7 @@
     "titel": "Fußballstars",
     "frage": "Geburtsjahr",
     "richtung": "Vom ältesten zum jüngsten Spieler",
+    "skala": ["ALT", "JUNG"],
     "startId": "messi",
     "begriffe": [
       { "id": "franz-beckenbauer", "name": "Franz Beckenbauer", "wert": 1945, "wertText": "1945" },
@@ -169,6 +178,7 @@
     "titel": "Berühmte Bauwerke",
     "frage": "Höhe des Bauwerks",
     "richtung": "Vom niedrigsten zum höchsten",
+    "skala": ["NIEDRIG", "HOCH"],
     "startId": "koelner-dom",
     "begriffe": [
       { "id": "brandenburger-tor", "name": "Brandenburger Tor", "wert": 26, "wertText": "26 m" },
@@ -181,6 +191,850 @@
       { "id": "empire-state-building", "name": "Empire State Building", "wert": 381, "wertText": "381 m" },
       { "id": "one-world-trade-center", "name": "One World Trade Center", "wert": 541, "wertText": "541 m" },
       { "id": "burj-khalifa", "name": "Burj Khalifa", "wert": 828, "wertText": "828 m" }
+    ]
+  },
+  {
+    "id": "monate-kalender", "titel": "Monate", "frage": "Reihenfolge im Kalender", "richtung": "Von Jahresanfang bis Jahresende", "skala": ["ANFANG", "ENDE"], "startId": "juni",
+    "begriffe": [
+      { "id": "januar", "name": "Januar", "wert": 1, "wertText": "1. Monat" }, { "id": "februar", "name": "Februar", "wert": 2, "wertText": "2. Monat" },
+      { "id": "maerz", "name": "März", "wert": 3, "wertText": "3. Monat" }, { "id": "april", "name": "April", "wert": 4, "wertText": "4. Monat" },
+      { "id": "mai", "name": "Mai", "wert": 5, "wertText": "5. Monat" }, { "id": "juni", "name": "Juni", "wert": 6, "wertText": "6. Monat" },
+      { "id": "juli", "name": "Juli", "wert": 7, "wertText": "7. Monat" }, { "id": "august", "name": "August", "wert": 8, "wertText": "8. Monat" },
+      { "id": "september", "name": "September", "wert": 9, "wertText": "9. Monat" }, { "id": "oktober", "name": "Oktober", "wert": 10, "wertText": "10. Monat" },
+      { "id": "november", "name": "November", "wert": 11, "wertText": "11. Monat" }, { "id": "dezember", "name": "Dezember", "wert": 12, "wertText": "12. Monat" }
+    ]
+  },
+  {
+    "id": "wochentage", "titel": "Wochentage", "frage": "Reihenfolge in der Woche", "richtung": "Von Montag bis Sonntag", "skala": ["MONTAG", "SONNTAG"], "startId": "donnerstag",
+    "begriffe": [
+      { "id": "montag", "name": "Montag", "wert": 1, "wertText": "Tag 1" }, { "id": "dienstag", "name": "Dienstag", "wert": 2, "wertText": "Tag 2" },
+      { "id": "mittwoch", "name": "Mittwoch", "wert": 3, "wertText": "Tag 3" }, { "id": "donnerstag", "name": "Donnerstag", "wert": 4, "wertText": "Tag 4" },
+      { "id": "freitag", "name": "Freitag", "wert": 5, "wertText": "Tag 5" }, { "id": "samstag", "name": "Samstag", "wert": 6, "wertText": "Tag 6" },
+      { "id": "sonntag", "name": "Sonntag", "wert": 7, "wertText": "Tag 7" }
+    ]
+  },
+  {
+    "id": "sternzeichen", "titel": "Sternzeichen", "frage": "Beginn im Kalenderjahr", "richtung": "Von Januar bis Dezember", "skala": ["JANUAR", "DEZEMBER"], "startId": "krebs",
+    "begriffe": [
+      { "id": "steinbock", "name": "Steinbock", "wert": 1, "wertText": "ab 22. Dezember" }, { "id": "wassermann", "name": "Wassermann", "wert": 2, "wertText": "ab 20. Januar" },
+      { "id": "fische", "name": "Fische", "wert": 3, "wertText": "ab 19. Februar" }, { "id": "widder", "name": "Widder", "wert": 4, "wertText": "ab 21. März" },
+      { "id": "stier", "name": "Stier", "wert": 5, "wertText": "ab 20. April" }, { "id": "zwillinge", "name": "Zwillinge", "wert": 6, "wertText": "ab 21. Mai" },
+      { "id": "krebs", "name": "Krebs", "wert": 7, "wertText": "ab 21. Juni" }, { "id": "loewe", "name": "Löwe", "wert": 8, "wertText": "ab 23. Juli" },
+      { "id": "jungfrau", "name": "Jungfrau", "wert": 9, "wertText": "ab 23. August" }, { "id": "waage", "name": "Waage", "wert": 10, "wertText": "ab 23. September" },
+      { "id": "skorpion", "name": "Skorpion", "wert": 11, "wertText": "ab 23. Oktober" }, { "id": "schuetze", "name": "Schütze", "wert": 12, "wertText": "ab 22. November" }
+    ]
+  },
+  {
+    "id": "chinesischer-tierkreis", "titel": "Chinesische Tierkreiszeichen", "frage": "Reihenfolge im zwölfjährigen Zyklus", "richtung": "Von Ratte bis Schwein", "skala": ["START", "ENDE"], "startId": "schlange",
+    "begriffe": [
+      { "id": "ratte", "name": "Ratte", "wert": 1, "wertText": "Platz 1" }, { "id": "bueffel", "name": "Büffel", "wert": 2, "wertText": "Platz 2" },
+      { "id": "tiger", "name": "Tiger", "wert": 3, "wertText": "Platz 3" }, { "id": "hase", "name": "Hase", "wert": 4, "wertText": "Platz 4" },
+      { "id": "drache", "name": "Drache", "wert": 5, "wertText": "Platz 5" }, { "id": "schlange", "name": "Schlange", "wert": 6, "wertText": "Platz 6" },
+      { "id": "pferd", "name": "Pferd", "wert": 7, "wertText": "Platz 7" }, { "id": "ziege", "name": "Ziege", "wert": 8, "wertText": "Platz 8" },
+      { "id": "affe", "name": "Affe", "wert": 9, "wertText": "Platz 9" }, { "id": "hahn", "name": "Hahn", "wert": 10, "wertText": "Platz 10" },
+      { "id": "hund", "name": "Hund", "wert": 11, "wertText": "Platz 11" }, { "id": "schwein", "name": "Schwein", "wert": 12, "wertText": "Platz 12" }
+    ]
+  },
+  {
+    "id": "star-wars-filme", "titel": "Star-Wars-Episoden", "frage": "Jahr des Kinostarts", "richtung": "Vom ältesten zum neuesten Film", "skala": ["ALT", "NEU"], "startId": "episode-1",
+    "begriffe": [
+      { "id": "episode-4", "name": "Episode IV – Eine neue Hoffnung", "wert": 1977, "wertText": "1977" }, { "id": "episode-5", "name": "Episode V – Das Imperium schlägt zurück", "wert": 1980, "wertText": "1980" },
+      { "id": "episode-6", "name": "Episode VI – Die Rückkehr der Jedi-Ritter", "wert": 1983, "wertText": "1983" }, { "id": "episode-1", "name": "Episode I – Die dunkle Bedrohung", "wert": 1999, "wertText": "1999" },
+      { "id": "episode-2", "name": "Episode II – Angriff der Klonkrieger", "wert": 2002, "wertText": "2002" }, { "id": "episode-3", "name": "Episode III – Die Rache der Sith", "wert": 2005, "wertText": "2005" },
+      { "id": "episode-7", "name": "Episode VII – Das Erwachen der Macht", "wert": 2015, "wertText": "2015" }, { "id": "episode-8", "name": "Episode VIII – Die letzten Jedi", "wert": 2017, "wertText": "2017" },
+      { "id": "episode-9", "name": "Episode IX – Der Aufstieg Skywalkers", "wert": 2019, "wertText": "2019" }
+    ]
+  },
+  {
+    "id": "rocky-filme", "titel": "Rocky-Filme", "frage": "Jahr des Kinostarts", "richtung": "Vom ersten zum letzten Film", "skala": ["ALT", "NEU"], "startId": "rocky-3",
+    "begriffe": [
+      { "id": "rocky-1", "name": "Rocky", "wert": 1976, "wertText": "1976" }, { "id": "rocky-2", "name": "Rocky II", "wert": 1979, "wertText": "1979" },
+      { "id": "rocky-3", "name": "Rocky III", "wert": 1982, "wertText": "1982" }, { "id": "rocky-4", "name": "Rocky IV", "wert": 1985, "wertText": "1985" },
+      { "id": "rocky-5", "name": "Rocky V", "wert": 1990, "wertText": "1990" }, { "id": "rocky-balboa", "name": "Rocky Balboa", "wert": 2006, "wertText": "2006" }
+    ]
+  },
+  {
+    "id": "jurassic-filme", "titel": "Jurassic-Filme", "frage": "Jahr des Kinostarts", "richtung": "Vom ersten zum letzten Film", "skala": ["ALT", "NEU"], "startId": "jp-3",
+    "begriffe": [
+      { "id": "jp-1", "name": "Jurassic Park", "wert": 1993, "wertText": "1993" }, { "id": "jp-2", "name": "Vergessene Welt", "wert": 1997, "wertText": "1997" },
+      { "id": "jp-3", "name": "Jurassic Park III", "wert": 2001, "wertText": "2001" }, { "id": "jw-1", "name": "Jurassic World", "wert": 2015, "wertText": "2015" },
+      { "id": "jw-2", "name": "Das gefallene Königreich", "wert": 2018, "wertText": "2018" }, { "id": "jw-3", "name": "Ein neues Zeitalter", "wert": 2022, "wertText": "2022" }
+    ]
+  },
+  {
+    "id": "mission-impossible", "titel": "Mission: Impossible", "frage": "Jahr des Kinostarts", "richtung": "Vom ersten zum neuesten Teil", "skala": ["ALT", "NEU"], "startId": "mi-4",
+    "begriffe": [
+      { "id": "mi-1", "name": "Mission: Impossible", "wert": 1996, "wertText": "1996" }, { "id": "mi-2", "name": "Mission: Impossible 2", "wert": 2000, "wertText": "2000" },
+      { "id": "mi-3", "name": "Mission: Impossible III", "wert": 2006, "wertText": "2006" }, { "id": "mi-4", "name": "Phantom Protokoll", "wert": 2011, "wertText": "2011" },
+      { "id": "mi-5", "name": "Rogue Nation", "wert": 2015, "wertText": "2015" }, { "id": "mi-6", "name": "Fallout", "wert": 2018, "wertText": "2018" },
+      { "id": "mi-7", "name": "Dead Reckoning", "wert": 2023, "wertText": "2023" }
+    ]
+  },
+  {
+    "id": "fast-furious", "titel": "Fast-&-Furious-Filme", "frage": "Jahr des Kinostarts", "richtung": "Vom ersten zum neuesten Hauptfilm", "skala": ["ALT", "NEU"], "startId": "fast-5",
+    "begriffe": [
+      { "id": "fast-1", "name": "The Fast and the Furious", "wert": 2001, "wertText": "2001" }, { "id": "fast-2", "name": "2 Fast 2 Furious", "wert": 2003, "wertText": "2003" },
+      { "id": "fast-3", "name": "Tokyo Drift", "wert": 2006, "wertText": "2006" }, { "id": "fast-4", "name": "Fast & Furious – Neues Modell", "wert": 2009, "wertText": "2009" },
+      { "id": "fast-5", "name": "Fast Five", "wert": 2011, "wertText": "2011" }, { "id": "fast-6", "name": "Fast & Furious 6", "wert": 2013, "wertText": "2013" },
+      { "id": "fast-7", "name": "Furious 7", "wert": 2015, "wertText": "2015" }, { "id": "fast-8", "name": "Fast & Furious 8", "wert": 2017, "wertText": "2017" },
+      { "id": "fast-9", "name": "Fast & Furious 9", "wert": 2021, "wertText": "2021" }, { "id": "fast-10", "name": "Fast & Furious 10", "wert": 2023, "wertText": "2023" }
+    ]
+  },
+  {
+    "id": "disney-klassiker", "titel": "Disney-Klassiker", "frage": "Jahr des Kinostarts", "richtung": "Von alt nach neu", "skala": ["ALT", "NEU"], "startId": "dschungelbuch",
+    "begriffe": [
+      { "id": "schneewittchen", "name": "Schneewittchen", "wert": 1937, "wertText": "1937" }, { "id": "pinocchio", "name": "Pinocchio", "wert": 1940, "wertText": "1940" },
+      { "id": "cinderella", "name": "Cinderella", "wert": 1950, "wertText": "1950" }, { "id": "dschungelbuch", "name": "Das Dschungelbuch", "wert": 1967, "wertText": "1967" },
+      { "id": "koenig-der-loewen", "name": "Der König der Löwen", "wert": 1994, "wertText": "1994" }, { "id": "mulan", "name": "Mulan", "wert": 1998, "wertText": "1998" },
+      { "id": "die-eiskoenigin", "name": "Die Eiskönigin", "wert": 2013, "wertText": "2013" }, { "id": "encanto", "name": "Encanto", "wert": 2021, "wertText": "2021" }
+    ]
+  },
+  {
+    "id": "pixar-filme", "titel": "Pixar-Filme", "frage": "Jahr des Kinostarts", "richtung": "Von alt nach neu", "skala": ["ALT", "NEU"], "startId": "die-unglaublichen",
+    "begriffe": [
+      { "id": "toy-story", "name": "Toy Story", "wert": 1995, "wertText": "1995" }, { "id": "monster-ag", "name": "Die Monster AG", "wert": 2001, "wertText": "2001" },
+      { "id": "findet-nemo", "name": "Findet Nemo", "wert": 2003, "wertText": "2003" }, { "id": "die-unglaublichen", "name": "Die Unglaublichen", "wert": 2004, "wertText": "2004" },
+      { "id": "cars", "name": "Cars", "wert": 2006, "wertText": "2006" }, { "id": "oben", "name": "Oben", "wert": 2009, "wertText": "2009" },
+      { "id": "alles-steht-kopf", "name": "Alles steht Kopf", "wert": 2015, "wertText": "2015" }, { "id": "coco", "name": "Coco", "wert": 2017, "wertText": "2017" }
+    ]
+  },
+  {
+    "id": "mcu-filme", "titel": "Marvel-Filme", "frage": "Jahr des Kinostarts", "richtung": "Von alt nach neu", "skala": ["ALT", "NEU"], "startId": "civil-war",
+    "begriffe": [
+      { "id": "iron-man", "name": "Iron Man", "wert": 2008, "wertText": "2008" }, { "id": "avengers", "name": "Marvel's The Avengers", "wert": 2012, "wertText": "2012" },
+      { "id": "guardians", "name": "Guardians of the Galaxy", "wert": 2014, "wertText": "2014" }, { "id": "civil-war", "name": "Captain America: Civil War", "wert": 2016, "wertText": "2016" },
+      { "id": "black-panther", "name": "Black Panther", "wert": 2018, "wertText": "2018" }, { "id": "endgame", "name": "Avengers: Endgame", "wert": 2019, "wertText": "2019" },
+      { "id": "shang-chi", "name": "Shang-Chi", "wert": 2021, "wertText": "2021" }, { "id": "wakanda-forever", "name": "Wakanda Forever", "wert": 2022, "wertText": "2022" }
+    ]
+  },
+  {
+    "id": "bond-darsteller", "titel": "James-Bond-Darsteller", "frage": "Erster Kinoauftritt als James Bond", "richtung": "Vom ersten zum neuesten Darsteller", "skala": ["FRÜH", "SPÄT"], "startId": "roger-moore",
+    "begriffe": [
+      { "id": "sean-connery", "name": "Sean Connery", "wert": 1962, "wertText": "1962" }, { "id": "george-lazenby", "name": "George Lazenby", "wert": 1969, "wertText": "1969" },
+      { "id": "roger-moore", "name": "Roger Moore", "wert": 1973, "wertText": "1973" }, { "id": "timothy-dalton", "name": "Timothy Dalton", "wert": 1987, "wertText": "1987" },
+      { "id": "pierce-brosnan", "name": "Pierce Brosnan", "wert": 1995, "wertText": "1995" }, { "id": "daniel-craig", "name": "Daniel Craig", "wert": 2006, "wertText": "2006" }
+    ]
+  },
+  {
+    "id": "super-mario-spiele", "titel": "Super-Mario-Spiele", "frage": "Jahr der ersten Veröffentlichung", "richtung": "Von alt nach neu", "skala": ["ALT", "NEU"], "startId": "super-mario-world",
+    "begriffe": [
+      { "id": "donkey-kong", "name": "Donkey Kong", "wert": 1981, "wertText": "1981" }, { "id": "super-mario-bros", "name": "Super Mario Bros.", "wert": 1985, "wertText": "1985" },
+      { "id": "super-mario-bros-3", "name": "Super Mario Bros. 3", "wert": 1988, "wertText": "1988" }, { "id": "super-mario-world", "name": "Super Mario World", "wert": 1990, "wertText": "1990" },
+      { "id": "super-mario-64", "name": "Super Mario 64", "wert": 1996, "wertText": "1996" }, { "id": "super-mario-sunshine", "name": "Super Mario Sunshine", "wert": 2002, "wertText": "2002" },
+      { "id": "super-mario-galaxy", "name": "Super Mario Galaxy", "wert": 2007, "wertText": "2007" }, { "id": "super-mario-odyssey", "name": "Super Mario Odyssey", "wert": 2017, "wertText": "2017" }
+    ]
+  },
+  {
+    "id": "zelda-spiele", "titel": "Zelda-Spiele", "frage": "Jahr der ersten Veröffentlichung", "richtung": "Von alt nach neu", "skala": ["ALT", "NEU"], "startId": "majoras-mask",
+    "begriffe": [
+      { "id": "zelda-1", "name": "The Legend of Zelda", "wert": 1986, "wertText": "1986" }, { "id": "link-to-past", "name": "A Link to the Past", "wert": 1991, "wertText": "1991" },
+      { "id": "ocarina", "name": "Ocarina of Time", "wert": 1998, "wertText": "1998" }, { "id": "majoras-mask", "name": "Majora's Mask", "wert": 2000, "wertText": "2000" },
+      { "id": "wind-waker", "name": "The Wind Waker", "wert": 2002, "wertText": "2002" }, { "id": "twilight-princess", "name": "Twilight Princess", "wert": 2006, "wertText": "2006" },
+      { "id": "skyward-sword", "name": "Skyward Sword", "wert": 2011, "wertText": "2011" }, { "id": "breath-wild", "name": "Breath of the Wild", "wert": 2017, "wertText": "2017" },
+      { "id": "tears-kingdom", "name": "Tears of the Kingdom", "wert": 2023, "wertText": "2023" }
+    ]
+  },
+  {
+    "id": "gta-spiele", "titel": "Grand-Theft-Auto-Spiele", "frage": "Jahr der ersten Veröffentlichung", "richtung": "Von alt nach neu", "skala": ["ALT", "NEU"], "startId": "vice-city",
+    "begriffe": [
+      { "id": "gta-1", "name": "Grand Theft Auto", "wert": 1997, "wertText": "1997" }, { "id": "gta-2", "name": "Grand Theft Auto 2", "wert": 1999, "wertText": "1999" },
+      { "id": "gta-3", "name": "Grand Theft Auto III", "wert": 2001, "wertText": "2001" }, { "id": "vice-city", "name": "Vice City", "wert": 2002, "wertText": "2002" },
+      { "id": "san-andreas", "name": "San Andreas", "wert": 2004, "wertText": "2004" }, { "id": "gta-4", "name": "Grand Theft Auto IV", "wert": 2008, "wertText": "2008" },
+      { "id": "gta-5", "name": "Grand Theft Auto V", "wert": 2013, "wertText": "2013" }
+    ]
+  },
+  {
+    "id": "handheld-konsolen", "titel": "Handheld-Konsolen", "frage": "Datum der ersten Veröffentlichung", "richtung": "Von alt nach neu", "skala": ["ALT", "NEU"], "startId": "nintendo-ds",
+    "begriffe": [
+      { "id": "game-boy-h", "name": "Game Boy", "wert": 19890421, "wertText": "1989" }, { "id": "game-gear", "name": "Sega Game Gear", "wert": 19901006, "wertText": "1990" },
+      { "id": "game-boy-advance", "name": "Game Boy Advance", "wert": 20010321, "wertText": "21.03.2001" }, { "id": "nintendo-ds", "name": "Nintendo DS", "wert": 20041121, "wertText": "21.11.2004" },
+      { "id": "psp", "name": "PlayStation Portable", "wert": 20041212, "wertText": "12.12.2004" }, { "id": "nintendo-3ds", "name": "Nintendo 3DS", "wert": 20110226, "wertText": "26.02.2011" },
+      { "id": "ps-vita", "name": "PlayStation Vita", "wert": 20111217, "wertText": "17.12.2011" }, { "id": "switch-lite", "name": "Nintendo Switch Lite", "wert": 20190920, "wertText": "20.09.2019" }
+    ]
+  },
+  {
+    "id": "windows-versionen", "titel": "Windows-Versionen", "frage": "Jahr der Veröffentlichung", "richtung": "Von alt nach neu", "skala": ["ALT", "NEU"], "startId": "windows-xp",
+    "begriffe": [
+      { "id": "windows-1", "name": "Windows 1.0", "wert": 1985, "wertText": "1985" }, { "id": "windows-3", "name": "Windows 3.0", "wert": 1990, "wertText": "1990" },
+      { "id": "windows-95", "name": "Windows 95", "wert": 1995, "wertText": "1995" }, { "id": "windows-98", "name": "Windows 98", "wert": 1998, "wertText": "1998" },
+      { "id": "windows-2000", "name": "Windows 2000", "wert": 2000, "wertText": "2000" }, { "id": "windows-xp", "name": "Windows XP", "wert": 2001, "wertText": "2001" },
+      { "id": "windows-vista", "name": "Windows Vista", "wert": 2007, "wertText": "2007" }, { "id": "windows-7", "name": "Windows 7", "wert": 2009, "wertText": "2009" },
+      { "id": "windows-8", "name": "Windows 8", "wert": 2012, "wertText": "2012" }, { "id": "windows-10", "name": "Windows 10", "wert": 2015, "wertText": "2015" },
+      { "id": "windows-11", "name": "Windows 11", "wert": 2021, "wertText": "2021" }
+    ]
+  },
+  {
+    "id": "online-plattformen", "titel": "Online-Plattformen", "frage": "Jahr des Starts", "richtung": "Von alt nach neu", "skala": ["ALT", "NEU"], "startId": "facebook",
+    "begriffe": [
+      { "id": "amazon-online", "name": "Amazon", "wert": 1995, "wertText": "1995" }, { "id": "google", "name": "Google", "wert": 1998, "wertText": "1998" },
+      { "id": "wikipedia", "name": "Wikipedia", "wert": 2001, "wertText": "2001" }, { "id": "linkedin", "name": "LinkedIn", "wert": 2003, "wertText": "2003" },
+      { "id": "facebook", "name": "Facebook", "wert": 2004, "wertText": "2004" }, { "id": "youtube", "name": "YouTube", "wert": 2005, "wertText": "2005" },
+      { "id": "twitter", "name": "Twitter/X", "wert": 2006, "wertText": "2006" }, { "id": "instagram", "name": "Instagram", "wert": 2010, "wertText": "2010" },
+      { "id": "tiktok", "name": "TikTok", "wert": 2016, "wertText": "2016" }
+    ]
+  },
+  {
+    "id": "programmiersprachen", "titel": "Programmiersprachen", "frage": "Jahr der ersten Veröffentlichung", "richtung": "Von alt nach neu", "skala": ["ALT", "NEU"], "startId": "c-plus-plus",
+    "begriffe": [
+      { "id": "fortran", "name": "Fortran", "wert": 1957, "wertText": "1957" }, { "id": "lisp", "name": "Lisp", "wert": 1958, "wertText": "1958" },
+      { "id": "basic", "name": "BASIC", "wert": 1964, "wertText": "1964" }, { "id": "pascal", "name": "Pascal", "wert": 1970, "wertText": "1970" },
+      { "id": "c", "name": "C", "wert": 1972, "wertText": "1972" }, { "id": "c-plus-plus", "name": "C++", "wert": 1985, "wertText": "1985" },
+      { "id": "python", "name": "Python", "wert": 1991, "wertText": "1991" }, { "id": "java", "name": "Java", "wert": 1995, "wertText": "1995" },
+      { "id": "c-sharp", "name": "C#", "wert": 2000, "wertText": "2000" }, { "id": "go", "name": "Go", "wert": 2009, "wertText": "2009" },
+      { "id": "swift", "name": "Swift", "wert": 2014, "wertText": "2014" }
+    ]
+  },
+  {
+    "id": "unternehmen-gruendung", "titel": "Bekannte Unternehmen", "frage": "Gründungsjahr", "richtung": "Von alt nach neu", "skala": ["ALT", "NEU"], "startId": "sony",
+    "begriffe": [
+      { "id": "ibm", "name": "IBM", "wert": 1911, "wertText": "1911" }, { "id": "disney-firma", "name": "Disney", "wert": 1923, "wertText": "1923" },
+      { "id": "samsung", "name": "Samsung", "wert": 1938, "wertText": "1938" }, { "id": "sony", "name": "Sony", "wert": 1946, "wertText": "1946" },
+      { "id": "microsoft", "name": "Microsoft", "wert": 1975, "wertText": "1975" }, { "id": "apple", "name": "Apple", "wert": 1976, "wertText": "1976" },
+      { "id": "netflix", "name": "Netflix", "wert": 1997, "wertText": "1997" }, { "id": "google-firma", "name": "Google", "wert": 1998, "wertText": "1998" }
+    ]
+  },
+  {
+    "id": "erfindungen", "titel": "Erfindungen", "frage": "Jahr der Erfindung oder ersten Vorführung", "richtung": "Von früh nach spät", "skala": ["FRÜH", "SPÄT"], "startId": "fotografie",
+    "begriffe": [
+      { "id": "buchdruck", "name": "Buchdruck mit beweglichen Lettern", "wert": 1450, "wertText": "um 1450" }, { "id": "fernrohr", "name": "Fernrohr", "wert": 1608, "wertText": "1608" },
+      { "id": "dampfmaschine", "name": "Dampfmaschine von Newcomen", "wert": 1712, "wertText": "1712" }, { "id": "fotografie", "name": "Erstes dauerhaftes Foto", "wert": 1826, "wertText": "1826" },
+      { "id": "telefon", "name": "Telefonpatent von Bell", "wert": 1876, "wertText": "1876" }, { "id": "gluehlampe", "name": "Praktische Glühlampe", "wert": 1879, "wertText": "1879" },
+      { "id": "motorflug", "name": "Motorflug der Wright-Brüder", "wert": 1903, "wertText": "1903" }, { "id": "world-wide-web", "name": "World Wide Web", "wert": 1989, "wertText": "1989" }
+    ]
+  },
+  {
+    "id": "raumfahrt-meilensteine", "titel": "Raumfahrt", "frage": "Jahr des Meilensteins", "richtung": "Von früh nach spät", "skala": ["FRÜH", "SPÄT"], "startId": "voyager-1",
+    "begriffe": [
+      { "id": "sputnik", "name": "Sputnik 1", "wert": 1957, "wertText": "1957" }, { "id": "gagarin", "name": "Juri Gagarin im All", "wert": 1961, "wertText": "1961" },
+      { "id": "mondlandung", "name": "Erste Mondlandung", "wert": 1969, "wertText": "1969" }, { "id": "voyager-1", "name": "Start von Voyager 1", "wert": 1977, "wertText": "1977" },
+      { "id": "iss", "name": "Erstes Modul der ISS", "wert": 1998, "wertText": "1998" }, { "id": "curiosity", "name": "Curiosity landet auf dem Mars", "wert": 2012, "wertText": "2012" },
+      { "id": "falcon-heavy", "name": "Erstflug Falcon Heavy", "wert": 2018, "wertText": "2018" }, { "id": "jwst", "name": "Start des James-Webb-Teleskops", "wert": 2021, "wertText": "2021" }
+    ]
+  },
+  {
+    "id": "luftfahrt-meilensteine", "titel": "Luftfahrt", "frage": "Jahr des Meilensteins", "richtung": "Von früh nach spät", "skala": ["FRÜH", "SPÄT"], "startId": "lindbergh",
+    "begriffe": [
+      { "id": "montgolfiere", "name": "Erste bemannte Ballonfahrt", "wert": 1783, "wertText": "1783" }, { "id": "wright", "name": "Motorflug der Wright-Brüder", "wert": 1903, "wertText": "1903" },
+      { "id": "erste-airline", "name": "Erste Linienfluggesellschaft", "wert": 1914, "wertText": "1914" }, { "id": "lindbergh", "name": "Lindbergh überquert den Atlantik", "wert": 1927, "wertText": "1927" },
+      { "id": "comet", "name": "Erster Jet-Passagierlinienflug", "wert": 1952, "wertText": "1952" }, { "id": "concorde", "name": "Erstflug der Concorde", "wert": 1969, "wertText": "1969" },
+      { "id": "a380", "name": "Erstflug des Airbus A380", "wert": 2005, "wertText": "2005" }
+    ]
+  },
+  {
+    "id": "auto-meilensteine", "titel": "Automobilgeschichte", "frage": "Jahr der Vorstellung oder Produktion", "richtung": "Von früh nach spät", "skala": ["FRÜH", "SPÄT"], "startId": "citroen-ds",
+    "begriffe": [
+      { "id": "benz-patentwagen", "name": "Benz Patent-Motorwagen", "wert": 1886, "wertText": "1886" }, { "id": "ford-model-t", "name": "Ford Model T", "wert": 1908, "wertText": "1908" },
+      { "id": "vw-kaefer", "name": "VW Käfer", "wert": 1938, "wertText": "1938" }, { "id": "citroen-ds", "name": "Citroën DS", "wert": 1955, "wertText": "1955" },
+      { "id": "porsche-911", "name": "Porsche 911", "wert": 1963, "wertText": "1963" }, { "id": "vw-golf", "name": "VW Golf", "wert": 1974, "wertText": "1974" },
+      { "id": "toyota-prius", "name": "Toyota Prius", "wert": 1997, "wertText": "1997" }, { "id": "tesla-roadster", "name": "Tesla Roadster", "wert": 2008, "wertText": "2008" }
+    ]
+  },
+  {
+    "id": "bundeskanzler-bis-merkel", "titel": "Deutsche Bundeskanzler", "frage": "Jahr des Amtsantritts", "richtung": "Von Adenauer bis Merkel", "skala": ["FRÜH", "SPÄT"], "startId": "willy-brandt",
+    "begriffe": [
+      { "id": "adenauer", "name": "Konrad Adenauer", "wert": 1949, "wertText": "1949" }, { "id": "erhard", "name": "Ludwig Erhard", "wert": 1963, "wertText": "1963" },
+      { "id": "kiesinger", "name": "Kurt Georg Kiesinger", "wert": 1966, "wertText": "1966" }, { "id": "willy-brandt", "name": "Willy Brandt", "wert": 1969, "wertText": "1969" },
+      { "id": "helmut-schmidt", "name": "Helmut Schmidt", "wert": 1974, "wertText": "1974" }, { "id": "helmut-kohl", "name": "Helmut Kohl", "wert": 1982, "wertText": "1982" },
+      { "id": "schroeder", "name": "Gerhard Schröder", "wert": 1998, "wertText": "1998" }, { "id": "merkel", "name": "Angela Merkel", "wert": 2005, "wertText": "2005" }
+    ]
+  },
+  {
+    "id": "us-praesidenten", "titel": "US-Präsidenten", "frage": "Jahr des Amtsantritts", "richtung": "Von früh nach spät", "skala": ["FRÜH", "SPÄT"], "startId": "franklin-roosevelt",
+    "begriffe": [
+      { "id": "washington", "name": "George Washington", "wert": 1789, "wertText": "1789" }, { "id": "jefferson", "name": "Thomas Jefferson", "wert": 1801, "wertText": "1801" },
+      { "id": "lincoln", "name": "Abraham Lincoln", "wert": 1861, "wertText": "1861" }, { "id": "theodore-roosevelt", "name": "Theodore Roosevelt", "wert": 1901, "wertText": "1901" },
+      { "id": "franklin-roosevelt", "name": "Franklin D. Roosevelt", "wert": 1933, "wertText": "1933" }, { "id": "kennedy", "name": "John F. Kennedy", "wert": 1961, "wertText": "1961" },
+      { "id": "reagan", "name": "Ronald Reagan", "wert": 1981, "wertText": "1981" }, { "id": "obama", "name": "Barack Obama", "wert": 2009, "wertText": "2009" }
+    ]
+  },
+  {
+    "id": "britische-monarchen", "titel": "Britische Monarchen", "frage": "Jahr des Regierungsantritts", "richtung": "Von früh nach spät", "skala": ["FRÜH", "SPÄT"], "startId": "george-v",
+    "begriffe": [
+      { "id": "victoria", "name": "Victoria", "wert": 1837, "wertText": "1837" }, { "id": "edward-vii", "name": "Edward VII.", "wert": 1901, "wertText": "1901" },
+      { "id": "george-v", "name": "George V.", "wert": 1910, "wertText": "1910" }, { "id": "edward-viii", "name": "Edward VIII.", "wert": 1936.01, "wertText": "Januar 1936" },
+      { "id": "george-vi", "name": "George VI.", "wert": 1936.12, "wertText": "Dezember 1936" }, { "id": "elizabeth-ii", "name": "Elizabeth II.", "wert": 1952, "wertText": "1952" },
+      { "id": "charles-iii", "name": "Charles III.", "wert": 2022, "wertText": "2022" }
+    ]
+  },
+  {
+    "id": "deutsche-geschichte", "titel": "Deutsche Geschichte", "frage": "Jahr des Ereignisses", "richtung": "Von früh nach spät", "skala": ["FRÜH", "SPÄT"], "startId": "grundgesetz",
+    "begriffe": [
+      { "id": "reformation", "name": "Beginn der Reformation", "wert": 1517, "wertText": "1517" }, { "id": "reichsgruendung", "name": "Gründung des Deutschen Kaiserreichs", "wert": 1871, "wertText": "1871" },
+      { "id": "weimarer-republik", "name": "Ausrufung der Republik", "wert": 1918, "wertText": "1918" }, { "id": "ns-machtuebernahme", "name": "NS-Machtübernahme", "wert": 1933, "wertText": "1933" },
+      { "id": "grundgesetz", "name": "Gründung der Bundesrepublik", "wert": 1949, "wertText": "1949" }, { "id": "mauerbau", "name": "Bau der Berliner Mauer", "wert": 1961, "wertText": "1961" },
+      { "id": "mauerfall", "name": "Fall der Berliner Mauer", "wert": 1989, "wertText": "1989" }, { "id": "wiedervereinigung", "name": "Deutsche Wiedervereinigung", "wert": 1990, "wertText": "1990" }
+    ]
+  },
+  {
+    "id": "weltgeschichte", "titel": "Weltgeschichte", "frage": "Jahr des Ereignisses", "richtung": "Von früh nach spät", "skala": ["FRÜH", "SPÄT"], "startId": "erster-weltkrieg",
+    "begriffe": [
+      { "id": "kolumbus", "name": "Kolumbus erreicht Amerika", "wert": 1492, "wertText": "1492" }, { "id": "franzoesische-revolution", "name": "Beginn der Französischen Revolution", "wert": 1789, "wertText": "1789" },
+      { "id": "napoleon-kaiser", "name": "Napoleon wird Kaiser", "wert": 1804, "wertText": "1804" }, { "id": "erster-weltkrieg", "name": "Beginn des Ersten Weltkriegs", "wert": 1914, "wertText": "1914" },
+      { "id": "zweiter-weltkrieg", "name": "Beginn des Zweiten Weltkriegs", "wert": 1939, "wertText": "1939" }, { "id": "vereinte-nationen", "name": "Gründung der Vereinten Nationen", "wert": 1945, "wertText": "1945" },
+      { "id": "mondlandung-welt", "name": "Erste Mondlandung", "wert": 1969, "wertText": "1969" }, { "id": "www-welt", "name": "Erfindung des World Wide Web", "wert": 1989, "wertText": "1989" }
+    ]
+  },
+  {
+    "id": "komponisten-geburt", "titel": "Komponisten", "frage": "Geburtsjahr", "richtung": "Vom ältesten zum jüngsten", "skala": ["ALT", "JUNG"], "startId": "mozart",
+    "begriffe": [
+      { "id": "vivaldi", "name": "Antonio Vivaldi", "wert": 1678, "wertText": "1678" }, { "id": "haendel", "name": "Georg Friedrich Händel", "wert": 1685.02, "wertText": "23.02.1685" },
+      { "id": "bach", "name": "Johann Sebastian Bach", "wert": 1685.03, "wertText": "31.03.1685" }, { "id": "haydn", "name": "Joseph Haydn", "wert": 1732, "wertText": "1732" },
+      { "id": "mozart", "name": "Wolfgang Amadeus Mozart", "wert": 1756, "wertText": "1756" }, { "id": "beethoven", "name": "Ludwig van Beethoven", "wert": 1770, "wertText": "1770" },
+      { "id": "schubert", "name": "Franz Schubert", "wert": 1797, "wertText": "1797" }, { "id": "chopin", "name": "Frédéric Chopin", "wert": 1810, "wertText": "1810" }
+    ]
+  },
+  {
+    "id": "maler-geburt", "titel": "Berühmte Maler", "frage": "Geburtsjahr", "richtung": "Vom ältesten zum jüngsten", "skala": ["ALT", "JUNG"], "startId": "rembrandt",
+    "begriffe": [
+      { "id": "leonardo", "name": "Leonardo da Vinci", "wert": 1452, "wertText": "1452" }, { "id": "michelangelo", "name": "Michelangelo", "wert": 1475, "wertText": "1475" },
+      { "id": "rembrandt", "name": "Rembrandt", "wert": 1606, "wertText": "1606" }, { "id": "monet", "name": "Claude Monet", "wert": 1840, "wertText": "1840" },
+      { "id": "van-gogh", "name": "Vincent van Gogh", "wert": 1853, "wertText": "1853" }, { "id": "klimt", "name": "Gustav Klimt", "wert": 1862, "wertText": "1862" },
+      { "id": "matisse", "name": "Henri Matisse", "wert": 1869, "wertText": "1869" }, { "id": "picasso", "name": "Pablo Picasso", "wert": 1881, "wertText": "1881" }
+    ]
+  },
+  {
+    "id": "schriftsteller-geburt", "titel": "Schriftsteller", "frage": "Geburtsjahr", "richtung": "Vom ältesten zum jüngsten", "skala": ["ALT", "JUNG"], "startId": "goethe",
+    "begriffe": [
+      { "id": "shakespeare", "name": "William Shakespeare", "wert": 1564, "wertText": "1564" }, { "id": "goethe", "name": "Johann Wolfgang von Goethe", "wert": 1749, "wertText": "1749" },
+      { "id": "jane-austen", "name": "Jane Austen", "wert": 1775, "wertText": "1775" }, { "id": "charles-dickens", "name": "Charles Dickens", "wert": 1812, "wertText": "1812" },
+      { "id": "mark-twain", "name": "Mark Twain", "wert": 1835, "wertText": "1835" }, { "id": "kafka", "name": "Franz Kafka", "wert": 1883, "wertText": "1883" },
+      { "id": "tolkien", "name": "J. R. R. Tolkien", "wert": 1892, "wertText": "1892" }, { "id": "rowling", "name": "J. K. Rowling", "wert": 1965, "wertText": "1965" }
+    ]
+  },
+  {
+    "id": "wissenschaftler-geburt", "titel": "Wissenschaftler", "frage": "Geburtsjahr", "richtung": "Vom ältesten zum jüngsten", "skala": ["ALT", "JUNG"], "startId": "darwin",
+    "begriffe": [
+      { "id": "galilei", "name": "Galileo Galilei", "wert": 1564, "wertText": "1564" }, { "id": "newton", "name": "Isaac Newton", "wert": 1643, "wertText": "1643" },
+      { "id": "faraday", "name": "Michael Faraday", "wert": 1791, "wertText": "1791" }, { "id": "darwin", "name": "Charles Darwin", "wert": 1809, "wertText": "1809" },
+      { "id": "curie", "name": "Marie Curie", "wert": 1867, "wertText": "1867" }, { "id": "einstein", "name": "Albert Einstein", "wert": 1879, "wertText": "1879" },
+      { "id": "turing", "name": "Alan Turing", "wert": 1912, "wertText": "1912" }, { "id": "hawking", "name": "Stephen Hawking", "wert": 1942, "wertText": "1942" }
+    ]
+  },
+  {
+    "id": "schauspieler-geburt", "titel": "Schauspieler", "frage": "Geburtsjahr", "richtung": "Vom ältesten zum jüngsten", "skala": ["ALT", "JUNG"], "startId": "tom-hanks",
+    "begriffe": [
+      { "id": "clint-eastwood", "name": "Clint Eastwood", "wert": 1930, "wertText": "1930" }, { "id": "morgan-freeman", "name": "Morgan Freeman", "wert": 1937, "wertText": "1937" },
+      { "id": "harrison-ford", "name": "Harrison Ford", "wert": 1942, "wertText": "1942" }, { "id": "arnold", "name": "Arnold Schwarzenegger", "wert": 1947, "wertText": "1947" },
+      { "id": "tom-hanks", "name": "Tom Hanks", "wert": 1956, "wertText": "1956" }, { "id": "george-clooney", "name": "George Clooney", "wert": 1961, "wertText": "1961" },
+      { "id": "brad-pitt", "name": "Brad Pitt", "wert": 1963, "wertText": "1963" }, { "id": "leonardo-dicaprio", "name": "Leonardo DiCaprio", "wert": 1974, "wertText": "1974" }
+    ]
+  },
+  {
+    "id": "schauspielerinnen-geburt", "titel": "Schauspielerinnen", "frage": "Geburtsjahr", "richtung": "Von der ältesten zur jüngsten", "skala": ["ALT", "JUNG"], "startId": "sandra-bullock",
+    "begriffe": [
+      { "id": "meryl-streep", "name": "Meryl Streep", "wert": 1949, "wertText": "1949" }, { "id": "whoopi-goldberg", "name": "Whoopi Goldberg", "wert": 1955, "wertText": "1955" },
+      { "id": "michelle-pfeiffer", "name": "Michelle Pfeiffer", "wert": 1958, "wertText": "1958" }, { "id": "sandra-bullock", "name": "Sandra Bullock", "wert": 1964, "wertText": "1964" },
+      { "id": "nicole-kidman", "name": "Nicole Kidman", "wert": 1967, "wertText": "1967" }, { "id": "cate-blanchett", "name": "Cate Blanchett", "wert": 1969, "wertText": "1969" },
+      { "id": "angelina-jolie", "name": "Angelina Jolie", "wert": 1975, "wertText": "1975" }, { "id": "natalie-portman", "name": "Natalie Portman", "wert": 1981, "wertText": "1981" }
+    ]
+  },
+  {
+    "id": "popstars-geburt", "titel": "Popstars", "frage": "Geburtsjahr", "richtung": "Vom ältesten zum jüngsten", "skala": ["ALT", "JUNG"], "startId": "madonna",
+    "begriffe": [
+      { "id": "elvis", "name": "Elvis Presley", "wert": 1935, "wertText": "1935" }, { "id": "paul-mccartney", "name": "Paul McCartney", "wert": 1942, "wertText": "1942" },
+      { "id": "elton-john", "name": "Elton John", "wert": 1947, "wertText": "1947" }, { "id": "madonna", "name": "Madonna", "wert": 1958, "wertText": "1958" },
+      { "id": "bono", "name": "Bono", "wert": 1960, "wertText": "1960" }, { "id": "shania-twain", "name": "Shania Twain", "wert": 1965, "wertText": "1965" },
+      { "id": "eminem", "name": "Eminem", "wert": 1972, "wertText": "1972" }, { "id": "beyonce", "name": "Beyoncé", "wert": 1981, "wertText": "1981" },
+      { "id": "lady-gaga", "name": "Lady Gaga", "wert": 1986, "wertText": "1986" }, { "id": "taylor-swift", "name": "Taylor Swift", "wert": 1989, "wertText": "1989" }
+    ]
+  },
+  {
+    "id": "deutsche-fussballer-geburt", "titel": "Deutsche Fußballstars", "frage": "Geburtsjahr", "richtung": "Vom ältesten zum jüngsten", "skala": ["ALT", "JUNG"], "startId": "miroslav-klose",
+    "begriffe": [
+      { "id": "sepp-maier", "name": "Sepp Maier", "wert": 1944.02, "wertText": "28.02.1944" }, { "id": "guenter-netzer", "name": "Günter Netzer", "wert": 1944.09, "wertText": "14.09.1944" },
+      { "id": "rudi-voeller", "name": "Rudi Völler", "wert": 1960, "wertText": "1960" }, { "id": "juergen-klinsmann", "name": "Jürgen Klinsmann", "wert": 1964, "wertText": "1964" },
+      { "id": "oliver-kahn", "name": "Oliver Kahn", "wert": 1969, "wertText": "1969" }, { "id": "miroslav-klose", "name": "Miroslav Klose", "wert": 1978, "wertText": "1978" },
+      { "id": "philipp-lahm", "name": "Philipp Lahm", "wert": 1983, "wertText": "1983" }, { "id": "manuel-neuer", "name": "Manuel Neuer", "wert": 1986, "wertText": "1986" },
+      { "id": "thomas-mueller", "name": "Thomas Müller", "wert": 1989, "wertText": "1989" }, { "id": "jamal-musiala", "name": "Jamal Musiala", "wert": 2003, "wertText": "2003" }
+    ]
+  },
+  {
+    "id": "deutsche-fussballclubs", "titel": "Deutsche Fußballclubs", "frage": "Gründungsjahr", "richtung": "Vom ältesten zum jüngsten Club", "skala": ["ALT", "JUNG"], "startId": "bayern",
+    "begriffe": [
+      { "id": "hertha", "name": "Hertha BSC", "wert": 1892, "wertText": "1892" }, { "id": "hannover", "name": "Hannover 96", "wert": 1896, "wertText": "1896" },
+      { "id": "werder", "name": "Werder Bremen", "wert": 1899, "wertText": "1899" }, { "id": "bayern", "name": "FC Bayern München", "wert": 1900, "wertText": "1900" },
+      { "id": "schalke", "name": "FC Schalke 04", "wert": 1904.05, "wertText": "04.05.1904" }, { "id": "leverkusen", "name": "Bayer 04 Leverkusen", "wert": 1904.07, "wertText": "01.07.1904" },
+      { "id": "dortmund", "name": "Borussia Dortmund", "wert": 1909, "wertText": "1909" }, { "id": "wolfsburg", "name": "VfL Wolfsburg", "wert": 1945, "wertText": "1945" }
+    ]
+  },
+  {
+    "id": "europaeische-fussballclubs", "titel": "Europäische Fußballclubs", "frage": "Gründungsjahr", "richtung": "Vom ältesten zum jüngsten Club", "skala": ["ALT", "JUNG"], "startId": "barcelona",
+    "begriffe": [
+      { "id": "manchester-united", "name": "Manchester United", "wert": 1878, "wertText": "1878" }, { "id": "arsenal", "name": "Arsenal FC", "wert": 1886, "wertText": "1886" },
+      { "id": "liverpool", "name": "Liverpool FC", "wert": 1892, "wertText": "1892" }, { "id": "juventus", "name": "Juventus Turin", "wert": 1897, "wertText": "1897" },
+      { "id": "barcelona", "name": "FC Barcelona", "wert": 1899, "wertText": "1899" }, { "id": "real-madrid", "name": "Real Madrid", "wert": 1902, "wertText": "1902" },
+      { "id": "chelsea", "name": "Chelsea FC", "wert": 1905, "wertText": "1905" }, { "id": "inter-mailand", "name": "Inter Mailand", "wert": 1908, "wertText": "1908" }
+    ]
+  },
+  {
+    "id": "wm-gastgeber", "titel": "Fußball-WM-Gastgeber", "frage": "Jahr der Austragung", "richtung": "Von früh nach spät", "skala": ["FRÜH", "SPÄT"], "startId": "schweiz-1954",
+    "begriffe": [
+      { "id": "uruguay-1930", "name": "Uruguay", "wert": 1930, "wertText": "1930" }, { "id": "italien-1934", "name": "Italien", "wert": 1934, "wertText": "1934" },
+      { "id": "frankreich-1938", "name": "Frankreich", "wert": 1938, "wertText": "1938" }, { "id": "brasilien-1950", "name": "Brasilien", "wert": 1950, "wertText": "1950" },
+      { "id": "schweiz-1954", "name": "Schweiz", "wert": 1954, "wertText": "1954" }, { "id": "schweden-1958", "name": "Schweden", "wert": 1958, "wertText": "1958" },
+      { "id": "chile-1962", "name": "Chile", "wert": 1962, "wertText": "1962" }, { "id": "england-1966", "name": "England", "wert": 1966, "wertText": "1966" },
+      { "id": "mexiko-1970", "name": "Mexiko", "wert": 1970, "wertText": "1970" }, { "id": "deutschland-1974", "name": "Deutschland", "wert": 1974, "wertText": "1974" }
+    ]
+  },
+  {
+    "id": "em-gastgeber", "titel": "Fußball-EM-Gastgeber", "frage": "Offizielles Turnierjahr", "richtung": "Von früh nach spät", "skala": ["FRÜH", "SPÄT"], "startId": "england-1996",
+    "begriffe": [
+      { "id": "frankreich-1984", "name": "Frankreich", "wert": 1984, "wertText": "1984" }, { "id": "deutschland-1988", "name": "Westdeutschland", "wert": 1988, "wertText": "1988" },
+      { "id": "schweden-1992", "name": "Schweden", "wert": 1992, "wertText": "1992" }, { "id": "england-1996", "name": "England", "wert": 1996, "wertText": "1996" },
+      { "id": "benelux-2000", "name": "Belgien & Niederlande", "wert": 2000, "wertText": "2000" }, { "id": "portugal-2004", "name": "Portugal", "wert": 2004, "wertText": "2004" },
+      { "id": "alpen-2008", "name": "Österreich & Schweiz", "wert": 2008, "wertText": "2008" }, { "id": "polen-ukraine-2012", "name": "Polen & Ukraine", "wert": 2012, "wertText": "2012" },
+      { "id": "europa-2020", "name": "Mehrere Länder Europas", "wert": 2020, "wertText": "EM 2020" }, { "id": "deutschland-2024", "name": "Deutschland", "wert": 2024, "wertText": "2024" }
+    ]
+  },
+  {
+    "id": "f1-erster-titel", "titel": "Formel-1-Weltmeister", "frage": "Jahr des ersten WM-Titels", "richtung": "Von früh nach spät", "skala": ["FRÜH", "SPÄT"], "startId": "niki-lauda",
+    "begriffe": [
+      { "id": "fangio", "name": "Juan Manuel Fangio", "wert": 1951, "wertText": "1951" }, { "id": "brabham", "name": "Jack Brabham", "wert": 1959, "wertText": "1959" },
+      { "id": "graham-hill", "name": "Graham Hill", "wert": 1962, "wertText": "1962" }, { "id": "jackie-stewart", "name": "Jackie Stewart", "wert": 1969, "wertText": "1969" },
+      { "id": "niki-lauda", "name": "Niki Lauda", "wert": 1975, "wertText": "1975" }, { "id": "alain-prost", "name": "Alain Prost", "wert": 1985, "wertText": "1985" },
+      { "id": "senna", "name": "Ayrton Senna", "wert": 1988, "wertText": "1988" }, { "id": "schumacher", "name": "Michael Schumacher", "wert": 1994, "wertText": "1994" },
+      { "id": "alonso", "name": "Fernando Alonso", "wert": 2005, "wertText": "2005" }, { "id": "hamilton", "name": "Lewis Hamilton", "wert": 2008, "wertText": "2008" },
+      { "id": "vettel", "name": "Sebastian Vettel", "wert": 2010, "wertText": "2010" }, { "id": "verstappen", "name": "Max Verstappen", "wert": 2021, "wertText": "2021" }
+    ]
+  },
+  {
+    "id": "laufstrecken", "titel": "Laufdisziplinen", "frage": "Länge der Strecke", "richtung": "Von kurz nach lang", "skala": ["KURZ", "LANG"], "startId": "achthundert-meter",
+    "begriffe": [
+      { "id": "hundert-meter", "name": "100-Meter-Lauf", "wert": 100, "wertText": "100 m" }, { "id": "zweihundert-meter", "name": "200-Meter-Lauf", "wert": 200, "wertText": "200 m" },
+      { "id": "vierhundert-meter", "name": "400-Meter-Lauf", "wert": 400, "wertText": "400 m" }, { "id": "achthundert-meter", "name": "800-Meter-Lauf", "wert": 800, "wertText": "800 m" },
+      { "id": "fuenfzehnhundert-meter", "name": "1.500-Meter-Lauf", "wert": 1500, "wertText": "1.500 m" }, { "id": "fuenftausend-meter", "name": "5.000-Meter-Lauf", "wert": 5000, "wertText": "5.000 m" },
+      { "id": "zehntausend-meter", "name": "10.000-Meter-Lauf", "wert": 10000, "wertText": "10.000 m" }, { "id": "marathon", "name": "Marathon", "wert": 42195, "wertText": "42,195 km" }
+    ]
+  },
+  {
+    "id": "pokerhaende", "titel": "Pokerhände", "frage": "Wertigkeit der Hand", "richtung": "Von schwach nach stark", "skala": ["SCHWACH", "STARK"], "startId": "strasse",
+    "begriffe": [
+      { "id": "high-card", "name": "High Card", "wert": 1, "wertText": "Platz 1" }, { "id": "pair", "name": "Ein Paar", "wert": 2, "wertText": "Platz 2" },
+      { "id": "two-pair", "name": "Zwei Paare", "wert": 3, "wertText": "Platz 3" }, { "id": "three-kind", "name": "Drilling", "wert": 4, "wertText": "Platz 4" },
+      { "id": "strasse", "name": "Straße", "wert": 5, "wertText": "Platz 5" }, { "id": "flush", "name": "Flush", "wert": 6, "wertText": "Platz 6" },
+      { "id": "full-house", "name": "Full House", "wert": 7, "wertText": "Platz 7" }, { "id": "four-kind", "name": "Vierling", "wert": 8, "wertText": "Platz 8" },
+      { "id": "straight-flush", "name": "Straight Flush", "wert": 9, "wertText": "Platz 9" }, { "id": "royal-flush", "name": "Royal Flush", "wert": 10, "wertText": "Platz 10" }
+    ]
+  },
+  {
+    "id": "snooker-kugeln", "titel": "Snooker-Kugeln", "frage": "Punktwert der Farbe", "richtung": "Von wenig nach viel", "skala": ["WENIG", "VIEL"], "startId": "snooker-braun",
+    "begriffe": [
+      { "id": "snooker-rot", "name": "Rot", "wert": 1, "wertText": "1 Punkt" }, { "id": "snooker-gelb", "name": "Gelb", "wert": 2, "wertText": "2 Punkte" },
+      { "id": "snooker-gruen", "name": "Grün", "wert": 3, "wertText": "3 Punkte" }, { "id": "snooker-braun", "name": "Braun", "wert": 4, "wertText": "4 Punkte" },
+      { "id": "snooker-blau", "name": "Blau", "wert": 5, "wertText": "5 Punkte" }, { "id": "snooker-pink", "name": "Pink", "wert": 6, "wertText": "6 Punkte" },
+      { "id": "snooker-schwarz", "name": "Schwarz", "wert": 7, "wertText": "7 Punkte" }
+    ]
+  },
+  {
+    "id": "laender-flaeche-welt", "titel": "Länder weltweit", "frage": "Fläche des Landes", "richtung": "Vom kleinsten zum größten", "skala": ["KLEIN", "GROSS"], "startId": "deutschland-flaeche",
+    "begriffe": [
+      { "id": "vatikan", "name": "Vatikanstadt", "wert": 0.49, "wertText": "0,49 km²" }, { "id": "luxemburg-welt", "name": "Luxemburg", "wert": 2586, "wertText": "2.586 km²" },
+      { "id": "niederlande-welt", "name": "Niederlande", "wert": 41850, "wertText": "ca. 41.850 km²" }, { "id": "deutschland-flaeche", "name": "Deutschland", "wert": 357588, "wertText": "ca. 357.588 km²" },
+      { "id": "frankreich-welt", "name": "Frankreich", "wert": 551695, "wertText": "ca. 551.695 km²" }, { "id": "indien", "name": "Indien", "wert": 3287263, "wertText": "ca. 3,29 Mio. km²" },
+      { "id": "brasilien-flaeche", "name": "Brasilien", "wert": 8515767, "wertText": "ca. 8,52 Mio. km²" }, { "id": "kanada", "name": "Kanada", "wert": 9984670, "wertText": "ca. 9,98 Mio. km²" },
+      { "id": "russland", "name": "Russland", "wert": 17098242, "wertText": "ca. 17,10 Mio. km²" }
+    ]
+  },
+  {
+    "id": "laender-flaeche-europa", "titel": "Europäische Länder", "frage": "Fläche des Landes", "richtung": "Vom kleinsten zum größten", "skala": ["KLEIN", "GROSS"], "startId": "oesterreich-flaeche",
+    "begriffe": [
+      { "id": "malta", "name": "Malta", "wert": 316, "wertText": "316 km²" }, { "id": "luxemburg-europa", "name": "Luxemburg", "wert": 2586, "wertText": "2.586 km²" },
+      { "id": "belgien", "name": "Belgien", "wert": 30528, "wertText": "ca. 30.528 km²" }, { "id": "niederlande-europa", "name": "Niederlande", "wert": 41850, "wertText": "ca. 41.850 km²" },
+      { "id": "oesterreich-flaeche", "name": "Österreich", "wert": 83879, "wertText": "ca. 83.879 km²" }, { "id": "deutschland-europa", "name": "Deutschland", "wert": 357588, "wertText": "ca. 357.588 km²" },
+      { "id": "spanien-flaeche", "name": "Spanien", "wert": 505990, "wertText": "ca. 505.990 km²" }, { "id": "frankreich-europa", "name": "Frankreich", "wert": 551695, "wertText": "ca. 551.695 km²" },
+      { "id": "ukraine", "name": "Ukraine", "wert": 603628, "wertText": "ca. 603.628 km²" }
+    ]
+  },
+  {
+    "id": "bundeslaender-flaeche", "titel": "Deutsche Bundesländer", "frage": "Fläche", "richtung": "Vom kleinsten zum größten", "skala": ["KLEIN", "GROSS"], "startId": "hessen-flaeche",
+    "begriffe": [
+      { "id": "bremen-flaeche", "name": "Bremen", "wert": 419, "wertText": "ca. 419 km²" }, { "id": "hamburg-flaeche", "name": "Hamburg", "wert": 755, "wertText": "ca. 755 km²" },
+      { "id": "berlin-flaeche", "name": "Berlin", "wert": 891, "wertText": "ca. 891 km²" }, { "id": "saarland-flaeche", "name": "Saarland", "wert": 2571, "wertText": "ca. 2.571 km²" },
+      { "id": "hessen-flaeche", "name": "Hessen", "wert": 21115, "wertText": "ca. 21.115 km²" }, { "id": "brandenburg-flaeche", "name": "Brandenburg", "wert": 29654, "wertText": "ca. 29.654 km²" },
+      { "id": "nrw-flaeche", "name": "Nordrhein-Westfalen", "wert": 34113, "wertText": "ca. 34.113 km²" }, { "id": "baden-wuerttemberg-flaeche", "name": "Baden-Württemberg", "wert": 35752, "wertText": "ca. 35.752 km²" },
+      { "id": "bayern-flaeche", "name": "Bayern", "wert": 70542, "wertText": "ca. 70.542 km²" }
+    ]
+  },
+  {
+    "id": "us-staaten-flaeche", "titel": "US-Bundesstaaten", "frage": "Gesamtfläche", "richtung": "Vom kleinsten zum größten", "skala": ["KLEIN", "GROSS"], "startId": "south-carolina",
+    "begriffe": [
+      { "id": "rhode-island", "name": "Rhode Island", "wert": 4001, "wertText": "ca. 4.001 km²" }, { "id": "delaware", "name": "Delaware", "wert": 6446, "wertText": "ca. 6.446 km²" },
+      { "id": "connecticut", "name": "Connecticut", "wert": 14357, "wertText": "ca. 14.357 km²" }, { "id": "hawaii", "name": "Hawaii", "wert": 28313, "wertText": "ca. 28.313 km²" },
+      { "id": "south-carolina", "name": "South Carolina", "wert": 82933, "wertText": "ca. 82.933 km²" }, { "id": "florida", "name": "Florida", "wert": 170312, "wertText": "ca. 170.312 km²" },
+      { "id": "california", "name": "Kalifornien", "wert": 423967, "wertText": "ca. 423.967 km²" }, { "id": "texas", "name": "Texas", "wert": 695662, "wertText": "ca. 695.662 km²" },
+      { "id": "alaska", "name": "Alaska", "wert": 1723337, "wertText": "ca. 1,72 Mio. km²" }
+    ]
+  },
+  {
+    "id": "inseln-flaeche", "titel": "Inseln", "frage": "Fläche der Insel", "richtung": "Von klein nach groß", "skala": ["KLEIN", "GROSS"], "startId": "kreta",
+    "begriffe": [
+      { "id": "manhattan", "name": "Manhattan", "wert": 59, "wertText": "ca. 59 km²" }, { "id": "ibiza", "name": "Ibiza", "wert": 572, "wertText": "ca. 572 km²" },
+      { "id": "mallorca", "name": "Mallorca", "wert": 3640, "wertText": "ca. 3.640 km²" }, { "id": "bali", "name": "Bali", "wert": 5780, "wertText": "ca. 5.780 km²" },
+      { "id": "kreta", "name": "Kreta", "wert": 8450, "wertText": "ca. 8.450 km²" }, { "id": "jamaika", "name": "Jamaika", "wert": 10991, "wertText": "ca. 10.991 km²" },
+      { "id": "irland-insel", "name": "Irland", "wert": 84421, "wertText": "ca. 84.421 km²" }, { "id": "grossbritannien-insel", "name": "Großbritannien", "wert": 209331, "wertText": "ca. 209.331 km²" },
+      { "id": "groenland", "name": "Grönland", "wert": 2166086, "wertText": "ca. 2,17 Mio. km²" }
+    ]
+  },
+  {
+    "id": "seen-flaeche", "titel": "Seen", "frage": "Wasseroberfläche", "richtung": "Von klein nach groß", "skala": ["KLEIN", "GROSS"], "startId": "michigansee",
+    "begriffe": [
+      { "id": "loch-ness", "name": "Loch Ness", "wert": 56, "wertText": "ca. 56 km²" }, { "id": "bodensee", "name": "Bodensee", "wert": 536, "wertText": "ca. 536 km²" },
+      { "id": "genfersee", "name": "Genfersee", "wert": 580, "wertText": "ca. 580 km²" }, { "id": "michigansee", "name": "Michigansee", "wert": 58030, "wertText": "ca. 58.030 km²" },
+      { "id": "huronsee", "name": "Huronsee", "wert": 59596, "wertText": "ca. 59.596 km²" }, { "id": "victoriasee", "name": "Victoriasee", "wert": 68870, "wertText": "ca. 68.870 km²" },
+      { "id": "oberer-see", "name": "Oberer See", "wert": 82100, "wertText": "ca. 82.100 km²" }, { "id": "kaspisches-meer", "name": "Kaspisches Meer", "wert": 371000, "wertText": "ca. 371.000 km²" }
+    ]
+  },
+  {
+    "id": "fluesse-laenge", "titel": "Flüsse", "frage": "Länge des Flusses", "richtung": "Von kurz nach lang", "skala": ["KURZ", "LANG"], "startId": "rhein-laenge",
+    "begriffe": [
+      { "id": "themse", "name": "Themse", "wert": 346, "wertText": "ca. 346 km" }, { "id": "spree", "name": "Spree", "wert": 400, "wertText": "ca. 400 km" },
+      { "id": "seine", "name": "Seine", "wert": 777, "wertText": "ca. 777 km" }, { "id": "elbe", "name": "Elbe", "wert": 1094, "wertText": "ca. 1.094 km" },
+      { "id": "rhein-laenge", "name": "Rhein", "wert": 1233, "wertText": "ca. 1.233 km" }, { "id": "donau", "name": "Donau", "wert": 2850, "wertText": "ca. 2.850 km" },
+      { "id": "kongo", "name": "Kongo", "wert": 4700, "wertText": "ca. 4.700 km" }, { "id": "jangtse", "name": "Jangtsekiang", "wert": 6300, "wertText": "ca. 6.300 km" },
+      { "id": "nil", "name": "Nil", "wert": 6650, "wertText": "ca. 6.650 km" }
+    ]
+  },
+  {
+    "id": "wasserfaelle-hoehe", "titel": "Wasserfälle", "frage": "Gesamte Fallhöhe", "richtung": "Vom niedrigsten zum höchsten", "skala": ["NIEDRIG", "HOCH"], "startId": "victoriafaelle",
+    "begriffe": [
+      { "id": "rheinfall", "name": "Rheinfall", "wert": 23, "wertText": "ca. 23 m" }, { "id": "niagarafaelle", "name": "Niagarafälle", "wert": 51, "wertText": "ca. 51 m" },
+      { "id": "iguazu", "name": "Iguazú-Wasserfälle", "wert": 82, "wertText": "bis ca. 82 m" }, { "id": "victoriafaelle", "name": "Victoriafälle", "wert": 108, "wertText": "ca. 108 m" },
+      { "id": "yosemite-falls", "name": "Yosemite Falls", "wert": 739, "wertText": "ca. 739 m" }, { "id": "tugela-falls", "name": "Tugela Falls", "wert": 948, "wertText": "ca. 948 m" },
+      { "id": "salto-angel", "name": "Salto Ángel", "wert": 979, "wertText": "ca. 979 m" }
+    ]
+  },
+  {
+    "id": "wuesten-flaeche", "titel": "Wüsten", "frage": "Ungefähre Fläche", "richtung": "Von klein nach groß", "skala": ["KLEIN", "GROSS"], "startId": "gobi",
+    "begriffe": [
+      { "id": "negev", "name": "Negev", "wert": 12000, "wertText": "ca. 12.000 km²" }, { "id": "mojave", "name": "Mojave-Wüste", "wert": 124000, "wertText": "ca. 124.000 km²" },
+      { "id": "great-victoria", "name": "Große Victoria-Wüste", "wert": 348750, "wertText": "ca. 349.000 km²" }, { "id": "gobi", "name": "Gobi", "wert": 1295000, "wertText": "ca. 1,30 Mio. km²" },
+      { "id": "arabische-wueste", "name": "Arabische Wüste", "wert": 2330000, "wertText": "ca. 2,33 Mio. km²" }, { "id": "sahara", "name": "Sahara", "wert": 9200000, "wertText": "ca. 9,2 Mio. km²" },
+      { "id": "antarktische-wueste", "name": "Antarktische Wüste", "wert": 14200000, "wertText": "ca. 14,2 Mio. km²" }
+    ]
+  },
+  {
+    "id": "berge-europa", "titel": "Berge Europas", "frage": "Höhe über dem Meeresspiegel", "richtung": "Vom niedrigsten zum höchsten", "skala": ["NIEDRIG", "HOCH"], "startId": "mulhacen",
+    "begriffe": [
+      { "id": "snowdon", "name": "Snowdon", "wert": 1085, "wertText": "1.085 m" }, { "id": "ben-nevis", "name": "Ben Nevis", "wert": 1345, "wertText": "1.345 m" },
+      { "id": "olymp", "name": "Olymp", "wert": 2918, "wertText": "2.918 m" }, { "id": "zugspitze-europa", "name": "Zugspitze", "wert": 2962, "wertText": "2.962 m" },
+      { "id": "mulhacen", "name": "Mulhacén", "wert": 3479, "wertText": "3.479 m" }, { "id": "grossglockner", "name": "Großglockner", "wert": 3798, "wertText": "3.798 m" },
+      { "id": "mont-blanc-europa", "name": "Mont Blanc", "wert": 4806, "wertText": "4.806 m" }, { "id": "elbrus", "name": "Elbrus", "wert": 5642, "wertText": "5.642 m" }
+    ]
+  },
+  {
+    "id": "berge-deutschland", "titel": "Berge Deutschlands", "frage": "Höhe über dem Meeresspiegel", "richtung": "Vom niedrigsten zum höchsten", "skala": ["NIEDRIG", "HOCH"], "startId": "watzmann-de",
+    "begriffe": [
+      { "id": "brocken-de", "name": "Brocken", "wert": 1141, "wertText": "1.141 m" }, { "id": "feldberg-de", "name": "Feldberg", "wert": 1493, "wertText": "1.493 m" },
+      { "id": "hochkalter", "name": "Hochkalter", "wert": 2607, "wertText": "2.607 m" }, { "id": "watzmann-de", "name": "Watzmann", "wert": 2713, "wertText": "2.713 m" },
+      { "id": "hochwanner", "name": "Hochwanner", "wert": 2744, "wertText": "2.744 m" }, { "id": "schneefernerkopf", "name": "Schneefernerkopf", "wert": 2875, "wertText": "2.875 m" },
+      { "id": "zugspitze-de", "name": "Zugspitze", "wert": 2962, "wertText": "2.962 m" }
+    ]
+  },
+  {
+    "id": "weltstaedte-breitengrad", "titel": "Weltstädte", "frage": "Geografische Lage", "richtung": "Von Süden nach Norden", "skala": ["SÜD", "NORD"], "startId": "nairobi",
+    "begriffe": [
+      { "id": "buenos-aires", "name": "Buenos Aires", "wert": -34.6, "wertText": "34,6° Süd" }, { "id": "kapstadt", "name": "Kapstadt", "wert": -33.92, "wertText": "33,92° Süd" },
+      { "id": "sydney", "name": "Sydney", "wert": -33.87, "wertText": "33,87° Süd" }, { "id": "rio", "name": "Rio de Janeiro", "wert": -22.9, "wertText": "22,9° Süd" },
+      { "id": "nairobi", "name": "Nairobi", "wert": -1.29, "wertText": "1,3° Süd" }, { "id": "singapur", "name": "Singapur", "wert": 1.35, "wertText": "1,4° Nord" },
+      { "id": "kairo", "name": "Kairo", "wert": 30.04, "wertText": "30,0° Nord" }, { "id": "berlin-lat", "name": "Berlin", "wert": 52.52, "wertText": "52,5° Nord" },
+      { "id": "oslo", "name": "Oslo", "wert": 59.91, "wertText": "59,9° Nord" }, { "id": "reykjavik", "name": "Reykjavík", "wert": 64.15, "wertText": "64,1° Nord" }
+    ]
+  },
+  {
+    "id": "hauptstaedte-laengengrad", "titel": "Europäische Hauptstädte", "frage": "Geografische Lage", "richtung": "Von Westen nach Osten", "skala": ["WEST", "OST"], "startId": "rom-long",
+    "begriffe": [
+      { "id": "lissabon", "name": "Lissabon", "wert": -9.14, "wertText": "9,1° West" }, { "id": "dublin", "name": "Dublin", "wert": -6.26, "wertText": "6,3° West" },
+      { "id": "london", "name": "London", "wert": -0.13, "wertText": "0,1° West" }, { "id": "paris", "name": "Paris", "wert": 2.35, "wertText": "2,4° Ost" },
+      { "id": "rom-long", "name": "Rom", "wert": 12.5, "wertText": "12,5° Ost" }, { "id": "berlin-long", "name": "Berlin", "wert": 13.4, "wertText": "13,4° Ost" },
+      { "id": "warschau", "name": "Warschau", "wert": 21.01, "wertText": "21,0° Ost" }, { "id": "athen", "name": "Athen", "wert": 23.73, "wertText": "23,7° Ost" },
+      { "id": "helsinki-long", "name": "Helsinki", "wert": 24.94, "wertText": "24,9° Ost" }, { "id": "moskau-long", "name": "Moskau", "wert": 37.62, "wertText": "37,6° Ost" }
+    ]
+  },
+  {
+    "id": "deutsche-staedte-breitengrad", "titel": "Deutsche Städte", "frage": "Geografische Lage", "richtung": "Von Süden nach Norden", "skala": ["SÜD", "NORD"], "startId": "frankfurt-lat",
+    "begriffe": [
+      { "id": "muenchen-lat", "name": "München", "wert": 48.14, "wertText": "48,1° Nord" }, { "id": "stuttgart-lat", "name": "Stuttgart", "wert": 48.78, "wertText": "48,8° Nord" },
+      { "id": "frankfurt-lat", "name": "Frankfurt am Main", "wert": 50.11, "wertText": "50,1° Nord" }, { "id": "koeln-lat", "name": "Köln", "wert": 50.94, "wertText": "50,9° Nord" },
+      { "id": "berlin-stadt-lat", "name": "Berlin", "wert": 52.52, "wertText": "52,5° Nord" }, { "id": "bremen-lat", "name": "Bremen", "wert": 53.08, "wertText": "53,1° Nord" },
+      { "id": "hamburg-lat", "name": "Hamburg", "wert": 53.55, "wertText": "53,6° Nord" }, { "id": "kiel-lat", "name": "Kiel", "wert": 54.32, "wertText": "54,3° Nord" }
+    ]
+  },
+  {
+    "id": "laender-hoechster-punkt", "titel": "Höchste Punkte der Länder", "frage": "Höhe des höchsten Punktes", "richtung": "Von niedrig nach hoch", "skala": ["NIEDRIG", "HOCH"], "startId": "spanien-hoch",
+    "begriffe": [
+      { "id": "portugal-hoch", "name": "Portugal – Ponta do Pico", "wert": 2351, "wertText": "2.351 m" }, { "id": "deutschland-hoch", "name": "Deutschland – Zugspitze", "wert": 2962, "wertText": "2.962 m" },
+      { "id": "spanien-hoch", "name": "Spanien – Teide", "wert": 3715, "wertText": "3.715 m" }, { "id": "japan-hoch", "name": "Japan – Fuji", "wert": 3776, "wertText": "3.776 m" },
+      { "id": "frankreich-hoch", "name": "Frankreich – Mont Blanc", "wert": 4806, "wertText": "4.806 m" }, { "id": "tansania-hoch", "name": "Tansania – Kilimandscharo", "wert": 5895, "wertText": "5.895 m" },
+      { "id": "argentinien-hoch", "name": "Argentinien – Aconcagua", "wert": 6961, "wertText": "6.961 m" }, { "id": "nepal-hoch", "name": "Nepal – Mount Everest", "wert": 8849, "wertText": "8.849 m" }
+    ]
+  },
+  {
+    "id": "planeten-durchmesser", "titel": "Planeten", "frage": "Durchmesser", "richtung": "Vom kleinsten zum größten", "skala": ["KLEIN", "GROSS"], "startId": "erde-durchmesser",
+    "begriffe": [
+      { "id": "merkur-durchmesser", "name": "Merkur", "wert": 4879, "wertText": "ca. 4.879 km" }, { "id": "mars-durchmesser", "name": "Mars", "wert": 6779, "wertText": "ca. 6.779 km" },
+      { "id": "venus-durchmesser", "name": "Venus", "wert": 12104, "wertText": "ca. 12.104 km" }, { "id": "erde-durchmesser", "name": "Erde", "wert": 12742, "wertText": "ca. 12.742 km" },
+      { "id": "neptun-durchmesser", "name": "Neptun", "wert": 49244, "wertText": "ca. 49.244 km" }, { "id": "uranus-durchmesser", "name": "Uranus", "wert": 50724, "wertText": "ca. 50.724 km" },
+      { "id": "saturn-durchmesser", "name": "Saturn", "wert": 116460, "wertText": "ca. 116.460 km" }, { "id": "jupiter-durchmesser", "name": "Jupiter", "wert": 139820, "wertText": "ca. 139.820 km" }
+    ]
+  },
+  {
+    "id": "monde-durchmesser", "titel": "Monde", "frage": "Durchmesser", "richtung": "Vom kleinsten zum größten", "skala": ["KLEIN", "GROSS"], "startId": "europa-mond",
+    "begriffe": [
+      { "id": "phobos", "name": "Phobos", "wert": 22, "wertText": "ca. 22 km" }, { "id": "mimas", "name": "Mimas", "wert": 396, "wertText": "ca. 396 km" },
+      { "id": "enceladus", "name": "Enceladus", "wert": 504, "wertText": "ca. 504 km" }, { "id": "charon", "name": "Charon", "wert": 1212, "wertText": "ca. 1.212 km" },
+      { "id": "europa-mond", "name": "Europa", "wert": 3122, "wertText": "ca. 3.122 km" }, { "id": "erdmond", "name": "Mond", "wert": 3475, "wertText": "ca. 3.475 km" },
+      { "id": "io", "name": "Io", "wert": 3643, "wertText": "ca. 3.643 km" }, { "id": "titan", "name": "Titan", "wert": 5150, "wertText": "ca. 5.150 km" },
+      { "id": "ganymed", "name": "Ganymed", "wert": 5268, "wertText": "ca. 5.268 km" }
+    ]
+  },
+  {
+    "id": "planeten-umlaufzeit", "titel": "Planeten-Umlaufzeiten", "frage": "Zeit für einen Umlauf um die Sonne", "richtung": "Von kurz nach lang", "skala": ["KURZ", "LANG"], "startId": "mars-umlauf",
+    "begriffe": [
+      { "id": "merkur-umlauf", "name": "Merkur", "wert": 88, "wertText": "ca. 88 Tage" }, { "id": "venus-umlauf", "name": "Venus", "wert": 225, "wertText": "ca. 225 Tage" },
+      { "id": "erde-umlauf", "name": "Erde", "wert": 365, "wertText": "ca. 365 Tage" }, { "id": "mars-umlauf", "name": "Mars", "wert": 687, "wertText": "ca. 687 Tage" },
+      { "id": "jupiter-umlauf", "name": "Jupiter", "wert": 4333, "wertText": "ca. 11,9 Jahre" }, { "id": "saturn-umlauf", "name": "Saturn", "wert": 10759, "wertText": "ca. 29,5 Jahre" },
+      { "id": "uranus-umlauf", "name": "Uranus", "wert": 30687, "wertText": "ca. 84 Jahre" }, { "id": "neptun-umlauf", "name": "Neptun", "wert": 60190, "wertText": "ca. 164,8 Jahre" }
+    ]
+  },
+  {
+    "id": "zwergplaneten-entfernung", "titel": "Zwergplaneten & Kandidaten", "frage": "Mittlere Entfernung von der Sonne", "richtung": "Von nah nach fern", "skala": ["NAH", "WEIT"], "startId": "pluto-entfernung",
+    "begriffe": [
+      { "id": "ceres", "name": "Ceres", "wert": 2.77, "wertText": "ca. 2,77 AE" }, { "id": "orcus", "name": "Orcus", "wert": 39.2, "wertText": "ca. 39,2 AE" },
+      { "id": "pluto-entfernung", "name": "Pluto", "wert": 39.5, "wertText": "ca. 39,5 AE" }, { "id": "haumea", "name": "Haumea", "wert": 43.1, "wertText": "ca. 43,1 AE" },
+      { "id": "makemake", "name": "Makemake", "wert": 45.7, "wertText": "ca. 45,7 AE" }, { "id": "gonggong", "name": "Gonggong", "wert": 67.5, "wertText": "ca. 67,5 AE" },
+      { "id": "eris", "name": "Eris", "wert": 67.8, "wertText": "ca. 67,8 AE" }
+    ]
+  },
+  {
+    "id": "elemente-ordnungszahl-2", "titel": "Weitere chemische Elemente", "frage": "Ordnungszahl im Periodensystem", "richtung": "Von klein nach groß", "skala": ["KLEIN", "GROSS"], "startId": "kalium",
+    "begriffe": [
+      { "id": "lithium", "name": "Lithium", "wert": 3, "wertText": "Ordnungszahl 3" }, { "id": "stickstoff", "name": "Stickstoff", "wert": 7, "wertText": "Ordnungszahl 7" },
+      { "id": "neon", "name": "Neon", "wert": 10, "wertText": "Ordnungszahl 10" }, { "id": "silicium", "name": "Silicium", "wert": 14, "wertText": "Ordnungszahl 14" },
+      { "id": "kalium", "name": "Kalium", "wert": 19, "wertText": "Ordnungszahl 19" }, { "id": "kupfer", "name": "Kupfer", "wert": 29, "wertText": "Ordnungszahl 29" },
+      { "id": "zinn", "name": "Zinn", "wert": 50, "wertText": "Ordnungszahl 50" }, { "id": "quecksilber", "name": "Quecksilber", "wert": 80, "wertText": "Ordnungszahl 80" },
+      { "id": "uran", "name": "Uran", "wert": 92, "wertText": "Ordnungszahl 92" }
+    ]
+  },
+  {
+    "id": "metalle-schmelzpunkt", "titel": "Metalle", "frage": "Schmelzpunkt", "richtung": "Von niedriger zu höherer Temperatur", "skala": ["KALT", "HEISS"], "startId": "silber-schmelz",
+    "begriffe": [
+      { "id": "quecksilber-schmelz", "name": "Quecksilber", "wert": -39, "wertText": "ca. −39 °C" }, { "id": "zinn-schmelz", "name": "Zinn", "wert": 232, "wertText": "ca. 232 °C" },
+      { "id": "aluminium-schmelz", "name": "Aluminium", "wert": 660, "wertText": "ca. 660 °C" }, { "id": "silber-schmelz", "name": "Silber", "wert": 962, "wertText": "ca. 962 °C" },
+      { "id": "gold-schmelz", "name": "Gold", "wert": 1064, "wertText": "ca. 1.064 °C" }, { "id": "kupfer-schmelz", "name": "Kupfer", "wert": 1085, "wertText": "ca. 1.085 °C" },
+      { "id": "eisen-schmelz", "name": "Eisen", "wert": 1538, "wertText": "ca. 1.538 °C" }, { "id": "wolfram-schmelz", "name": "Wolfram", "wert": 3422, "wertText": "ca. 3.422 °C" }
+    ]
+  },
+  {
+    "id": "materialien-dichte", "titel": "Materialien", "frage": "Dichte", "richtung": "Von leicht nach schwer bei gleichem Volumen", "skala": ["LEICHT", "SCHWER"], "startId": "aluminium-dichte",
+    "begriffe": [
+      { "id": "kork", "name": "Kork", "wert": 0.24, "wertText": "ca. 0,24 g/cm³" }, { "id": "eichenholz", "name": "Eichenholz", "wert": 0.7, "wertText": "ca. 0,70 g/cm³" },
+      { "id": "eis", "name": "Eis", "wert": 0.92, "wertText": "ca. 0,92 g/cm³" }, { "id": "wasser-dichte", "name": "Wasser", "wert": 1, "wertText": "ca. 1,00 g/cm³" },
+      { "id": "aluminium-dichte", "name": "Aluminium", "wert": 2.7, "wertText": "ca. 2,70 g/cm³" }, { "id": "eisen-dichte", "name": "Eisen", "wert": 7.87, "wertText": "ca. 7,87 g/cm³" },
+      { "id": "kupfer-dichte", "name": "Kupfer", "wert": 8.96, "wertText": "ca. 8,96 g/cm³" }, { "id": "silber-dichte", "name": "Silber", "wert": 10.49, "wertText": "ca. 10,49 g/cm³" },
+      { "id": "blei-dichte", "name": "Blei", "wert": 11.34, "wertText": "ca. 11,34 g/cm³" }, { "id": "gold-dichte", "name": "Gold", "wert": 19.32, "wertText": "ca. 19,32 g/cm³" }
+    ]
+  },
+  {
+    "id": "temperatur-marken", "titel": "Temperaturmarken", "frage": "Temperatur in Grad Celsius", "richtung": "Von kalt nach heiß", "skala": ["KALT", "HEISS"], "startId": "koerpertemperatur",
+    "begriffe": [
+      { "id": "absoluter-nullpunkt", "name": "Absoluter Nullpunkt", "wert": -273.15, "wertText": "−273,15 °C" }, { "id": "stickstoff-siedet", "name": "Stickstoff siedet", "wert": -196, "wertText": "ca. −196 °C" },
+      { "id": "wasser-gefriert", "name": "Wasser gefriert", "wert": 0, "wertText": "0 °C" }, { "id": "raumtemperatur", "name": "Typische Raumtemperatur", "wert": 20, "wertText": "ca. 20 °C" },
+      { "id": "koerpertemperatur", "name": "Normale Körpertemperatur", "wert": 37, "wertText": "ca. 37 °C" }, { "id": "wasser-siedet", "name": "Wasser siedet auf Meereshöhe", "wert": 100, "wertText": "100 °C" },
+      { "id": "papier-entzuendet", "name": "Papier entzündet sich", "wert": 233, "wertText": "ca. 233 °C" }, { "id": "lava", "name": "Heiße Lava", "wert": 1000, "wertText": "ca. 1.000 °C" }
+    ]
+  },
+  {
+    "id": "si-praefixe", "titel": "SI-Präfixe", "frage": "Größe des Vorsatzes als Zehnerpotenz", "richtung": "Von sehr klein nach sehr groß", "skala": ["KLEIN", "GROSS"], "startId": "dezi",
+    "begriffe": [
+      { "id": "nano", "name": "Nano", "wert": -9, "wertText": "10⁻⁹" }, { "id": "mikro", "name": "Mikro", "wert": -6, "wertText": "10⁻⁶" },
+      { "id": "milli", "name": "Milli", "wert": -3, "wertText": "10⁻³" }, { "id": "zenti", "name": "Zenti", "wert": -2, "wertText": "10⁻²" },
+      { "id": "dezi", "name": "Dezi", "wert": -1, "wertText": "10⁻¹" }, { "id": "deka", "name": "Deka", "wert": 1, "wertText": "10¹" },
+      { "id": "hekto", "name": "Hekto", "wert": 2, "wertText": "10²" }, { "id": "kilo", "name": "Kilo", "wert": 3, "wertText": "10³" },
+      { "id": "mega", "name": "Mega", "wert": 6, "wertText": "10⁶" }, { "id": "giga", "name": "Giga", "wert": 9, "wertText": "10⁹" },
+      { "id": "tera", "name": "Tera", "wert": 12, "wertText": "10¹²" }
+    ]
+  },
+  {
+    "id": "tiere-geschwindigkeit", "titel": "Tiere in Bewegung", "frage": "Ungefähre Höchstgeschwindigkeit", "richtung": "Von langsam nach schnell", "skala": ["LANGSAM", "SCHNELL"], "startId": "mensch-sprint",
+    "begriffe": [
+      { "id": "weinbergschnecke", "name": "Weinbergschnecke", "wert": 0.05, "wertText": "ca. 0,05 km/h" }, { "id": "landschildkroete", "name": "Landschildkröte", "wert": 0.3, "wertText": "ca. 0,3 km/h" },
+      { "id": "mensch-sprint", "name": "Mensch im Sprint", "wert": 45, "wertText": "ca. 45 km/h" }, { "id": "strauss", "name": "Strauß", "wert": 70, "wertText": "ca. 70 km/h" },
+      { "id": "loewe-speed", "name": "Löwe", "wert": 80, "wertText": "ca. 80 km/h" }, { "id": "gepard", "name": "Gepard", "wert": 110, "wertText": "ca. 110 km/h" },
+      { "id": "wanderfalke", "name": "Wanderfalke im Sturzflug", "wert": 320, "wertText": "über 300 km/h" }
+    ]
+  },
+  {
+    "id": "tiere-gewicht", "titel": "Tiergewichte", "frage": "Typisches Körpergewicht", "richtung": "Von leicht nach schwer", "skala": ["LEICHT", "SCHWER"], "startId": "loewe-gewicht",
+    "begriffe": [
+      { "id": "hausmaus", "name": "Hausmaus", "wert": 0.025, "wertText": "ca. 25 g" }, { "id": "hauskatze", "name": "Hauskatze", "wert": 4, "wertText": "ca. 4 kg" },
+      { "id": "wolf", "name": "Wolf", "wert": 40, "wertText": "ca. 40 kg" }, { "id": "loewe-gewicht", "name": "Löwe", "wert": 190, "wertText": "ca. 190 kg" },
+      { "id": "eisbaer", "name": "Eisbär", "wert": 450, "wertText": "ca. 450 kg" }, { "id": "giraffe", "name": "Giraffe", "wert": 1000, "wertText": "ca. 1.000 kg" },
+      { "id": "nashorn", "name": "Breitmaulnashorn", "wert": 2300, "wertText": "ca. 2.300 kg" }, { "id": "elefant", "name": "Afrikanischer Elefant", "wert": 6000, "wertText": "ca. 6.000 kg" },
+      { "id": "blauwal", "name": "Blauwal", "wert": 150000, "wertText": "ca. 150 t" }
+    ]
+  },
+  {
+    "id": "tiere-lebenserwartung", "titel": "Lebenserwartung von Tieren", "frage": "Typische Lebenserwartung", "richtung": "Von kurz nach lang", "skala": ["KURZ", "LANG"], "startId": "hund-leben",
+    "begriffe": [
+      { "id": "maus-leben", "name": "Maus", "wert": 2, "wertText": "ca. 2 Jahre" }, { "id": "hamster-leben", "name": "Hamster", "wert": 3, "wertText": "ca. 3 Jahre" },
+      { "id": "kaninchen-leben", "name": "Kaninchen", "wert": 9, "wertText": "ca. 9 Jahre" }, { "id": "hund-leben", "name": "Hund", "wert": 13, "wertText": "ca. 13 Jahre" },
+      { "id": "katze-leben", "name": "Katze", "wert": 16, "wertText": "ca. 16 Jahre" }, { "id": "pferd-leben", "name": "Pferd", "wert": 30, "wertText": "ca. 30 Jahre" },
+      { "id": "elefant-leben", "name": "Elefant", "wert": 65, "wertText": "ca. 65 Jahre" }, { "id": "riesenschildkroete", "name": "Riesenschildkröte", "wert": 120, "wertText": "über 100 Jahre" }
+    ]
+  },
+  {
+    "id": "tiere-tragzeit", "titel": "Tragzeiten von Tieren", "frage": "Ungefähre Dauer der Tragzeit", "richtung": "Von kurz nach lang", "skala": ["KURZ", "LANG"], "startId": "mensch-tragzeit",
+    "begriffe": [
+      { "id": "hamster-tragzeit", "name": "Hamster", "wert": 16, "wertText": "ca. 16 Tage" }, { "id": "maus-tragzeit", "name": "Maus", "wert": 20, "wertText": "ca. 20 Tage" },
+      { "id": "kaninchen-tragzeit", "name": "Kaninchen", "wert": 31, "wertText": "ca. 31 Tage" }, { "id": "katze-tragzeit", "name": "Katze", "wert": 65, "wertText": "ca. 65 Tage" },
+      { "id": "schwein-tragzeit", "name": "Schwein", "wert": 114, "wertText": "ca. 114 Tage" }, { "id": "mensch-tragzeit", "name": "Mensch", "wert": 280, "wertText": "ca. 280 Tage" },
+      { "id": "pferd-tragzeit", "name": "Pferd", "wert": 340, "wertText": "ca. 340 Tage" }, { "id": "giraffe-tragzeit", "name": "Giraffe", "wert": 450, "wertText": "ca. 450 Tage" },
+      { "id": "elefant-tragzeit", "name": "Elefant", "wert": 660, "wertText": "ca. 660 Tage" }
+    ]
+  },
+  {
+    "id": "voegel-spannweite", "titel": "Vögel", "frage": "Ungefähre Flügelspannweite", "richtung": "Von klein nach groß", "skala": ["KLEIN", "GROSS"], "startId": "kolkrabe",
+    "begriffe": [
+      { "id": "haussperling", "name": "Haussperling", "wert": 0.25, "wertText": "ca. 25 cm" }, { "id": "stadttaube", "name": "Stadttaube", "wert": 0.65, "wertText": "ca. 65 cm" },
+      { "id": "kolkrabe", "name": "Kolkrabe", "wert": 1.2, "wertText": "ca. 1,2 m" }, { "id": "weissstorch", "name": "Weißstorch", "wert": 2.1, "wertText": "ca. 2,1 m" },
+      { "id": "weisskopfseeadler", "name": "Weißkopfseeadler", "wert": 2.3, "wertText": "bis ca. 2,3 m" }, { "id": "hoeckerschwan", "name": "Höckerschwan", "wert": 2.4, "wertText": "bis ca. 2,4 m" },
+      { "id": "wanderalbatros", "name": "Wanderalbatros", "wert": 3.5, "wertText": "bis ca. 3,5 m" }
+    ]
+  },
+  {
+    "id": "dinosaurier-laenge", "titel": "Dinosaurier", "frage": "Ungefähre Körperlänge", "richtung": "Von kurz nach lang", "skala": ["KURZ", "LANG"], "startId": "triceratops",
+    "begriffe": [
+      { "id": "protoceratops", "name": "Protoceratops", "wert": 1.8, "wertText": "ca. 1,8 m" }, { "id": "velociraptor", "name": "Velociraptor", "wert": 2, "wertText": "ca. 2 m" },
+      { "id": "pachycephalosaurus", "name": "Pachycephalosaurus", "wert": 4.5, "wertText": "ca. 4,5 m" }, { "id": "triceratops", "name": "Triceratops", "wert": 8, "wertText": "ca. 8 m" },
+      { "id": "stegosaurus", "name": "Stegosaurus", "wert": 9, "wertText": "ca. 9 m" }, { "id": "tyrannosaurus", "name": "Tyrannosaurus rex", "wert": 12, "wertText": "ca. 12 m" },
+      { "id": "diplodocus", "name": "Diplodocus", "wert": 25, "wertText": "ca. 25 m" }, { "id": "argentinosaurus", "name": "Argentinosaurus", "wert": 35, "wertText": "ca. 35 m" }
+    ]
+  },
+  {
+    "id": "hunderassen-groesse", "titel": "Hunderassen", "frage": "Typische Schulterhöhe", "richtung": "Von klein nach groß", "skala": ["KLEIN", "GROSS"], "startId": "border-collie",
+    "begriffe": [
+      { "id": "chihuahua", "name": "Chihuahua", "wert": 18, "wertText": "ca. 18 cm" }, { "id": "dackel", "name": "Dackel", "wert": 25, "wertText": "ca. 25 cm" },
+      { "id": "beagle", "name": "Beagle", "wert": 38, "wertText": "ca. 38 cm" }, { "id": "border-collie", "name": "Border Collie", "wert": 53, "wertText": "ca. 53 cm" },
+      { "id": "labrador", "name": "Labrador Retriever", "wert": 57, "wertText": "ca. 57 cm" }, { "id": "deutscher-schaeferhund", "name": "Deutscher Schäferhund", "wert": 62, "wertText": "ca. 62 cm" },
+      { "id": "deutsche-dogge", "name": "Deutsche Dogge", "wert": 80, "wertText": "ca. 80 cm" }, { "id": "irischer-wolfshund", "name": "Irischer Wolfshund", "wert": 85, "wertText": "ca. 85 cm" }
+    ]
+  },
+  {
+    "id": "obst-kalorien", "titel": "Obst", "frage": "Ungefährer Energiegehalt pro 100 Gramm", "richtung": "Von wenig nach viel", "skala": ["WENIG", "VIEL"], "startId": "apfel-kalorien",
+    "begriffe": [
+      { "id": "wassermelone-kalorien", "name": "Wassermelone", "wert": 30, "wertText": "ca. 30 kcal" }, { "id": "erdbeere-kalorien", "name": "Erdbeere", "wert": 32, "wertText": "ca. 32 kcal" },
+      { "id": "pfirsich-kalorien", "name": "Pfirsich", "wert": 39, "wertText": "ca. 39 kcal" }, { "id": "orange-kalorien", "name": "Orange", "wert": 47, "wertText": "ca. 47 kcal" },
+      { "id": "apfel-kalorien", "name": "Apfel", "wert": 52, "wertText": "ca. 52 kcal" }, { "id": "birne-kalorien", "name": "Birne", "wert": 57, "wertText": "ca. 57 kcal" },
+      { "id": "weintraube-kalorien", "name": "Weintrauben", "wert": 69, "wertText": "ca. 69 kcal" }, { "id": "banane-kalorien", "name": "Banane", "wert": 89, "wertText": "ca. 89 kcal" },
+      { "id": "avocado-kalorien", "name": "Avocado", "wert": 160, "wertText": "ca. 160 kcal" }
+    ]
+  },
+  {
+    "id": "getraenke-koffein", "titel": "Koffeinhaltige Getränke", "frage": "Ungefährer Koffeingehalt pro 100 Milliliter", "richtung": "Von wenig nach viel", "skala": ["WENIG", "VIEL"], "startId": "schwarzer-tee-koffein",
+    "begriffe": [
+      { "id": "entkoffeinierter-kaffee", "name": "Entkoffeinierter Kaffee", "wert": 1, "wertText": "ca. 1 mg" }, { "id": "kakao-koffein", "name": "Kakao", "wert": 2, "wertText": "ca. 2 mg" },
+      { "id": "cola-koffein", "name": "Cola", "wert": 10, "wertText": "ca. 10 mg" }, { "id": "gruener-tee-koffein", "name": "Grüner Tee", "wert": 12, "wertText": "ca. 12 mg" },
+      { "id": "schwarzer-tee-koffein", "name": "Schwarzer Tee", "wert": 20, "wertText": "ca. 20 mg" }, { "id": "energydrink-koffein", "name": "Energy-Drink", "wert": 32, "wertText": "ca. 32 mg" },
+      { "id": "filterkaffee-koffein", "name": "Filterkaffee", "wert": 45, "wertText": "ca. 45 mg" }, { "id": "espresso-koffein", "name": "Espresso", "wert": 212, "wertText": "ca. 212 mg" }
+    ]
+  },
+  {
+    "id": "kerntemperaturen", "titel": "Kerntemperaturen beim Kochen", "frage": "Ungefähre Kerntemperatur", "richtung": "Von niedrig nach hoch", "skala": ["NIEDRIG", "HOCH"], "startId": "schweinefleisch-kern",
+    "begriffe": [
+      { "id": "rind-rare", "name": "Rindersteak rare", "wert": 52, "wertText": "ca. 52 °C" }, { "id": "fisch-glasig", "name": "Fisch glasig", "wert": 56, "wertText": "ca. 56 °C" },
+      { "id": "rind-medium", "name": "Rindersteak medium", "wert": 60, "wertText": "ca. 60 °C" }, { "id": "schweinefleisch-kern", "name": "Schweinefleisch", "wert": 65, "wertText": "ca. 65 °C" },
+      { "id": "hackfleisch-kern", "name": "Durchgegartes Hackfleisch", "wert": 70, "wertText": "ca. 70 °C" }, { "id": "gefluegel-kern", "name": "Geflügel", "wert": 75, "wertText": "ca. 75 °C" },
+      { "id": "pulled-pork", "name": "Pulled Pork", "wert": 90, "wertText": "ca. 90 °C" }
+    ]
+  },
+  {
+    "id": "waehrungen-einfuehrung", "titel": "Währungen", "frage": "Jahr der Einführung", "richtung": "Von alt nach neu", "skala": ["ALT", "NEU"], "startId": "japanischer-yen",
+    "begriffe": [
+      { "id": "us-dollar", "name": "US-Dollar", "wert": 1792, "wertText": "1792" }, { "id": "tuerkische-lira", "name": "Türkische Lira", "wert": 1844, "wertText": "1844" },
+      { "id": "schweizer-franken", "name": "Schweizer Franken", "wert": 1850, "wertText": "1850" }, { "id": "japanischer-yen", "name": "Japanischer Yen", "wert": 1871, "wertText": "1871" },
+      { "id": "schwedische-krone", "name": "Schwedische Krone", "wert": 1873, "wertText": "1873" }, { "id": "deutsche-mark", "name": "Deutsche Mark", "wert": 1948, "wertText": "1948" },
+      { "id": "euro-buchgeld", "name": "Euro als Buchgeld", "wert": 1999, "wertText": "1999" }, { "id": "bitcoin", "name": "Bitcoin", "wert": 2009, "wertText": "2009" }
+    ]
+  },
+  {
+    "id": "euro-muenzen", "titel": "Euro-Münzen", "frage": "Durchmesser der Münze", "richtung": "Von klein nach groß", "skala": ["KLEIN", "GROSS"], "startId": "fuenf-cent",
+    "begriffe": [
+      { "id": "ein-cent", "name": "1 Cent", "wert": 16.25, "wertText": "16,25 mm" }, { "id": "zwei-cent", "name": "2 Cent", "wert": 18.75, "wertText": "18,75 mm" },
+      { "id": "zehn-cent", "name": "10 Cent", "wert": 19.75, "wertText": "19,75 mm" }, { "id": "fuenf-cent", "name": "5 Cent", "wert": 21.25, "wertText": "21,25 mm" },
+      { "id": "zwanzig-cent", "name": "20 Cent", "wert": 22.25, "wertText": "22,25 mm" }, { "id": "ein-euro", "name": "1 Euro", "wert": 23.25, "wertText": "23,25 mm" },
+      { "id": "fuenfzig-cent", "name": "50 Cent", "wert": 24.25, "wertText": "24,25 mm" }, { "id": "zwei-euro", "name": "2 Euro", "wert": 25.75, "wertText": "25,75 mm" }
+    ]
+  },
+  {
+    "id": "euro-banknoten", "titel": "Euro-Banknoten", "frage": "Länge der Banknote in der ersten Serie", "richtung": "Von kurz nach lang", "skala": ["KURZ", "LANG"], "startId": "fuenfzig-euro-schein",
+    "begriffe": [
+      { "id": "fuenf-euro-schein", "name": "5-Euro-Schein", "wert": 120, "wertText": "120 mm" }, { "id": "zehn-euro-schein", "name": "10-Euro-Schein", "wert": 127, "wertText": "127 mm" },
+      { "id": "zwanzig-euro-schein", "name": "20-Euro-Schein", "wert": 133, "wertText": "133 mm" }, { "id": "fuenfzig-euro-schein", "name": "50-Euro-Schein", "wert": 140, "wertText": "140 mm" },
+      { "id": "hundert-euro-schein", "name": "100-Euro-Schein", "wert": 147, "wertText": "147 mm" }, { "id": "zweihundert-euro-schein", "name": "200-Euro-Schein", "wert": 153, "wertText": "153 mm" },
+      { "id": "fuenfhundert-euro-schein", "name": "500-Euro-Schein", "wert": 160, "wertText": "160 mm" }
+    ]
+  },
+  {
+    "id": "din-papier", "titel": "DIN-A-Papierformate", "frage": "Länge der längeren Seite", "richtung": "Von klein nach groß", "skala": ["KLEIN", "GROSS"], "startId": "din-a5",
+    "begriffe": [
+      { "id": "din-a10", "name": "DIN A10", "wert": 37, "wertText": "37 mm" }, { "id": "din-a9", "name": "DIN A9", "wert": 52, "wertText": "52 mm" },
+      { "id": "din-a8", "name": "DIN A8", "wert": 74, "wertText": "74 mm" }, { "id": "din-a7", "name": "DIN A7", "wert": 105, "wertText": "105 mm" },
+      { "id": "din-a6", "name": "DIN A6", "wert": 148, "wertText": "148 mm" }, { "id": "din-a5", "name": "DIN A5", "wert": 210, "wertText": "210 mm" },
+      { "id": "din-a4", "name": "DIN A4", "wert": 297, "wertText": "297 mm" }, { "id": "din-a3", "name": "DIN A3", "wert": 420, "wertText": "420 mm" },
+      { "id": "din-a2", "name": "DIN A2", "wert": 594, "wertText": "594 mm" }, { "id": "din-a1", "name": "DIN A1", "wert": 841, "wertText": "841 mm" },
+      { "id": "din-a0", "name": "DIN A0", "wert": 1189, "wertText": "1.189 mm" }
+    ]
+  },
+  {
+    "id": "speichereinheiten", "titel": "Speichereinheiten", "frage": "Größe in Byte nach Dezimalsystem", "richtung": "Von klein nach groß", "skala": ["KLEIN", "GROSS"], "startId": "gigabyte",
+    "begriffe": [
+      { "id": "byte", "name": "Byte", "wert": 1, "wertText": "1 Byte" }, { "id": "kilobyte", "name": "Kilobyte", "wert": 1000, "wertText": "10³ Byte" },
+      { "id": "megabyte", "name": "Megabyte", "wert": 1000000, "wertText": "10⁶ Byte" }, { "id": "gigabyte", "name": "Gigabyte", "wert": 1000000000, "wertText": "10⁹ Byte" },
+      { "id": "terabyte", "name": "Terabyte", "wert": 1000000000000, "wertText": "10¹² Byte" }, { "id": "petabyte", "name": "Petabyte", "wert": 1000000000000000, "wertText": "10¹⁵ Byte" },
+      { "id": "exabyte", "name": "Exabyte", "wert": 1000000000000000000, "wertText": "10¹⁸ Byte" }, { "id": "zettabyte", "name": "Zettabyte", "wert": 1e+21, "wertText": "10²¹ Byte" }
+    ]
+  },
+  {
+    "id": "wolkenkratzer-hoehe", "titel": "Wolkenkratzer", "frage": "Architektonische Höhe", "richtung": "Vom niedrigsten zum höchsten", "skala": ["NIEDRIG", "HOCH"], "startId": "taipei-101",
+    "begriffe": [
+      { "id": "chrysler-building", "name": "Chrysler Building", "wert": 319, "wertText": "319 m" }, { "id": "empire-state-wolke", "name": "Empire State Building", "wert": 381, "wertText": "381 m" },
+      { "id": "petronas-towers", "name": "Petronas Towers", "wert": 452, "wertText": "452 m" }, { "id": "taipei-101", "name": "Taipei 101", "wert": 508, "wertText": "508 m" },
+      { "id": "one-world-wolke", "name": "One World Trade Center", "wert": 541, "wertText": "541 m" }, { "id": "shanghai-tower", "name": "Shanghai Tower", "wert": 632, "wertText": "632 m" },
+      { "id": "burj-khalifa-wolke", "name": "Burj Khalifa", "wert": 828, "wertText": "828 m" }
+    ]
+  },
+  {
+    "id": "bruecken-laenge", "titel": "Berühmte Brücken", "frage": "Gesamtlänge", "richtung": "Von kurz nach lang", "skala": ["KURZ", "LANG"], "startId": "brooklyn-bridge",
+    "begriffe": [
+      { "id": "tower-bridge", "name": "Tower Bridge", "wert": 244, "wertText": "ca. 244 m" }, { "id": "sydney-harbour-bridge", "name": "Sydney Harbour Bridge", "wert": 1149, "wertText": "ca. 1.149 m" },
+      { "id": "brooklyn-bridge", "name": "Brooklyn Bridge", "wert": 1834, "wertText": "ca. 1.834 m" }, { "id": "golden-gate", "name": "Golden Gate Bridge", "wert": 2737, "wertText": "ca. 2.737 m" },
+      { "id": "akashi-kaikyo", "name": "Akashi-Kaikyō-Brücke", "wert": 3911, "wertText": "ca. 3.911 m" }, { "id": "grosser-belt", "name": "Storebælt-Brücke", "wert": 6790, "wertText": "ca. 6.790 m" },
+      { "id": "oeresund", "name": "Öresundbrücke", "wert": 7845, "wertText": "ca. 7.845 m" }
+    ]
+  },
+  {
+    "id": "tunnel-laenge", "titel": "Lange Tunnel", "frage": "Länge", "richtung": "Von kurz nach lang", "skala": ["KURZ", "LANG"], "startId": "guadarrama-tunnel",
+    "begriffe": [
+      { "id": "alter-elbtunnel", "name": "Alter Elbtunnel", "wert": 0.426, "wertText": "0,426 km" }, { "id": "mont-blanc-tunnel", "name": "Mont-Blanc-Tunnel", "wert": 11.6, "wertText": "ca. 11,6 km" },
+      { "id": "simplontunnel", "name": "Simplontunnel", "wert": 19.8, "wertText": "ca. 19,8 km" }, { "id": "guadarrama-tunnel", "name": "Guadarrama-Tunnel", "wert": 28.4, "wertText": "ca. 28,4 km" },
+      { "id": "loetschberg-basistunnel", "name": "Lötschberg-Basistunnel", "wert": 34.6, "wertText": "ca. 34,6 km" }, { "id": "eurotunnel", "name": "Eurotunnel", "wert": 50.5, "wertText": "ca. 50,5 km" },
+      { "id": "seikan-tunnel", "name": "Seikan-Tunnel", "wert": 53.9, "wertText": "ca. 53,9 km" }, { "id": "gotthard-basistunnel", "name": "Gotthard-Basistunnel", "wert": 57.1, "wertText": "ca. 57,1 km" }
+    ]
+  },
+  {
+    "id": "ozeane-flaeche", "titel": "Ozeane", "frage": "Ungefähre Fläche", "richtung": "Vom kleinsten zum größten", "skala": ["KLEIN", "GROSS"], "startId": "indischer-ozean",
+    "begriffe": [
+      { "id": "arktischer-ozean", "name": "Arktischer Ozean", "wert": 14.1, "wertText": "ca. 14,1 Mio. km²" }, { "id": "suedlicher-ozean", "name": "Südlicher Ozean", "wert": 20.3, "wertText": "ca. 20,3 Mio. km²" },
+      { "id": "indischer-ozean", "name": "Indischer Ozean", "wert": 70.6, "wertText": "ca. 70,6 Mio. km²" }, { "id": "atlantischer-ozean", "name": "Atlantischer Ozean", "wert": 85.1, "wertText": "ca. 85,1 Mio. km²" },
+      { "id": "pazifischer-ozean", "name": "Pazifischer Ozean", "wert": 165.25, "wertText": "ca. 165,3 Mio. km²" }
+    ]
+  },
+  {
+    "id": "meere-flaeche", "titel": "Meere", "frage": "Ungefähre Fläche", "richtung": "Vom kleinsten zum größten", "skala": ["KLEIN", "GROSS"], "startId": "nordsee",
+    "begriffe": [
+      { "id": "ostsee", "name": "Ostsee", "wert": 377000, "wertText": "ca. 377.000 km²" }, { "id": "schwarzes-meer", "name": "Schwarzes Meer", "wert": 436000, "wertText": "ca. 436.000 km²" },
+      { "id": "rotes-meer", "name": "Rotes Meer", "wert": 438000, "wertText": "ca. 438.000 km²" }, { "id": "nordsee", "name": "Nordsee", "wert": 570000, "wertText": "ca. 570.000 km²" },
+      { "id": "mittelmeer", "name": "Mittelmeer", "wert": 2500000, "wertText": "ca. 2,5 Mio. km²" }, { "id": "karibisches-meer", "name": "Karibisches Meer", "wert": 2750000, "wertText": "ca. 2,75 Mio. km²" }
     ]
   }
 ]
