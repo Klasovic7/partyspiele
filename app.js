@@ -5,15 +5,16 @@ import {
   serverTimestamp, runTransaction
 } from "./kern/firebase.js";
 import {
-  FARBEN, AVATARE, avatarHtml, escapeHtml, spielerKarte, zeigeDebug, erzeugeZufallsId
+  FARBEN, AVATARE, escapeHtml, spielerKarte, textFarbeFuer, zeigeDebug, erzeugeZufallsId
 } from "./kern/ui.js";
 import { SPIELE, spielInfo } from "./spiele/register.js";
 
-export const APP_VERSION = "v32";
+export const APP_VERSION = "v33";
 document.getElementById("app-version").textContent = "Version " + APP_VERSION;
 
 // ---------- DOM ----------
 const startScreen = document.getElementById("start-screen");
+const profilScreen = document.getElementById("profil-screen");
 const lobbyScreen = document.getElementById("lobby-screen");
 const spielWurzel = document.getElementById("spiel-wurzel");
 const topBar = document.getElementById("top-bar");
@@ -26,9 +27,18 @@ const btnBeitreten = document.getElementById("btn-beitreten");
 const startError = document.getElementById("start-error");
 
 const anzeigeCode = document.getElementById("anzeige-code");
-const farbAuswahl = document.getElementById("farb-auswahl");
-const iconAuswahl = document.getElementById("icon-auswahl");
+const farbKarussell = document.getElementById("farb-karussell");
+const iconKarussell = document.getElementById("icon-karussell");
+const farbName = document.getElementById("farb-name");
+const profilVorname = document.getElementById("profil-vorname");
+const profilNachname = document.getElementById("profil-nachname");
 const avatarHinweis = document.getElementById("avatar-hinweis");
+const btnFarbeZurueck = document.getElementById("btn-farbe-zurueck");
+const btnFarbeWeiter = document.getElementById("btn-farbe-weiter");
+const btnIconZurueck = document.getElementById("btn-icon-zurueck");
+const btnIconWeiter = document.getElementById("btn-icon-weiter");
+const btnProfilAuswaehlen = document.getElementById("btn-profil-auswaehlen");
+const btnProfilVerlassen = document.getElementById("btn-profil-verlassen");
 const spielerliste = document.getElementById("spielerliste");
 const spieleGrid = document.getElementById("spiele-grid");
 const spielauswahlHinweis = document.getElementById("spielauswahl-hinweis");
@@ -62,7 +72,8 @@ function sitzungSpeichern() {
   try {
     localStorage.setItem(SPEICHER_SCHLUESSEL, JSON.stringify({
       code: zustand.code, name: zustand.name, spielerId,
-      farbe: zustand.farbe, icon: zustand.icon
+      farbe: zustand.farbe, icon: zustand.icon,
+      profilBestaetigt: zustand.profilBestaetigt
     }));
   } catch { /* im privaten Modus kann das fehlschlagen - nicht schlimm */ }
 }
@@ -80,6 +91,7 @@ const zustand = {
   name: "",
   farbe: gespeicherteSitzung?.farbe ?? null,
   icon: gespeicherteSitzung?.icon ?? null,
+  profilBestaetigt: gespeicherteSitzung?.profilBestaetigt ?? false,
   raum: null,
   spieler: [],
   istLeiter: false
@@ -93,64 +105,214 @@ let aktivesSpielId = null;
 function raumRef() { return doc(db, RAEUME, zustand.code); }
 function spielerRef(id = spielerId) { return doc(db, RAEUME, zustand.code, "spieler", id); }
 
-// ---------- Avatar-Auswahl (Farbe + Profilbild) ----------
-// Prüft per Transaktion direkt vor dem Schreiben, ob der Wert nicht gerade von jemand
-// anderem belegt wurde - so bekommen (praktisch) nie zwei Leute dieselbe Farbe.
-async function waehleAvatarFeld(feld, wert) {
-  if (!zustand.code) return;
+// ---------- Vollbild-Profilwahl (Farbe + Profilbild) ----------
+const profilEntwurf = { farbe: zustand.farbe, icon: zustand.icon };
+
+function mischeFarbe(hex, ziel, anteil) {
+  const kanal = (start, ende) => Math.round(start + (ende - start) * anteil);
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  const z = ziel === "hell" ? 255 : 0;
+  return `rgb(${kanal(r, z)}, ${kanal(g, z)}, ${kanal(b, z)})`;
+}
+
+function freieOptionen(optionen, feld, schluessel) {
+  const belegt = new Set(
+    zustand.spieler
+      .filter((s) => s.id !== spielerId && s[feld])
+      .map((s) => s[feld])
+  );
+  return optionen.filter((option) => !belegt.has(option[schluessel]));
+}
+
+function karussellEintraege(optionen, aktuellerIndex) {
+  if (optionen.length <= 1) return optionen.map((option) => ({ option, position: "mitte" }));
+  if (optionen.length === 2) {
+    return [
+      { option: optionen[(aktuellerIndex + 1) % 2], position: "seite" },
+      { option: optionen[aktuellerIndex], position: "mitte" }
+    ];
+  }
+  return [
+    { option: optionen[(aktuellerIndex - 1 + optionen.length) % optionen.length], position: "seite" },
+    { option: optionen[aktuellerIndex], position: "mitte" },
+    { option: optionen[(aktuellerIndex + 1) % optionen.length], position: "seite" }
+  ];
+}
+
+function setzeProfilHintergrund(farbe) {
+  profilScreen.style.setProperty("--profil-farbe", farbe.hex);
+  profilScreen.style.setProperty("--profil-hell", mischeFarbe(farbe.hex, "hell", 0.34));
+  profilScreen.style.setProperty("--profil-dunkel", mischeFarbe(farbe.hex, "dunkel", 0.42));
+  profilScreen.style.setProperty("--profil-text", textFarbeFuer(farbe.hex));
+}
+
+function renderFarbKarussell() {
+  const optionen = freieOptionen(FARBEN, "farbe", "hex");
+  farbKarussell.innerHTML = "";
+  if (!optionen.length) {
+    profilEntwurf.farbe = null;
+    farbName.textContent = "Keine Farbe mehr frei";
+    btnFarbeZurueck.disabled = true;
+    btnFarbeWeiter.disabled = true;
+    return;
+  }
+
+  let index = optionen.findIndex((farbe) => farbe.hex === profilEntwurf.farbe);
+  if (index < 0) index = 0;
+  profilEntwurf.farbe = optionen[index].hex;
+  setzeProfilHintergrund(optionen[index]);
+  farbName.textContent = optionen[index].name;
+
+  karussellEintraege(optionen, index).forEach(({ option, position }) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = `karussell-option farb-option ${position}`;
+    btn.title = option.name;
+    btn.setAttribute("aria-label", option.name);
+    btn.setAttribute("aria-pressed", position === "mitte" ? "true" : "false");
+    btn.style.setProperty("--item-farbe", option.hex);
+    btn.style.setProperty("--item-hell", mischeFarbe(option.hex, "hell", 0.36));
+    btn.style.setProperty("--item-dunkel", mischeFarbe(option.hex, "dunkel", 0.38));
+    btn.addEventListener("click", () => {
+      profilEntwurf.farbe = option.hex;
+      renderFarbKarussell();
+    });
+    farbKarussell.appendChild(btn);
+  });
+  btnFarbeZurueck.disabled = optionen.length < 2;
+  btnFarbeWeiter.disabled = optionen.length < 2;
+}
+
+function renderIconKarussell() {
+  const optionen = freieOptionen(AVATARE, "icon", "id");
+  iconKarussell.innerHTML = "";
+  if (!optionen.length) {
+    profilEntwurf.icon = null;
+    profilVorname.textContent = "Kein Profilbild";
+    profilNachname.textContent = "mehr frei";
+    btnIconZurueck.disabled = true;
+    btnIconWeiter.disabled = true;
+    return;
+  }
+
+  let index = optionen.findIndex((avatar) => avatar.id === profilEntwurf.icon);
+  if (index < 0) index = 0;
+  const ausgewaehlt = optionen[index];
+  profilEntwurf.icon = ausgewaehlt.id;
+  profilVorname.textContent = ausgewaehlt.vorname;
+  profilNachname.textContent = ausgewaehlt.nachname;
+
+  karussellEintraege(optionen, index).forEach(({ option, position }) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = `karussell-option icon-option ${position}`;
+    btn.title = `${option.vorname} ${option.nachname}`;
+    btn.setAttribute("aria-label", `${option.vorname} ${option.nachname}`);
+    btn.setAttribute("aria-pressed", position === "mitte" ? "true" : "false");
+    btn.innerHTML = `<img src="${option.bild}" alt="${escapeHtml(`${option.vorname} ${option.nachname}`)}">`;
+    btn.addEventListener("click", () => {
+      profilEntwurf.icon = option.id;
+      renderIconKarussell();
+    });
+    iconKarussell.appendChild(btn);
+  });
+  btnIconZurueck.disabled = optionen.length < 2;
+  btnIconWeiter.disabled = optionen.length < 2;
+}
+
+function renderProfilAuswahl() {
+  renderFarbKarussell();
+  renderIconKarussell();
+  btnProfilAuswaehlen.disabled = !profilEntwurf.farbe || !profilEntwurf.icon;
+}
+
+function verschiebeProfilAuswahl(typ, richtung) {
+  const istFarbe = typ === "farbe";
+  const optionen = freieOptionen(istFarbe ? FARBEN : AVATARE, typ, istFarbe ? "hex" : "id");
+  if (optionen.length < 2) return;
+  const schluessel = istFarbe ? "hex" : "id";
+  let index = optionen.findIndex((option) => option[schluessel] === profilEntwurf[typ]);
+  if (index < 0) index = 0;
+  profilEntwurf[typ] = optionen[(index + richtung + optionen.length) % optionen.length][schluessel];
+  if (istFarbe) renderFarbKarussell(); else renderIconKarussell();
+}
+
+function aktiviereWischen(element, beiWischen) {
+  let startX = null;
+  element.addEventListener("pointerdown", (event) => { startX = event.clientX; });
+  element.addEventListener("pointerup", (event) => {
+    if (startX === null) return;
+    const strecke = event.clientX - startX;
+    startX = null;
+    if (Math.abs(strecke) >= 35) beiWischen(strecke < 0 ? 1 : -1);
+  });
+  element.addEventListener("pointercancel", () => { startX = null; });
+}
+
+function zeigeProfilAuswahl() {
+  if (profilScreen.hidden) {
+    profilEntwurf.farbe = zustand.farbe;
+    profilEntwurf.icon = zustand.icon;
+    avatarHinweis.textContent = "";
+  }
+  startScreen.hidden = true;
+  lobbyScreen.hidden = true;
+  spielWurzel.hidden = true;
+  topBar.hidden = true;
+  profilScreen.hidden = false;
+  document.body.classList.add("profil-offen");
+  renderProfilAuswahl();
+}
+
+async function bestaetigeProfilAuswahl() {
+  if (!zustand.code || !profilEntwurf.farbe || !profilEntwurf.icon) return;
   avatarHinweis.textContent = "";
+  btnProfilAuswaehlen.disabled = true;
   const andere = zustand.spieler.filter((s) => s.id !== spielerId).map((s) => s.id);
 
   try {
     await runTransaction(db, async (tx) => {
-      for (const id of andere) {
-        const snap = await tx.get(spielerRef(id));
-        if (snap.exists() && snap.data()[feld] === wert) throw new Error("VERGEBEN");
+      const andereSpieler = [];
+      for (const id of andere) andereSpieler.push(await tx.get(spielerRef(id)));
+      for (const snap of andereSpieler) {
+        if (!snap.exists()) continue;
+        if (snap.data().farbe === profilEntwurf.farbe) throw new Error("FARBE_VERGEBEN");
+        if (snap.data().icon === profilEntwurf.icon) throw new Error("ICON_VERGEBEN");
       }
-      tx.update(spielerRef(), { [feld]: wert });
+      tx.update(spielerRef(), { farbe: profilEntwurf.farbe, icon: profilEntwurf.icon });
     });
-    if (feld === "farbe") zustand.farbe = wert; else zustand.icon = wert;
+
+    zustand.farbe = profilEntwurf.farbe;
+    zustand.icon = profilEntwurf.icon;
+    zustand.profilBestaetigt = true;
     sitzungSpeichern();
+    profilScreen.hidden = true;
+    document.body.classList.remove("profil-offen");
+    topBar.hidden = false;
+    if (zustand.raum) reagiereAufRaum(zustand.raum);
+    else lobbyScreen.hidden = false;
   } catch (e) {
-    if (e.message === "VERGEBEN") {
-      avatarHinweis.textContent = (feld === "farbe" ? "Diese Farbe" : "Dieses Profilbild") +
-        " wurde gerade von jemand anderem gewählt. Bitte etwas anderes aussuchen.";
+    if (e.message === "FARBE_VERGEBEN" || e.message === "ICON_VERGEBEN") {
+      avatarHinweis.textContent = e.message === "FARBE_VERGEBEN"
+        ? "Diese Farbe wurde gerade vergeben. Bitte wähle eine andere."
+        : "Dieses Profilbild wurde gerade vergeben. Bitte wähle ein anderes.";
+      renderProfilAuswahl();
     } else {
       zeigeDebug("Fehler bei der Auswahl: " + e.message);
     }
+    btnProfilAuswaehlen.disabled = !profilEntwurf.farbe || !profilEntwurf.icon;
   }
 }
 
-function renderFarbAuswahl() {
-  const belegt = new Set(zustand.spieler.filter((s) => s.id !== spielerId && s.farbe).map((s) => s.farbe));
-  farbAuswahl.innerHTML = "";
-  FARBEN.forEach((f) => {
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.className = "farb-swatch";
-    btn.style.background = f.hex;
-    btn.title = f.name;
-    if (f.hex === zustand.farbe) btn.classList.add("ausgewaehlt");
-    if (belegt.has(f.hex)) { btn.classList.add("vergeben"); btn.disabled = true; }
-    else btn.addEventListener("click", () => waehleAvatarFeld("farbe", f.hex));
-    farbAuswahl.appendChild(btn);
-  });
-}
-
-function renderIconAuswahl() {
-  const belegt = new Set(zustand.spieler.filter((s) => s.id !== spielerId && s.icon).map((s) => s.icon));
-  iconAuswahl.innerHTML = "";
-  AVATARE.forEach((avatar) => {
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.className = "icon-swatch";
-    btn.innerHTML = avatarHtml(avatar.id, "avatar-bild");
-    if (avatar.id === zustand.icon) btn.classList.add("ausgewaehlt");
-    if (belegt.has(avatar.id)) { btn.classList.add("vergeben"); btn.disabled = true; }
-    else btn.addEventListener("click", () => waehleAvatarFeld("icon", avatar.id));
-    iconAuswahl.appendChild(btn);
-  });
-}
+btnFarbeZurueck.addEventListener("click", () => verschiebeProfilAuswahl("farbe", -1));
+btnFarbeWeiter.addEventListener("click", () => verschiebeProfilAuswahl("farbe", 1));
+btnIconZurueck.addEventListener("click", () => verschiebeProfilAuswahl("icon", -1));
+btnIconWeiter.addEventListener("click", () => verschiebeProfilAuswahl("icon", 1));
+btnProfilAuswaehlen.addEventListener("click", bestaetigeProfilAuswahl);
+aktiviereWischen(farbKarussell, (richtung) => verschiebeProfilAuswahl("farbe", richtung));
+aktiviereWischen(iconKarussell, (richtung) => verschiebeProfilAuswahl("icon", richtung));
 
 // ---------- Spielauswahl ----------
 async function waehleSpiel(id) {
@@ -197,8 +359,6 @@ function renderLobby() {
     li.innerHTML = spielerKarte(s.name, s.farbe, s.icon, 0, { punkteLinks: false });
     spielerliste.appendChild(li);
   });
-  renderFarbAuswahl();
-  renderIconAuswahl();
   renderSpieleAuswahl();
 }
 
@@ -254,6 +414,13 @@ function reagiereAufRaum(daten) {
   zustand.raum = daten;
   zustand.istLeiter = daten.leiterId === spielerId;
 
+  // Die Profilwahl liegt bewusst vor Lobby und Spiel. Startet der Leiter in der
+  // Zwischenzeit schon ein Spiel, wird es direkt nach „Auswählen“ geladen.
+  if (!zustand.profilBestaetigt) {
+    zeigeProfilAuswahl();
+    return;
+  }
+
   const spielId = daten.aktuellesSpiel ?? null;
 
   if (spielId !== aktivesSpielId) {
@@ -276,6 +443,7 @@ function starteListener(code) {
   spielerUnsubscribe = onSnapshot(collection(db, RAEUME, code, "spieler"), (snap) => {
     zustand.spieler = [];
     snap.forEach((d) => zustand.spieler.push({ id: d.id, ...d.data() }));
+    if (!profilScreen.hidden) renderProfilAuswahl();
     if (!lobbyScreen.hidden) renderLobby();
     aktivesSpielModul?.spieler?.(zustand.spieler);
   });
@@ -292,14 +460,21 @@ function betreteRaum(code, name) {
   zustand.name = name;
   anzeigeCode.textContent = code;
   startScreen.hidden = true;
-  lobbyScreen.hidden = false;
-  topBar.hidden = false;
+  if (zustand.profilBestaetigt) {
+    profilScreen.hidden = true;
+    document.body.classList.remove("profil-offen");
+    lobbyScreen.hidden = false;
+    topBar.hidden = false;
+  } else {
+    zeigeProfilAuswahl();
+  }
   starteListener(code);
 }
 
 // ---------- Raum verlassen ----------
 async function verlasseRaum() {
   btnVerlassen.disabled = true;
+  btnProfilVerlassen.disabled = true;
 
   if (raumUnsubscribe) { raumUnsubscribe(); raumUnsubscribe = null; }
   if (spielerUnsubscribe) { spielerUnsubscribe(); spielerUnsubscribe = null; }
@@ -316,19 +491,24 @@ async function verlasseRaum() {
   zustand.raum = null;
   zustand.spieler = [];
   zustand.istLeiter = false;
+  zustand.profilBestaetigt = false;
 
+  profilScreen.hidden = true;
   lobbyScreen.hidden = true;
   spielWurzel.hidden = true;
   topBar.hidden = true;
+  document.body.classList.remove("profil-offen");
   startScreen.hidden = false;
   inputCode.value = "";
   startError.textContent = "";
   btnErstellen.disabled = false;
   btnBeitreten.disabled = false;
   btnVerlassen.disabled = false;
+  btnProfilVerlassen.disabled = false;
 }
 
 btnVerlassen.addEventListener("click", verlasseRaum);
+btnProfilVerlassen.addEventListener("click", verlasseRaum);
 
 // ---------- Raum erstellen / beitreten ----------
 function generiereCode() {
@@ -344,8 +524,8 @@ async function neuenRaumCodeErzeugen() {
   throw new Error("Es konnte kein freier Raum-Code gefunden werden.");
 }
 
-// Farbe und Profilbild aus der letzten Sitzung übernehmen, aber nur wenn im neuen
-// Raum noch frei - sonst startet man ohne und wählt in der Lobby.
+// Farbe und Profilbild aus der letzten Sitzung als Vorauswahl übernehmen, aber nur
+// wenn sie im neuen Raum noch frei sind. Bestätigt wird erst im Vollbild-Schritt.
 function startWerte(vorhandene) {
   const belegteFarben = new Set(vorhandene.map((s) => s.farbe).filter(Boolean));
   const belegteIcons = new Set(vorhandene.map((s) => s.icon).filter(Boolean));
@@ -364,6 +544,7 @@ btnErstellen.addEventListener("click", async () => {
   try {
     const code = await neuenRaumCodeErzeugen();
     zustand.name = name;
+    zustand.profilBestaetigt = false;
 
     await setDoc(doc(db, RAEUME, code), {
       erstelltAm: serverTimestamp(),
@@ -401,6 +582,7 @@ btnBeitreten.addEventListener("click", async () => {
 
     zustand.name = name;
     zustand.code = code;
+    zustand.profilBestaetigt = false;
 
     // Belegte Farben/Bilder einmal abfragen, damit man nicht direkt mit einer
     // schon vergebenen Farbe hereinkommt.
