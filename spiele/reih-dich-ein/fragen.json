@@ -1,0 +1,186 @@
+[
+  {
+    "id": "planeten-entfernung",
+    "titel": "Planeten",
+    "frage": "Entfernung von der Sonne",
+    "richtung": "Von nah nach fern",
+    "startId": "mars",
+    "begriffe": [
+      { "id": "merkur", "name": "Merkur", "wert": 1, "wertText": "1. Planet" },
+      { "id": "venus", "name": "Venus", "wert": 2, "wertText": "2. Planet" },
+      { "id": "erde", "name": "Erde", "wert": 3, "wertText": "3. Planet" },
+      { "id": "mars", "name": "Mars", "wert": 4, "wertText": "4. Planet" },
+      { "id": "jupiter", "name": "Jupiter", "wert": 5, "wertText": "5. Planet" },
+      { "id": "saturn", "name": "Saturn", "wert": 6, "wertText": "6. Planet" },
+      { "id": "uranus", "name": "Uranus", "wert": 7, "wertText": "7. Planet" },
+      { "id": "neptun", "name": "Neptun", "wert": 8, "wertText": "8. Planet" }
+    ]
+  },
+  {
+    "id": "berge-hoehe",
+    "titel": "Berge",
+    "frage": "Höhe über dem Meeresspiegel",
+    "richtung": "Vom niedrigsten zum höchsten",
+    "startId": "mont-blanc",
+    "begriffe": [
+      { "id": "brocken", "name": "Brocken", "wert": 1141, "wertText": "1.141 m" },
+      { "id": "feldberg", "name": "Feldberg (Schwarzwald)", "wert": 1493, "wertText": "1.493 m" },
+      { "id": "watzmann", "name": "Watzmann", "wert": 2713, "wertText": "2.713 m" },
+      { "id": "zugspitze", "name": "Zugspitze", "wert": 2962, "wertText": "2.962 m" },
+      { "id": "mont-blanc", "name": "Mont Blanc", "wert": 4806, "wertText": "4.806 m" },
+      { "id": "kilimandscharo", "name": "Kilimandscharo", "wert": 5895, "wertText": "5.895 m" },
+      { "id": "denali", "name": "Denali", "wert": 6190, "wertText": "6.190 m" },
+      { "id": "aconcagua", "name": "Aconcagua", "wert": 6961, "wertText": "6.961 m" },
+      { "id": "k2", "name": "K2", "wert": 8611, "wertText": "8.611 m" },
+      { "id": "mount-everest", "name": "Mount Everest", "wert": 8849, "wertText": "8.849 m" }
+    ]
+  },
+  {
+    "id": "filme-kinostart",
+    "titel": "Filmklassiker",
+    "frage": "Jahr des Kinostarts",
+    "richtung": "Vom ältesten zum neuesten Film",
+    "startId": "titanic",
+    "begriffe": [
+      { "id": "der-weisse-hai", "name": "Der weiße Hai", "wert": 1975, "wertText": "1975" },
+      { "id": "star-wars", "name": "Star Wars", "wert": 1977, "wertText": "1977" },
+      { "id": "et", "name": "E.T.", "wert": 1982, "wertText": "1982" },
+      { "id": "zurueck-zukunft", "name": "Zurück in die Zukunft", "wert": 1985, "wertText": "1985" },
+      { "id": "jurassic-park", "name": "Jurassic Park", "wert": 1993, "wertText": "1993" },
+      { "id": "titanic", "name": "Titanic", "wert": 1997, "wertText": "1997" },
+      { "id": "matrix", "name": "Matrix", "wert": 1999, "wertText": "1999" },
+      { "id": "herr-der-ringe", "name": "Der Herr der Ringe: Die Gefährten", "wert": 2001, "wertText": "2001" },
+      { "id": "avatar", "name": "Avatar", "wert": 2009, "wertText": "2009" },
+      { "id": "barbie", "name": "Barbie", "wert": 2023, "wertText": "2023" }
+    ]
+  },
+  {
+    "id": "harry-potter-filme",
+    "titel": "Harry-Potter-Filme",
+    "frage": "Reihenfolge der Kinostarts",
+    "richtung": "Vom ersten zum letzten Teil",
+    "startId": "feuerkelch",
+    "begriffe": [
+      { "id": "stein-der-weisen", "name": "Der Stein der Weisen", "wert": 1, "wertText": "Teil 1 · 2001" },
+      { "id": "kammer-des-schreckens", "name": "Die Kammer des Schreckens", "wert": 2, "wertText": "Teil 2 · 2002" },
+      { "id": "gefangene-von-askaban", "name": "Der Gefangene von Askaban", "wert": 3, "wertText": "Teil 3 · 2004" },
+      { "id": "feuerkelch", "name": "Der Feuerkelch", "wert": 4, "wertText": "Teil 4 · 2005" },
+      { "id": "orden-des-phoenix", "name": "Der Orden des Phönix", "wert": 5, "wertText": "Teil 5 · 2007" },
+      { "id": "halbblutprinz", "name": "Der Halbblutprinz", "wert": 6, "wertText": "Teil 6 · 2009" },
+      { "id": "heiligtuemer-1", "name": "Die Heiligtümer des Todes 1", "wert": 7, "wertText": "Teil 7 · 2010" },
+      { "id": "heiligtuemer-2", "name": "Die Heiligtümer des Todes 2", "wert": 8, "wertText": "Teil 8 · 2011" }
+    ]
+  },
+  {
+    "id": "spielkonsolen",
+    "titel": "Spielkonsolen",
+    "frage": "Erste Veröffentlichung",
+    "richtung": "Von alt nach neu",
+    "startId": "playstation",
+    "begriffe": [
+      { "id": "nes", "name": "Nintendo NES", "wert": 1983, "wertText": "1983" },
+      { "id": "game-boy", "name": "Game Boy", "wert": 1989, "wertText": "1989" },
+      { "id": "snes", "name": "Super Nintendo", "wert": 1990, "wertText": "1990" },
+      { "id": "playstation", "name": "PlayStation", "wert": 1994, "wertText": "1994" },
+      { "id": "nintendo-64", "name": "Nintendo 64", "wert": 1996, "wertText": "1996" },
+      { "id": "playstation-2", "name": "PlayStation 2", "wert": 2000, "wertText": "2000" },
+      { "id": "xbox", "name": "Xbox", "wert": 2001, "wertText": "2001" },
+      { "id": "wii", "name": "Nintendo Wii", "wert": 2006, "wertText": "2006" },
+      { "id": "switch", "name": "Nintendo Switch", "wert": 2017, "wertText": "2017" },
+      { "id": "playstation-5", "name": "PlayStation 5", "wert": 2020, "wertText": "2020" }
+    ]
+  },
+  {
+    "id": "elemente-ordnungszahl",
+    "titel": "Chemische Elemente",
+    "frage": "Ordnungszahl im Periodensystem",
+    "richtung": "Von klein nach groß",
+    "startId": "aluminium",
+    "begriffe": [
+      { "id": "wasserstoff", "name": "Wasserstoff", "wert": 1, "wertText": "Ordnungszahl 1" },
+      { "id": "helium", "name": "Helium", "wert": 2, "wertText": "Ordnungszahl 2" },
+      { "id": "kohlenstoff", "name": "Kohlenstoff", "wert": 6, "wertText": "Ordnungszahl 6" },
+      { "id": "sauerstoff", "name": "Sauerstoff", "wert": 8, "wertText": "Ordnungszahl 8" },
+      { "id": "natrium", "name": "Natrium", "wert": 11, "wertText": "Ordnungszahl 11" },
+      { "id": "aluminium", "name": "Aluminium", "wert": 13, "wertText": "Ordnungszahl 13" },
+      { "id": "chlor", "name": "Chlor", "wert": 17, "wertText": "Ordnungszahl 17" },
+      { "id": "eisen", "name": "Eisen", "wert": 26, "wertText": "Ordnungszahl 26" },
+      { "id": "silber", "name": "Silber", "wert": 47, "wertText": "Ordnungszahl 47" },
+      { "id": "gold", "name": "Gold", "wert": 79, "wertText": "Ordnungszahl 79" }
+    ]
+  },
+  {
+    "id": "olympia-gastgeber",
+    "titel": "Olympische Sommerspiele",
+    "frage": "Jahr der Austragung",
+    "richtung": "Von früh nach spät",
+    "startId": "rom",
+    "begriffe": [
+      { "id": "berlin", "name": "Berlin", "wert": 1936, "wertText": "1936" },
+      { "id": "london-1948", "name": "London", "wert": 1948, "wertText": "1948" },
+      { "id": "helsinki", "name": "Helsinki", "wert": 1952, "wertText": "1952" },
+      { "id": "melbourne", "name": "Melbourne", "wert": 1956, "wertText": "1956" },
+      { "id": "rom", "name": "Rom", "wert": 1960, "wertText": "1960" },
+      { "id": "tokio-1964", "name": "Tokio", "wert": 1964, "wertText": "1964" },
+      { "id": "mexiko-stadt", "name": "Mexiko-Stadt", "wert": 1968, "wertText": "1968" },
+      { "id": "muenchen", "name": "München", "wert": 1972, "wertText": "1972" },
+      { "id": "montreal", "name": "Montreal", "wert": 1976, "wertText": "1976" },
+      { "id": "moskau", "name": "Moskau", "wert": 1980, "wertText": "1980" }
+    ]
+  },
+  {
+    "id": "weltmeister-erster-titel",
+    "titel": "Fußball-Weltmeister",
+    "frage": "Jahr des ersten WM-Titels",
+    "richtung": "Vom frühesten zum spätesten ersten Titel",
+    "startId": "brasilien",
+    "begriffe": [
+      { "id": "uruguay", "name": "Uruguay", "wert": 1930, "wertText": "1930" },
+      { "id": "italien", "name": "Italien", "wert": 1934, "wertText": "1934" },
+      { "id": "deutschland", "name": "Deutschland", "wert": 1954, "wertText": "1954" },
+      { "id": "brasilien", "name": "Brasilien", "wert": 1958, "wertText": "1958" },
+      { "id": "england", "name": "England", "wert": 1966, "wertText": "1966" },
+      { "id": "argentinien", "name": "Argentinien", "wert": 1978, "wertText": "1978" },
+      { "id": "frankreich", "name": "Frankreich", "wert": 1998, "wertText": "1998" },
+      { "id": "spanien", "name": "Spanien", "wert": 2010, "wertText": "2010" }
+    ]
+  },
+  {
+    "id": "fussballer-geburtsjahr",
+    "titel": "Fußballstars",
+    "frage": "Geburtsjahr",
+    "richtung": "Vom ältesten zum jüngsten Spieler",
+    "startId": "messi",
+    "begriffe": [
+      { "id": "franz-beckenbauer", "name": "Franz Beckenbauer", "wert": 1945, "wertText": "1945" },
+      { "id": "diego-maradona", "name": "Diego Maradona", "wert": 1960, "wertText": "1960" },
+      { "id": "lothar-matthaeus", "name": "Lothar Matthäus", "wert": 1961, "wertText": "1961" },
+      { "id": "zinedine-zidane", "name": "Zinédine Zidane", "wert": 1972, "wertText": "1972" },
+      { "id": "ronaldinho", "name": "Ronaldinho", "wert": 1980, "wertText": "1980" },
+      { "id": "cristiano-ronaldo", "name": "Cristiano Ronaldo", "wert": 1985, "wertText": "1985" },
+      { "id": "messi", "name": "Lionel Messi", "wert": 1987, "wertText": "1987" },
+      { "id": "neymar", "name": "Neymar", "wert": 1992, "wertText": "1992" },
+      { "id": "mbappe", "name": "Kylian Mbappé", "wert": 1998, "wertText": "1998" },
+      { "id": "bellingham", "name": "Jude Bellingham", "wert": 2003, "wertText": "2003" }
+    ]
+  },
+  {
+    "id": "bauwerke-hoehe",
+    "titel": "Berühmte Bauwerke",
+    "frage": "Höhe des Bauwerks",
+    "richtung": "Vom niedrigsten zum höchsten",
+    "startId": "koelner-dom",
+    "begriffe": [
+      { "id": "brandenburger-tor", "name": "Brandenburger Tor", "wert": 26, "wertText": "26 m" },
+      { "id": "schiefer-turm", "name": "Schiefer Turm von Pisa", "wert": 57, "wertText": "57 m" },
+      { "id": "freiheitsstatue", "name": "Freiheitsstatue", "wert": 93, "wertText": "93 m" },
+      { "id": "big-ben", "name": "Elizabeth Tower (Big Ben)", "wert": 96, "wertText": "96 m" },
+      { "id": "petersdom", "name": "Petersdom", "wert": 136, "wertText": "136 m" },
+      { "id": "koelner-dom", "name": "Kölner Dom", "wert": 157, "wertText": "157 m" },
+      { "id": "eiffelturm", "name": "Eiffelturm", "wert": 330, "wertText": "330 m" },
+      { "id": "empire-state-building", "name": "Empire State Building", "wert": 381, "wertText": "381 m" },
+      { "id": "one-world-trade-center", "name": "One World Trade Center", "wert": 541, "wertText": "541 m" },
+      { "id": "burj-khalifa", "name": "Burj Khalifa", "wert": 828, "wertText": "828 m" }
+    ]
+  }
+]
