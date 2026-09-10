@@ -9,7 +9,7 @@ import {
 } from "./kern/ui.js";
 import { SPIELE, spielInfo } from "./spiele/register.js";
 
-export const APP_VERSION = "v50";
+export const APP_VERSION = "v51";
 document.getElementById("app-version").textContent = "Version " + APP_VERSION;
 
 // ---------- DOM ----------
@@ -19,6 +19,9 @@ const lobbyScreen = document.getElementById("lobby-screen");
 const spielWurzel = document.getElementById("spiel-wurzel");
 const topBar = document.getElementById("top-bar");
 const btnVerlassen = document.getElementById("btn-verlassen");
+const spielKopfTitel = document.getElementById("spiel-kopf-titel");
+const spielKopfIcon = document.getElementById("spiel-kopf-icon");
+const spielKopfName = document.getElementById("spiel-kopf-name");
 
 const inputName = document.getElementById("input-name");
 const inputCode = document.getElementById("input-code");
@@ -460,12 +463,18 @@ function entladeSpiel() {
 
 function aktualisiereRaumNavigation(spielId) {
   const imSpiel = Boolean(spielId);
-  btnVerlassen.textContent = imSpiel ? "← Zurück ins Hauptmenü" : "Raum verlassen";
+  const info = imSpiel ? spielInfo(spielId) : null;
+  topBar.classList.toggle("im-spiel", imSpiel);
+  btnVerlassen.textContent = imSpiel ? "←  Spielauswahl" : "Raum verlassen";
   btnVerlassen.disabled = false;
+  btnVerlassen.hidden = imSpiel && !zustand.istLeiter;
+  spielKopfTitel.hidden = !imSpiel;
+  spielKopfIcon.textContent = info?.emoji ?? "🎲";
+  spielKopfName.textContent = info?.name ?? "Partyspiele";
   // Das Zurückkehren aus einem Spiel ändert den gemeinsamen Raumzustand und
   // bleibt deshalb dem Spielleiter vorbehalten. Im Hauptmenü darf jeder den
   // Raum für sich verlassen.
-  topBar.hidden = imSpiel && !zustand.istLeiter;
+  topBar.hidden = false;
 }
 
 // ---------- Reaktion auf Änderungen am Raum ----------
