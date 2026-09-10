@@ -330,7 +330,7 @@ function punktestandHtml(mitKategorienPunkten = true) {
     (punkte[b.id] ?? 0) - (punkte[a.id] ?? 0)
   );
   const aenderungen = kategorienPunkte();
-  return `<ul class="rd-punkteliste">${sortiert.map((spieler) => {
+  return `<ul class="rd-punkteliste">${sortiert.map((spieler, index) => {
     const gesamt = punkte[spieler.id] ?? 0;
     return `<li>${mitKategorienPunkten
       ? spielerKarte(
@@ -338,7 +338,7 @@ function punktestandHtml(mitKategorienPunkten = true) {
           formatiertePunkte(aenderungen[spieler.id] ?? 0),
           { punkteRechts: gesamt }
         )
-      : spielerKarte(spieler.name, spieler.farbe, spieler.icon, gesamt)
+      : spielerKarte(spieler.name, spieler.farbe, spieler.icon, gesamt, { rang: index + 1 })
     }</li>`;
   }).join("")}</ul>`;
 }
