@@ -33,6 +33,14 @@ export const SPIELE = [
     beschreibung: "Ein Begriff, zehn gesuchte Treffer!",
     minSpieler: 2,
     laden: () => import("./zehn-treffer/spiel.js")
+  },
+  {
+    id: "reih-dich-ein",
+    name: "Reih dich ein!",
+    emoji: "↕️",
+    beschreibung: "Setz den Begriff an die richtige Stelle!",
+    minSpieler: 2,
+    laden: () => import("./reih-dich-ein/spiel.js")
   }
 ];
 
