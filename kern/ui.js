@@ -15,10 +15,16 @@ export const FARBEN = [
 
 // Profilbilder liegen als echte Dateien in bilder/ - der Browser cacht sie dann
 // einzeln und die Startseite bleibt klein. In Firestore steht nur die id ("avatar1").
-export const AVATARE = Array.from({ length: 8 }, (_, i) => ({
-  id: `avatar${i + 1}`,
-  bild: `bilder/avatar${i + 1}.jpg`
-}));
+export const AVATARE = [
+  { id: "avatar1", bild: "bilder/avatar1.jpg", vorname: "Stefan",    nachname: "Effenberg" },
+  { id: "avatar2", bild: "bilder/avatar2.jpg", vorname: "Marco",     nachname: "Reus" },
+  { id: "avatar3", bild: "bilder/avatar3.jpg", vorname: "Sébastien", nachname: "Haller" },
+  { id: "avatar4", bild: "bilder/avatar4.jpg", vorname: "Lothar",    nachname: "Matthäus" },
+  { id: "avatar5", bild: "bilder/avatar5.jpg", vorname: "Christian", nachname: "Wörns" },
+  { id: "avatar6", bild: "bilder/avatar6.jpg", vorname: "Stefan",    nachname: "Kießling" },
+  { id: "avatar7", bild: "bilder/avatar7.jpg", vorname: "Aílton",    nachname: "Gonçalves" },
+  { id: "avatar8", bild: "bilder/avatar8.jpg", vorname: "Erling",    nachname: "Haaland" }
+];
 
 export function avatarBild(id) {
   return AVATARE.find((a) => a.id === id)?.bild ?? null;
