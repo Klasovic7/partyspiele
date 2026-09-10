@@ -460,7 +460,30 @@
     .rd-kandidat strong { font-size: 1.5rem; line-height: 1.15; }
     .rd-kandidat small { opacity: .82; font-size: .7rem; }
     .rd-anweisung { text-align: center; }
-    .rd-reihe { display: flex; flex-direction: column; gap: 7px; margin: 12px 0 22px; }
+    .rd-sortierbereich {
+      display: grid; grid-template-columns: 58px minmax(0, 1fr); gap: 9px;
+      align-items: stretch; margin: 12px 0 22px;
+    }
+    .rd-skala {
+      display: flex; flex-direction: column; align-items: center; min-height: 100%;
+      padding: 5px 0; color: #5b21b6;
+    }
+    .rd-skala span {
+      width: 58px; padding: 5px 3px; border-radius: 9px; background: #ede9fe;
+      font-size: .61rem; font-weight: 900; line-height: 1.05; text-align: center;
+      overflow-wrap: anywhere;
+    }
+    .rd-skala i {
+      position: relative; flex: 1; width: 3px; min-height: 35px; margin: 5px 0;
+      border-radius: 999px; background: linear-gradient(#8b5cf6, #c4b5fd);
+    }
+    .rd-skala i::before, .rd-skala i::after {
+      content: ""; position: absolute; left: 50%; width: 8px; height: 8px;
+      border-left: 3px solid #8b5cf6; border-top: 3px solid #8b5cf6;
+    }
+    .rd-skala i::before { top: 1px; transform: translateX(-50%) rotate(45deg); }
+    .rd-skala i::after { bottom: 1px; transform: translateX(-50%) rotate(225deg); }
+    .rd-reihe { display: flex; flex-direction: column; gap: 7px; margin: 0; }
     .rd-position {
       width: 100%; min-height: 34px; padding: 6px 10px; border: 2px dashed #a78bfa;
       border-radius: 12px; color: #6d28d9; background: #f5f3ff;
@@ -497,7 +520,7 @@
     .rd-feedback-box.falsch { color: #7f1d1d; border-color: #ef4444; background: #fee2e2; }
     .rd-feedback-box strong { font-size: 1.08rem; }
     .rd-feedback-box span { font-size: .83rem; line-height: 1.35; }
-    .rd-reihe-aufgeloest { margin-bottom: 20px; }
+    .rd-reihe-aufgeloest { margin: 12px 0 20px; }
     .rd-punkteliste { display: grid; gap: 8px; margin: 8px 0 18px; padding: 0; list-style: none; }
     .rd-punkteliste li { margin: 0; }
 
