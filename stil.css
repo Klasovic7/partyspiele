@@ -431,6 +431,76 @@
       .zt-treffer-grid { grid-template-columns: 1fr; }
     }
 
+    /* ---------- Reih dich ein! ---------- */
+    .rd-regel {
+      padding: 14px; border-radius: 16px; color: var(--text-hell); background: #f6f4fb;
+      font-size: 0.9rem; line-height: 1.4;
+    }
+    .rd-kategorie-kopf {
+      margin: 10px 0 14px; padding: 16px; border: 2px solid #ddd6fe; border-radius: 18px;
+      background: linear-gradient(145deg, #faf8ff, #f1edff);
+    }
+    .rd-kategorie-kopf h1 { margin: 0 0 5px; }
+    .rd-kategorie-kopf p { margin: 0 0 10px; color: var(--text-hell); }
+    .rd-kategorie-kopf strong {
+      display: inline-flex; padding: 5px 10px; border-radius: 999px;
+      color: #5b21b6; background: #ede9fe; font-size: 0.78rem;
+    }
+    .rd-aktiver-spieler {
+      margin: 12px 0; padding: 9px 12px; border-radius: 13px;
+      color: #fff; background: var(--akzent); text-align: center; font-weight: 800;
+    }
+    .rd-kandidat {
+      display: flex; flex-direction: column; align-items: center; gap: 4px;
+      margin: 12px 0; padding: 17px 14px; border-radius: 19px; text-align: center;
+      color: #fff; background: linear-gradient(135deg, #6d28d9, #a855f7);
+      box-shadow: 0 10px 22px rgba(109,40,217,.2);
+    }
+    .rd-kandidat span { opacity: .8; font-size: .72rem; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; }
+    .rd-kandidat strong { font-size: 1.5rem; line-height: 1.15; }
+    .rd-kandidat small { opacity: .82; font-size: .7rem; }
+    .rd-anweisung { text-align: center; }
+    .rd-reihe { display: flex; flex-direction: column; gap: 7px; margin: 12px 0 22px; }
+    .rd-position {
+      width: 100%; min-height: 34px; padding: 6px 10px; border: 2px dashed #a78bfa;
+      border-radius: 12px; color: #6d28d9; background: #f5f3ff;
+      font-size: .75rem; font-weight: 800;
+    }
+    .rd-position:hover { color: #fff; background: var(--akzent); border-color: var(--akzent); }
+    .rd-position:disabled {
+      min-height: 14px; padding: 0; border: 0; color: #c4b5fd; background: transparent;
+      opacity: 1;
+    }
+    .rd-reihen-begriff {
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      min-height: 48px; padding: 11px 14px; border: 2px solid #e7e3ef; border-radius: 15px;
+      color: var(--text-dunkel); background: #fff; box-shadow: 0 5px 13px rgba(26,28,40,.06);
+    }
+    .rd-reihen-begriff strong { line-height: 1.2; }
+    .rd-reihen-begriff span {
+      flex: 0 0 auto; padding: 4px 8px; border-radius: 9px;
+      color: #5b21b6; background: #ede9fe; font-size: .76rem; font-weight: 800;
+    }
+    .rd-reihen-begriff.neu {
+      border-color: #f59e0b; background: #fffbeb; box-shadow: 0 0 0 3px rgba(245,158,11,.18);
+      animation: rd-neu-puls .55s ease-out;
+    }
+    @keyframes rd-neu-puls {
+      from { transform: scale(.96); }
+      to { transform: scale(1); }
+    }
+    .rd-feedback-box {
+      display: flex; flex-direction: column; gap: 4px; margin: 10px 0 18px;
+      padding: 15px; border: 2px solid; border-radius: 17px;
+    }
+    .rd-feedback-box.richtig { color: #14532d; border-color: #22c55e; background: #dcfce7; }
+    .rd-feedback-box.falsch { color: #7f1d1d; border-color: #ef4444; background: #fee2e2; }
+    .rd-feedback-box strong { font-size: 1.08rem; }
+    .rd-feedback-box span { font-size: .83rem; line-height: 1.35; }
+    .rd-reihe-aufgeloest { margin-bottom: 20px; }
+    .rd-punkteliste { display: grid; gap: 8px; margin: 8px 0 18px; padding: 0; list-style: none; }
+    .rd-punkteliste li { margin: 0; }
+
     .kategorien-aktionen { display: flex; gap: 8px; margin: 8px 0 0; }
     .kategorien-aktionen button { flex: 1; font-size: 0.8rem; padding: 7px 8px; }
     .kategorien-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 8px 0 16px; }
