@@ -9,7 +9,7 @@ import {
 } from "./kern/ui.js";
 import { SPIELE, spielInfo } from "./spiele/register.js";
 
-export const APP_VERSION = "v45";
+export const APP_VERSION = "v46";
 document.getElementById("app-version").textContent = "Version " + APP_VERSION;
 
 // ---------- DOM ----------
@@ -23,8 +23,13 @@ const btnVerlassen = document.getElementById("btn-verlassen");
 const inputName = document.getElementById("input-name");
 const inputCode = document.getElementById("input-code");
 const btnErstellen = document.getElementById("btn-erstellen");
+const btnBeitretenOeffnen = document.getElementById("btn-beitreten-oeffnen");
 const btnBeitreten = document.getElementById("btn-beitreten");
 const startError = document.getElementById("start-error");
+const beitretenDialog = document.getElementById("beitreten-dialog");
+const beitretenForm = document.getElementById("beitreten-form");
+const btnBeitretenSchliessen = document.getElementById("btn-beitreten-schliessen");
+const beitretenError = document.getElementById("beitreten-error");
 
 const anzeigeCode = document.getElementById("anzeige-code");
 const farbKarussell = document.getElementById("farb-karussell");
@@ -50,11 +55,13 @@ window.addEventListener("unhandledrejection", (e) => zeigeDebug("Fehler: " + (e.
 // bleiben die Start-Knöpfe gesperrt - ein Klick davor würde an den Firestore-Regeln
 // abprallen, weil noch niemand angemeldet ist.
 btnErstellen.disabled = true;
+btnBeitretenOeffnen.disabled = true;
 btnBeitreten.disabled = true;
 startError.textContent = "Verbinde …";
 authBereit
   .then(() => {
     btnErstellen.disabled = false;
+    btnBeitretenOeffnen.disabled = false;
     btnBeitreten.disabled = false;
     startError.textContent = "";
   })
@@ -556,7 +563,11 @@ async function verlasseRaum() {
   startScreen.hidden = false;
   inputCode.value = "";
   startError.textContent = "";
+  beitretenError.textContent = "";
+  beitretenDialog.hidden = true;
+  document.body.classList.remove("beitreten-offen");
   btnErstellen.disabled = false;
+  btnBeitretenOeffnen.disabled = false;
   btnBeitreten.disabled = false;
   btnVerlassen.disabled = false;
   btnProfilVerlassen.disabled = false;
@@ -618,19 +629,60 @@ btnErstellen.addEventListener("click", async () => {
   }
 });
 
-btnBeitreten.addEventListener("click", async () => {
+function oeffneBeitretenDialog() {
+  startError.textContent = "";
+  beitretenError.textContent = "";
+  beitretenDialog.hidden = false;
+  document.body.classList.add("beitreten-offen");
+  requestAnimationFrame(() => {
+    inputCode.focus();
+    inputCode.select();
+  });
+}
+
+function schliesseBeitretenDialog(fokusZurueck = true) {
+  beitretenDialog.hidden = true;
+  document.body.classList.remove("beitreten-offen");
+  beitretenError.textContent = "";
+  if (fokusZurueck) btnBeitretenOeffnen.focus();
+}
+
+btnBeitretenOeffnen.addEventListener("click", oeffneBeitretenDialog);
+btnBeitretenSchliessen.addEventListener("click", () => schliesseBeitretenDialog());
+beitretenDialog.addEventListener("click", (event) => {
+  if (event.target === beitretenDialog) schliesseBeitretenDialog();
+});
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && !beitretenDialog.hidden) schliesseBeitretenDialog();
+});
+inputCode.addEventListener("input", () => {
+  inputCode.value = inputCode.value.replace(/\D/g, "").slice(0, 4);
+  beitretenError.textContent = "";
+});
+
+beitretenForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
   const name = inputName.value.trim();
   const code = inputCode.value.trim();
-  if (!name) { startError.textContent = "Bitte gib zuerst deinen Namen ein."; return; }
-  if (!code) { startError.textContent = "Bitte gib den Code ein."; return; }
+  if (!name) {
+    schliesseBeitretenDialog(false);
+    startError.textContent = "Bitte gib zuerst deinen Namen ein.";
+    inputName.focus();
+    return;
+  }
+  if (!/^\d{4}$/.test(code)) {
+    beitretenError.textContent = "Bitte gib einen vierstelligen Code ein.";
+    inputCode.focus();
+    return;
+  }
 
-  startError.textContent = "";
+  beitretenError.textContent = "";
   btnBeitreten.disabled = true;
 
   try {
     const snap = await getDoc(doc(db, RAEUME, code));
     if (!snap.exists()) {
-      startError.textContent = "Diesen Code gibt es nicht.";
+      beitretenError.textContent = "Diesen Raum gibt es nicht.";
       btnBeitreten.disabled = false;
       return;
     }
@@ -647,9 +699,11 @@ btnBeitreten.addEventListener("click", async () => {
     await setDoc(doc(db, RAEUME, code, "spieler", spielerId), startWerte(vorhandene));
 
     sitzungSpeichern();
+    schliesseBeitretenDialog(false);
     betreteRaum(code, name);
   } catch (e) {
     zeigeDebug("Fehler beim Beitreten: " + e.message);
+    beitretenError.textContent = "Der Raum konnte nicht geöffnet werden. Versuche es erneut.";
     btnBeitreten.disabled = false;
   }
 });
