@@ -527,15 +527,35 @@
       from { transform: scale(.96); }
       to { transform: scale(1); }
     }
-    .rd-feedback-box {
-      display: flex; flex-direction: column; gap: 4px; margin: 10px 0 18px;
-      padding: 15px; border: 2px solid; border-radius: 17px;
+    .rd-kategorie-ergebnis-kopf {
+      display: flex; flex-direction: column; gap: 3px; margin: 10px 0 18px;
+      padding: 15px; border: 2px solid #8b5cf6; border-radius: 17px;
+      color: #4c1d95; background: #f3e8ff;
     }
-    .rd-feedback-box.richtig { color: #14532d; border-color: #22c55e; background: #dcfce7; }
-    .rd-feedback-box.falsch { color: #7f1d1d; border-color: #ef4444; background: #fee2e2; }
-    .rd-feedback-box strong { font-size: 1.08rem; }
-    .rd-feedback-box span { font-size: .83rem; line-height: 1.35; }
-    .rd-reihe-aufgeloest { margin: 12px 0 20px; }
+    .rd-kategorie-ergebnis-kopf strong { font-size: 1.08rem; }
+    .rd-kategorie-ergebnis-kopf span { font-size: .83rem; line-height: 1.35; }
+    .rd-ergebnis-reihe { display: grid; gap: 8px; margin: 12px 0 20px; }
+    .rd-ergebnis-begriff {
+      display: grid; gap: 8px; padding: 11px 13px; border: 2px solid #e7e3ef;
+      border-radius: 15px; background: #fff; box-shadow: 0 5px 13px rgba(26,28,40,.06);
+    }
+    .rd-ergebnis-begriff-kopf, .rd-ergebnis-meta {
+      display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    }
+    .rd-ergebnis-begriff-kopf > strong { line-height: 1.2; }
+    .rd-ergebnis-begriff-kopf > span {
+      flex: 0 0 auto; padding: 4px 8px; border-radius: 9px;
+      color: #5b21b6; background: #ede9fe; font-size: .76rem; font-weight: 800;
+    }
+    .rd-ergebnis-meta {
+      padding-top: 7px; border-top: 1px solid #eeeaf4; color: var(--text-hell); font-size: .8rem;
+    }
+    .rd-ergebnis-meta strong {
+      min-width: 42px; padding: 4px 9px; border-radius: 999px; text-align: center; font-size: .82rem;
+    }
+    .rd-ergebnis-meta strong.richtig { color: #166534; background: #dcfce7; }
+    .rd-ergebnis-meta strong.falsch { color: #991b1b; background: #fee2e2; }
+    .rd-ergebnis-meta strong.neutral { color: #64748b; background: #f1f5f9; }
     .rd-punkteliste { display: grid; gap: 8px; margin: 8px 0 18px; padding: 0; list-style: none; }
     .rd-punkteliste li { margin: 0; }
 
