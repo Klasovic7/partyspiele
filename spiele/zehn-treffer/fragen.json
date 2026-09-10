@@ -1,0 +1,82 @@
+[
+  {
+    "id": "will-smith",
+    "begriff": "Will Smith",
+    "treffer": [
+      "Men in Black",
+      "Der Prinz von Bel-Air",
+      "Bad Boys",
+      "Independence Day",
+      "I Am Legend",
+      "Agent J",
+      "Oscar",
+      "Chris Rock",
+      "Jada Pinkett Smith",
+      "Rapper"
+    ]
+  },
+  {
+    "id": "harry-potter",
+    "begriff": "Harry Potter",
+    "treffer": [
+      "Hogwarts",
+      "Hermine Granger",
+      "Ron Weasley",
+      "Lord Voldemort",
+      "Dumbledore",
+      "Zauberstab",
+      "Quidditch",
+      "Gryffindor",
+      "Hedwig",
+      "Dementoren"
+    ]
+  },
+  {
+    "id": "fc-bayern",
+    "begriff": "FC Bayern München",
+    "treffer": [
+      "Thomas Müller",
+      "Manuel Neuer",
+      "Allianz Arena",
+      "Rekordmeister",
+      "Bundesliga",
+      "Uli Hoeneß",
+      "Mia san mia",
+      "Champions League",
+      "Rot",
+      "München"
+    ]
+  },
+  {
+    "id": "mallorca",
+    "begriff": "Mallorca",
+    "treffer": [
+      "Ballermann",
+      "Palma",
+      "Spanien",
+      "Strand",
+      "Sangria",
+      "Bierkönig",
+      "Megapark",
+      "Schinkenstraße",
+      "Urlaub",
+      "Insel"
+    ]
+  },
+  {
+    "id": "deutschland",
+    "begriff": "Deutschland",
+    "treffer": [
+      "Berlin",
+      "Bratwurst",
+      "Autobahn",
+      "Fußball",
+      "Oktoberfest",
+      "Schwarz-Rot-Gold",
+      "Bundestag",
+      "Rhein",
+      "Currywurst",
+      "Bundesadler"
+    ]
+  }
+]
