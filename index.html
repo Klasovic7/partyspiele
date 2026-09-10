@@ -43,16 +43,28 @@
       <input id="input-name" placeholder="z. B. Niklas" autocomplete="nickname">
     </label>
 
-    <button id="btn-erstellen" class="btn-primaer">Neuen Raum erstellen</button>
-
-    <div class="trenner"><span>oder</span></div>
-
-    <label class="feld-label">Code eines bestehenden Raums
-      <input id="input-code" placeholder="1234" maxlength="4" inputmode="numeric" pattern="[0-9]*" class="code-eingabe">
-    </label>
-    <button id="btn-beitreten" class="btn-sekundaer">Beitreten</button>
+    <div class="start-aktionen">
+      <button id="btn-erstellen" class="btn-primaer">Neuen Raum erstellen</button>
+      <button id="btn-beitreten-oeffnen" class="btn-sekundaer">Raum beitreten</button>
+    </div>
 
     <p id="start-error"></p>
+  </div>
+
+  <!-- ---------- Dialog: bestehendem Raum beitreten ---------- -->
+  <div id="beitreten-dialog" class="beitreten-dialog" role="dialog" aria-modal="true"
+       aria-labelledby="beitreten-titel" hidden>
+    <form id="beitreten-form" class="beitreten-dialog-inhalt">
+      <button id="btn-beitreten-schliessen" class="beitreten-schliessen" type="button" aria-label="Fenster schließen">×</button>
+      <p class="kategorie">Bestehender Raum</p>
+      <h2 id="beitreten-titel">Raum beitreten</h2>
+      <p class="hinweis-text">Gib den vierstelligen Raum-Code ein.</p>
+      <label class="feld-label" for="input-code">Raum-Code</label>
+      <input id="input-code" placeholder="1234" maxlength="4" inputmode="numeric" pattern="[0-9]{4}"
+             autocomplete="one-time-code" class="code-eingabe">
+      <p id="beitreten-error" class="fehler-text" role="alert"></p>
+      <button id="btn-beitreten" class="btn-primaer" type="submit">Raum beitreten</button>
+    </form>
   </div>
 
   <!-- ---------- Vollbild-Auswahl: Farbe + Profilbild ---------- -->
