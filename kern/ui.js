@@ -16,14 +16,14 @@ export const FARBEN = [
 // Profilbilder liegen als echte Dateien in bilder/ - der Browser cacht sie dann
 // einzeln und die Startseite bleibt klein. In Firestore steht nur die id ("avatar1").
 export const AVATARE = [
-  { id: "avatar1", bild: "bilder/avatar1-hd.jpg", vorname: "Jens",      nachname: "Jeremies" },
-  { id: "avatar2", bild: "bilder/avatar2-hd.jpg", vorname: "Marco",     nachname: "Reus" },
-  { id: "avatar3", bild: "bilder/avatar3-hd.jpg", vorname: "Timothy",   nachname: "Chandler" },
-  { id: "avatar4", bild: "bilder/avatar4-hd.jpg", vorname: "Lothar",    nachname: "Matthäus" },
-  { id: "avatar5", bild: "bilder/avatar5-hd.jpg", vorname: "Christian", nachname: "Wörns" },
-  { id: "avatar6", bild: "bilder/avatar6-hd.jpg", vorname: "Martin",    nachname: "Hinteregger" },
-  { id: "avatar7", bild: "bilder/avatar7-hd.jpg", vorname: "",          nachname: "Ailton" },
-  { id: "avatar8", bild: "bilder/avatar8-hd.jpg", vorname: "Niklas",    nachname: "Süle" }
+  { id: "avatar1", bild: "bilder/avatar1-hd.jpg?v=35", vorname: "Jens",      nachname: "Jeremies" },
+  { id: "avatar2", bild: "bilder/avatar2-hd.jpg?v=35", vorname: "Marco",     nachname: "Reus" },
+  { id: "avatar3", bild: "bilder/avatar3-hd.jpg?v=35", vorname: "Timothy",   nachname: "Chandler" },
+  { id: "avatar4", bild: "bilder/avatar4-hd.jpg?v=35", vorname: "Lothar",    nachname: "Matthäus" },
+  { id: "avatar5", bild: "bilder/avatar5-hd.jpg?v=35", vorname: "Christian", nachname: "Wörns" },
+  { id: "avatar6", bild: "bilder/avatar6-hd.jpg?v=35", vorname: "Martin",    nachname: "Hinteregger" },
+  { id: "avatar7", bild: "bilder/avatar7-hd.jpg?v=35", vorname: "",          nachname: "Ailton" },
+  { id: "avatar8", bild: "bilder/avatar8-hd.jpg?v=35", vorname: "Niklas",    nachname: "Süle" }
 ];
 
 export function avatarBild(id) {
