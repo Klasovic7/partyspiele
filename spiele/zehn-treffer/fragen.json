@@ -78,5 +78,1525 @@
       "Currywurst",
       "Bundesadler"
     ]
+  },
+  {
+    "id": "leonardo-dicaprio",
+    "begriff": "Leonardo DiCaprio",
+    "treffer": [
+      "Titanic",
+      "Inception",
+      "The Wolf of Wall Street",
+      "Oscar",
+      "Kate Winslet",
+      "Hollywood",
+      "Schauspieler",
+      "The Revenant",
+      "Catch Me If You Can",
+      "Umweltschutz"
+    ]
+  },
+  {
+    "id": "taylor-swift",
+    "begriff": "Taylor Swift",
+    "treffer": [
+      "Shake It Off",
+      "Love Story",
+      "Blank Space",
+      "Eras Tour",
+      "Swifties",
+      "Gitarre",
+      "Grammy",
+      "1989",
+      "Red",
+      "Songwriterin"
+    ]
+  },
+  {
+    "id": "cristiano-ronaldo",
+    "begriff": "Cristiano Ronaldo",
+    "treffer": [
+      "Portugal",
+      "Real Madrid",
+      "Manchester United",
+      "Juventus Turin",
+      "CR7",
+      "Champions League",
+      "Tore",
+      "Lionel Messi",
+      "Siuuu",
+      "Ballon d’Or"
+    ]
+  },
+  {
+    "id": "michael-jackson",
+    "begriff": "Michael Jackson",
+    "treffer": [
+      "Thriller",
+      "Beat It",
+      "Billie Jean",
+      "Moonwalk",
+      "King of Pop",
+      "Handschuh",
+      "Neverland",
+      "Jackson Five",
+      "Smooth Criminal",
+      "Bad"
+    ]
+  },
+  {
+    "id": "helene-fischer",
+    "begriff": "Helene Fischer",
+    "treffer": [
+      "Atemlos",
+      "Schlager",
+      "Florian Silbereisen",
+      "Sängerin",
+      "Show",
+      "Tournee",
+      "Weihnachten",
+      "Farbenspiel",
+      "Akrobatik",
+      "Deutschland"
+    ]
+  },
+  {
+    "id": "die-simpsons",
+    "begriff": "Die Simpsons",
+    "treffer": [
+      "Homer",
+      "Marge",
+      "Bart",
+      "Lisa",
+      "Maggie",
+      "Springfield",
+      "Duff Beer",
+      "Mr. Burns",
+      "Gelbe Haut",
+      "Couch"
+    ]
+  },
+  {
+    "id": "star-wars",
+    "begriff": "Star Wars",
+    "treffer": [
+      "Darth Vader",
+      "Luke Skywalker",
+      "Yoda",
+      "Laserschwert",
+      "Die Macht",
+      "Prinzessin Leia",
+      "Han Solo",
+      "Chewbacca",
+      "Todesstern",
+      "R2-D2"
+    ]
+  },
+  {
+    "id": "marvel",
+    "begriff": "Marvel",
+    "treffer": [
+      "Iron Man",
+      "Spider-Man",
+      "Captain America",
+      "Thor",
+      "Hulk",
+      "Avengers",
+      "Thanos",
+      "Wakanda",
+      "Superhelden",
+      "Stan Lee"
+    ]
+  },
+  {
+    "id": "titanic",
+    "begriff": "Titanic",
+    "treffer": [
+      "Eisberg",
+      "Leonardo DiCaprio",
+      "Kate Winslet",
+      "Schiff",
+      "Untergang",
+      "Jack und Rose",
+      "Atlantik",
+      "1912",
+      "My Heart Will Go On",
+      "Rettungsboot"
+    ]
+  },
+  {
+    "id": "koenig-der-loewen",
+    "begriff": "Der König der Löwen",
+    "treffer": [
+      "Simba",
+      "Mufasa",
+      "Nala",
+      "Scar",
+      "Timon",
+      "Pumbaa",
+      "Hakuna Matata",
+      "Afrika",
+      "Disney",
+      "Der ewige Kreis"
+    ]
+  },
+  {
+    "id": "friends",
+    "begriff": "Friends",
+    "treffer": [
+      "Rachel",
+      "Ross",
+      "Monica",
+      "Chandler",
+      "Joey",
+      "Phoebe",
+      "Central Perk",
+      "New York",
+      "Sofa",
+      "How you doin?"
+    ]
+  },
+  {
+    "id": "breaking-bad",
+    "begriff": "Breaking Bad",
+    "treffer": [
+      "Walter White",
+      "Jesse Pinkman",
+      "Heisenberg",
+      "Meth",
+      "Albuquerque",
+      "Chemielehrer",
+      "Saul Goodman",
+      "Los Pollos Hermanos",
+      "Wohnmobil",
+      "Glatze"
+    ]
+  },
+  {
+    "id": "game-of-thrones",
+    "begriff": "Game of Thrones",
+    "treffer": [
+      "Eiserner Thron",
+      "Jon Snow",
+      "Daenerys",
+      "Drachen",
+      "Winterfell",
+      "Starks",
+      "Lannisters",
+      "White Walker",
+      "Westeros",
+      "Winter is coming"
+    ]
+  },
+  {
+    "id": "stranger-things",
+    "begriff": "Stranger Things",
+    "treffer": [
+      "Eleven",
+      "Hawkins",
+      "Upside Down",
+      "Demogorgon",
+      "Mike",
+      "Dustin",
+      "Walkie-Talkie",
+      "Fahrräder",
+      "Vecna",
+      "Netflix"
+    ]
+  },
+  {
+    "id": "james-bond",
+    "begriff": "James Bond",
+    "treffer": [
+      "007",
+      "Aston Martin",
+      "Martini",
+      "MI6",
+      "Q",
+      "M",
+      "Walther PPK",
+      "Geheimagent",
+      "Bond-Girl",
+      "Goldfinger"
+    ]
+  },
+  {
+    "id": "disney",
+    "begriff": "Disney",
+    "treffer": [
+      "Micky Maus",
+      "Donald Duck",
+      "Prinzessinnen",
+      "Schloss",
+      "Freizeitpark",
+      "Walt Disney",
+      "Pixar",
+      "Der König der Löwen",
+      "Eiskönigin",
+      "Zeichentrick"
+    ]
+  },
+  {
+    "id": "netflix",
+    "begriff": "Netflix",
+    "treffer": [
+      "Streaming",
+      "Serien",
+      "Filme",
+      "Fernseher",
+      "Abo",
+      "Binge-Watching",
+      "Stranger Things",
+      "Squid Game",
+      "Fernbedienung",
+      "Rotes Logo"
+    ]
+  },
+  {
+    "id": "youtube",
+    "begriff": "YouTube",
+    "treffer": [
+      "Videos",
+      "Abonnenten",
+      "Likes",
+      "Kommentare",
+      "YouTuber",
+      "Werbung",
+      "Tutorial",
+      "Vlog",
+      "Livestream",
+      "Play-Button"
+    ]
+  },
+  {
+    "id": "instagram",
+    "begriff": "Instagram",
+    "treffer": [
+      "Fotos",
+      "Story",
+      "Reels",
+      "Follower",
+      "Influencer",
+      "Hashtag",
+      "Like",
+      "Filter",
+      "Direktnachricht",
+      "Meta"
+    ]
+  },
+  {
+    "id": "whatsapp",
+    "begriff": "WhatsApp",
+    "treffer": [
+      "Nachrichten",
+      "Gruppenchat",
+      "Sprachnachricht",
+      "Grüner Haken",
+      "Status",
+      "Emoji",
+      "Videoanruf",
+      "Blauer Haken",
+      "Meta",
+      "Handynummer"
+    ]
+  },
+  {
+    "id": "apple",
+    "begriff": "Apple",
+    "treffer": [
+      "iPhone",
+      "MacBook",
+      "iPad",
+      "Apple Watch",
+      "Steve Jobs",
+      "Apfel-Logo",
+      "AirPods",
+      "Siri",
+      "App Store",
+      "Kalifornien"
+    ]
+  },
+  {
+    "id": "mcdonalds",
+    "begriff": "McDonald’s",
+    "treffer": [
+      "Big Mac",
+      "Pommes",
+      "Happy Meal",
+      "McNuggets",
+      "Goldenes M",
+      "Fast Food",
+      "McFlurry",
+      "Drive-in",
+      "Burger",
+      "Ronald McDonald"
+    ]
+  },
+  {
+    "id": "ikea",
+    "begriff": "IKEA",
+    "treffer": [
+      "Schweden",
+      "Möbel",
+      "Billy-Regal",
+      "Köttbullar",
+      "Inbusschlüssel",
+      "Blau und Gelb",
+      "Hotdog",
+      "Selbstaufbau",
+      "Teelichter",
+      "Småland"
+    ]
+  },
+  {
+    "id": "coca-cola",
+    "begriff": "Coca-Cola",
+    "treffer": [
+      "Cola",
+      "Rotes Etikett",
+      "Flasche",
+      "Dose",
+      "Weihnachtsmann",
+      "Zucker",
+      "Pepsi",
+      "Erfrischungsgetränk",
+      "Eiswürfel",
+      "Geheimrezept"
+    ]
+  },
+  {
+    "id": "lego",
+    "begriff": "LEGO",
+    "treffer": [
+      "Bausteine",
+      "Dänemark",
+      "Minifiguren",
+      "Noppen",
+      "Kinderzimmer",
+      "Bausatz",
+      "Legoland",
+      "Bunt",
+      "Raumschiff",
+      "Drauftreten"
+    ]
+  },
+  {
+    "id": "fussball",
+    "begriff": "Fußball",
+    "treffer": [
+      "Tor",
+      "Ball",
+      "Schiedsrichter",
+      "Stadion",
+      "Bundesliga",
+      "Elfmeter",
+      "Abseits",
+      "Trikot",
+      "Fans",
+      "Weltmeisterschaft"
+    ]
+  },
+  {
+    "id": "champions-league",
+    "begriff": "Champions League",
+    "treffer": [
+      "Hymne",
+      "Henkelpott",
+      "Real Madrid",
+      "Dienstagabend",
+      "Mittwochabend",
+      "Gruppenphase",
+      "K.-o.-Runde",
+      "Finale",
+      "UEFA",
+      "Flutlicht"
+    ]
+  },
+  {
+    "id": "borussia-dortmund",
+    "begriff": "Borussia Dortmund",
+    "treffer": [
+      "Schwarz-Gelb",
+      "Signal Iduna Park",
+      "Südtribüne",
+      "BVB",
+      "Marco Reus",
+      "Jürgen Klopp",
+      "Dortmund",
+      "Gelbe Wand",
+      "Bundesliga",
+      "Borussia"
+    ]
+  },
+  {
+    "id": "eintracht-frankfurt",
+    "begriff": "Eintracht Frankfurt",
+    "treffer": [
+      "Adler",
+      "Waldstadion",
+      "Schwarz-Weiß-Rot",
+      "Europa League",
+      "Frankfurt",
+      "SGE",
+      "Fans",
+      "Randal Kolo Muani",
+      "Alex Meier",
+      "Pokalsieg"
+    ]
+  },
+  {
+    "id": "vfb-stuttgart",
+    "begriff": "VfB Stuttgart",
+    "treffer": [
+      "Brustring",
+      "Mercedes-Benz Arena",
+      "Schwaben",
+      "Rot-Weiß",
+      "Stuttgart",
+      "Bundesliga",
+      "Mario Gomez",
+      "Sami Khedira",
+      "Meister 2007",
+      "Cannstatter Kurve"
+    ]
+  },
+  {
+    "id": "schalke-04",
+    "begriff": "Schalke 04",
+    "treffer": [
+      "Königsblau",
+      "Gelsenkirchen",
+      "Veltins-Arena",
+      "Knappen",
+      "Glück auf",
+      "Revierderby",
+      "Rudi Assauer",
+      "Raúl",
+      "Gazprom",
+      "04"
+    ]
+  },
+  {
+    "id": "deutsche-nationalmannschaft",
+    "begriff": "Deutsche Nationalmannschaft",
+    "treffer": [
+      "DFB",
+      "Weltmeister",
+      "Schwarz-Weiß",
+      "Adler",
+      "Manuel Neuer",
+      "Thomas Müller",
+      "Berlin",
+      "Nationalhymne",
+      "Vier Sterne",
+      "Die Mannschaft"
+    ]
+  },
+  {
+    "id": "formel-1",
+    "begriff": "Formel 1",
+    "treffer": [
+      "Rennwagen",
+      "Michael Schumacher",
+      "Ferrari",
+      "Boxenstopp",
+      "Lewis Hamilton",
+      "Red Bull",
+      "Poleposition",
+      "Monaco",
+      "Reifen",
+      "Zielflagge"
+    ]
+  },
+  {
+    "id": "olympische-spiele",
+    "begriff": "Olympische Spiele",
+    "treffer": [
+      "Olympische Ringe",
+      "Goldmedaille",
+      "Fackel",
+      "Eröffnungsfeier",
+      "Leichtathletik",
+      "Schwimmen",
+      "Olympisches Dorf",
+      "Siegerehrung",
+      "Sommer",
+      "Winter"
+    ]
+  },
+  {
+    "id": "tennis",
+    "begriff": "Tennis",
+    "treffer": [
+      "Schläger",
+      "Ball",
+      "Netz",
+      "Wimbledon",
+      "Aufschlag",
+      "Satz",
+      "Roger Federer",
+      "Rafael Nadal",
+      "Grand Slam",
+      "Sandplatz"
+    ]
+  },
+  {
+    "id": "weihnachten",
+    "begriff": "Weihnachten",
+    "treffer": [
+      "Tannenbaum",
+      "Geschenke",
+      "Weihnachtsmann",
+      "Heiligabend",
+      "Plätzchen",
+      "Lichterkette",
+      "Familie",
+      "Christkind",
+      "Glühwein",
+      "Schnee"
+    ]
+  },
+  {
+    "id": "silvester",
+    "begriff": "Silvester",
+    "treffer": [
+      "Feuerwerk",
+      "Mitternacht",
+      "Sekt",
+      "Countdown",
+      "Neujahr",
+      "Raketen",
+      "Bleigießen",
+      "Party",
+      "Gute Vorsätze",
+      "Dinner for One"
+    ]
+  },
+  {
+    "id": "hochzeit",
+    "begriff": "Hochzeit",
+    "treffer": [
+      "Braut",
+      "Bräutigam",
+      "Ringe",
+      "Kleid",
+      "Trauzeuge",
+      "Torte",
+      "Ja-Wort",
+      "Kirche",
+      "Brautstrauß",
+      "Flitterwochen"
+    ]
+  },
+  {
+    "id": "geburtstag",
+    "begriff": "Geburtstag",
+    "treffer": [
+      "Kuchen",
+      "Kerzen",
+      "Geschenke",
+      "Party",
+      "Gratulieren",
+      "Luftballons",
+      "Einladung",
+      "Geburtstagslied",
+      "Alter",
+      "Konfetti"
+    ]
+  },
+  {
+    "id": "schule",
+    "begriff": "Schule",
+    "treffer": [
+      "Lehrer",
+      "Schüler",
+      "Tafel",
+      "Hausaufgaben",
+      "Pause",
+      "Klassenarbeit",
+      "Schulhof",
+      "Ranzen",
+      "Zeugnis",
+      "Klassenzimmer"
+    ]
+  },
+  {
+    "id": "buero",
+    "begriff": "Büro",
+    "treffer": [
+      "Computer",
+      "Schreibtisch",
+      "Drucker",
+      "Kollegen",
+      "Kaffee",
+      "Meeting",
+      "E-Mail",
+      "Telefon",
+      "Aktenordner",
+      "Bürostuhl"
+    ]
+  },
+  {
+    "id": "krankenhaus",
+    "begriff": "Krankenhaus",
+    "treffer": [
+      "Arzt",
+      "Pflegekraft",
+      "Patient",
+      "Notaufnahme",
+      "Bett",
+      "Operation",
+      "Stethoskop",
+      "Krankenwagen",
+      "Wartezimmer",
+      "Visite"
+    ]
+  },
+  {
+    "id": "flughafen",
+    "begriff": "Flughafen",
+    "treffer": [
+      "Flugzeug",
+      "Koffer",
+      "Check-in",
+      "Sicherheitskontrolle",
+      "Gate",
+      "Pilot",
+      "Startbahn",
+      "Boardingpass",
+      "Duty-free",
+      "Verspätung"
+    ]
+  },
+  {
+    "id": "supermarkt",
+    "begriff": "Supermarkt",
+    "treffer": [
+      "Einkaufswagen",
+      "Kasse",
+      "Regal",
+      "Lebensmittel",
+      "Angebot",
+      "Pfandautomat",
+      "Kassenzettel",
+      "Obstabteilung",
+      "Tiefkühltruhe",
+      "Schlange"
+    ]
+  },
+  {
+    "id": "camping",
+    "begriff": "Camping",
+    "treffer": [
+      "Zelt",
+      "Wohnwagen",
+      "Lagerfeuer",
+      "Campingplatz",
+      "Schlafsack",
+      "Natur",
+      "Grillen",
+      "Isomatte",
+      "Taschenlampe",
+      "Mücken"
+    ]
+  },
+  {
+    "id": "sommer",
+    "begriff": "Sommer",
+    "treffer": [
+      "Sonne",
+      "Hitze",
+      "Strand",
+      "Urlaub",
+      "Eis",
+      "Freibad",
+      "Grillen",
+      "Sonnencreme",
+      "Kurze Hose",
+      "Ferien"
+    ]
+  },
+  {
+    "id": "winter",
+    "begriff": "Winter",
+    "treffer": [
+      "Schnee",
+      "Kälte",
+      "Weihnachten",
+      "Schlitten",
+      "Skifahren",
+      "Handschuhe",
+      "Eis",
+      "Heizung",
+      "Schneemann",
+      "Dunkelheit"
+    ]
+  },
+  {
+    "id": "meer",
+    "begriff": "Meer",
+    "treffer": [
+      "Wellen",
+      "Strand",
+      "Salzwasser",
+      "Fische",
+      "Schiff",
+      "Muscheln",
+      "Horizont",
+      "Tauchen",
+      "Möwen",
+      "Leuchtturm"
+    ]
+  },
+  {
+    "id": "berge",
+    "begriff": "Berge",
+    "treffer": [
+      "Gipfel",
+      "Wandern",
+      "Alpen",
+      "Schnee",
+      "Seilbahn",
+      "Hütte",
+      "Klettern",
+      "Tal",
+      "Aussicht",
+      "Rucksack"
+    ]
+  },
+  {
+    "id": "dschungel",
+    "begriff": "Dschungel",
+    "treffer": [
+      "Regenwald",
+      "Lianen",
+      "Affen",
+      "Papagei",
+      "Feuchtigkeit",
+      "Abenteuer",
+      "Schlangen",
+      "Dichte Pflanzen",
+      "Tiger",
+      "Amazonas"
+    ]
+  },
+  {
+    "id": "wueste",
+    "begriff": "Wüste",
+    "treffer": [
+      "Sand",
+      "Hitze",
+      "Kamel",
+      "Oase",
+      "Dünen",
+      "Sahara",
+      "Trockenheit",
+      "Fata Morgana",
+      "Skorpion",
+      "Beduinen"
+    ]
+  },
+  {
+    "id": "new-york",
+    "begriff": "New York",
+    "treffer": [
+      "Freiheitsstatue",
+      "Times Square",
+      "Manhattan",
+      "Central Park",
+      "Empire State Building",
+      "Brooklyn Bridge",
+      "Taxi",
+      "Broadway",
+      "Wolkenkratzer",
+      "Big Apple"
+    ]
+  },
+  {
+    "id": "paris",
+    "begriff": "Paris",
+    "treffer": [
+      "Eiffelturm",
+      "Frankreich",
+      "Louvre",
+      "Seine",
+      "Croissant",
+      "Notre-Dame",
+      "Liebe",
+      "Champs-Élysées",
+      "Arc de Triomphe",
+      "Mode"
+    ]
+  },
+  {
+    "id": "london",
+    "begriff": "London",
+    "treffer": [
+      "Big Ben",
+      "Themse",
+      "Tower Bridge",
+      "Buckingham Palace",
+      "Rote Busse",
+      "Taxi",
+      "Königshaus",
+      "London Eye",
+      "Underground",
+      "Regen"
+    ]
+  },
+  {
+    "id": "rom",
+    "begriff": "Rom",
+    "treffer": [
+      "Kolosseum",
+      "Vatikan",
+      "Italien",
+      "Trevi-Brunnen",
+      "Pasta",
+      "Papst",
+      "Forum Romanum",
+      "Vespa",
+      "Sieben Hügel",
+      "Gladiatoren"
+    ]
+  },
+  {
+    "id": "berlin",
+    "begriff": "Berlin",
+    "treffer": [
+      "Brandenburger Tor",
+      "Reichstag",
+      "Fernsehturm",
+      "Hauptstadt",
+      "Spree",
+      "Berliner Mauer",
+      "Currywurst",
+      "Bundestag",
+      "Alexanderplatz",
+      "Ampelmann"
+    ]
+  },
+  {
+    "id": "hamburg",
+    "begriff": "Hamburg",
+    "treffer": [
+      "Hafen",
+      "Elbphilharmonie",
+      "Reeperbahn",
+      "Fischmarkt",
+      "Elbe",
+      "Landungsbrücken",
+      "Michel",
+      "Speicherstadt",
+      "HSV",
+      "Franzbrötchen"
+    ]
+  },
+  {
+    "id": "koeln",
+    "begriff": "Köln",
+    "treffer": [
+      "Kölner Dom",
+      "Rhein",
+      "Karneval",
+      "1. FC Köln",
+      "Kölsch",
+      "Hohenzollernbrücke",
+      "Geißbock",
+      "Altstadt",
+      "Schokoladenmuseum",
+      "Kölner Haie"
+    ]
+  },
+  {
+    "id": "muenchen",
+    "begriff": "München",
+    "treffer": [
+      "Oktoberfest",
+      "Marienplatz",
+      "FC Bayern",
+      "Biergarten",
+      "Frauenkirche",
+      "Isar",
+      "Weißwurst",
+      "Englischer Garten",
+      "Lederhose",
+      "Viktualienmarkt"
+    ]
+  },
+  {
+    "id": "italien",
+    "begriff": "Italien",
+    "treffer": [
+      "Pizza",
+      "Pasta",
+      "Rom",
+      "Venedig",
+      "Ferrari",
+      "Espresso",
+      "Toskana",
+      "Stiefel",
+      "Gelato",
+      "Mittelmeer"
+    ]
+  },
+  {
+    "id": "spanien",
+    "begriff": "Spanien",
+    "treffer": [
+      "Madrid",
+      "Barcelona",
+      "Mallorca",
+      "Paella",
+      "Flamenco",
+      "Sonne",
+      "Real Madrid",
+      "Sangria",
+      "Tapas",
+      "Stierkampf"
+    ]
+  },
+  {
+    "id": "usa",
+    "begriff": "USA",
+    "treffer": [
+      "New York",
+      "Hollywood",
+      "Freiheitsstatue",
+      "Präsident",
+      "Dollar",
+      "Fast Food",
+      "Route 66",
+      "American Football",
+      "Grand Canyon",
+      "Sterne und Streifen"
+    ]
+  },
+  {
+    "id": "japan",
+    "begriff": "Japan",
+    "treffer": [
+      "Tokio",
+      "Sushi",
+      "Anime",
+      "Samurai",
+      "Kirschblüte",
+      "Fuji",
+      "Manga",
+      "Shinkansen",
+      "Kimono",
+      "Nintendo"
+    ]
+  },
+  {
+    "id": "australien",
+    "begriff": "Australien",
+    "treffer": [
+      "Känguru",
+      "Sydney",
+      "Koala",
+      "Outback",
+      "Opernhaus",
+      "Great Barrier Reef",
+      "Surfen",
+      "Aborigines",
+      "Melbourne",
+      "Didgeridoo"
+    ]
+  },
+  {
+    "id": "brasilien",
+    "begriff": "Brasilien",
+    "treffer": [
+      "Rio de Janeiro",
+      "Karneval",
+      "Fußball",
+      "Copacabana",
+      "Samba",
+      "Amazonas",
+      "Cristo Redentor",
+      "Pelé",
+      "Caipirinha",
+      "Gelb-Grün"
+    ]
+  },
+  {
+    "id": "pizza",
+    "begriff": "Pizza",
+    "treffer": [
+      "Italien",
+      "Käse",
+      "Tomatensoße",
+      "Salami",
+      "Ofen",
+      "Margherita",
+      "Teig",
+      "Pizzeria",
+      "Ananas",
+      "Rund"
+    ]
+  },
+  {
+    "id": "doener",
+    "begriff": "Döner",
+    "treffer": [
+      "Fladenbrot",
+      "Fleischspieß",
+      "Salat",
+      "Soße",
+      "Zwiebeln",
+      "Knoblauch",
+      "Türkei",
+      "Imbiss",
+      "Scharf",
+      "Dönerladen"
+    ]
+  },
+  {
+    "id": "fruehstueck",
+    "begriff": "Frühstück",
+    "treffer": [
+      "Brötchen",
+      "Kaffee",
+      "Ei",
+      "Marmelade",
+      "Müsli",
+      "Butter",
+      "Käse",
+      "Sonntag",
+      "Orangensaft",
+      "Aufstehen"
+    ]
+  },
+  {
+    "id": "grillen",
+    "begriff": "Grillen",
+    "treffer": [
+      "Holzkohle",
+      "Würstchen",
+      "Steak",
+      "Garten",
+      "Grillzange",
+      "Salat",
+      "Rauch",
+      "Sommer",
+      "Bier",
+      "Marinade"
+    ]
+  },
+  {
+    "id": "kaffee",
+    "begriff": "Kaffee",
+    "treffer": [
+      "Koffein",
+      "Tasse",
+      "Espresso",
+      "Milch",
+      "Zucker",
+      "Morgen",
+      "Kaffeemaschine",
+      "Bohnen",
+      "Cappuccino",
+      "Heiß"
+    ]
+  },
+  {
+    "id": "bier",
+    "begriff": "Bier",
+    "treffer": [
+      "Hopfen",
+      "Gerste",
+      "Schaum",
+      "Flasche",
+      "Fass",
+      "Brauerei",
+      "Pils",
+      "Oktoberfest",
+      "Prost",
+      "Alkohol"
+    ]
+  },
+  {
+    "id": "schokolade",
+    "begriff": "Schokolade",
+    "treffer": [
+      "Kakao",
+      "Süß",
+      "Tafel",
+      "Milch",
+      "Nüsse",
+      "Praline",
+      "Zartbitter",
+      "Weiße Schokolade",
+      "Nikolaus",
+      "Schmelzen"
+    ]
+  },
+  {
+    "id": "eiscreme",
+    "begriff": "Eiscreme",
+    "treffer": [
+      "Kugel",
+      "Waffel",
+      "Vanille",
+      "Schokolade",
+      "Eisdiele",
+      "Sommer",
+      "Kalt",
+      "Stracciatella",
+      "Sahne",
+      "Schmelzen"
+    ]
+  },
+  {
+    "id": "obst",
+    "begriff": "Obst",
+    "treffer": [
+      "Apfel",
+      "Banane",
+      "Orange",
+      "Erdbeere",
+      "Trauben",
+      "Birne",
+      "Vitamine",
+      "Obstsalat",
+      "Süß",
+      "Gesund"
+    ]
+  },
+  {
+    "id": "fast-food",
+    "begriff": "Fast Food",
+    "treffer": [
+      "Burger",
+      "Pommes",
+      "Pizza",
+      "McDonald’s",
+      "Ketchup",
+      "Drive-in",
+      "Ungesund",
+      "Schnell",
+      "Chicken Nuggets",
+      "Cola"
+    ]
+  },
+  {
+    "id": "hund",
+    "begriff": "Hund",
+    "treffer": [
+      "Leine",
+      "Bellen",
+      "Knochen",
+      "Gassi gehen",
+      "Pfote",
+      "Welpe",
+      "Haustier",
+      "Schwanzwedeln",
+      "Halsband",
+      "Treue"
+    ]
+  },
+  {
+    "id": "katze",
+    "begriff": "Katze",
+    "treffer": [
+      "Miauen",
+      "Schnurren",
+      "Maus",
+      "Krallen",
+      "Katzenklo",
+      "Fell",
+      "Whiskas",
+      "Haustier",
+      "Neun Leben",
+      "Milch"
+    ]
+  },
+  {
+    "id": "zoo",
+    "begriff": "Zoo",
+    "treffer": [
+      "Löwe",
+      "Elefant",
+      "Giraffe",
+      "Affen",
+      "Gehege",
+      "Tierpfleger",
+      "Eintritt",
+      "Pinguine",
+      "Fütterung",
+      "Zoobesuch"
+    ]
+  },
+  {
+    "id": "bauernhof",
+    "begriff": "Bauernhof",
+    "treffer": [
+      "Traktor",
+      "Kuh",
+      "Schwein",
+      "Scheune",
+      "Hühner",
+      "Bauer",
+      "Feld",
+      "Stall",
+      "Heu",
+      "Milch"
+    ]
+  },
+  {
+    "id": "dinosaurier",
+    "begriff": "Dinosaurier",
+    "treffer": [
+      "Tyrannosaurus Rex",
+      "Ausgestorben",
+      "Fossilien",
+      "Jurassic Park",
+      "Triceratops",
+      "Urzeit",
+      "Knochen",
+      "Meteorit",
+      "Velociraptor",
+      "Museum"
+    ]
+  },
+  {
+    "id": "weltraum",
+    "begriff": "Weltraum",
+    "treffer": [
+      "Sterne",
+      "Mond",
+      "Rakete",
+      "Astronaut",
+      "Planeten",
+      "Schwerelosigkeit",
+      "Mars",
+      "Galaxie",
+      "Satellit",
+      "Aliens"
+    ]
+  },
+  {
+    "id": "piraten",
+    "begriff": "Piraten",
+    "treffer": [
+      "Schatz",
+      "Schiff",
+      "Augenklappe",
+      "Papagei",
+      "Totenkopf",
+      "Säbel",
+      "Insel",
+      "Kapitän",
+      "Holzbein",
+      "Schatzkarte"
+    ]
+  },
+  {
+    "id": "feuerwehr",
+    "begriff": "Feuerwehr",
+    "treffer": [
+      "Feuer",
+      "Löschfahrzeug",
+      "Sirene",
+      "Schlauch",
+      "Leiter",
+      "Helm",
+      "Notruf 112",
+      "Rauch",
+      "Feuerwehrmann",
+      "Blaulicht"
+    ]
+  },
+  {
+    "id": "polizei",
+    "begriff": "Polizei",
+    "treffer": [
+      "Blaulicht",
+      "Handschellen",
+      "Streifenwagen",
+      "Uniform",
+      "Notruf 110",
+      "Verbrechen",
+      "Kommissar",
+      "Kontrolle",
+      "Sirene",
+      "Wache"
+    ]
+  },
+  {
+    "id": "baustelle",
+    "begriff": "Baustelle",
+    "treffer": [
+      "Bagger",
+      "Kran",
+      "Helm",
+      "Beton",
+      "Absperrung",
+      "Lärm",
+      "Bauarbeiter",
+      "Gerüst",
+      "Werkzeug",
+      "Umleitung"
+    ]
+  },
+  {
+    "id": "auto",
+    "begriff": "Auto",
+    "treffer": [
+      "Lenkrad",
+      "Reifen",
+      "Motor",
+      "Benzin",
+      "Führerschein",
+      "Autobahn",
+      "Kofferraum",
+      "Bremse",
+      "Sicherheitsgurt",
+      "Parkplatz"
+    ]
+  },
+  {
+    "id": "fahrrad",
+    "begriff": "Fahrrad",
+    "treffer": [
+      "Pedale",
+      "Lenker",
+      "Kette",
+      "Helm",
+      "Reifen",
+      "Klingel",
+      "Sattel",
+      "Fahrradweg",
+      "Gangschaltung",
+      "Bremsen"
+    ]
+  },
+  {
+    "id": "zug",
+    "begriff": "Zug",
+    "treffer": [
+      "Bahnhof",
+      "Gleise",
+      "Lokomotive",
+      "Waggon",
+      "Fahrkarte",
+      "Verspätung",
+      "Schaffner",
+      "ICE",
+      "Bahnsteig",
+      "Deutsche Bahn"
+    ]
+  },
+  {
+    "id": "smartphone",
+    "begriff": "Smartphone",
+    "treffer": [
+      "Touchscreen",
+      "Apps",
+      "Kamera",
+      "Akku",
+      "WhatsApp",
+      "Telefonieren",
+      "Internet",
+      "Ladekabel",
+      "Display",
+      "Handyhülle"
+    ]
+  },
+  {
+    "id": "computer",
+    "begriff": "Computer",
+    "treffer": [
+      "Tastatur",
+      "Maus",
+      "Bildschirm",
+      "Internet",
+      "Windows",
+      "Festplatte",
+      "Laptop",
+      "Datei",
+      "Passwort",
+      "Drucker"
+    ]
+  },
+  {
+    "id": "videospiele",
+    "begriff": "Videospiele",
+    "treffer": [
+      "Konsole",
+      "Controller",
+      "PlayStation",
+      "Xbox",
+      "Nintendo",
+      "Gaming",
+      "Level",
+      "Highscore",
+      "Online",
+      "Bildschirm"
+    ]
+  },
+  {
+    "id": "minecraft",
+    "begriff": "Minecraft",
+    "treffer": [
+      "Blöcke",
+      "Creeper",
+      "Steve",
+      "Diamanten",
+      "Crafting",
+      "Enderman",
+      "Schwert",
+      "Redstone",
+      "Nether",
+      "Mojang"
+    ]
+  },
+  {
+    "id": "super-mario",
+    "begriff": "Super Mario",
+    "treffer": [
+      "Luigi",
+      "Prinzessin Peach",
+      "Bowser",
+      "Pilz",
+      "Nintendo",
+      "Yoshi",
+      "Rote Mütze",
+      "Röhren",
+      "Münzen",
+      "Kart"
+    ]
+  },
+  {
+    "id": "pokemon",
+    "begriff": "Pokémon",
+    "treffer": [
+      "Pikachu",
+      "Pokéball",
+      "Ash",
+      "Team Rocket",
+      "Glurak",
+      "Nintendo",
+      "Fangen",
+      "Arena",
+      "Evoli",
+      "Karten"
+    ]
+  },
+  {
+    "id": "urlaub",
+    "begriff": "Urlaub",
+    "treffer": [
+      "Koffer",
+      "Hotel",
+      "Strand",
+      "Flugzeug",
+      "Sonne",
+      "Reisepass",
+      "Meer",
+      "Erholung",
+      "Souvenir",
+      "Ferien"
+    ]
   }
 ]
