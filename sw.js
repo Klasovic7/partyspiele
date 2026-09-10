@@ -4,7 +4,7 @@
 // Nur dann wirft der Browser den alten Zwischenspeicher weg und alle Spieler
 // bekommen zuverlässig die neue Version. Das ist der einzige Handgriff, den man
 // nach dem Bearbeiten von Dateien nicht vergessen darf.
-const CACHE_NAME = "partyspiele-v40";
+const CACHE_NAME = "partyspiele-v41";
 
 const DATEIEN = [
   "./",
@@ -22,6 +22,9 @@ const DATEIEN = [
   "spiele/zehn-treffer/spiel.js",
   "spiele/zehn-treffer/logik.js",
   "spiele/zehn-treffer/fragen.json",
+  "spiele/reih-dich-ein/spiel.js",
+  "spiele/reih-dich-ein/logik.js",
+  "spiele/reih-dich-ein/fragen.json",
   "bilder/icon-192.png",
   "bilder/icon-512.png",
   "bilder/icon-512-maskable.png",
