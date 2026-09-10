@@ -374,9 +374,10 @@
       margin: 10px 0 18px; padding: 10px 12px; border-radius: 12px;
       background: #f6f4fb; color: var(--text-hell); font-size: 0.82rem; line-height: 1.35;
     }
-    .zt-team-grid, .zt-punkte-grid {
+    .zt-team-grid {
       display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px;
     }
+    .zt-punkte-grid { display: grid; gap: 10px; }
     .zt-team {
       padding: 12px; border-radius: 16px; border: 2px solid transparent;
     }
@@ -448,11 +449,22 @@
     #zt-zwischenstand { margin-top: 22px; }
     .zt-punkteliste { margin: 0; }
     .zt-punkte-team {
-      padding: 14px; border-radius: 16px; text-align: center;
+      display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 12px;
+      min-height: 88px; padding: 10px 14px; border-radius: 18px;
     }
-    .zt-punkte-team span, .zt-punkte-team strong { display: block; }
-    .zt-punkte-team span { font-size: 0.82rem; font-weight: 700; }
-    .zt-punkte-team strong { margin-top: 4px; font-size: 2rem; line-height: 1; }
+    .zt-punkte-team-info { min-width: 0; }
+    .zt-punkte-team-info > span { display: block; font-size: .86rem; font-weight: 800; }
+    .zt-team-avatare { display: flex; flex-wrap: wrap; row-gap: 4px; margin-top: 7px; padding-left: 5px; }
+    .zt-team-avatar {
+      width: 38px; height: 38px; flex: 0 0 38px; display: flex; align-items: center; justify-content: center;
+      margin-left: -5px; border: 2px solid #fff; border-radius: 50%; object-fit: cover;
+      background: #fff; overflow: hidden; font-size: .7rem;
+    }
+    .zt-team-rundenpunkte { font-size: 1.45rem; line-height: 1; }
+    .zt-team-gesamtpunkte {
+      font-family: "Bungee", sans-serif; font-style: italic; font-size: 2.25rem; line-height: 1;
+      text-shadow: 2px 2px 0 rgba(0,0,0,.14);
+    }
     .zt-team-endstand { display: grid; gap: 12px; }
     .zt-team-endstand .zt-team { text-align: center; }
     .zt-team-punkte { display: block; font-size: 3rem; line-height: 1; }
@@ -492,8 +504,8 @@
       margin: -8px 0 16px; padding: 7px 11px; border-radius: 999px;
       font-size: .78rem;
     }
-    .rd-kategorie-wechsel { margin: 8px 0 4px; }
-    .rd-kategorie-wechsel button { width: 100%; margin: 0; padding: 8px 10px; font-size: .76rem; }
+    .rd-kategorie-wechsel { display: flex; justify-content: flex-end; margin: 18px 0 0; }
+    .rd-kategorie-wechsel button { width: auto; margin: 0; padding: 8px 13px; font-size: .76rem; }
     .rd-letztes-ergebnis {
       display: flex; align-items: center; justify-content: space-between; gap: 10px;
       margin: 8px 0; padding: 9px 12px; border: 2px solid; border-radius: 13px;
