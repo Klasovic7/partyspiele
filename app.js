@@ -9,7 +9,7 @@ import {
 } from "./kern/ui.js";
 import { SPIELE, spielInfo } from "./spiele/register.js";
 
-export const APP_VERSION = "v33";
+export const APP_VERSION = "v34";
 document.getElementById("app-version").textContent = "Version " + APP_VERSION;
 
 // ---------- DOM ----------
@@ -148,6 +148,16 @@ function setzeProfilHintergrund(farbe) {
   profilScreen.style.setProperty("--profil-text", textFarbeFuer(farbe.hex));
 }
 
+function richteStrahlenAufSpieler() {
+  if (profilScreen.hidden) return;
+  const spielerBild = iconKarussell.querySelector(".icon-option.mitte");
+  if (!spielerBild) return;
+  const bildPosition = spielerBild.getBoundingClientRect();
+  const screenPosition = profilScreen.getBoundingClientRect();
+  profilScreen.style.setProperty("--strahlen-x", `${bildPosition.left + bildPosition.width / 2 - screenPosition.left}px`);
+  profilScreen.style.setProperty("--strahlen-y", `${bildPosition.top + bildPosition.height / 2 - screenPosition.top}px`);
+}
+
 function renderFarbKarussell() {
   const optionen = freieOptionen(FARBEN, "farbe", "hex");
   farbKarussell.innerHTML = "";
@@ -205,13 +215,14 @@ function renderIconKarussell() {
   profilNachname.textContent = ausgewaehlt.nachname;
 
   karussellEintraege(optionen, index).forEach(({ option, position }) => {
+    const spielerName = [option.vorname, option.nachname].filter(Boolean).join(" ");
     const btn = document.createElement("button");
     btn.type = "button";
     btn.className = `karussell-option icon-option ${position}`;
-    btn.title = `${option.vorname} ${option.nachname}`;
-    btn.setAttribute("aria-label", `${option.vorname} ${option.nachname}`);
+    btn.title = spielerName;
+    btn.setAttribute("aria-label", spielerName);
     btn.setAttribute("aria-pressed", position === "mitte" ? "true" : "false");
-    btn.innerHTML = `<img src="${option.bild}" alt="${escapeHtml(`${option.vorname} ${option.nachname}`)}">`;
+    btn.innerHTML = `<img src="${option.bild}" alt="${escapeHtml(spielerName)}">`;
     btn.addEventListener("click", () => {
       profilEntwurf.icon = option.id;
       renderIconKarussell();
@@ -220,6 +231,7 @@ function renderIconKarussell() {
   });
   btnIconZurueck.disabled = optionen.length < 2;
   btnIconWeiter.disabled = optionen.length < 2;
+  requestAnimationFrame(richteStrahlenAufSpieler);
 }
 
 function renderProfilAuswahl() {
@@ -313,6 +325,7 @@ btnIconWeiter.addEventListener("click", () => verschiebeProfilAuswahl("icon", 1)
 btnProfilAuswaehlen.addEventListener("click", bestaetigeProfilAuswahl);
 aktiviereWischen(farbKarussell, (richtung) => verschiebeProfilAuswahl("farbe", richtung));
 aktiviereWischen(iconKarussell, (richtung) => verschiebeProfilAuswahl("icon", richtung));
+window.addEventListener("resize", () => requestAnimationFrame(richteStrahlenAufSpieler));
 
 // ---------- Spielauswahl ----------
 async function waehleSpiel(id) {
