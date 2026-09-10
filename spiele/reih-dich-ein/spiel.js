@@ -13,6 +13,7 @@ import {
 
 const VORLAGE = `
   <div id="rd-setup" class="bildschirm-karte" hidden>
+    <button id="rd-abbrechen" class="btn-flach rd-zurueck" hidden>← Spielauswahl</button>
     <h1>↕️ Reih dich ein!</h1>
     <p class="hinweis-text">Setzt jeden neuen Begriff an die richtige Stelle der Reihe.</p>
     <p class="rd-regel">Ein Startbegriff ist bereits eingeordnet. Danach ist immer ein Spieler dran.
@@ -28,7 +29,6 @@ const VORLAGE = `
     <p id="rd-setup-fehler" class="fehler-text"></p>
     <p><button id="rd-starten" class="btn-primaer" hidden>Spiel starten</button></p>
     <p id="rd-setup-warten" hidden><em>Warte, bis der Spielleiter das Spiel startet …</em></p>
-    <p><button id="rd-abbrechen" class="btn-flach" hidden>Zurück zur Spielauswahl</button></p>
   </div>
 
   <div id="rd-runde" class="bildschirm-karte" hidden>
@@ -46,7 +46,10 @@ const VORLAGE = `
       <small>Der Wert bleibt bis zur Auflösung geheim.</small>
     </div>
     <p id="rd-anweisung" class="hinweis-text rd-anweisung"></p>
-    <p><button id="rd-anderer-begriff" class="btn-flach" hidden>Anderer Begriff</button></p>
+    <div class="rd-wechsel-aktionen">
+      <button id="rd-anderer-begriff" class="btn-flach" hidden>Anderer Begriff</button>
+      <button id="rd-andere-kategorie" class="btn-flach" hidden>Andere Kategorie</button>
+    </div>
     <p id="rd-runde-fehler" class="fehler-text"></p>
     <div class="rd-sortierbereich">
       <aside class="rd-skala" aria-label="Sortierrichtung">
@@ -171,6 +174,7 @@ function verdrahteBedienelemente() {
   $("rd-nochmal").addEventListener("click", zurueck);
   $("rd-weiter").addEventListener("click", weiter);
   $("rd-anderer-begriff").addEventListener("click", andererBegriff);
+  $("rd-andere-kategorie").addEventListener("click", andereKategorie);
 }
 
 export function beenden() {
@@ -360,12 +364,60 @@ function zeigeRunde() {
   rendereReihe($("rd-reihe"), true);
   $("rd-anderer-begriff").hidden = !api.istLeiter;
   $("rd-anderer-begriff").disabled = aktionLaeuft;
+  $("rd-andere-kategorie").hidden = !api.istLeiter;
+  $("rd-andere-kategorie").disabled = aktionLaeuft;
   $("rd-zwischenstand").innerHTML = `<h3>Zwischenstand</h3>${punktestandHtml()}`;
 }
 
 async function andererBegriff() {
   if (!api.istLeiter || status !== "runde" || aktionLaeuft) return;
   const knopf = $("rd-anderer-begriff");
+  knopf.disabled = true;
+  $("rd-runde-fehler").textContent = "";
+  const erwarteteKategorie = kategorienReihenfolge[kategorieIndex];
+  const erwarteterBegriff = begriffeReihenfolge[begriffIndex];
+  aktionLaeuft = true;
+  let keinErsatz = false;
+  try {
+    await runTransaction(api.db, async (transaktion) => {
+      keinErsatz = false;
+      const ref = api.raumRef();
+      const snap = await transaktion.get(ref);
+      const daten = snap.data();
+      if (!daten || daten.rdStatus !== "runde") return;
+
+      const katIndex = daten.rdKategorieIndex ?? 0;
+      const kartenReihenfolge = daten.rdKategorienReihenfolge ?? [];
+      const begriffPos = daten.rdBegriffIndex ?? 0;
+      const begriffsReihenfolge = daten.rdBegriffeReihenfolge ?? [];
+      if (kartenReihenfolge[katIndex] !== erwarteteKategorie ||
+          begriffsReihenfolge[begriffPos] !== erwarteterBegriff) return;
+
+      if (begriffPos + 1 >= begriffsReihenfolge.length) {
+        keinErsatz = true;
+        return;
+      }
+      const neueBegriffsReihenfolge = [...begriffsReihenfolge];
+      neueBegriffsReihenfolge.splice(begriffPos, 1);
+      transaktion.update(ref, {
+        rdBegriffeReihenfolge: neueBegriffsReihenfolge,
+        rdLetzteRichtig: null,
+        rdLetzterBegriffId: null
+      });
+    });
+    if (keinErsatz) {
+      $("rd-runde-fehler").textContent = "In dieser Kategorie ist kein weiterer Begriff verfügbar.";
+    }
+  } catch (e) {
+    zeigeDebug("Begriff konnte nicht gewechselt werden: " + e.message);
+  }
+  aktionLaeuft = false;
+  renderAktuellenStatus();
+}
+
+async function andereKategorie() {
+  if (!api.istLeiter || status !== "runde" || aktionLaeuft) return;
+  const knopf = $("rd-andere-kategorie");
   knopf.disabled = true;
   $("rd-runde-fehler").textContent = "";
   const erwarteteKategorie = kategorienReihenfolge[kategorieIndex];
@@ -403,10 +455,10 @@ async function andererBegriff() {
       });
     });
     if (keinErsatz) {
-      $("rd-runde-fehler").textContent = "Es ist kein anderer ungespielter Begriff mehr verfügbar.";
+      $("rd-runde-fehler").textContent = "Es ist keine andere ungespielte Kategorie mehr verfügbar.";
     }
   } catch (e) {
-    zeigeDebug("Begriff konnte nicht gewechselt werden: " + e.message);
+    zeigeDebug("Kategorie konnte nicht gewechselt werden: " + e.message);
   }
   aktionLaeuft = false;
   renderAktuellenStatus();
