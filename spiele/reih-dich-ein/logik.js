@@ -33,3 +33,7 @@ export function aktiveSpielerId(reihenfolge, zugIndex, vorhandeneIds) {
   if (!spielbar.length) return null;
   return spielbar[Math.max(0, zugIndex) % spielbar.length];
 }
+
+export function punkteNachAntwort(aktuellePunkte, richtig) {
+  return (Number(aktuellePunkte) || 0) + (richtig ? 1 : -1);
+}
