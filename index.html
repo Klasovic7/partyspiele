@@ -55,18 +55,49 @@
     <p id="start-error"></p>
   </div>
 
+  <!-- ---------- Vollbild-Auswahl: Farbe + Profilbild ---------- -->
+  <div id="profil-screen" hidden>
+    <button id="btn-profil-verlassen" class="profil-verlassen" type="button">← Raum verlassen</button>
+
+    <main class="profil-inhalt">
+      <header class="profil-kopf">
+        <span class="profil-schritt">Dein Auftritt</span>
+        <h1>Wähle deinen Look</h1>
+      </header>
+
+      <section class="profil-auswahlblock" aria-labelledby="farbe-titel">
+        <h2 id="farbe-titel">Deine Farbe</h2>
+        <div class="profil-karussell">
+          <button id="btn-farbe-zurueck" class="karussell-pfeil" type="button" aria-label="Vorherige Farbe">‹</button>
+          <div id="farb-karussell" class="karussell-buehne farb-karussell" aria-live="polite"></div>
+          <button id="btn-farbe-weiter" class="karussell-pfeil" type="button" aria-label="Nächste Farbe">›</button>
+        </div>
+        <p id="farb-name" class="farb-name"></p>
+      </section>
+
+      <section class="profil-auswahlblock spieler-auswahlblock" aria-labelledby="spieler-titel">
+        <h2 id="spieler-titel">Dein Spieler</h2>
+        <div class="profil-karussell">
+          <button id="btn-icon-zurueck" class="karussell-pfeil" type="button" aria-label="Vorheriger Spieler">‹</button>
+          <div id="icon-karussell" class="karussell-buehne icon-karussell" aria-live="polite"></div>
+          <button id="btn-icon-weiter" class="karussell-pfeil" type="button" aria-label="Nächster Spieler">›</button>
+        </div>
+        <p class="profil-spielername">
+          <span id="profil-vorname"></span>
+          <strong id="profil-nachname"></strong>
+        </p>
+      </section>
+    </main>
+
+    <p id="avatar-hinweis" class="profil-hinweis" role="alert"></p>
+    <button id="btn-profil-auswaehlen" class="profil-auswaehlen" type="button">Auswählen</button>
+  </div>
+
   <!-- ---------- Lobby: wer spielt mit + Spielauswahl ---------- -->
   <div id="lobby-screen" class="bildschirm-karte" hidden>
     <h1>Warteraum</h1>
     <p>Raum-Code: <strong id="anzeige-code"></strong></p>
     <p class="hinweis-text">Gib diesen Code deinen Freunden, damit sie beitreten können.</p>
-
-    <p class="feld-titel">Deine Farbe:</p>
-    <div id="farb-auswahl" class="auswahl-reihe"></div>
-
-    <p class="feld-titel">Dein Profilbild:</p>
-    <div id="icon-auswahl" class="auswahl-reihe"></div>
-    <p id="avatar-hinweis" class="fehler-text"></p>
 
     <h3>Mitspieler</h3>
     <ul id="spielerliste"></ul>
