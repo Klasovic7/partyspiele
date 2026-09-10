@@ -119,16 +119,8 @@
       align-items: stretch; justify-content: center; gap: clamp(14px, 2.8vh, 28px);
     }
     .profil-kopf { text-align: center; text-shadow: 0 3px 12px rgba(0,0,0,0.28); }
-    .profil-schritt {
-      display: inline-block; margin-bottom: 3px; font-size: 0.72rem; font-weight: 900;
-      letter-spacing: 0.16em; text-transform: uppercase; opacity: 0.82;
-    }
     .profil-kopf h1 { margin: 0; font-size: clamp(1.8rem, 7vw, 2.75rem); line-height: 1.05; }
     .profil-auswahlblock { text-align: center; }
-    .profil-auswahlblock h2 {
-      margin: 0 0 4px; font-size: 0.78rem; letter-spacing: 0.12em;
-      text-transform: uppercase; text-shadow: 0 2px 7px rgba(0,0,0,0.24); opacity: 0.92;
-    }
     .profil-karussell { width: 100%; display: flex; align-items: center; justify-content: center; gap: 4px; }
     .karussell-buehne {
       width: calc(100% - 84px); max-width: 370px; min-height: 104px; display: flex; align-items: center;
@@ -159,10 +151,6 @@
         radial-gradient(circle, var(--item-hell), var(--item-farbe) 56%, var(--item-dunkel));
     }
     .farb-option.mitte { width: 96px; height: 96px; }
-    .farb-name {
-      min-height: 20px; margin: 0; font-size: 0.95rem; font-weight: 900;
-      text-shadow: 0 2px 7px rgba(0,0,0,0.28);
-    }
     .spieler-auswahlblock { margin-top: -4px; }
     .icon-karussell { min-height: 182px; }
     .icon-option {
@@ -259,11 +247,33 @@
     .avatar-bild-text { display: flex; align-items: center; justify-content: center; font-size: 1.3rem; }
 
     .spieler-karte {
+      position: relative; isolation: isolate; overflow: hidden;
       display: flex; align-items: center; gap: 12px;
-      width: 100%; min-height: 60px; padding: 12px 18px; border-radius: 18px;
+      width: 100%; min-height: 96px; padding: 10px 16px 10px 12px; border-radius: 22px;
+      background: var(--spieler-farbe, #7f8c8d);
       box-shadow: 0 4px 10px rgba(0,0,0,0.12);
     }
+    .spieler-karte::after {
+      content: ""; position: absolute; z-index: 0; inset: 0; pointer-events: none;
+      background: linear-gradient(90deg, rgba(255,255,255,0.05), transparent 54%, rgba(0,0,0,0.08));
+    }
+    .spieler-zacken {
+      position: absolute; z-index: 0; inset: 0 0 0 50%; overflow: hidden;
+      opacity: 0.62; pointer-events: none;
+    }
+    .spieler-zacken span {
+      position: absolute; right: 0; display: block;
+      clip-path: polygon(0 50%, 100% 0, 100% 100%);
+    }
+    .spieler-zacken span:nth-child(-n+3) { background: var(--spieler-dunkel); }
+    .spieler-zacken span:nth-child(n+4) { background: var(--spieler-hell); }
+    .spieler-zacken span:nth-child(1) { top: 12%; width: 78%; height: 5%; }
+    .spieler-zacken span:nth-child(2) { top: 48%; width: 93%; height: 6%; }
+    .spieler-zacken span:nth-child(3) { top: 84%; width: 72%; height: 5%; }
+    .spieler-zacken span:nth-child(4) { top: 20%; width: 88%; height: 20%; }
+    .spieler-zacken span:nth-child(5) { top: 58%; width: 76%; height: 19%; }
     .spieler-punkte {
+      position: relative; z-index: 1;
       font-weight: 800; font-size: 1.8rem; line-height: 1; flex-shrink: 0;
       font-variant-numeric: tabular-nums;
       text-shadow: 0 2px 4px rgba(0,0,0,0.35);
@@ -280,14 +290,14 @@
       letter-spacing: 0.5px;
       text-shadow: 2px 2px 0 rgba(0,0,0,0.25);
     }
-    .spieler-info { display: flex; align-items: center; gap: 10px; min-width: 0; flex: 1; }
+    .spieler-info { position: relative; z-index: 1; display: flex; align-items: center; gap: 12px; min-width: 0; flex: 1; }
     .spieler-icon {
-      width: 36px; height: 36px; border-radius: 50%; object-fit: cover; flex-shrink: 0;
-      border: 2px solid rgba(255,255,255,0.6);
+      width: 72px; height: 72px; border-radius: 50%; object-fit: cover; flex-shrink: 0;
+      border: 3px solid rgba(255,255,255,0.82); box-shadow: 0 4px 12px rgba(0,0,0,0.25);
     }
     .spieler-icon-text {
       display: flex; align-items: center; justify-content: center;
-      font-size: 1.4rem; border: none;
+      font-size: 2rem; border: none;
     }
     .spieler-text { display: flex; flex-direction: column; min-width: 0; }
     .spieler-name {
