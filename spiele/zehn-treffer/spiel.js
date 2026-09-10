@@ -6,7 +6,7 @@
 //  sie live. Alle Felder dieses Spiels im Raum-Dokument beginnen mit "zt".
 // ============================================================================
 import { updateDoc, runTransaction, serverTimestamp } from "../../kern/firebase.js";
-import { escapeHtml, spielerKarte, zeigeDebug } from "../../kern/ui.js";
+import { escapeHtml, avatarHtml, spielerKarte, zeigeDebug } from "../../kern/ui.js";
 import {
   mischeListe, erstelleTeams, bereinigeTreffer, aktiveSpielerId, aktivesTeam
 } from "./logik.js";
@@ -127,6 +127,7 @@ let punkte = {};
 let teamPunkte = { blau: 0, rot: 0 };
 let rundenpunkte = 0;
 let rundeBeendenLaeuft = false;
+let weiterLaeuft = false;
 let anzahlManuellGesetzt = false;
 let rundenStartMs = null;
 let timerIntervall = null;
@@ -318,6 +319,7 @@ export function beenden() {
   teamPunkte = { blau: 0, rot: 0 };
   rundenpunkte = 0;
   rundeBeendenLaeuft = false;
+  weiterLaeuft = false;
   anzahlManuellGesetzt = false;
   rundenStartMs = null;
   timerRundenSchluessel = null;
@@ -617,24 +619,46 @@ async function rundeBeenden() {
   if ($("zt-runde-beenden")) $("zt-runde-beenden").disabled = false;
 }
 
-function zwischenstandHtml() {
+function formatiertePunkte(wert) {
+  const punktewert = Number(wert) || 0;
+  return punktewert > 0 ? `+${punktewert}` : `${punktewert}`;
+}
+
+function zwischenstandHtml(mitRundenpunkten = true) {
   if (teammodus) {
     return `<div class="zt-punkte-grid">` +
-      Object.keys(TEAMS).map((team) =>
+      Object.keys(TEAMS).map((team) => {
+        const mitglieder = spielerListe.filter((spieler) => teams[spieler.id] === team);
+        const hinzugekommen = mitRundenpunkten && team === aktivesTeamId ? rundenpunkte : 0;
+        return (
         `<div class="zt-punkte-team zt-team-${team}">` +
-          `<span>${TEAMS[team].emoji} ${TEAMS[team].name}</span>` +
-          `<strong>${teamPunkte[team] ?? 0}</strong>` +
+          `<strong class="zt-team-rundenpunkte">${formatiertePunkte(hinzugekommen)}</strong>` +
+          `<div class="zt-punkte-team-info">` +
+            `<span>${TEAMS[team].emoji} ${TEAMS[team].name}</span>` +
+            `<div class="zt-team-avatare">${mitglieder.map((spieler) => avatarHtml(spieler.icon, "zt-team-avatar")).join("")}</div>` +
+          `</div>` +
+          `<strong class="zt-team-gesamtpunkte">${teamPunkte[team] ?? 0}</strong>` +
         `</div>`
-      ).join("") +
+        );
+      }).join("") +
     `</div>`;
   }
 
   const sortiert = [...spielerListe].sort((a, b) =>
     (punkte[b.id] ?? 0) - (punkte[a.id] ?? 0)
   );
-  return `<ul class="zt-punkteliste">` + sortiert.map((spieler) =>
-    `<li>${spielerKarte(spieler.name, spieler.farbe, spieler.icon, punkte[spieler.id] ?? 0)}</li>`
-  ).join("") + `</ul>`;
+  return `<ul class="zt-punkteliste">` + sortiert.map((spieler) => {
+    const gesamt = punkte[spieler.id] ?? 0;
+    if (!mitRundenpunkten) {
+      return `<li>${spielerKarte(spieler.name, spieler.farbe, spieler.icon, gesamt)}</li>`;
+    }
+    const hinzugekommen = spieler.id === aktiveId ? rundenpunkte : 0;
+    return `<li>${spielerKarte(
+      spieler.name, spieler.farbe, spieler.icon,
+      formatiertePunkte(hinzugekommen),
+      { punkteRechts: gesamt }
+    )}</li>`;
+  }).join("") + `</ul>`;
 }
 
 function zeigeAuswertung() {
@@ -646,13 +670,16 @@ function zeigeAuswertung() {
   rendereTreffer($("zt-auswertung-grid"), false);
   $("zt-zwischenstand").innerHTML = `<h3>Zwischenstand</h3>${zwischenstandHtml()}`;
   $("zt-weiter").hidden = !api.istLeiter;
+  $("zt-weiter").disabled = weiterLaeuft;
   $("zt-weiter").textContent = rundenIndex + 1 >= anzahlRunden ? "Endstand anzeigen" : "Nächste Runde";
 }
 
 async function weiter() {
-  if (!api.istLeiter || status !== "auswertung") return;
+  if (!api.istLeiter || status !== "auswertung" || weiterLaeuft) return;
+  weiterLaeuft = true;
   $("zt-weiter").disabled = true;
   const naechsterIndex = rundenIndex + 1;
+  let erfolgreich = false;
   try {
     if (naechsterIndex >= anzahlRunden) {
       await updateDoc(api.raumRef(), { ztStatus: "beendet" });
@@ -672,10 +699,12 @@ async function weiter() {
         ztRundenStart: serverTimestamp()
       });
     }
+    erfolgreich = true;
   } catch (e) {
     zeigeDebug("Fehler beim Weiterschalten: " + e.message);
-    $("zt-weiter").disabled = false;
   }
+  weiterLaeuft = false;
+  if (!erfolgreich && $("zt-weiter")) $("zt-weiter").disabled = false;
 }
 
 function teamEndstandHtml() {
@@ -696,7 +725,7 @@ function teamEndstandHtml() {
 function zeigeEndstand() {
   $("zt-endstand-inhalt").innerHTML = teammodus
     ? teamEndstandHtml()
-    : zwischenstandHtml();
+    : zwischenstandHtml(false);
   $("zt-nochmal").hidden = !api.istLeiter;
   $("zt-endstand-warten").hidden = api.istLeiter;
 }
