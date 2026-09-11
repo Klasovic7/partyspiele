@@ -9,7 +9,7 @@ import {
 } from "./kern/ui.js";
 import { SPIELE, spielInfo } from "./spiele/register.js";
 
-export const APP_VERSION = "v53";
+export const APP_VERSION = "v54";
 const appVersion = document.getElementById("app-version");
 appVersion.textContent = "Version " + APP_VERSION;
 
@@ -411,10 +411,6 @@ function renderLobby() {
       (istSpielleiter ? `<small>Spielleiter</small>` : "");
     spielerliste.appendChild(li);
   });
-  const wartet = document.createElement("li");
-  wartet.className = "lobby-spieler lobby-spieler-wartet";
-  wartet.innerHTML = `<span class="lobby-warten-plus">+</span><strong>Weitere</strong><small>Spieler …</small>`;
-  spielerliste.appendChild(wartet);
   renderSpieleAuswahl();
 }
 
