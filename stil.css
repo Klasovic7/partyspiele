@@ -6,6 +6,10 @@
     }
     * { box-sizing: border-box; }
     [hidden] { display: none !important; }
+    .nur-screenreader {
+      position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px;
+      overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+    }
     html, body { min-height: 100%; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -289,6 +293,34 @@
       background: #f1f2f6; font-size: 1.6rem; line-height: 1;
     }
     .beitreten-schliessen:hover { color: var(--text-dunkel); background: #e5e7eb; }
+
+    /* ---------- Bestätigung: Raum verlassen ---------- */
+    body.raum-verlassen-offen { overflow: hidden; }
+    .raum-verlassen-dialog[hidden] { display: none; }
+    .raum-verlassen-dialog {
+      position: fixed; z-index: 80; inset: 0; display: grid; place-items: center;
+      padding: max(20px, env(safe-area-inset-top)) 22px max(20px, env(safe-area-inset-bottom));
+      background: rgba(23,20,22,.62); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    }
+    .raum-verlassen-dialog-inhalt {
+      width: min(100%, 330px); padding: 25px 22px 21px; border: 1px solid #eee1d8;
+      border-radius: 24px; background: var(--flaeche, #fffaf1); text-align: center;
+      box-shadow: 0 24px 60px rgba(17,12,46,.42); animation: beitreten-einblenden .18s ease-out;
+    }
+    .raum-verlassen-symbol {
+      width: 52px; height: 52px; display: grid; place-items: center; margin: 0 auto 12px;
+      border-radius: 50%; color: #ff786d; background: #303139;
+      box-shadow: 0 8px 18px rgba(24,24,30,.22);
+    }
+    .raum-verlassen-symbol svg {
+      width: 30px; height: 30px; fill: none; stroke: currentColor;
+      stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+    }
+    .raum-verlassen-dialog-inhalt h2 { margin: 0 0 20px; font-size: 1.55rem; }
+    .raum-verlassen-aktionen { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .raum-verlassen-aktionen button { width: 100%; min-height: 48px; margin: 0; }
+    .btn-gefahr { color: #fff; background: #dc493d; }
+    .btn-gefahr:hover { background: #c83c31; }
 
     .auswahl-reihe { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0 16px; }
     .farb-swatch {
@@ -779,29 +811,22 @@
       letter-spacing: -.035em; white-space: nowrap;
     }
     .lobby-verlassen {
-      flex: 0 0 auto; display: inline-flex; align-items: center; gap: 6px;
-      margin: 0; padding: 8px 12px; border: 1px solid #f1aaa1; border-radius: 999px;
-      color: #a52b20; background: #ffe4df; font-size: .7rem; white-space: nowrap;
-      box-shadow: 0 5px 13px rgba(165,43,32,.12);
+      position: relative; flex: 0 0 46px; width: 46px; height: 46px; display: grid; place-items: center;
+      margin: 0; padding: 0; border: 1px solid rgba(255,255,255,.15); border-radius: 50%;
+      color: #ff786d; background: #303139;
+      box-shadow: 0 7px 16px rgba(39,36,42,.23);
     }
     .lobby-ausgang-icon {
       width: 20px; height: 20px; flex: 0 0 20px; fill: none; stroke: currentColor;
       stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
     }
-    .lobby-verlassen-kurz { display: none; }
-    .lobby-verlassen:hover { color: #861f17; background: #ffd5cd; }
+    .lobby-verlassen:hover { color: #ff9188; background: #24252b; }
     @media (max-width: 350px) {
       #lobby-screen { padding-left: 18px; padding-right: 18px; }
       .lobby-kopf { gap: 7px; }
       .lobby-app-icon { width: 36px; height: 36px; flex-basis: 36px; border-radius: 10px; }
       .lobby-kopf h1 { font-size: 1.35rem; }
-      .lobby-verlassen { padding: 7px 10px; }
-      .lobby-verlassen-lang { display: none; }
-      .lobby-verlassen-kurz { display: inline; }
-    }
-    .lobby-version {
-      position: absolute; left: 24px; bottom: 20px; color: #9a918c;
-      font-size: .6rem; line-height: 1; letter-spacing: .03em;
+      .lobby-verlassen { width: 42px; height: 42px; flex-basis: 42px; }
     }
     #lobby-screen > h3 { margin: 26px 0 9px; font-size: 1.35rem; }
     .lobby-code {
