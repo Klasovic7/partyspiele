@@ -9,7 +9,7 @@ import {
 } from "./kern/ui.js";
 import { SPIELE, spielInfo } from "./spiele/register.js";
 
-export const APP_VERSION = "v57";
+export const APP_VERSION = "v58";
 const appVersion = document.getElementById("app-version");
 appVersion.textContent = "Version " + APP_VERSION;
 
@@ -24,8 +24,9 @@ const spielKopfTitel = document.getElementById("spiel-kopf-titel");
 const spielKopfIcon = document.getElementById("spiel-kopf-icon");
 const spielKopfName = document.getElementById("spiel-kopf-name");
 const btnLobbyVerlassen = document.getElementById("btn-lobby-verlassen");
-const lobbyVersion = document.getElementById("lobby-version");
-lobbyVersion.textContent = "Version " + APP_VERSION;
+const raumVerlassenDialog = document.getElementById("raum-verlassen-dialog");
+const btnRaumVerlassenNein = document.getElementById("btn-raum-verlassen-nein");
+const btnRaumVerlassenJa = document.getElementById("btn-raum-verlassen-ja");
 
 const inputName = document.getElementById("input-name");
 const inputCode = document.getElementById("input-code");
@@ -602,6 +603,8 @@ async function verlasseRaum() {
   beitretenError.textContent = "";
   beitretenDialog.hidden = true;
   document.body.classList.remove("beitreten-offen");
+  raumVerlassenDialog.hidden = true;
+  document.body.classList.remove("raum-verlassen-offen");
   btnErstellen.disabled = false;
   btnBeitretenOeffnen.disabled = false;
   btnBeitreten.disabled = false;
@@ -628,7 +631,33 @@ async function raumNavigationAusfuehren() {
 }
 
 btnVerlassen.addEventListener("click", raumNavigationAusfuehren);
-btnLobbyVerlassen.addEventListener("click", verlasseRaum);
+function oeffneRaumVerlassenDialog() {
+  raumVerlassenDialog.hidden = false;
+  document.body.classList.add("raum-verlassen-offen");
+  requestAnimationFrame(() => btnRaumVerlassenNein.focus());
+}
+
+function schliesseRaumVerlassenDialog() {
+  raumVerlassenDialog.hidden = true;
+  document.body.classList.remove("raum-verlassen-offen");
+  btnLobbyVerlassen.focus();
+}
+
+btnLobbyVerlassen.addEventListener("click", oeffneRaumVerlassenDialog);
+btnRaumVerlassenNein.addEventListener("click", schliesseRaumVerlassenDialog);
+btnRaumVerlassenJa.addEventListener("click", async () => {
+  btnRaumVerlassenJa.disabled = true;
+  raumVerlassenDialog.hidden = true;
+  document.body.classList.remove("raum-verlassen-offen");
+  await verlasseRaum();
+  btnRaumVerlassenJa.disabled = false;
+});
+raumVerlassenDialog.addEventListener("click", (event) => {
+  if (event.target === raumVerlassenDialog) schliesseRaumVerlassenDialog();
+});
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && !raumVerlassenDialog.hidden) schliesseRaumVerlassenDialog();
+});
 btnProfilVerlassen.addEventListener("click", verlasseRaum);
 
 // ---------- Raum erstellen / beitreten ----------
