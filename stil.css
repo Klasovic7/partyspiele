@@ -672,14 +672,14 @@
     body {
       position: relative;
       max-width: 520px;
-      padding-bottom: 72px;
+      padding-bottom: 48px;
       background:
         radial-gradient(circle at 12% 5%, rgba(255,255,255,.075), transparent 24%),
         linear-gradient(165deg, var(--app-hintergrund-hell), var(--app-hintergrund) 55%);
     }
     #app-version {
-      position: absolute; left: 20px; bottom: 14px; z-index: 0;
-      margin: 0; color: rgba(255,255,255,.48); font-size: .62rem;
+      position: absolute; left: 20px; bottom: 16px; z-index: 2;
+      margin: 0; color: rgba(255,255,255,.72); font-size: .6rem;
       line-height: 1; letter-spacing: .03em;
     }
     .bildschirm-karte {
@@ -695,7 +695,7 @@
       display: flex; flex-direction: column;
       padding: 44px 28px 26px;
       background:
-        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 390 800' preserveAspectRatio='none'%3E%3Cpath fill='%23bd58d7' d='M0 0h142c2 41-18 64-47 75C60 88 43 110 0 105Z'/%3E%3Cpath fill='%23ffc969' d='M286 0h104v108c-32-8-37-34-62-45-27-12-37-34-42-63Z'/%3E%3Cpath fill='%23ff735d' d='M0 677c39-9 72 2 91 31 20 31 45 53 69 92H0Z'/%3E%3C/svg%3E") center / 100% 100% no-repeat,
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 390 800' preserveAspectRatio='none'%3E%3Cpath fill='%23a93bd0' d='M0 0h168c-5 34-26 54-57 67-36 15-43 49-72 62-14 6-27 7-39 4Z'/%3E%3Cpath fill='%23d875e5' opacity='.58' d='M0 0h126c-3 23-20 38-43 48C49 62 37 84 0 93Z'/%3E%3Cpath fill='%23f6bd55' d='M270 0h120v132c-33-6-49-28-63-51-15-26-41-35-57-81Z'/%3E%3Cpath fill='%23ffd887' opacity='.75' d='M318 0h72v91c-18-6-28-20-37-37-9-18-24-28-35-54Z'/%3E%3Cpath fill='%23ff6755' d='M0 638c30 7 49 35 66 66 17 32 54 43 83 96H0Z'/%3E%3Cpath fill='%23ff9480' opacity='.68' d='M0 704c24 5 38 23 51 44 12 21 31 32 45 52H0Z'/%3E%3C/svg%3E") center / 100% 100% no-repeat,
         var(--flaeche);
     }
     #start-screen::before {
@@ -721,11 +721,8 @@
     #start-screen .btn-primaer:hover { background: linear-gradient(135deg, #ff806a, #ee4e3c); }
     #start-screen .btn-sekundaer { min-height: 55px; background: rgba(255,255,255,.5); }
     .start-deko {
-      position: relative; min-height: 154px; margin-top: auto; padding-top: 48px;
-      color: #bc5148; font-size: 1.05rem; line-height: 1.15;
-      text-transform: uppercase; transform: rotate(-4deg);
+      position: relative; min-height: 164px; margin-top: auto;
     }
-    .start-deko strong { display: block; width: 145px; letter-spacing: .02em; }
     .start-deko span {
       position: absolute; right: 7px; bottom: -1px; font-size: 4.7rem;
       filter: drop-shadow(0 8px 9px rgba(55,29,32,.16)); transform: rotate(-12deg);
@@ -786,10 +783,6 @@
       overflow: hidden; text-overflow: ellipsis;
     }
     .lobby-spieler small { margin-top: 2px; color: var(--text-hell); font-size: .62rem; line-height: 1.05; }
-    .lobby-warten-plus {
-      width: 62px; height: 62px; display: grid; place-items: center; border: 2px solid #aeb5c7;
-      border-radius: 50%; color: #64708c; background: #f3f4f8; font-size: 2.2rem; font-weight: 300;
-    }
 
     /* Größere Spielkacheln – Spielname und Symbol bilden den Blickfang. */
     .spiele-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
