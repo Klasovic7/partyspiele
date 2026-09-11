@@ -784,11 +784,14 @@
     .start-deko {
       position: relative; min-height: 164px; margin-top: auto;
     }
-    .start-deko span {
-      position: absolute; right: 7px; bottom: -1px; font-size: 4.7rem;
+    .start-deko img {
+      position: absolute; right: 7px; bottom: -1px; width: 86px; height: 86px;
+      object-fit: cover; border-radius: 28%;
       filter: drop-shadow(0 8px 9px rgba(55,29,32,.16)); transform: rotate(-12deg);
     }
-    .start-deko span:last-child { right: 77px; bottom: -12px; font-size: 3.8rem; transform: rotate(17deg); }
+    .start-deko img:last-child {
+      right: 82px; bottom: -12px; width: 68px; height: 68px; transform: rotate(17deg);
+    }
 
     /* Die Lobby zeigt Personen als horizontale, scrollbare Gruppe. */
     #top-bar:not(.im-spiel) { display: none !important; }
@@ -959,6 +962,7 @@
       min-width: 58px; font-size: 3.25rem; line-height: 1; text-align: center;
       filter: drop-shadow(0 7px 8px rgba(0,0,0,.24));
     }
+    .spiel-kopf-icon img { display: block; width: 58px; height: 58px; border-radius: 16px; }
     .spiel-kopf-titel strong {
       color: #fff; font-family: "Barlow Condensed", sans-serif; font-style: italic;
       font-size: clamp(2.35rem, 11vw, 3.2rem); line-height: .9; letter-spacing: -.025em;
@@ -981,6 +985,6 @@
     @media (max-height: 720px) {
       #start-screen { min-height: 620px; padding-top: 30px; }
       .start-deko { min-height: 104px; padding-top: 22px; }
-      .start-deko span { font-size: 3.5rem; }
-      .start-deko span:last-child { font-size: 2.8rem; }
+      .start-deko img { width: 70px; height: 70px; }
+      .start-deko img:last-child { width: 56px; height: 56px; }
     }
