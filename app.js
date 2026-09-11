@@ -9,7 +9,7 @@ import {
 } from "./kern/ui.js";
 import { SPIELE, spielInfo } from "./spiele/register.js";
 
-export const APP_VERSION = "v64";
+export const APP_VERSION = "v66";
 const appVersion = document.getElementById("app-version");
 appVersion.textContent = "Version " + APP_VERSION;
 
@@ -470,7 +470,11 @@ function aktualisiereRaumNavigation(spielId) {
   btnVerlassen.disabled = false;
   btnVerlassen.hidden = imSpiel && !zustand.istLeiter;
   spielKopfTitel.hidden = !imSpiel;
-  spielKopfIcon.textContent = info?.emoji ?? "🎲";
+  if (info?.emoji) {
+    spielKopfIcon.textContent = info.emoji;
+  } else {
+    spielKopfIcon.innerHTML = '<img src="bilder/icon-192.png" alt="">';
+  }
   spielKopfName.textContent = info?.name ?? "Partyspiele";
   // Das Zurückkehren aus einem Spiel ändert den gemeinsamen Raumzustand und
   // bleibt deshalb dem Spielleiter vorbehalten. Im Hauptmenü darf jeder den
