@@ -112,8 +112,10 @@
 
   <!-- ---------- Lobby: wer spielt mit + Spielauswahl ---------- -->
   <div id="lobby-screen" class="bildschirm-karte" hidden>
-    <button id="btn-lobby-verlassen" class="lobby-verlassen" type="button">Raum verlassen</button>
-    <h1>Warteraum</h1>
+    <div class="lobby-kopf">
+      <h1>Warteraum</h1>
+      <button id="btn-lobby-verlassen" class="lobby-verlassen" type="button"><span aria-hidden="true">🚪</span> Raum verlassen</button>
+    </div>
     <div class="lobby-code" aria-label="Raum-Code">
       <span>Raum-Code</span>
       <strong id="anzeige-code"></strong>
