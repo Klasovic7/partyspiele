@@ -113,8 +113,17 @@
   <!-- ---------- Lobby: wer spielt mit + Spielauswahl ---------- -->
   <div id="lobby-screen" class="bildschirm-karte" hidden>
     <div class="lobby-kopf">
-      <h1>Warteraum</h1>
-      <button id="btn-lobby-verlassen" class="lobby-verlassen" type="button"><span aria-hidden="true">🚪</span> Raum verlassen</button>
+      <div class="lobby-marke">
+        <img src="bilder/icon-192.png" width="42" height="42" alt="" class="lobby-app-icon">
+        <h1>Partyspiele</h1>
+      </div>
+      <button id="btn-lobby-verlassen" class="lobby-verlassen" type="button">
+        <svg class="lobby-ausgang-icon" viewBox="0 0 28 28" aria-hidden="true">
+          <path d="M16.5 3.5h7v21h-7M13 14h10M19.5 10.5 23 14l-3.5 3.5M4.5 24v-5.5l3-3 2.5 2.5v6M7 9.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm0 2.5 3.5 2 2-3"/>
+        </svg>
+        <span class="lobby-verlassen-lang">Raum verlassen</span>
+        <span class="lobby-verlassen-kurz">Verlassen</span>
+      </button>
     </div>
     <div class="lobby-code" aria-label="Raum-Code">
       <span>Raum-Code</span>
