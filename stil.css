@@ -765,12 +765,20 @@
     #start-screen::after {
       display: none;
     }
-    #start-screen .start-hero { position: relative; margin-bottom: 22px; }
+    #start-screen .start-hero { position: relative; margin-bottom: 24px; }
     #start-screen .start-hero::before {
       display: none;
     }
-    #start-screen .app-icon { width: 92px; height: 92px; border-radius: 24px; }
-    #start-screen .start-hero h1 { margin-top: 14px; font-size: 2.15rem; letter-spacing: -.03em; }
+    #start-screen .start-icon {
+      width: 112px; height: 112px; margin: 0 auto 14px; display: grid; place-items: center;
+      border-radius: 50%; background: radial-gradient(circle at 42% 34%, #572080, #2d0d50 72%);
+      border: 5px solid #ff6b58; box-shadow: 0 9px 22px rgba(64,24,80,.24), inset 0 0 0 3px rgba(255,255,255,.18);
+    }
+    #start-screen .app-icon {
+      display: block; width: 92px; height: 92px; object-fit: contain; border-radius: 0;
+      filter: drop-shadow(0 3px 2px rgba(22,7,39,.22));
+    }
+    #start-screen .start-hero h1 { margin-top: 0; font-size: 2.25rem; letter-spacing: -.04em; }
     #start-screen .start-tagline { font-size: 1rem; }
     #start-screen .feld-label { margin-top: 18px; color: var(--text-dunkel); font-size: .92rem; }
     #start-screen input { min-height: 54px; background: rgba(255,255,255,.72); }
@@ -782,15 +790,12 @@
     #start-screen .btn-primaer:hover { background: linear-gradient(135deg, #ff806a, #ee4e3c); }
     #start-screen .btn-sekundaer { min-height: 55px; background: rgba(255,255,255,.5); }
     .start-deko {
-      position: relative; min-height: 164px; margin-top: auto;
+      position: relative; min-height: 178px; margin-top: auto; display: flex;
+      align-items: flex-end; justify-content: center; padding: 10px 2px 2px;
     }
     .start-deko img {
-      position: absolute; right: 7px; bottom: -1px; width: 86px; height: 86px;
-      object-fit: cover; border-radius: 28%;
-      filter: drop-shadow(0 8px 9px rgba(55,29,32,.16)); transform: rotate(-12deg);
-    }
-    .start-deko img:last-child {
-      right: 82px; bottom: -12px; width: 68px; height: 68px; transform: rotate(17deg);
+      display: block; width: min(100%, 340px); height: auto; max-height: 180px;
+      object-fit: contain; filter: drop-shadow(0 12px 12px rgba(75,40,22,.12));
     }
 
     /* Die Lobby zeigt Personen als horizontale, scrollbare Gruppe. */
@@ -803,10 +808,13 @@
       margin: 0 0 22px; padding-bottom: 16px; border-bottom: 1px solid #e5dbd1;
     }
     .lobby-marke { min-width: 0; display: flex; align-items: center; gap: 9px; }
-    .lobby-app-icon {
-      width: 42px; height: 42px; flex: 0 0 42px; border-radius: 11px;
+    .lobby-logo-badge, .spiel-logo-badge {
+      display: grid; place-items: center; flex: 0 0 auto; overflow: hidden;
+      border-radius: 50%; background: #35105c; border: 2px solid #ff6b58;
       box-shadow: 0 5px 12px rgba(79,38,93,.18);
     }
+    .lobby-logo-badge { width: 42px; height: 42px; }
+    .lobby-app-icon { display: block; width: 36px; height: 36px; object-fit: contain; border-radius: 0; }
     .lobby-kopf h1 {
       min-width: 0; margin: 0; font-size: 1.55rem; line-height: 1;
       letter-spacing: -.035em; white-space: nowrap;
@@ -963,6 +971,8 @@
       filter: drop-shadow(0 7px 8px rgba(0,0,0,.24));
     }
     .spiel-kopf-icon img { display: block; width: 58px; height: 58px; border-radius: 16px; }
+    .spiel-logo-badge { width: 58px; height: 58px; }
+    .spiel-logo-badge img { width: 50px; height: 50px; object-fit: contain; border-radius: 0; }
     .spiel-kopf-titel strong {
       color: #fff; font-family: "Barlow Condensed", sans-serif; font-style: italic;
       font-size: clamp(2.35rem, 11vw, 3.2rem); line-height: .9; letter-spacing: -.025em;
@@ -984,7 +994,8 @@
 
     @media (max-height: 720px) {
       #start-screen { min-height: 620px; padding-top: 30px; }
-      .start-deko { min-height: 104px; padding-top: 22px; }
-      .start-deko img { width: 70px; height: 70px; }
-      .start-deko img:last-child { width: 56px; height: 56px; }
+      #start-screen .start-icon { width: 94px; height: 94px; margin-bottom: 8px; }
+      #start-screen .app-icon { width: 76px; height: 76px; }
+      .start-deko { min-height: 116px; padding-top: 8px; }
+      .start-deko img { max-height: 118px; }
     }
