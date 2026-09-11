@@ -9,8 +9,9 @@ import {
 } from "./kern/ui.js";
 import { SPIELE, spielInfo } from "./spiele/register.js";
 
-export const APP_VERSION = "v52";
-document.getElementById("app-version").textContent = "Version " + APP_VERSION;
+export const APP_VERSION = "v53";
+const appVersion = document.getElementById("app-version");
+appVersion.textContent = "Version " + APP_VERSION;
 
 // ---------- DOM ----------
 const startScreen = document.getElementById("start-screen");
@@ -22,6 +23,9 @@ const btnVerlassen = document.getElementById("btn-verlassen");
 const spielKopfTitel = document.getElementById("spiel-kopf-titel");
 const spielKopfIcon = document.getElementById("spiel-kopf-icon");
 const spielKopfName = document.getElementById("spiel-kopf-name");
+const btnLobbyVerlassen = document.getElementById("btn-lobby-verlassen");
+const lobbyVersion = document.getElementById("lobby-version");
+lobbyVersion.textContent = "Version " + APP_VERSION;
 
 const inputName = document.getElementById("input-name");
 const inputCode = document.getElementById("input-code");
@@ -474,7 +478,8 @@ function aktualisiereRaumNavigation(spielId) {
   // Das Zurückkehren aus einem Spiel ändert den gemeinsamen Raumzustand und
   // bleibt deshalb dem Spielleiter vorbehalten. Im Hauptmenü darf jeder den
   // Raum für sich verlassen.
-  topBar.hidden = false;
+  topBar.hidden = !imSpiel;
+  appVersion.hidden = true;
 }
 
 // ---------- Reaktion auf Änderungen am Raum ----------
@@ -555,7 +560,8 @@ function betreteRaum(code, name) {
     profilScreen.hidden = true;
     document.body.classList.remove("profil-offen");
     lobbyScreen.hidden = false;
-    topBar.hidden = false;
+    topBar.hidden = true;
+    appVersion.hidden = true;
   } else {
     zeigeProfilAuswahl();
   }
@@ -565,6 +571,7 @@ function betreteRaum(code, name) {
 // ---------- Raum verlassen ----------
 async function verlasseRaum() {
   btnVerlassen.disabled = true;
+  btnLobbyVerlassen.disabled = true;
   btnProfilVerlassen.disabled = true;
 
   if (raumUnsubscribe) { raumUnsubscribe(); raumUnsubscribe = null; }
@@ -591,6 +598,7 @@ async function verlasseRaum() {
   lobbyScreen.hidden = true;
   spielWurzel.hidden = true;
   topBar.hidden = true;
+  appVersion.hidden = false;
   document.body.classList.remove("profil-offen");
   startScreen.hidden = false;
   inputCode.value = "";
@@ -602,6 +610,7 @@ async function verlasseRaum() {
   btnBeitretenOeffnen.disabled = false;
   btnBeitreten.disabled = false;
   btnVerlassen.disabled = false;
+  btnLobbyVerlassen.disabled = false;
   btnProfilVerlassen.disabled = false;
 }
 
@@ -623,6 +632,7 @@ async function raumNavigationAusfuehren() {
 }
 
 btnVerlassen.addEventListener("click", raumNavigationAusfuehren);
+btnLobbyVerlassen.addEventListener("click", verlasseRaum);
 btnProfilVerlassen.addEventListener("click", verlasseRaum);
 
 // ---------- Raum erstellen / beitreten ----------
