@@ -9,7 +9,7 @@ import {
 } from "./kern/ui.js";
 import { SPIELE, spielInfo } from "./spiele/register.js";
 
-export const APP_VERSION = "v66";
+export const APP_VERSION = "v67";
 const appVersion = document.getElementById("app-version");
 appVersion.textContent = "Version " + APP_VERSION;
 
@@ -473,7 +473,7 @@ function aktualisiereRaumNavigation(spielId) {
   if (info?.emoji) {
     spielKopfIcon.textContent = info.emoji;
   } else {
-    spielKopfIcon.innerHTML = '<img src="bilder/icon-192.png" alt="">';
+    spielKopfIcon.innerHTML = '<span class="spiel-logo-badge"><img src="bilder/logo-fuchs-transparent.png" alt=""></span>';
   }
   spielKopfName.textContent = info?.name ?? "Partyspiele";
   // Das Zurückkehren aus einem Spiel ändert den gemeinsamen Raumzustand und
