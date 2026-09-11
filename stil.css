@@ -733,15 +733,21 @@
     .start-deko span:last-child { right: 77px; bottom: -12px; font-size: 3.8rem; transform: rotate(17deg); }
 
     /* Die Lobby zeigt Personen als horizontale, scrollbare Gruppe. */
-    #top-bar:not(.im-spiel) {
-      position: absolute; top: 24px; right: 16px; z-index: 3; margin: 0;
+    #top-bar:not(.im-spiel) { display: none !important; }
+    #lobby-screen {
+      position: relative; margin-top: 0; padding: 76px 24px 58px;
     }
-    #top-bar:not(.im-spiel) button {
-      margin: 0; padding: 8px 14px; font-size: .74rem;
-      background: rgba(255,255,255,.1); border-color: rgba(255,255,255,.34);
-      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    .lobby-verlassen {
+      position: absolute; top: 22px; right: 22px; margin: 0; padding: 8px 14px;
+      border: 1px solid #d6cabf; border-radius: 999px; color: #5b5260;
+      background: rgba(255,255,255,.64); font-size: .74rem;
+      box-shadow: 0 4px 12px rgba(49,34,39,.08);
     }
-    #lobby-screen { margin-top: 66px; padding: 30px 24px; }
+    .lobby-verlassen:hover { color: var(--text-dunkel); background: #fff; }
+    .lobby-version {
+      position: absolute; left: 24px; bottom: 20px; color: #9a918c;
+      font-size: .6rem; line-height: 1; letter-spacing: .03em;
+    }
     #lobby-screen > h1 { margin: 0 0 12px; font-size: 2.2rem; letter-spacing: -.035em; }
     #lobby-screen > h3 { margin: 26px 0 9px; font-size: 1.35rem; }
     .lobby-code {
