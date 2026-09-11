@@ -313,12 +313,12 @@
       box-shadow: 0 8px 18px rgba(180,54,46,.28);
     }
     .raum-verlassen-symbol svg {
-      width: 30px; height: 30px; fill: none; stroke: currentColor;
+      width: 34px; height: 34px; fill: none; stroke: currentColor;
       stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round;
     }
-    .raum-verlassen-symbol .ausgang-kopf,
+    .raum-verlassen-symbol .ausgang-klinke,
+    .lobby-ausgang-icon .ausgang-klinke { fill: currentColor; stroke: none; }
     .raum-verlassen-symbol .ausgang-mensch,
-    .lobby-ausgang-icon .ausgang-kopf,
     .lobby-ausgang-icon .ausgang-mensch { fill: currentColor; stroke: none; }
     .raum-verlassen-dialog-inhalt h2 { margin: 0 0 20px; font-size: 1.55rem; }
     .raum-verlassen-aktionen { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
@@ -821,7 +821,7 @@
       box-shadow: 0 7px 16px rgba(180,54,46,.28);
     }
     .lobby-ausgang-icon {
-      width: 28px; height: 28px; flex: 0 0 28px; fill: none; stroke: currentColor;
+      width: 32px; height: 32px; flex: 0 0 32px; fill: none; stroke: currentColor;
       stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round;
     }
     .lobby-verlassen:hover { color: #fff; background: linear-gradient(145deg, #ef7d71, #d45046); }
