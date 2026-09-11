@@ -763,23 +763,42 @@
     /* Die Lobby zeigt Personen als horizontale, scrollbare Gruppe. */
     #top-bar:not(.im-spiel) { display: none !important; }
     #lobby-screen {
-      position: relative; margin-top: 0; padding: 46px 24px 58px;
+      position: relative; margin-top: 0; padding: 30px 24px 58px;
     }
     .lobby-kopf {
       display: flex; align-items: center; justify-content: space-between; gap: 12px;
-      margin: 0 0 12px;
+      margin: 0 0 22px; padding-bottom: 16px; border-bottom: 1px solid #e5dbd1;
+    }
+    .lobby-marke { min-width: 0; display: flex; align-items: center; gap: 9px; }
+    .lobby-app-icon {
+      width: 42px; height: 42px; flex: 0 0 42px; border-radius: 11px;
+      box-shadow: 0 5px 12px rgba(79,38,93,.18);
     }
     .lobby-kopf h1 {
-      min-width: 0; margin: 0; font-size: 2.2rem; letter-spacing: -.035em;
+      min-width: 0; margin: 0; font-size: 1.55rem; line-height: 1;
+      letter-spacing: -.035em; white-space: nowrap;
     }
     .lobby-verlassen {
       flex: 0 0 auto; display: inline-flex; align-items: center; gap: 6px;
       margin: 0; padding: 8px 12px; border: 1px solid #f1aaa1; border-radius: 999px;
-      color: #a52b20; background: #ffe4df; font-size: .7rem;
+      color: #a52b20; background: #ffe4df; font-size: .7rem; white-space: nowrap;
       box-shadow: 0 5px 13px rgba(165,43,32,.12);
     }
-    .lobby-verlassen span { font-size: .9rem; line-height: 1; }
+    .lobby-ausgang-icon {
+      width: 20px; height: 20px; flex: 0 0 20px; fill: none; stroke: currentColor;
+      stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+    }
+    .lobby-verlassen-kurz { display: none; }
     .lobby-verlassen:hover { color: #861f17; background: #ffd5cd; }
+    @media (max-width: 350px) {
+      #lobby-screen { padding-left: 18px; padding-right: 18px; }
+      .lobby-kopf { gap: 7px; }
+      .lobby-app-icon { width: 36px; height: 36px; flex-basis: 36px; border-radius: 10px; }
+      .lobby-kopf h1 { font-size: 1.35rem; }
+      .lobby-verlassen { padding: 7px 10px; }
+      .lobby-verlassen-lang { display: none; }
+      .lobby-verlassen-kurz { display: inline; }
+    }
     .lobby-version {
       position: absolute; left: 24px; bottom: 20px; color: #9a918c;
       font-size: .6rem; line-height: 1; letter-spacing: .03em;
