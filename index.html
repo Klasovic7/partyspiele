@@ -7,7 +7,7 @@
 
   <!-- Damit die Seite auf dem Handy als App gestartet werden kann -->
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#292526">
+  <meta name="theme-color" content="#120d17">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -52,7 +52,16 @@
     </div>
 
     <div class="start-deko" aria-hidden="true">
-      <img src="bilder/start-quiz-deko.svg" width="340" height="180" alt="">
+      <span class="start-symbol">
+        <svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="10"/><circle cx="16" cy="16" r="5"/><path d="m18 14 8-8m-4 0h4v4"/></svg>
+      </span>
+      <span class="start-symbol">
+        <svg viewBox="0 0 32 32"><path d="M13 25c-4 1-7-2-6-6-3-2-2-7 1-8-1-4 4-7 7-4 2-3 7-1 7 2 4 0 5 5 3 7 3 3 1 8-3 8-1 4-6 5-8 2-1 2-3 3-5 1Z"/><path d="M16 7v18m-5-13c3 0 4 2 5 4m5-3c-3 0-4 2-5 4m-7 2c2-1 4 0 5 2m9-2c-2-1-4 0-5 2"/></svg>
+      </span>
+      <span class="start-symbol start-symbol-frage">?</span>
+      <span class="start-symbol">
+        <svg viewBox="0 0 32 32"><path d="M11 5v22m0-22-5 5m5-5 5 5M21 27V5m0 22-5-5m5 5 5-5"/></svg>
+      </span>
     </div>
 
     <p id="start-error"></p>
