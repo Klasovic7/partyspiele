@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Raum verlassen">
+  <g fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M43 10h11v44H43" stroke-width="4"/>
+    <path d="m43 14-12 6v28l12 5z" fill="#fff" stroke="#fff" stroke-width="2"/>
+    <path d="M37 33h5" stroke="#d6534d" stroke-width="2.6"/>
+    <circle cx="18" cy="21" r="5" fill="#fff" stroke="#fff" stroke-width="1"/>
+    <path d="m20 28 7 7 7-2M20 28l-5 10-7 4m19-7-4 10-7 7" stroke-width="5"/>
+  </g>
+</svg>
