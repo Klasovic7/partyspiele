@@ -42,13 +42,13 @@ const VORLAGE = `
     <div id="sf-kategorien" class="kategorien-grid"></div>
 
     <div id="sf-anzahl-zeile" class="setup-anzahlblock" hidden>
-      <label class="setup-anzahl-zeile" for="sf-anzahl">
+      <div class="setup-anzahl-zeile">
         <span>Anzahl Fragen</span>
         <span class="anzahl-picker">
-          <select id="sf-anzahl" aria-label="Anzahl Fragen"></select>
-          <span class="anzahl-picker-pfeile" aria-hidden="true">▲<br>▼</span>
+          <span id="sf-anzahl-rad" class="anzahl-rad" role="listbox" aria-label="Anzahl Fragen" tabindex="0"></span>
+          <input id="sf-anzahl" type="hidden" value="1">
         </span>
-      </label>
+      </div>
       <span id="sf-anzahl-hinweis" class="hinweis-text"></span>
     </div>
 
@@ -135,6 +135,10 @@ let status = null;
 let ausgewertetAusgeloest = false;
 let dummkopfPhaseBeendet = false;
 let anzahlManuellGesetzt = false;
+let anzahlRadScrollTimer = null;
+let anzahlRadProgrammgesteuert = false;
+
+const ANZAHL_RAD_ZEILENHOEHE = 34;
 
 const $ = (id) => el.wurzel.querySelector("#" + id);
 
@@ -179,7 +183,26 @@ export async function starten(uebergebeneApi) {
 function verdrahteBedienelemente() {
   $("sf-alle").addEventListener("click", () => setzeAlleKategorien(true));
   $("sf-keine").addEventListener("click", () => setzeAlleKategorien(false));
-  $("sf-anzahl").addEventListener("change", () => { anzahlManuellGesetzt = true; });
+  $("sf-anzahl-rad").addEventListener("click", (event) => {
+    const option = event.target.closest(".anzahl-rad-option");
+    if (!option) return;
+    setzeAnzahlRadWert(parseInt(option.dataset.wert, 10), true, true);
+  });
+  $("sf-anzahl-rad").addEventListener("scroll", () => {
+    clearTimeout(anzahlRadScrollTimer);
+    anzahlRadScrollTimer = setTimeout(() => {
+      if (anzahlRadProgrammgesteuert) return;
+      const rad = $("sf-anzahl-rad");
+      const wert = Math.round(rad.scrollTop / ANZAHL_RAD_ZEILENHOEHE) + 1;
+      setzeAnzahlRadWert(wert, true, false);
+    }, 80);
+  }, { passive: true });
+  $("sf-anzahl-rad").addEventListener("keydown", (event) => {
+    if (event.key !== "ArrowUp" && event.key !== "ArrowDown") return;
+    event.preventDefault();
+    const richtung = event.key === "ArrowUp" ? -1 : 1;
+    setzeAnzahlRadWert(parseInt($("sf-anzahl").value, 10) + richtung, true, true);
+  });
   $("sf-dummkopf").addEventListener("change", async () => {
     if (!api.istLeiter) return;
     try { await updateDoc(api.raumRef(), { sfDummkopf: $("sf-dummkopf").checked }); }
@@ -212,6 +235,9 @@ function starteListener() {
 export function beenden() {
   if (antwortenUnsub) { antwortenUnsub(); antwortenUnsub = null; }
   if (dummkoepfeUnsub) { dummkoepfeUnsub(); dummkoepfeUnsub = null; }
+  clearTimeout(anzahlRadScrollTimer);
+  anzahlRadScrollTimer = null;
+  anzahlRadProgrammgesteuert = false;
   el = {};
   index = -1; frageVersion = 0; reihenfolge = []; anzahlFragen = 0;
   kategorien = []; dummkopfModus = false; status = null;
@@ -324,6 +350,53 @@ function verfuegbareFragenAnzahl() {
   return fragen.filter((f) => kategorien.includes(f.kategorie)).length;
 }
 
+function markiereAnzahlRadWert(wert) {
+  const rad = $("sf-anzahl-rad");
+  rad.querySelectorAll(".anzahl-rad-option").forEach((option) => {
+    const aktiv = parseInt(option.dataset.wert, 10) === wert;
+    option.classList.toggle("aktiv", aktiv);
+    option.setAttribute("aria-selected", String(aktiv));
+  });
+  rad.setAttribute("aria-activedescendant", `sf-anzahl-${wert}`);
+}
+
+function setzeAnzahlRadWert(rohwert, manuell = false, sanft = false) {
+  const rad = $("sf-anzahl-rad");
+  const maximum = Math.max(1, parseInt(rad.dataset.maximum || "1", 10));
+  const wert = Math.min(Math.max(1, Number.isFinite(rohwert) ? rohwert : 1), maximum);
+  $("sf-anzahl").value = String(wert);
+  if (manuell) anzahlManuellGesetzt = true;
+  markiereAnzahlRadWert(wert);
+
+  const ziel = (wert - 1) * ANZAHL_RAD_ZEILENHOEHE;
+  if (Math.abs(rad.scrollTop - ziel) > 1) {
+    anzahlRadProgrammgesteuert = true;
+    rad.scrollTo({ top: ziel, behavior: sanft ? "smooth" : "auto" });
+    setTimeout(() => { anzahlRadProgrammgesteuert = false; }, sanft ? 260 : 80);
+  }
+}
+
+function fuelleAnzahlRad(maximum, wert) {
+  const rad = $("sf-anzahl-rad");
+  if (parseInt(rad.dataset.maximum || "0", 10) !== maximum) {
+    rad.innerHTML = "";
+    const fragment = document.createDocumentFragment();
+    for (let zahl = 1; zahl <= maximum; zahl += 1) {
+      const option = document.createElement("button");
+      option.type = "button";
+      option.id = `sf-anzahl-${zahl}`;
+      option.className = "anzahl-rad-option";
+      option.dataset.wert = String(zahl);
+      option.setAttribute("role", "option");
+      option.textContent = String(zahl);
+      fragment.appendChild(option);
+    }
+    rad.appendChild(fragment);
+    rad.dataset.maximum = String(maximum);
+  }
+  requestAnimationFrame(() => setzeAnzahlRadWert(wert, false, false));
+}
+
 function mischeIndizes(werte) {
   const gemischt = [...werte];
   for (let i = gemischt.length - 1; i > 0; i--) {
@@ -408,16 +481,7 @@ function zeigeSetup() {
   const auswahl = anzahlManuellGesetzt && Number.isFinite(bisher)
     ? Math.min(Math.max(1, bisher), obergrenze)
     : obergrenze;
-  if (anzahlFeld.options.length !== obergrenze) {
-    anzahlFeld.innerHTML = "";
-    for (let wert = 1; wert <= obergrenze; wert += 1) {
-      const option = document.createElement("option");
-      option.value = String(wert);
-      option.textContent = String(wert);
-      anzahlFeld.appendChild(option);
-    }
-  }
-  anzahlFeld.value = String(auswahl);
+  fuelleAnzahlRad(obergrenze, auswahl);
 
   $("sf-anzahl-hinweis").textContent = verfuegbar === 0
     ? "Noch keine Kategorie ausgewählt."
