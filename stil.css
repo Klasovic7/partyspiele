@@ -1356,3 +1356,123 @@
     @media (min-width: 760px) {
       .bildschirm-karte, #profil-screen, #top-bar.im-spiel { border-width: 1.5px; }
     }
+
+    /* v69: scharfe Symbole und kompaktere Spieleinstellungen */
+    .lobby-verlassen {
+      background-image: none;
+      background-color: #bd4e4d;
+    }
+    .lobby-verlassen img {
+      display: block;
+      width: 32px;
+      height: 32px;
+      object-fit: contain;
+    }
+
+    .setup-anzahlblock, .setup-modusblock {
+      margin: 18px 0 0;
+      padding: 13px 14px;
+      border: 1px solid rgba(255, 130, 101, .28);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, .035);
+    }
+    .setup-anzahl-zeile, .setup-moduszeile {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      color: var(--club-text);
+      font-size: 1rem;
+      font-weight: 750;
+    }
+    .anzahl-picker {
+      position: relative;
+      flex: 0 0 104px;
+    }
+    .anzahl-picker select {
+      width: 100%;
+      min-height: 50px;
+      margin: 0;
+      padding: 8px 38px 8px 15px;
+      appearance: none;
+      -webkit-appearance: none;
+      color: #24182a;
+      background: var(--club-ivory);
+      border: 1px solid #dfd2c6;
+      border-radius: 13px;
+      font: inherit;
+      font-size: 1.12rem;
+      font-variant-numeric: tabular-nums;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.8), 0 5px 13px rgba(0,0,0,.18);
+    }
+    .anzahl-picker select:focus-visible {
+      outline: 3px solid #ffad94;
+      outline-offset: 2px;
+      border-color: var(--club-orange);
+    }
+    .anzahl-picker-pfeile {
+      position: absolute;
+      top: 50%;
+      right: 12px;
+      translate: 0 -50%;
+      color: var(--club-orange);
+      font-size: .55rem;
+      line-height: 1.15;
+      pointer-events: none;
+    }
+    .setup-anzahlblock > .hinweis-text {
+      display: block;
+      margin-top: 9px;
+      font-size: .8rem;
+      line-height: 1.35;
+    }
+    .setup-moduszeile .schalter-zeile { min-width: 0; }
+    .setup-moduszeile .schalter-text { white-space: nowrap; }
+    .modus-info {
+      position: relative;
+      align-self: flex-start;
+      flex: 0 0 auto;
+      margin-top: -5px;
+    }
+    .modus-info summary {
+      width: 25px;
+      height: 25px;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      list-style: none;
+      color: #fff;
+      background: var(--club-orange);
+      border: 1px solid #ff9b81;
+      border-radius: 50%;
+      font-family: Georgia, serif;
+      font-size: .88rem;
+      font-weight: 800;
+      font-style: italic;
+      box-shadow: 0 4px 10px rgba(0,0,0,.24);
+    }
+    .modus-info summary::-webkit-details-marker { display: none; }
+    .modus-info[open] summary { background: var(--club-orange-dunkel); }
+    .modus-info > div {
+      position: absolute;
+      z-index: 20;
+      top: 33px;
+      right: 0;
+      width: min(270px, calc(100vw - 92px));
+      padding: 12px 13px;
+      color: #302334;
+      background: var(--club-ivory);
+      border: 1px solid var(--club-orange);
+      border-radius: 13px;
+      font-size: .8rem;
+      font-weight: 500;
+      line-height: 1.4;
+      box-shadow: 0 13px 28px rgba(0,0,0,.38);
+    }
+
+    @media (max-width: 350px) {
+      .setup-anzahlblock, .setup-modusblock { padding-inline: 11px; }
+      .setup-anzahl-zeile, .setup-moduszeile { gap: 9px; font-size: .92rem; }
+      .anzahl-picker { flex-basis: 88px; }
+      .setup-moduszeile .schalter-text { white-space: normal; }
+    }
