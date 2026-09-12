@@ -41,24 +41,32 @@ const VORLAGE = `
     </p>
     <div id="sf-kategorien" class="kategorien-grid"></div>
 
-    <p id="sf-anzahl-zeile" hidden>
-      <label>Anzahl Fragen:
-        <input id="sf-anzahl" type="number" inputmode="numeric" min="1" style="width:78px;">
-      </label><br>
-      <span id="sf-anzahl-hinweis" class="hinweis-text"></span>
-    </p>
-
-    <p id="sf-dummkopf-zeile" hidden>
-      <label class="schalter-zeile">
-        <span class="schalter">
-          <input type="checkbox" id="sf-dummkopf">
-          <span class="schalter-regler"></span>
+    <div id="sf-anzahl-zeile" class="setup-anzahlblock" hidden>
+      <label class="setup-anzahl-zeile" for="sf-anzahl">
+        <span>Anzahl Fragen</span>
+        <span class="anzahl-picker">
+          <select id="sf-anzahl" aria-label="Anzahl Fragen"></select>
+          <span class="anzahl-picker-pfeile" aria-hidden="true">▲<br>▼</span>
         </span>
-        <span class="schalter-text">Dummkopf-Modus</span>
       </label>
-      <span class="schalter-hinweis">Vor jeder Frage tippt jeder, wer am weitesten danebenliegt.
-      Wer richtig tippt, bekommt einen Extrapunkt.</span>
-    </p>
+      <span id="sf-anzahl-hinweis" class="hinweis-text"></span>
+    </div>
+
+    <div id="sf-dummkopf-zeile" class="setup-modusblock" hidden>
+      <div class="setup-moduszeile">
+        <label class="schalter-zeile">
+          <span class="schalter">
+            <input type="checkbox" id="sf-dummkopf">
+            <span class="schalter-regler"></span>
+          </span>
+          <span class="schalter-text">Dummkopf-Modus</span>
+        </label>
+        <details class="modus-info">
+          <summary aria-label="Erklärung zum Dummkopf-Modus">i</summary>
+          <div>Vor jeder Frage tippt jeder, wer am weitesten danebenliegt. Wer richtig tippt, bekommt einen Extrapunkt.</div>
+        </details>
+      </div>
+    </div>
 
     <p id="sf-setup-fehler" class="fehler-text"></p>
     <p><button id="sf-starten" class="btn-primaer" hidden>Spiel starten</button></p>
@@ -171,7 +179,7 @@ export async function starten(uebergebeneApi) {
 function verdrahteBedienelemente() {
   $("sf-alle").addEventListener("click", () => setzeAlleKategorien(true));
   $("sf-keine").addEventListener("click", () => setzeAlleKategorien(false));
-  $("sf-anzahl").addEventListener("input", () => { anzahlManuellGesetzt = true; });
+  $("sf-anzahl").addEventListener("change", () => { anzahlManuellGesetzt = true; });
   $("sf-dummkopf").addEventListener("change", async () => {
     if (!api.istLeiter) return;
     try { await updateDoc(api.raumRef(), { sfDummkopf: $("sf-dummkopf").checked }); }
@@ -395,11 +403,21 @@ function zeigeSetup() {
   const verfuegbar = verfuegbareFragenAnzahl();
   const maximalSpielbar = maximaleFragenOhneKategorieNachbarn(fragen, kategorien);
   const anzahlFeld = $("sf-anzahl");
-  anzahlFeld.max = Math.max(1, maximalSpielbar);
-  if (!anzahlManuellGesetzt) anzahlFeld.value = Math.max(1, maximalSpielbar);
-  else if (maximalSpielbar > 0 && parseInt(anzahlFeld.value, 10) > maximalSpielbar) {
-    anzahlFeld.value = maximalSpielbar;
+  const obergrenze = Math.max(1, maximalSpielbar);
+  const bisher = parseInt(anzahlFeld.value, 10);
+  const auswahl = anzahlManuellGesetzt && Number.isFinite(bisher)
+    ? Math.min(Math.max(1, bisher), obergrenze)
+    : obergrenze;
+  if (anzahlFeld.options.length !== obergrenze) {
+    anzahlFeld.innerHTML = "";
+    for (let wert = 1; wert <= obergrenze; wert += 1) {
+      const option = document.createElement("option");
+      option.value = String(wert);
+      option.textContent = String(wert);
+      anzahlFeld.appendChild(option);
+    }
   }
+  anzahlFeld.value = String(auswahl);
 
   $("sf-anzahl-hinweis").textContent = verfuegbar === 0
     ? "Noch keine Kategorie ausgewählt."
