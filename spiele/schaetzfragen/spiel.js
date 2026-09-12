@@ -135,8 +135,10 @@ let status = null;
 let ausgewertetAusgeloest = false;
 let dummkopfPhaseBeendet = false;
 let anzahlManuellGesetzt = false;
-let anzahlRadScrollTimer = null;
-let anzahlRadProgrammgesteuert = false;
+let anzahlRadZug = null;
+let anzahlRadHatGezogen = false;
+let anzahlRadMausRest = 0;
+let anzahlRadMausTimer = null;
 
 const ANZAHL_RAD_ZEILENHOEHE = 34;
 
@@ -184,19 +186,20 @@ function verdrahteBedienelemente() {
   $("sf-alle").addEventListener("click", () => setzeAlleKategorien(true));
   $("sf-keine").addEventListener("click", () => setzeAlleKategorien(false));
   $("sf-anzahl-rad").addEventListener("click", (event) => {
+    if (anzahlRadHatGezogen) {
+      anzahlRadHatGezogen = false;
+      event.preventDefault();
+      return;
+    }
     const option = event.target.closest(".anzahl-rad-option");
     if (!option) return;
     setzeAnzahlRadWert(parseInt(option.dataset.wert, 10), true, true);
   });
-  $("sf-anzahl-rad").addEventListener("scroll", () => {
-    clearTimeout(anzahlRadScrollTimer);
-    anzahlRadScrollTimer = setTimeout(() => {
-      if (anzahlRadProgrammgesteuert) return;
-      const rad = $("sf-anzahl-rad");
-      const wert = Math.round(rad.scrollTop / ANZAHL_RAD_ZEILENHOEHE) + 1;
-      setzeAnzahlRadWert(wert, true, false);
-    }, 80);
-  }, { passive: true });
+  $("sf-anzahl-rad").addEventListener("pointerdown", starteAnzahlRadZug);
+  $("sf-anzahl-rad").addEventListener("pointermove", bewegeAnzahlRadZug);
+  $("sf-anzahl-rad").addEventListener("pointerup", beendeAnzahlRadZug);
+  $("sf-anzahl-rad").addEventListener("pointercancel", beendeAnzahlRadZug);
+  $("sf-anzahl-rad").addEventListener("wheel", dreheAnzahlRadMitMaus, { passive: false });
   $("sf-anzahl-rad").addEventListener("keydown", (event) => {
     if (event.key !== "ArrowUp" && event.key !== "ArrowDown") return;
     event.preventDefault();
@@ -235,9 +238,11 @@ function starteListener() {
 export function beenden() {
   if (antwortenUnsub) { antwortenUnsub(); antwortenUnsub = null; }
   if (dummkoepfeUnsub) { dummkoepfeUnsub(); dummkoepfeUnsub = null; }
-  clearTimeout(anzahlRadScrollTimer);
-  anzahlRadScrollTimer = null;
-  anzahlRadProgrammgesteuert = false;
+  clearTimeout(anzahlRadMausTimer);
+  anzahlRadMausTimer = null;
+  anzahlRadZug = null;
+  anzahlRadHatGezogen = false;
+  anzahlRadMausRest = 0;
   el = {};
   index = -1; frageVersion = 0; reihenfolge = []; anzahlFragen = 0;
   kategorien = []; dummkopfModus = false; status = null;
@@ -360,6 +365,59 @@ function markiereAnzahlRadWert(wert) {
   rad.setAttribute("aria-activedescendant", `sf-anzahl-${wert}`);
 }
 
+function starteAnzahlRadZug(event) {
+  if (!api.istLeiter || event.button > 0) return;
+  const rad = $("sf-anzahl-rad");
+  anzahlRadHatGezogen = false;
+  anzahlRadZug = { pointerId: event.pointerId, letzteY: event.clientY, rest: 0 };
+  rad.classList.add("wird-gedreht");
+  rad.setPointerCapture?.(event.pointerId);
+  event.preventDefault();
+}
+
+function bewegeAnzahlRadZug(event) {
+  if (!anzahlRadZug || event.pointerId !== anzahlRadZug.pointerId) return;
+  const delta = anzahlRadZug.letzteY - event.clientY;
+  anzahlRadZug.letzteY = event.clientY;
+  anzahlRadZug.rest += delta;
+  if (Math.abs(anzahlRadZug.rest) >= 18) {
+    const schritte = anzahlRadZug.rest > 0
+      ? Math.floor(anzahlRadZug.rest / 18)
+      : Math.ceil(anzahlRadZug.rest / 18);
+    anzahlRadZug.rest -= schritte * 18;
+    const aktuell = parseInt($("sf-anzahl").value, 10) || 1;
+    setzeAnzahlRadWert(aktuell + schritte, true, false);
+    anzahlRadHatGezogen = true;
+  }
+  event.preventDefault();
+}
+
+function beendeAnzahlRadZug(event) {
+  if (!anzahlRadZug || event.pointerId !== anzahlRadZug.pointerId) return;
+  const rad = $("sf-anzahl-rad");
+  rad.classList.remove("wird-gedreht");
+  if (rad.hasPointerCapture?.(event.pointerId)) rad.releasePointerCapture(event.pointerId);
+  anzahlRadZug = null;
+  setTimeout(() => { anzahlRadHatGezogen = false; }, 0);
+  event.preventDefault();
+}
+
+function dreheAnzahlRadMitMaus(event) {
+  if (!api.istLeiter || event.deltaY === 0) return;
+  event.preventDefault();
+  clearTimeout(anzahlRadMausTimer);
+  anzahlRadMausRest += event.deltaY;
+  const schritte = anzahlRadMausRest > 0
+    ? Math.floor(anzahlRadMausRest / 28)
+    : Math.ceil(anzahlRadMausRest / 28);
+  if (schritte !== 0) {
+    anzahlRadMausRest -= schritte * 28;
+    const aktuell = parseInt($("sf-anzahl").value, 10) || 1;
+    setzeAnzahlRadWert(aktuell + schritte, true, false);
+  }
+  anzahlRadMausTimer = setTimeout(() => { anzahlRadMausRest = 0; }, 140);
+}
+
 function setzeAnzahlRadWert(rohwert, manuell = false, sanft = false) {
   const rad = $("sf-anzahl-rad");
   const maximum = Math.max(1, parseInt(rad.dataset.maximum || "1", 10));
@@ -370,9 +428,7 @@ function setzeAnzahlRadWert(rohwert, manuell = false, sanft = false) {
 
   const ziel = (wert - 1) * ANZAHL_RAD_ZEILENHOEHE;
   if (Math.abs(rad.scrollTop - ziel) > 1) {
-    anzahlRadProgrammgesteuert = true;
     rad.scrollTo({ top: ziel, behavior: sanft ? "smooth" : "auto" });
-    setTimeout(() => { anzahlRadProgrammgesteuert = false; }, sanft ? 260 : 80);
   }
 }
 

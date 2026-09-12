@@ -1558,3 +1558,42 @@
       outline-offset: -3px;
       border-radius: 13px;
     }
+
+    /* v71: breite, organische Clubhouse-Baender statt radialer Kreise */
+    :root {
+      --club-lava: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 390 900' preserveAspectRatio='none'%3E%3Cpath fill='%23331f38' opacity='.78' d='M-95 184C-8 151 12 54 111-18h132C169 69 159 142 62 199-28 252-30 332-95 386Z'/%3E%3Cpath fill='%2329192f' opacity='.9' d='M490 98c-117 44-104 151-205 225-88 65-91 153-136 235C111 627 42 674-21 724v139c88-79 177-127 225-215 50-93 52-178 139-241 92-67 108-157 147-198Z'/%3E%3Cpath fill='%233a223e' opacity='.58' d='M456 594c-91 28-118 98-180 148-56 45-102 73-135 158h249V594Z'/%3E%3C/svg%3E");
+    }
+    body {
+      background:
+        var(--club-lava) center top / max(430px, 100vw) 1000px repeat-y,
+        linear-gradient(155deg, #251728 0%, #171019 48%, #100c14 100%);
+    }
+    #start-screen, #lobby-screen, #profil-screen,
+    #spiel-wurzel .bildschirm-karte, #top-bar.im-spiel,
+    .beitreten-dialog-inhalt, .raum-verlassen-dialog-inhalt {
+      background:
+        var(--club-lava) center / 100% 100% no-repeat,
+        linear-gradient(158deg, #241627 0%, #18101d 55%, #110c15 100%);
+    }
+
+    /* Das Startlogo nutzt exakt dieselbe Datei und Flaeche wie die saubere Lobby-Marke. */
+    #start-screen .start-icon {
+      overflow: hidden;
+      background: var(--club-ivory);
+    }
+    #start-screen .app-icon {
+      width: 102px;
+      height: 102px;
+      border-radius: 50%;
+      clip-path: circle(50% at 50% 50%);
+    }
+
+    /* Das Zahlenrad faengt Wischgesten selbst ab, statt die Seite zu scrollen. */
+    .anzahl-rad {
+      overflow: hidden;
+      touch-action: none;
+      cursor: ns-resize;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    .anzahl-rad.wird-gedreht { cursor: grabbing; }
