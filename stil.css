@@ -999,3 +999,360 @@
       .start-deko { min-height: 116px; padding-top: 8px; }
       .start-deko img { max-height: 118px; }
     }
+
+    /* ======================================================================
+       Designsystem v68 – Dark Clubhouse / Minimal Ink
+       ====================================================================== */
+    :root {
+      --app-hintergrund: #120d17;
+      --app-hintergrund-hell: #251727;
+      --club-ink: #18101d;
+      --club-ink-2: #24152a;
+      --club-ink-3: #352039;
+      --club-ivory: #fff9ed;
+      --club-ivory-2: #f5ede1;
+      --club-orange: #ff5b36;
+      --club-orange-dunkel: #e94628;
+      --club-linie: rgba(255, 111, 79, .68);
+      --club-text: #fffaf3;
+      --club-muted: #bdb3c0;
+      --akzent: var(--club-orange);
+      --akzent-dunkel: var(--club-orange-dunkel);
+      --text-dunkel: #211827;
+      --text-hell: #756e7d;
+      --flaeche: var(--club-ink);
+      --flaeche-klar: var(--club-ivory);
+      --linie: rgba(255,255,255,.13);
+      --koralle: var(--club-orange);
+    }
+
+    html { background: var(--app-hintergrund); }
+    body {
+      color: var(--club-text);
+      background:
+        radial-gradient(130% 55% at -18% 8%, rgba(104,58,91,.34) 0 32%, transparent 33%),
+        radial-gradient(105% 50% at 112% 92%, rgba(78,43,77,.27) 0 32%, transparent 33%),
+        linear-gradient(155deg, #2a1b2c 0%, #171019 46%, #100c14 100%);
+      background-attachment: fixed;
+    }
+    .bildschirm-karte {
+      color: var(--club-text); background: var(--club-ink);
+      border: 1px solid rgba(255,115,90,.66);
+      box-shadow: 0 22px 48px rgba(0,0,0,.38);
+    }
+    input {
+      color: var(--text-dunkel); background: var(--club-ivory);
+      border-color: #dfd4c7;
+    }
+    input::placeholder { color: #9d969f; }
+    input:focus { border-color: var(--club-orange); box-shadow: 0 0 0 3px rgba(255,91,54,.2); }
+    button { background: var(--club-orange); }
+    button:hover { background: var(--club-orange-dunkel); }
+    .btn-primaer {
+      color: #fff; background: linear-gradient(135deg, #ff673f, #ff4e2e);
+      border: 1px solid #ff805f; box-shadow: 0 8px 18px rgba(255,73,39,.2);
+    }
+    .btn-sekundaer, .btn-flach {
+      color: #ff714e; background: transparent; border: 2px solid var(--club-orange);
+    }
+    .btn-sekundaer:hover, .btn-flach:hover { color: #fff; background: rgba(255,91,54,.13); }
+    .hinweis-text, .fortschritt { color: var(--club-muted); }
+    .feld-label { color: var(--club-text); }
+
+    #start-screen {
+      min-height: min(790px, calc(100dvh - 96px));
+      background:
+        radial-gradient(110% 42% at -22% 0%, rgba(99,55,85,.28) 0 37%, transparent 38%),
+        radial-gradient(96% 38% at 112% 100%, rgba(77,43,73,.27) 0 38%, transparent 39%),
+        linear-gradient(160deg, #251728 0%, #18101d 50%, #120d17 100%);
+    }
+    #start-screen .start-icon {
+      background: var(--club-ivory); border-color: var(--club-orange);
+      box-shadow: 0 9px 22px rgba(0,0,0,.34), 0 0 0 1px rgba(255,145,111,.25);
+    }
+    #start-screen .start-hero h1, #start-screen .feld-label { color: var(--club-text); }
+    #start-screen .start-tagline { color: var(--club-muted); }
+    #start-screen input { color: var(--text-dunkel); background: var(--club-ivory); border-color: #e6d9c9; }
+    #start-screen .btn-primaer { background: linear-gradient(135deg, #ff673f, #ff4e2e); }
+    #start-screen .btn-sekundaer { color: #ff714e; background: transparent; border-color: var(--club-orange); }
+    #app-version { color: rgba(255,250,243,.64); }
+    .start-deko {
+      min-height: 118px; align-items: center; justify-content: flex-start; gap: 12px;
+      padding: 24px 0 10px; margin-top: auto;
+    }
+    .start-symbol {
+      width: 52px; height: 52px; display: grid; place-items: center;
+      color: #f4ece8; border: 1px solid rgba(255,250,243,.42); border-radius: 12px;
+      background: rgba(255,255,255,.025); font-size: 1.65rem; font-weight: 700;
+    }
+    .start-symbol svg {
+      width: 29px; height: 29px; fill: none; stroke: currentColor;
+      stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round;
+    }
+    .start-symbol-frage { font-family: Georgia, serif; font-size: 2rem; }
+
+    @media (max-height: 720px) {
+      .start-deko { min-height: 76px; padding-top: 12px; gap: 9px; }
+      .start-symbol { width: 43px; height: 43px; border-radius: 10px; }
+      .start-symbol svg { width: 24px; height: 24px; }
+    }
+
+    /* Durchgaengiges Clubhouse-Motiv */
+    button:focus-visible, input:focus-visible {
+      outline: 3px solid #ffad94;
+      outline-offset: 3px;
+    }
+    .beitreten-dialog, .raum-verlassen-dialog {
+      background: rgba(8, 5, 11, .78);
+      backdrop-filter: blur(12px);
+    }
+    .beitreten-dialog-inhalt, .raum-verlassen-dialog-inhalt {
+      color: var(--club-text);
+      background:
+        radial-gradient(90% 65% at 105% 0%, rgba(91, 49, 80, .34), transparent 62%),
+        var(--club-ink);
+      border: 1px solid rgba(255, 115, 90, .7);
+      box-shadow: 0 24px 70px rgba(0, 0, 0, .55);
+    }
+    .beitreten-dialog-inhalt h2, .raum-verlassen-dialog-inhalt h2 { color: var(--club-text); }
+    .beitreten-schliessen {
+      color: var(--club-orange);
+      background: rgba(255, 91, 54, .1);
+      border: 1px solid rgba(255, 112, 78, .55);
+    }
+    .beitreten-schliessen:hover { color: #fff; background: rgba(255, 91, 54, .24); }
+    .raum-verlassen-symbol {
+      color: var(--club-orange);
+      background: rgba(255, 91, 54, .12);
+      border-color: rgba(255, 112, 78, .62);
+    }
+    .btn-gefahr {
+      color: #fff;
+      background: linear-gradient(135deg, #ff6742, #e9402a);
+      border: 1px solid #ff8064;
+    }
+
+    #lobby-screen {
+      background:
+        radial-gradient(110% 46% at 116% 22%, rgba(94, 51, 84, .3) 0 35%, transparent 36%),
+        radial-gradient(95% 38% at -14% 100%, rgba(92, 49, 80, .27) 0 36%, transparent 37%),
+        linear-gradient(158deg, #251728 0%, #18101d 54%, #120d17 100%);
+      border-color: rgba(255, 115, 90, .68);
+    }
+    .lobby-kopf {
+      padding-bottom: 14px;
+      border-bottom: 1px solid rgba(255, 130, 101, .35);
+    }
+    .lobby-kopf h1, #lobby-screen > h3 { color: var(--club-text); }
+    .lobby-logo-badge, .spiel-logo-badge {
+      background: var(--club-ivory);
+      border: 3px solid var(--club-orange);
+      box-shadow: 0 5px 14px rgba(0, 0, 0, .28);
+    }
+    .lobby-verlassen {
+      color: #fff4ef;
+      background-color: #bd4e4d;
+      border: 1px solid #ff8b7d;
+      box-shadow: 0 5px 14px rgba(0, 0, 0, .28);
+    }
+    .lobby-verlassen:hover { background-color: #d85a50; }
+    .lobby-code {
+      color: #29202b;
+      background: linear-gradient(135deg, #fffdf7, #fff5e7);
+      border: 1.5px solid var(--club-orange);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, .22);
+    }
+    .lobby-code span { color: #6e6671; }
+    .lobby-code strong {
+      color: #f14d32;
+      font-family: "Barlow Condensed", sans-serif;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: .08em;
+    }
+    .lobby-spieler strong { color: var(--club-text); }
+    .lobby-spieler small { color: var(--club-muted); }
+    .lobby-avatar-rahmen {
+      background: #251b29;
+      box-shadow: 0 0 0 2px var(--club-ivory), 0 6px 15px rgba(0, 0, 0, .36);
+    }
+    .spiel-kachel {
+      color: #23182a;
+      background: linear-gradient(155deg, #fffdf7, #fff7eb);
+      border: 1.5px solid rgba(255, 91, 54, .85);
+      box-shadow: 0 8px 18px rgba(0, 0, 0, .2);
+    }
+    .spiel-kachel:hover { color: #23182a; background: #fff3e5; border-color: #ff3f24; }
+    .spiel-kachel.passiv:hover { background: #fffaf1; border-color: rgba(255, 91, 54, .48); }
+    .spiel-name { color: #32163b; }
+    .spiel-beschreibung { color: #6f6672; }
+
+    #profil-screen {
+      color: var(--club-text);
+      background:
+        radial-gradient(115% 48% at -23% 6%, rgba(102, 57, 91, .31) 0 33%, transparent 34%),
+        radial-gradient(105% 44% at 116% 74%, rgba(88, 48, 80, .28) 0 35%, transparent 36%),
+        linear-gradient(160deg, #251728 0%, #18101d 54%, #110c15 100%);
+    }
+    #profil-screen::before, #profil-screen::after, .profil-zacken { display: none; }
+    .profil-kopf { text-shadow: 0 5px 20px rgba(0, 0, 0, .65); }
+    .profil-kopf h1 { color: var(--club-text); }
+    .profil-kopf::after { background: var(--club-orange); box-shadow: 0 0 14px rgba(255, 91, 54, .38); }
+    .profil-verlassen {
+      color: var(--club-text);
+      background: rgba(15, 10, 19, .58);
+      border: 1px solid rgba(255, 112, 78, .78);
+    }
+    .profil-verlassen:hover { color: #fff; background: rgba(255, 91, 54, .16); }
+    .karussell-pfeil {
+      color: var(--club-text);
+      background: rgba(18, 12, 23, .9);
+      border-color: rgba(255, 112, 78, .82);
+      box-shadow: 0 8px 22px rgba(0, 0, 0, .34);
+    }
+    .karussell-pfeil:hover { color: #fff; background: rgba(255, 91, 54, .2); }
+    .farb-option {
+      border-color: rgba(255, 250, 243, .62);
+      box-shadow: 0 7px 18px rgba(0, 0, 0, .32);
+    }
+    .farb-option.aktiv {
+      border-color: #fff;
+      box-shadow: 0 0 0 4px var(--club-orange), 0 9px 24px rgba(0, 0, 0, .42);
+    }
+    .icon-option {
+      background: #19121c;
+      border-color: rgba(255, 250, 243, .42);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, .38);
+    }
+    .icon-option.aktiv {
+      border-color: var(--club-ivory);
+      box-shadow: 0 0 0 5px var(--club-orange), 0 17px 34px rgba(0, 0, 0, .48);
+    }
+    .profil-spielername { color: var(--club-text); text-shadow: 0 4px 16px rgba(0, 0, 0, .8); }
+    .profil-auswaehlen {
+      color: #fff;
+      background: linear-gradient(135deg, #ff673f, #ff4e2e);
+      border-color: #ff8b6f;
+      box-shadow: 0 10px 24px rgba(255, 71, 38, .22);
+    }
+    .profil-auswaehlen:hover { background: linear-gradient(135deg, #ff7854, #ff5534); }
+    .profil-hinweis { color: #ffb4a0; background: rgba(143, 37, 36, .42); }
+
+    #top-bar.im-spiel {
+      color: var(--club-text);
+      background:
+        radial-gradient(105% 100% at 112% 0%, rgba(98, 52, 86, .3), transparent 60%),
+        linear-gradient(145deg, #251728, #171019);
+      border: 1px solid rgba(255, 115, 90, .68);
+      box-shadow: 0 14px 32px rgba(0, 0, 0, .34);
+    }
+    #top-bar.im-spiel button {
+      color: var(--club-text);
+      background: rgba(12, 8, 16, .5);
+      border-color: var(--club-orange);
+    }
+    #top-bar.im-spiel button:hover { background: rgba(255, 91, 54, .15); }
+    .spiel-kopf-titel strong { color: var(--club-text); text-shadow: 0 4px 14px rgba(0, 0, 0, .46); }
+
+    #spiel-wurzel .bildschirm-karte {
+      color: var(--club-text);
+      background:
+        radial-gradient(110% 42% at 116% 18%, rgba(95, 50, 84, .29) 0 35%, transparent 36%),
+        radial-gradient(95% 36% at -15% 100%, rgba(84, 46, 78, .25) 0 35%, transparent 36%),
+        linear-gradient(158deg, #241627 0%, #18101d 55%, #110c15 100%);
+      border: 1px solid rgba(255, 115, 90, .68);
+    }
+    #spiel-wurzel h1, #spiel-wurzel h2, #spiel-wurzel h3,
+    #spiel-wurzel .schalter-text { color: var(--club-text); }
+    #spiel-wurzel .kategorie { color: #ff8567; }
+    #spiel-wurzel .hinweis-text, #spiel-wurzel .fortschritt,
+    #spiel-wurzel .schalter-hinweis { color: var(--club-muted); }
+    #spiel-wurzel hr { border-color: rgba(255, 130, 101, .28); }
+    .dg-regel, .zt-regel, .rd-regel,
+    .zt-rater-ansicht, .rd-kategorie-kopf, .rd-kandidat {
+      color: #2a1c2d;
+      background: linear-gradient(145deg, #fffdf7, #fff5e9);
+      border: 1px solid rgba(255, 91, 54, .58);
+      box-shadow: 0 8px 18px rgba(0, 0, 0, .19);
+    }
+    .dg-regel, .zt-regel, .rd-regel,
+    .rd-kategorie-kopf p { color: #6f6672; }
+    #spiel-wurzel .rd-kategorie-kopf h1, .rd-kandidat strong { color: #2d1735; }
+    .rd-kategorie-kopf strong { color: #7b2eea; background: #f1e8ff; }
+    .schalter-regler { background: #53495a; border: 1px solid rgba(255,255,255,.18); }
+    .schalter input:checked + .schalter-regler { background: var(--club-orange); }
+    .kategorien-aktionen button {
+      color: var(--club-orange);
+      background: transparent;
+      border-color: var(--club-orange);
+    }
+    .kategorie-kachel {
+      color: #2b2030;
+      background: linear-gradient(145deg, #fffdf8, #fff6eb);
+      border: 1px solid #ddcfc3;
+      box-shadow: 0 5px 13px rgba(0, 0, 0, .16);
+    }
+    .kategorie-kachel-name { color: #2b2030; }
+    .kategorie-kachel-anzahl { color: #746b75; }
+    .kategorie-kachel.ausgewaehlt {
+      color: #27152f;
+      background: #fff0e9;
+      border-color: var(--club-orange);
+      box-shadow: 0 0 0 2px rgba(255, 91, 54, .22), 0 7px 16px rgba(0,0,0,.18);
+    }
+
+    .spieler-karte {
+      color: #fff;
+      background: linear-gradient(135deg,
+        color-mix(in srgb, var(--spieler-farbe, #6b7280) 58%, #211427),
+        color-mix(in srgb, var(--spieler-farbe, #6b7280) 28%, #100c15));
+      border: 1px solid color-mix(in srgb, var(--spieler-farbe, #6b7280) 62%, #fff);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, .28);
+    }
+    .spieler-punkte { color: #fff; background: rgba(7, 5, 10, .38); border-color: rgba(255, 255, 255, .46); }
+    .spieler-punkte.positiv { color: #d9ffe8; background: #176c45; border-color: #62e89d; }
+    .spieler-punkte.negativ { color: #ffe3e4; background: #8e2934; border-color: #ff8790; }
+    .spieler-punkte-gesamt { color: #fff8ed; text-shadow: 0 3px 10px rgba(0, 0, 0, .5); }
+    .spieler-extra { color: rgba(255, 255, 255, .7); }
+    .spieler-fortschritt { background: rgba(255,255,255,.16); }
+    .spieler-fortschritt i { background: linear-gradient(90deg, #ff7a55, #ffd17d); }
+
+    .zt-begriff {
+      color: #27182d;
+      background: linear-gradient(145deg, #fffdf7, #fff2e5);
+      border: 1.5px solid var(--club-orange);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, .2);
+    }
+    #spiel-wurzel .zt-begriff { color: #27182d; }
+    .zt-aktive-einheit, .zt-runden-status, .zt-runden-ergebnis { color: var(--club-text); }
+    .zt-timer {
+      color: var(--club-text); background: #130d17; border: 3px solid var(--club-orange);
+      box-shadow: 0 0 0 6px rgba(255, 91, 54, .1), 0 9px 22px rgba(0,0,0,.33);
+    }
+    .zt-timer span { color: var(--club-muted); }
+    .zt-team { color: var(--club-text); background: #211729; border-color: rgba(255,255,255,.18); }
+    .zt-team-blau { background: linear-gradient(145deg, #182a47, #151827); border-color: #4a8dea; }
+    .zt-team-rot { background: linear-gradient(145deg, #4a202a, #23141d); border-color: #e96368; }
+    .zt-treffer { color: #2b1c2f; background: #fffaf1; border-color: #ded2c7; }
+    .zt-treffer:hover { color: #2b1c2f; background: #fff0e8; border-color: var(--club-orange); }
+    .zt-treffer:disabled:hover { background: #fffaf1; border-color: #ded2c7; }
+    .zt-treffer.getroffen, .zt-treffer.getroffen:disabled:hover { color: #dfffea; background: #195c3d; border-color: #4bd78a; }
+    .zt-punkte-team { color: var(--club-text); background: #21172a; border-color: rgba(255,255,255,.18); }
+
+    .rd-skala i { background: var(--club-orange); }
+    #spiel-wurzel .rd-zurueck { display: none; }
+    .rd-skala i::before, .rd-skala i::after { border-color: var(--club-orange); }
+    .rd-skala span { color: #ff9b80; background: rgba(255, 91, 54, .12); }
+    .rd-position { color: #ff8a6b; background: rgba(13, 9, 17, .42); border-color: var(--club-orange); }
+    .rd-position:hover { color: #fff; background: var(--club-orange); }
+    .rd-position:disabled { color: rgba(255,255,255,.46); background: rgba(255,255,255,.07); border-color: rgba(255,255,255,.2); }
+    .rd-reihen-begriff, .rd-ergebnis-begriff, .rd-kategorie-ergebnis-kopf {
+      color: #2a1b2e; background: linear-gradient(145deg, #fffdf7, #fff5e9); border-color: #e2d4c7;
+    }
+    .rd-reihen-begriff span, .rd-ergebnis-begriff-kopf > span, .rd-ergebnis-meta { color: #766d77; }
+    .rd-reihen-begriff.neu { border-color: var(--club-orange); box-shadow: 0 0 0 2px rgba(255,91,54,.16); }
+    .rd-letztes-ergebnis.richtig { color: #d8ffe7; border-color: #3ed47f; background: #174c35; }
+    .rd-letztes-ergebnis.falsch { color: #ffe1df; border-color: #f16f68; background: #63282e; }
+
+    @media (min-width: 760px) {
+      .bildschirm-karte, #profil-screen, #top-bar.im-spiel { border-width: 1.5px; }
+    }
