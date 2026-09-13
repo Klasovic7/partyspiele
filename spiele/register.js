@@ -41,6 +41,14 @@ export const SPIELE = [
     beschreibung: "Setz den Begriff an die richtige Stelle!",
     minSpieler: 2,
     laden: () => import("./reih-dich-ein/spiel.js")
+  },
+  {
+    id: "wer-ist-es",
+    name: "Wer ist es?",
+    emoji: "🕵️",
+    beschreibung: "Buzzere zuerst und errate den Fußballer",
+    minSpieler: 3,
+    laden: () => import("./wer-ist-es/spiel.js")
   }
 ];
 
