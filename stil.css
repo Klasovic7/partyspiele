@@ -798,9 +798,20 @@
          deshalb jetzt wirklich kleiner: 86px mit echtem Sicherheitsabstand.
          filter:none, weil drop-shadow auf iOS Safari bei dieser Kombination
          (Kreis-Clip + object-fit:contain) fehlerhaft als eckiger Schatten
-         gerendert werden kann. */
+         gerendert werden kann.
+         v85: DAS war die eigentliche Ursache des "weissen Vierecks" - eine
+         ganz frueh im File stehende, allgemeine ".app-icon"-Regel (ohne
+         "#start-screen" davor, ca. Zeile 246) setzt fuer JEDES Element mit
+         dieser Klasse "box-shadow: 0 6px 16px rgba(17,12,46,.25)". Diese
+         Regel wurde hier nie mit box-shadow ueberschrieben, nur border-radius
+         und filter - der box-shadow blieb also die ganze Zeit aktiv: ein
+         weicher dunkler Schatten um ein eckiges (border-radius:0) Bild,
+         sichtbar als Kanten/Schatten-Artefakt auf dem cremefarbenen Kreis.
+         Per getComputedStyle bestaetigt (boxShadow war nicht "none"). Jetzt
+         explizit entfernt. */
       display: block; width: 86px; height: 86px; object-fit: contain; border-radius: 0;
       filter: none;
+      box-shadow: none;
     }
     #start-screen .start-hero h1 { margin-top: 0; font-size: 2.25rem; letter-spacing: -.04em; }
     #start-screen .start-tagline { font-size: 1rem; }
