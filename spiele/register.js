@@ -47,7 +47,7 @@ export const SPIELE = [
     name: "Wer ist es?",
     emoji: "🕵️",
     beschreibung: "Buzzere zuerst und errate den Fußballer",
-    minSpieler: 3,
+    minSpieler: 2,
     laden: () => import("./wer-ist-es/spiel.js")
   }
 ];
