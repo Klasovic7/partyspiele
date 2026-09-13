@@ -1,10 +1,10 @@
 // Service Worker: macht die App installierbar und offline startfähig.
 //
-// WICHTIG bei Änderungen: die Zahl in CACHE_NAME hochzählen (z. B. v89 -> v90).
+// WICHTIG bei Änderungen: die Zahl in CACHE_NAME hochzählen (z. B. v90 -> v91).
 // Nur dann wirft der Browser den alten Zwischenspeicher weg und alle Spieler
 // bekommen zuverlässig die neue Version. Das ist der einzige Handgriff, den man
 // nach dem Bearbeiten von Dateien nicht vergessen darf.
-const CACHE_NAME = "partyspiele-v90";
+const CACHE_NAME = "partyspiele-v91";
 
 const DATEIEN = [
   "./",
@@ -25,6 +25,8 @@ const DATEIEN = [
   "spiele/reih-dich-ein/spiel.js",
   "spiele/reih-dich-ein/logik.js",
   "spiele/reih-dich-ein/fragen.json",
+  "spiele/wer-ist-es/spiel.js",
+  "spiele/wer-ist-es/fragen.json",
   "bilder/icon-192.png",
   "bilder/icon-512.png",
   "bilder/icon-512-maskable.png",
