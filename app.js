@@ -9,7 +9,7 @@ import {
 } from "./kern/ui.js";
 import { SPIELE, spielInfo } from "./spiele/register.js";
 
-export const APP_VERSION = "v86";
+export const APP_VERSION = "v87";
 const appVersion = document.getElementById("app-version");
 appVersion.textContent = "Version " + APP_VERSION;
 
@@ -627,7 +627,15 @@ async function raumNavigationAusfuehren() {
 
   btnVerlassen.disabled = true;
   try {
-    await updateDoc(raumRef(), { aktuellesSpiel: null, phase: "lobby" });
+    // v87: Manche Spiele müssen vor dem Zurückgehen eigene Rundendaten aufräumen
+    // (z. B. Schätzfragen: Punkte, Antworten, sfStatus). Bietet das aktive Spiel
+    // dafür den Hook "vorZurueck" an, übernimmt der das Zurücksetzen des Raums
+    // gleich mit - sonst reicht das einfache Zurücksetzen hier.
+    if (aktivesSpielModul?.vorZurueck) {
+      await aktivesSpielModul.vorZurueck();
+    } else {
+      await updateDoc(raumRef(), { aktuellesSpiel: null, phase: "lobby" });
+    }
   } catch (e) {
     zeigeDebug("Hauptmenü konnte nicht geöffnet werden: " + e.message);
     btnVerlassen.disabled = false;
