@@ -9,7 +9,7 @@ import {
 } from "./kern/ui.js";
 import { SPIELE, spielInfo } from "./spiele/register.js";
 
-export const APP_VERSION = "v91";
+export const APP_VERSION = "v92";
 const appVersion = document.getElementById("app-version");
 appVersion.textContent = "Version " + APP_VERSION;
 
@@ -835,5 +835,21 @@ versucheSitzungFortzusetzen();
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     navigator.serviceWorker.register("sw.js").catch((e) => console.warn("Service Worker:", e));
+  });
+
+  // Beim ALLERERSTEN Öffnen nach einem neuen Deploy steuert kurzzeitig noch der
+  // ALTE Service Worker die Seite (Browser-Standardverhalten: ein bereits
+  // laufender Tab wird von einer neuen SW-Version erst uebernommen, nachdem sie
+  // im Hintergrund fertig installiert+aktiviert ist). In diesem kurzen Fenster
+  // liefert der alte SW noch alte/zwischengespeicherte Dateien aus - das war
+  // vermutlich der Grund fuer das gemeldete "weisse Viereck beim Fuchs, das
+  // nach Aktualisieren verschwindet". Sobald die neue SW-Version uebernimmt
+  // (controllerchange), laden wir die Seite darum genau einmal automatisch neu,
+  // damit man den manuellen Reload nicht mehr selbst machen muss.
+  let neuGeladenWegenSW = false;
+  navigator.serviceWorker.addEventListener("controllerchange", () => {
+    if (neuGeladenWegenSW) return;
+    neuGeladenWegenSW = true;
+    window.location.reload();
   });
 }
