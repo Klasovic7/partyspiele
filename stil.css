@@ -775,10 +775,10 @@
       border: 5px solid #ff6b58; box-shadow: 0 9px 22px rgba(64,24,80,.24), inset 0 0 0 3px rgba(255,255,255,.18);
     }
     #start-screen .app-icon {
-      /* v74: die Grafik selbst hat unten nur sehr wenig transparenten Rand
-         (der Punkt des Fragezeichens sitzt fast am Bildrand) - bei 104px
-         beruehrte er den Kreisrand. 94px lassen echten Abstand. */
-      display: block; width: 94px; height: 94px; object-fit: contain; border-radius: 0;
+      /* v75: nochmal deutlich kleiner - die Grafik hat unten kaum transparenten
+         Rand (der Punkt sitzt nur ~2% vom Bildrand entfernt), deshalb jetzt mit
+         spuerbarem Sicherheitsabstand statt knapp am Kreisrand zu kleben. */
+      display: block; width: 82px; height: 82px; object-fit: contain; border-radius: 0;
       filter: drop-shadow(0 3px 2px rgba(22,7,39,.22));
     }
     #start-screen .start-hero h1 { margin-top: 0; font-size: 2.25rem; letter-spacing: -.04em; }
@@ -998,7 +998,7 @@
     @media (max-height: 720px) {
       #start-screen { min-height: 620px; padding-top: 30px; }
       #start-screen .start-icon { width: 94px; height: 94px; margin-bottom: 8px; }
-      #start-screen .app-icon { width: 80px; height: 80px; }
+      #start-screen .app-icon { width: 70px; height: 70px; }
       .start-deko { min-height: 116px; padding-top: 8px; }
       .start-deko img { max-height: 118px; }
     }
@@ -1027,14 +1027,10 @@
       --flaeche-klar: var(--club-ivory);
       --linie: rgba(255,255,255,.13);
       --koralle: var(--club-orange);
-      /* v73: ein gemeinsamer "Lava-Lampen"-Verlauf fuer alle Karten - mehrere
-         weiche, ineinanderfliessende Lichtflecken statt zwei harter Kreise.
-         Ausserhalb der Karten (body) gibt es diese Flecken bewusst nicht mehr. */
-      --club-glow:
-        radial-gradient(72% 58% at 10% 6%, rgba(150,72,128,.58) 0%, rgba(150,72,128,.26) 34%, transparent 64%),
-        radial-gradient(66% 62% at 94% 12%, rgba(224,112,68,.34) 0%, rgba(224,112,68,.14) 36%, transparent 62%),
-        radial-gradient(80% 64% at 18% 100%, rgba(120,62,112,.50) 0%, rgba(120,62,112,.20) 36%, transparent 66%),
-        radial-gradient(64% 60% at 100% 92%, rgba(168,78,134,.42) 0%, rgba(168,78,134,.16) 34%, transparent 62%);
+      /* v75: echte organische Wellenform (weich ausgeblendete Pfade) statt
+         reiner Farbverlaeufe - naeher an der Vorlage. Nur INNERHALB von Karten
+         verwendet (nie auf body), damit am Rand nichts mehr auseinanderlaeuft. */
+      --club-glow: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 760'><filter id='b' x='-40%' y='-40%' width='180%' height='180%'><feGaussianBlur stdDeviation='16'/></filter><g filter='url(%23b)'><path d='M-40 40 C 60 -50 170 -10 220 70 C 275 160 215 245 100 240 C -25 235 -125 135 -40 40 Z' fill='%239a4d86' opacity='.62'/><path d='M300 20 C 400 -15 470 70 440 155 C 410 240 300 235 255 165 C 218 105 245 55 300 20 Z' fill='%23e57a44' opacity='.34'/><path d='M45 545 C 155 480 290 520 315 618 C 338 710 225 758 100 738 C -8 720 -50 605 45 545 Z' fill='%23713a82' opacity='.55'/><path d='M330 590 C 425 555 470 655 415 720 C 365 778 270 752 260 685 C 252 636 278 612 330 590 Z' fill='%23bd5a97' opacity='.44'/></g></svg>");
     }
 
     html { background: var(--app-hintergrund); }
@@ -1044,7 +1040,7 @@
       background-attachment: fixed;
     }
     .bildschirm-karte {
-      color: var(--club-text); background: var(--club-glow), var(--club-ink);
+      color: var(--club-text); background: var(--club-glow) center/100% 100% no-repeat, var(--club-ink);
       border: 1px solid rgba(255,115,90,.66);
       box-shadow: 0 22px 48px rgba(0,0,0,.38);
     }
@@ -1069,7 +1065,7 @@
 
     #start-screen {
       min-height: min(790px, calc(100dvh - 96px));
-      background: var(--club-glow), linear-gradient(160deg, #251728 0%, #18101d 50%, #120d17 100%);
+      background: var(--club-glow) center/100% 100% no-repeat, linear-gradient(160deg, #251728 0%, #18101d 50%, #120d17 100%);
     }
     #start-screen .start-icon {
       background: var(--club-ivory); border-color: var(--club-orange);
@@ -1113,7 +1109,7 @@
     }
     .beitreten-dialog-inhalt, .raum-verlassen-dialog-inhalt {
       color: var(--club-text);
-      background: var(--club-glow), var(--club-ink);
+      background: var(--club-glow) center/100% 100% no-repeat, var(--club-ink);
       border: 1px solid rgba(255, 115, 90, .7);
       box-shadow: 0 24px 70px rgba(0, 0, 0, .55);
     }
@@ -1136,7 +1132,7 @@
     }
 
     #lobby-screen {
-      background: var(--club-glow), linear-gradient(158deg, #251728 0%, #18101d 54%, #120d17 100%);
+      background: var(--club-glow) center/100% 100% no-repeat, linear-gradient(158deg, #251728 0%, #18101d 54%, #120d17 100%);
       border-color: rgba(255, 115, 90, .68);
     }
     .lobby-kopf {
@@ -1188,7 +1184,7 @@
 
     #profil-screen {
       color: var(--club-text);
-      background: var(--club-glow), linear-gradient(160deg, #251728 0%, #18101d 54%, #110c15 100%);
+      background: var(--club-glow) center/100% 100% no-repeat, linear-gradient(160deg, #251728 0%, #18101d 54%, #110c15 100%);
     }
     #profil-screen::before, #profil-screen::after, .profil-zacken { display: none; }
     .profil-kopf { text-shadow: 0 5px 20px rgba(0, 0, 0, .65); }
@@ -1236,7 +1232,7 @@
 
     #top-bar.im-spiel {
       color: var(--club-text);
-      background: var(--club-glow), linear-gradient(145deg, #251728, #171019);
+      background: var(--club-glow) center/100% 100% no-repeat, linear-gradient(145deg, #251728, #171019);
       border: 1px solid rgba(255, 115, 90, .68);
       box-shadow: 0 14px 32px rgba(0, 0, 0, .34);
     }
@@ -1250,7 +1246,7 @@
 
     #spiel-wurzel .bildschirm-karte {
       color: var(--club-text);
-      background: var(--club-glow), linear-gradient(158deg, #241627 0%, #18101d 55%, #110c15 100%);
+      background: var(--club-glow) center/100% 100% no-repeat, linear-gradient(158deg, #241627 0%, #18101d 55%, #110c15 100%);
       border: 1px solid rgba(255, 115, 90, .68);
     }
     #spiel-wurzel h1, #spiel-wurzel h2, #spiel-wurzel h3,
