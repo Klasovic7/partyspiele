@@ -1036,17 +1036,14 @@
       --flaeche-klar: var(--club-ivory);
       --linie: rgba(255,255,255,.13);
       --koralle: var(--club-orange);
-      /* v75: echte organische Wellenform (weich ausgeblendete Pfade) statt
-         reiner Farbverlaeufe - naeher an der Vorlage. Nur INNERHALB von Karten
-         verwendet (nie auf body), damit am Rand nichts mehr auseinanderlaeuft. */
-      /* v78: komplett neu nach Feedback ("nicht mehrere Farben, aktuell nur
-         Kreise"). Nur noch EIN Farbton (das Clubhouse-Lila, wie im
-         Logo-Kreis) in verschiedenen Helligkeiten/Deckkraften statt vier
-         verschiedener Farben, und laenglich gezogene, unregelmaessige
-         Wachs-Straehnen (mehr Kontrollpunkte, hochkant gestreckt) statt
-         runder Kreis-Blobs, damit es wie eine Lavalampe fliesst statt wie
-         Konfetti-Kreise wirkt. */
-      --club-glow: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 760'><filter id='b' x='-50%' y='-50%' width='200%' height='200%'><feGaussianBlur stdDeviation='24'/></filter><g filter='url(%23b)'><path d='M120 -80 C 210 -95 265 -20 250 70 C 240 132 190 150 210 210 C 228 266 300 275 295 345 C 290 405 210 420 165 380 C 120 340 140 290 110 250 C 78 208 20 200 15 130 C 10 55 55 -12 120 -80 Z' fill='%23723a86' opacity='.58'/><path d='M60 -40 C 120 -55 165 5 150 65 C 138 112 100 120 112 168 C 124 214 178 222 170 275 C 163 320 100 328 72 292 C 44 256 62 222 40 190 C 16 156 -22 150 -25 96 C -28 42 5 12 60 -40 Z' fill='%23a866b8' opacity='.28'/><path d='M255 480 C 340 460 400 525 385 605 C 375 660 320 675 335 730 C 348 778 410 790 395 838 C 385 872 320 880 288 848 C 255 815 275 780 250 745 C 222 706 165 700 158 640 C 150 572 195 512 255 480 Z' fill='%23723a86' opacity='.54'/><path d='M300 555 C 365 540 405 590 392 645 C 383 683 342 690 352 730 C 362 768 408 775 398 812 C 390 840 344 848 320 823 C 296 798 310 772 292 746 C 272 718 232 714 227 670 C 221 620 252 578 300 555 Z' fill='%23a866b8' opacity='.24'/></g></svg>");
+      /* v79: neu nach genauerem Abgleich mit der ChatGPT-Designvorlage - dort
+         ist es KEINE Ansammlung einzelner Blobs, sondern ein einziger,
+         durchgehender, diagonaler weicher Schwung/Streak durch die Karte
+         (oben links nach unten rechts), nur EIN Farbton in unterschiedlichen
+         Helligkeiten. Nachgebaut mit zwei gedrehten, weich ausgeblendeten
+         Ellipsen auf derselben Diagonalen: eine breitere, dunklere fuer den
+         Grundschwung, eine schmalere, hellere obendrauf fuer den Glanzkern. */
+      --club-glow: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 760'><filter id='b' x='-60%' y='-60%' width='220%' height='220%'><feGaussianBlur stdDeviation='42'/></filter><g filter='url(%23b)'><ellipse cx='150' cy='230' rx='230' ry='95' transform='rotate(-32 150 230)' fill='%23713a82' opacity='.55'/><ellipse cx='250' cy='540' rx='230' ry='95' transform='rotate(-32 250 540)' fill='%23713a82' opacity='.5'/><ellipse cx='120' cy='170' rx='120' ry='48' transform='rotate(-32 120 170)' fill='%23a866c2' opacity='.3'/><ellipse cx='270' cy='580' rx='120' ry='48' transform='rotate(-32 270 580)' fill='%23a866c2' opacity='.26'/></g></svg>");
     }
 
     html { background: var(--app-hintergrund); }
@@ -1084,14 +1081,12 @@
       background: var(--club-glow) center/100% 100% no-repeat, linear-gradient(160deg, #251728 0%, #18101d 50%, #120d17 100%);
     }
     #start-screen .start-icon {
-      /* v78: Diese zweite Regel im "Designsystem v68"-Abschnitt hat frueher
-         "background: var(--club-ivory)" gesetzt - das ist ein cremeweisser
-         Ton und wurde als eckiges/weisses Artefakt im Kreis sichtbar, weil
-         diese Regel spaeter im Code steht als die erste #start-screen
-         .start-icon-Regel (Zeile ~772) und damit die dortige lila
-         Farbverlauf-Fuellung ueberschrieben hat. Genau das war das
-         gemeldete "weisse Viereck". Jetzt nur noch Rahmenfarbe/Schatten
-         anpassen, die lila Fuellung bleibt unveraendert wie im Warteraum. */
+      /* v79: Der cremeweisse Kreis-Hintergrund war so gewollt (siehe Vorlage) -
+         mein v78-Verdacht, das waere die Ursache des gemeldeten "weissen
+         Vierecks", war falsch. Die Groesse/Zentrierung des Fuchses war das
+         eigentliche Problem und ist jetzt korrekt, also kommt der weisse
+         Kreis zurueck. */
+      background: var(--club-ivory);
       border-color: var(--club-orange);
       box-shadow: 0 9px 22px rgba(0,0,0,.34), 0 0 0 1px rgba(255,145,111,.25);
     }
