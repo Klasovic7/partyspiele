@@ -1620,3 +1620,42 @@
       -webkit-user-select: none;
     }
     .anzahl-rad.wird-gedreht { cursor: grabbing; }
+
+    /* ======================================================================
+       "Wer ist es?" - Buzzer, Hinweise, Anzahl-Runden-Stepper
+       ====================================================================== */
+    .wi-anzahl-zeile {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 14px; margin: 18px 0 0; padding: 13px 14px;
+      border: 1px solid rgba(255, 130, 101, .28); border-radius: 16px;
+      background: rgba(255, 255, 255, .035);
+      color: var(--club-text); font-size: 1rem; font-weight: 750;
+    }
+    .wi-anzahl-stepper { display: flex; align-items: center; gap: 10px; }
+    .wi-anzahl-stepper button { width: auto; padding: 6px 14px; }
+    .wi-anzahl-stepper strong { min-width: 24px; text-align: center; font-size: 1.15rem; }
+
+    .wi-hinweis-aktuell {
+      margin: 10px 0 8px; padding: 16px 14px;
+      border-radius: 16px; border: 1px solid rgba(255, 130, 101, .28);
+      background: rgba(255, 255, 255, .035);
+      font-size: 1.25rem; font-weight: 750; line-height: 1.35;
+    }
+    .wi-hinweis-liste { list-style: none; margin: 0 0 10px; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+    .wi-hinweis-liste li {
+      color: var(--club-muted); font-size: 0.85rem; opacity: .8;
+      padding: 6px 10px; border-radius: 10px; background: rgba(255, 255, 255, .02);
+    }
+    .wi-countdown { color: var(--club-muted); font-size: 0.85rem; margin: 0 0 14px; }
+
+    .wi-buzzer {
+      width: 100%; padding: 20px; font-size: 1.35rem; font-weight: 800;
+      border-radius: 18px; border: none; color: #fff;
+      background: linear-gradient(160deg, #ff8a68, #ff5b36);
+      box-shadow: 0 10px 24px rgba(255, 91, 54, .35);
+    }
+    .wi-buzzer:disabled { opacity: .45; box-shadow: none; }
+    .wi-buzzer:not(:disabled):active { transform: scale(.98); }
+
+    .wi-antwort-zeile { display: flex; gap: 8px; }
+    .wi-antwort-zeile input { flex: 1; }
