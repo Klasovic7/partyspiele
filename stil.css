@@ -770,13 +770,25 @@
       display: none;
     }
     #start-screen .start-icon {
+      /* v80: EINZIGE Regel fuer dieses Element (die zweite, weiter unten im
+         "Designsystem v68"-Block stehende Regel ist entfernt - das war schon
+         zweimal die Ursache dafuer, dass Aenderungen hier wirkungslos
+         blieben bzw. sich gegenseitig ueberschrieben haben).
+         Farben 1:1 wie beim Warteraum-Badge (.lobby-logo-badge), das laut
+         Rueckmeldung perfekt aussieht - nur groesser. WICHTIG: das gemeldete
+         "weisse Viereck" war kein CSS-Bug, sondern ein echtes Kontrast-
+         problem - der Fuchs hat selbst cremeweisse Stellen (Schwanzspitze,
+         Wangen), die bei dieser Groesse auf cremeweissem Hintergrund
+         optisch verschmelzen und wie ein unfoermiger heller Klecks wirken.
+         Im Warteraum faellt das bei 42px kaum auf. Falls es bei 112px immer
+         noch komisch aussieht, ist die Farbe (nicht die Groesse) das
+         eigentliche Problem - dann probieren wir wieder den dunklen
+         Farbverlauf, der in v78 sauber aussah. */
       width: 112px; height: 112px; margin: 0 auto 14px; display: grid; place-items: center;
-      border-radius: 50%; background: radial-gradient(circle at 42% 34%, #572080, #2d0d50 72%);
-      border: 5px solid #ff6b58; box-shadow: 0 9px 22px rgba(64,24,80,.24), inset 0 0 0 3px rgba(255,255,255,.18);
-      /* v77: overflow:hidden schneidet garantiert alles ab, was ueber den
-         Kreis hinausragt - unabhaengig davon, wodurch das eckige Artefakt
-         wirklich verursacht wurde. */
-      overflow: hidden;
+      border-radius: 50%; overflow: hidden;
+      background: var(--club-ivory);
+      border: 5px solid var(--club-orange);
+      box-shadow: 0 9px 22px rgba(0,0,0,.34), 0 0 0 1px rgba(255,145,111,.25);
     }
     #start-screen .app-icon {
       /* v77: EINZIGE Regel fuer dieses Element - vorher gab es eine zweite,
@@ -1079,16 +1091,6 @@
     #start-screen {
       min-height: min(790px, calc(100dvh - 96px));
       background: var(--club-glow) center/100% 100% no-repeat, linear-gradient(160deg, #251728 0%, #18101d 50%, #120d17 100%);
-    }
-    #start-screen .start-icon {
-      /* v79: Der cremeweisse Kreis-Hintergrund war so gewollt (siehe Vorlage) -
-         mein v78-Verdacht, das waere die Ursache des gemeldeten "weissen
-         Vierecks", war falsch. Die Groesse/Zentrierung des Fuchses war das
-         eigentliche Problem und ist jetzt korrekt, also kommt der weisse
-         Kreis zurueck. */
-      background: var(--club-ivory);
-      border-color: var(--club-orange);
-      box-shadow: 0 9px 22px rgba(0,0,0,.34), 0 0 0 1px rgba(255,145,111,.25);
     }
     #start-screen .start-hero h1, #start-screen .feld-label { color: var(--club-text); }
     #start-screen .start-tagline { color: var(--club-muted); }
