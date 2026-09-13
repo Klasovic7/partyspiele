@@ -798,6 +798,8 @@
          deshalb kleiner: 86px mit echtem Sicherheitsabstand.
          v86: auf Wunsch minimal vergroessert (86 -> 88px) - deutlich unter
          den kritischen 92px, Sicherheitsabstand zum Kreisrand bleibt.
+         v87: nochmals minimal vergroessert (88 -> 90px), bewusst noch mit
+         2px Abstand zu den kritischen 92px.
          filter:none, weil drop-shadow auf iOS Safari bei dieser Kombination
          (Kreis-Clip + object-fit:contain) fehlerhaft als eckiger Schatten
          gerendert werden kann.
@@ -811,7 +813,7 @@
          sichtbar als Kanten/Schatten-Artefakt auf dem cremefarbenen Kreis.
          Per getComputedStyle bestaetigt (boxShadow war nicht "none"). Jetzt
          explizit entfernt. */
-      display: block; width: 88px; height: 88px; object-fit: contain; border-radius: 0;
+      display: block; width: 90px; height: 90px; object-fit: contain; border-radius: 0;
       filter: none;
       box-shadow: none;
     }
@@ -1032,7 +1034,7 @@
     @media (max-height: 720px) {
       #start-screen { min-height: 620px; padding-top: 30px; }
       #start-screen .start-icon { width: 94px; height: 94px; margin-bottom: 8px; }
-      #start-screen .app-icon { width: 72px; height: 72px; }
+      #start-screen .app-icon { width: 74px; height: 74px; }
       .start-deko { min-height: 116px; padding-top: 8px; }
       .start-deko img { max-height: 118px; }
     }
