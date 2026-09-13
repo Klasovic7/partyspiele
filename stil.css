@@ -795,7 +795,9 @@
          weiter unten stehende Regel mit width/height 92px, die diese Werte
          die ganze Zeit lautlos ueberschrieben hat (siehe Kommentar dort).
          92px liess den Punkt des Fragezeichens den Kreisrand beruehren,
-         deshalb jetzt wirklich kleiner: 86px mit echtem Sicherheitsabstand.
+         deshalb kleiner: 86px mit echtem Sicherheitsabstand.
+         v86: auf Wunsch minimal vergroessert (86 -> 88px) - deutlich unter
+         den kritischen 92px, Sicherheitsabstand zum Kreisrand bleibt.
          filter:none, weil drop-shadow auf iOS Safari bei dieser Kombination
          (Kreis-Clip + object-fit:contain) fehlerhaft als eckiger Schatten
          gerendert werden kann.
@@ -809,7 +811,7 @@
          sichtbar als Kanten/Schatten-Artefakt auf dem cremefarbenen Kreis.
          Per getComputedStyle bestaetigt (boxShadow war nicht "none"). Jetzt
          explizit entfernt. */
-      display: block; width: 86px; height: 86px; object-fit: contain; border-radius: 0;
+      display: block; width: 88px; height: 88px; object-fit: contain; border-radius: 0;
       filter: none;
       box-shadow: none;
     }
@@ -1030,7 +1032,7 @@
     @media (max-height: 720px) {
       #start-screen { min-height: 620px; padding-top: 30px; }
       #start-screen .start-icon { width: 94px; height: 94px; margin-bottom: 8px; }
-      #start-screen .app-icon { width: 70px; height: 70px; }
+      #start-screen .app-icon { width: 72px; height: 72px; }
       .start-deko { min-height: 116px; padding-top: 8px; }
       .start-deko img { max-height: 118px; }
     }
