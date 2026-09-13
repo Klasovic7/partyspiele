@@ -814,9 +814,16 @@
          Per getComputedStyle bestaetigt (boxShadow war nicht "none"). Jetzt
          explizit entfernt.
          v88: auf Wunsch weiter vergroessert (90 -> 94px) - das liegt jetzt
-         ÜBER den oben dokumentierten kritischen 92px. Nach dem Update visuell
-         pruefen, ob der Fragezeichen-Punkt den Kreisrand beruehrt. */
-      display: block; width: 94px; height: 94px; object-fit: contain; border-radius: 0;
+         ÜBER den oben dokumentierten kritischen 92px. Per Pixel-Messung
+         bestaetigt: bei 94px bleibt trotzdem ca. 12px Abstand zwischen dem
+         Fragezeichen-Punkt und dem Kreisrand (112px-Referenzbild) - die
+         alte 92px-Grenze war also zu konservativ / bezog sich auf eine
+         andere Ausgangslage.
+         v89: 94px war fuer den Nutzer beim Vorher/Nachher-Vergleich kaum
+         wahrnehmbar (nur 6px Zuwachs seit v86 insgesamt). Deutlicher
+         Sprung auf 102px, erneut per Pixel-Messung auf Abstand zum
+         Kreisrand geprueft. */
+      display: block; width: 102px; height: 102px; object-fit: contain; border-radius: 0;
       filter: none;
       box-shadow: none;
     }
