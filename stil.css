@@ -775,7 +775,10 @@
       border: 5px solid #ff6b58; box-shadow: 0 9px 22px rgba(64,24,80,.24), inset 0 0 0 3px rgba(255,255,255,.18);
     }
     #start-screen .app-icon {
-      display: block; width: 92px; height: 92px; object-fit: contain; border-radius: 0;
+      /* v73: dichter am Kreisrand, wie im Warteraum-Badge - vorher war hier
+         deutlich mehr Luft zwischen Logo und Kreis als bei der kleinen
+         Lobby-Marke, dadurch wirkte der Kreis "zu groß" fuers Logo. */
+      display: block; width: 104px; height: 104px; object-fit: contain; border-radius: 0;
       filter: drop-shadow(0 3px 2px rgba(22,7,39,.22));
     }
     #start-screen .start-hero h1 { margin-top: 0; font-size: 2.25rem; letter-spacing: -.04em; }
@@ -995,7 +998,7 @@
     @media (max-height: 720px) {
       #start-screen { min-height: 620px; padding-top: 30px; }
       #start-screen .start-icon { width: 94px; height: 94px; margin-bottom: 8px; }
-      #start-screen .app-icon { width: 76px; height: 76px; }
+      #start-screen .app-icon { width: 86px; height: 86px; }
       .start-deko { min-height: 116px; padding-top: 8px; }
       .start-deko img { max-height: 118px; }
     }
@@ -1024,19 +1027,24 @@
       --flaeche-klar: var(--club-ivory);
       --linie: rgba(255,255,255,.13);
       --koralle: var(--club-orange);
+      /* v73: ein gemeinsamer "Lava-Lampen"-Verlauf fuer alle Karten - mehrere
+         weiche, ineinanderfliessende Lichtflecken statt zwei harter Kreise.
+         Ausserhalb der Karten (body) gibt es diese Flecken bewusst nicht mehr. */
+      --club-glow:
+        radial-gradient(70% 55% at 12% 8%, rgba(122,63,105,.42) 0%, rgba(122,63,105,.16) 38%, transparent 70%),
+        radial-gradient(65% 60% at 92% 14%, rgba(210,102,64,.22) 0%, rgba(210,102,64,.08) 40%, transparent 66%),
+        radial-gradient(78% 62% at 20% 98%, rgba(98,53,94,.36) 0%, rgba(98,53,94,.14) 40%, transparent 72%),
+        radial-gradient(62% 58% at 98% 94%, rgba(140,68,112,.30) 0%, rgba(140,68,112,.10) 38%, transparent 68%);
     }
 
     html { background: var(--app-hintergrund); }
     body {
       color: var(--club-text);
-      background:
-        radial-gradient(130% 55% at -18% 8%, rgba(104,58,91,.34) 0 32%, transparent 33%),
-        radial-gradient(105% 50% at 112% 92%, rgba(78,43,77,.27) 0 32%, transparent 33%),
-        linear-gradient(155deg, #2a1b2c 0%, #171019 46%, #100c14 100%);
+      background: linear-gradient(155deg, #2a1b2c 0%, #171019 46%, #100c14 100%);
       background-attachment: fixed;
     }
     .bildschirm-karte {
-      color: var(--club-text); background: var(--club-ink);
+      color: var(--club-text); background: var(--club-glow), var(--club-ink);
       border: 1px solid rgba(255,115,90,.66);
       box-shadow: 0 22px 48px rgba(0,0,0,.38);
     }
@@ -1061,10 +1069,7 @@
 
     #start-screen {
       min-height: min(790px, calc(100dvh - 96px));
-      background:
-        radial-gradient(110% 42% at -22% 0%, rgba(99,55,85,.28) 0 37%, transparent 38%),
-        radial-gradient(96% 38% at 112% 100%, rgba(77,43,73,.27) 0 38%, transparent 39%),
-        linear-gradient(160deg, #251728 0%, #18101d 50%, #120d17 100%);
+      background: var(--club-glow), linear-gradient(160deg, #251728 0%, #18101d 50%, #120d17 100%);
     }
     #start-screen .start-icon {
       background: var(--club-ivory); border-color: var(--club-orange);
@@ -1108,9 +1113,7 @@
     }
     .beitreten-dialog-inhalt, .raum-verlassen-dialog-inhalt {
       color: var(--club-text);
-      background:
-        radial-gradient(90% 65% at 105% 0%, rgba(91, 49, 80, .34), transparent 62%),
-        var(--club-ink);
+      background: var(--club-glow), var(--club-ink);
       border: 1px solid rgba(255, 115, 90, .7);
       box-shadow: 0 24px 70px rgba(0, 0, 0, .55);
     }
@@ -1133,10 +1136,7 @@
     }
 
     #lobby-screen {
-      background:
-        radial-gradient(110% 46% at 116% 22%, rgba(94, 51, 84, .3) 0 35%, transparent 36%),
-        radial-gradient(95% 38% at -14% 100%, rgba(92, 49, 80, .27) 0 36%, transparent 37%),
-        linear-gradient(158deg, #251728 0%, #18101d 54%, #120d17 100%);
+      background: var(--club-glow), linear-gradient(158deg, #251728 0%, #18101d 54%, #120d17 100%);
       border-color: rgba(255, 115, 90, .68);
     }
     .lobby-kopf {
@@ -1188,10 +1188,7 @@
 
     #profil-screen {
       color: var(--club-text);
-      background:
-        radial-gradient(115% 48% at -23% 6%, rgba(102, 57, 91, .31) 0 33%, transparent 34%),
-        radial-gradient(105% 44% at 116% 74%, rgba(88, 48, 80, .28) 0 35%, transparent 36%),
-        linear-gradient(160deg, #251728 0%, #18101d 54%, #110c15 100%);
+      background: var(--club-glow), linear-gradient(160deg, #251728 0%, #18101d 54%, #110c15 100%);
     }
     #profil-screen::before, #profil-screen::after, .profil-zacken { display: none; }
     .profil-kopf { text-shadow: 0 5px 20px rgba(0, 0, 0, .65); }
@@ -1239,9 +1236,7 @@
 
     #top-bar.im-spiel {
       color: var(--club-text);
-      background:
-        radial-gradient(105% 100% at 112% 0%, rgba(98, 52, 86, .3), transparent 60%),
-        linear-gradient(145deg, #251728, #171019);
+      background: var(--club-glow), linear-gradient(145deg, #251728, #171019);
       border: 1px solid rgba(255, 115, 90, .68);
       box-shadow: 0 14px 32px rgba(0, 0, 0, .34);
     }
@@ -1255,10 +1250,7 @@
 
     #spiel-wurzel .bildschirm-karte {
       color: var(--club-text);
-      background:
-        radial-gradient(110% 42% at 116% 18%, rgba(95, 50, 84, .29) 0 35%, transparent 36%),
-        radial-gradient(95% 36% at -15% 100%, rgba(84, 46, 78, .25) 0 35%, transparent 36%),
-        linear-gradient(158deg, #241627 0%, #18101d 55%, #110c15 100%);
+      background: var(--club-glow), linear-gradient(158deg, #241627 0%, #18101d 55%, #110c15 100%);
       border: 1px solid rgba(255, 115, 90, .68);
     }
     #spiel-wurzel h1, #spiel-wurzel h2, #spiel-wurzel h3,
