@@ -71,7 +71,6 @@ const VORLAGE = `
     <p id="sf-setup-fehler" class="fehler-text"></p>
     <p><button id="sf-starten" class="btn-primaer" hidden>Spiel starten</button></p>
     <p id="sf-setup-warten" hidden><em>Warte, bis der Spielleiter das Spiel startet …</em></p>
-    <p><button id="sf-abbrechen" class="btn-flach" hidden>Zurück zur Spielauswahl</button></p>
   </div>
 
   <div id="sf-dummkopf-screen" class="bildschirm-karte" hidden>
@@ -109,7 +108,6 @@ const VORLAGE = `
   <div id="sf-endstand-screen" class="bildschirm-karte" hidden>
     <h1>Endstand</h1>
     <ul id="sf-endstand-liste"></ul>
-    <p><button id="sf-nochmal" class="btn-primaer" hidden>Zurück zur Spielauswahl</button></p>
     <p id="sf-endstand-warten" hidden><em>Der Spielleiter wählt gleich das nächste Spiel …</em></p>
   </div>
 `;
@@ -212,8 +210,6 @@ function verdrahteBedienelemente() {
     catch (e) { zeigeDebug("Fehler beim Umschalten des Dummkopf-Modus: " + e.message); }
   });
   $("sf-starten").addEventListener("click", spielStarten);
-  $("sf-abbrechen").addEventListener("click", zurueck);
-  $("sf-nochmal").addEventListener("click", zurueck);
   $("sf-absenden").addEventListener("click", schaetzungAbsenden);
   $("sf-schaetzung").addEventListener("keydown", (e) => { if (e.key === "Enter") schaetzungAbsenden(); });
   $("sf-andere-frage").addEventListener("click", andereFrage);
@@ -548,7 +544,6 @@ function zeigeSetup() {
   $("sf-anzahl-zeile").hidden = !api.istLeiter;
   $("sf-dummkopf-zeile").hidden = !api.istLeiter;
   $("sf-starten").hidden = !api.istLeiter;
-  $("sf-abbrechen").hidden = !api.istLeiter;
   $("sf-setup-warten").hidden = api.istLeiter;
 }
 
@@ -597,20 +592,18 @@ async function raeumeSpieldatenAuf() {
   ));
 }
 
-async function zurueck() {
-  const knopf = status === "beendet" ? $("sf-nochmal") : $("sf-abbrechen");
-  knopf.disabled = true;
-  try {
-    await raeumeSpieldatenAuf();
-    await updateDoc(api.raumRef(), {
-      sfStatus: null, sfKategorien: [], sfReihenfolge: [],
-      sfFragenIndex: 0, sfAnzahlFragen: 0, sfFrageVersion: 0
-    });
-    await api.zurueckZurAuswahl();
-  } catch (e) {
-    zeigeDebug("Fehler beim Zurückkehren: " + e.message);
-    knopf.disabled = false;
-  }
+// v87: Die eigenen "Zurück zur Spielauswahl"-Buttons (Setup- und Endstand-Bildschirm)
+// wurden entfernt, weil oben in der Kopfzeile bereits derselbe Button existiert.
+// Damit beim Zurückgehen trotzdem die Rundendaten aufgeräumt werden (Punkte,
+// Antworten, sfStatus etc.), ruft app.js diesen exportierten Hook auf, statt den
+// Raum selbst direkt zurückzusetzen.
+export async function vorZurueck() {
+  await raeumeSpieldatenAuf();
+  await updateDoc(api.raumRef(), {
+    sfStatus: null, sfKategorien: [], sfReihenfolge: [],
+    sfFragenIndex: 0, sfAnzahlFragen: 0, sfFrageVersion: 0
+  });
+  await api.zurueckZurAuswahl();
 }
 
 // ============================================================================
@@ -913,7 +906,6 @@ function zeigeEndstand() {
     li.innerHTML = spielerKarte(s.name, s.farbe, s.icon, s.punkte ?? 0, { rang: index + 1 });
     liste.appendChild(li);
   });
-  $("sf-nochmal").hidden = !api.istLeiter;
   $("sf-endstand-warten").hidden = api.istLeiter;
 }
 
