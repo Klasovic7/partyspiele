@@ -1048,14 +1048,14 @@
       --flaeche-klar: var(--club-ivory);
       --linie: rgba(255,255,255,.13);
       --koralle: var(--club-orange);
-      /* v79: neu nach genauerem Abgleich mit der ChatGPT-Designvorlage - dort
-         ist es KEINE Ansammlung einzelner Blobs, sondern ein einziger,
-         durchgehender, diagonaler weicher Schwung/Streak durch die Karte
-         (oben links nach unten rechts), nur EIN Farbton in unterschiedlichen
-         Helligkeiten. Nachgebaut mit zwei gedrehten, weich ausgeblendeten
-         Ellipsen auf derselben Diagonalen: eine breitere, dunklere fuer den
-         Grundschwung, eine schmalere, hellere obendrauf fuer den Glanzkern. */
-      --club-glow: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 760'><filter id='b' x='-60%' y='-60%' width='220%' height='220%'><feGaussianBlur stdDeviation='42'/></filter><g filter='url(%23b)'><ellipse cx='150' cy='230' rx='230' ry='95' transform='rotate(-32 150 230)' fill='%23713a82' opacity='.55'/><ellipse cx='250' cy='540' rx='230' ry='95' transform='rotate(-32 250 540)' fill='%23713a82' opacity='.5'/><ellipse cx='120' cy='170' rx='120' ry='48' transform='rotate(-32 120 170)' fill='%23a866c2' opacity='.3'/><ellipse cx='270' cy='580' rx='120' ry='48' transform='rotate(-32 270 580)' fill='%23a866c2' opacity='.26'/></g></svg>");
+      /* v84: Design "C" (diagonaler Farbverlauf) - vom Nutzer aus 4 echten,
+         in der App gerenderten Vorschlaegen ausgewaehlt. Kein SVG, keine
+         Kontur-Rekonstruktion mehr - einfach ein durchgehender, deckender
+         diagonaler linear-gradient. Da dieser vollstaendig deckend ist,
+         ueberdeckt er die pro Karte leicht unterschiedlichen Fallback-
+         Verlaeufe (die zweite Ebene in jeder "background:"-Zeile) komplett -
+         die muessen deshalb nicht einzeln angefasst werden. */
+      --club-glow: linear-gradient(135deg, #3d2544 0%, #251728 32%, #18101d 62%, #120d17 100%);
     }
 
     html { background: var(--app-hintergrund); }
