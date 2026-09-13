@@ -822,7 +822,15 @@
          v89: 94px war fuer den Nutzer beim Vorher/Nachher-Vergleich kaum
          wahrnehmbar (nur 6px Zuwachs seit v86 insgesamt). Deutlicher
          Sprung auf 102px, erneut per Pixel-Messung auf Abstand zum
-         Kreisrand geprueft. */
+         Kreisrand geprueft.
+         v90: DER EIGENTLICHE GRUND, warum v87-v89 kaum etwas gebracht haben -
+         bilder/logo-fuchs-transparent.png (1254x1254) enthielt riesigen,
+         fast unsichtbaren transparenten Leerraum um den Fuchs (echter
+         sichtbarer Inhalt nur ca. 743x1091px, mittig, nicht mal quadratisch).
+         Jede Vergroesserung dieser Box hat also vor allem den Leerraum
+         mitvergroessert, kaum den Fuchs selbst. Bild jetzt eng auf den
+         sichtbaren Inhalt zugeschnitten (mit object-fit:contain skaliert
+         sich der Fuchs dadurch bei GLEICHER Boxgroesse deutlich sichtbarer). */
       display: block; width: 102px; height: 102px; object-fit: contain; border-radius: 0;
       filter: none;
       box-shadow: none;
