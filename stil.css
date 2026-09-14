@@ -839,8 +839,25 @@
          Jede Vergroesserung dieser Box hat also vor allem den Leerraum
          mitvergroessert, kaum den Fuchs selbst. Bild jetzt eng auf den
          sichtbaren Inhalt zugeschnitten (mit object-fit:contain skaliert
-         sich der Fuchs dadurch bei GLEICHER Boxgroesse deutlich sichtbarer). */
-      display: block; width: 102px; height: 102px; object-fit: contain; border-radius: 0;
+         sich der Fuchs dadurch bei GLEICHER Boxgroesse deutlich sichtbarer).
+         v95: ZWEI echte Probleme endlich behoben, statt nur Symptome zu lindern:
+         1) Die Bilddatei enthielt bis hierhin noch den kompletten Frage-
+            zeichen-Punkt WEIT unterhalb des Fuchskopfes, durch eine grosse
+            leere Luecke getrennt - dadurch musste object-fit:contain (das die
+            HOEHE einpasst) den Fuchskopf recht klein UND nach oben verschoben
+            darstellen, mit viel leerem Platz links/rechts. Bild jetzt auf nur
+            noch Kopf+Schweif zugeschnitten (der Punkt ergibt in einem 112px-
+            Kreis ohnehin keinen Sinn) - dadurch automatisch groesser UND
+            wirklich mittig.
+         2) Das "weisse Viereck" in den Ecken war object-fit:contain + Clipping
+            am AEUSSEREN Wrapper-Element (das bei iOS Safari in Kombination mit
+            border-radius manchmal unzuverlaessig ist) - border-radius auf
+            einem <img> selbst wird dagegen von JEDEM Browser zuverlaessig
+            direkt aufs Bild angewendet. Deshalb jetzt object-fit:cover (statt
+            contain) UND border-radius:50% DIREKT auf dem Bild, das Bild
+            clippt sich damit selbst kreisrund, unabhaengig vom Eltern-Element. */
+      display: block; width: 100px; height: 100px; object-fit: cover; object-position: center;
+      border-radius: 50%;
       filter: none;
       box-shadow: none;
     }
@@ -884,7 +901,9 @@
       clip-path: circle(50%);
     }
     .lobby-logo-badge { width: 42px; height: 42px; }
-    .lobby-app-icon { display: block; width: 36px; height: 36px; object-fit: contain; border-radius: 0; }
+    /* v95: gleicher Fix wie beim Start-Icon - Kreis-Clip direkt auf dem <img>,
+       object-fit: cover statt contain, damit der Fuchs randfuellend & mittig sitzt. */
+    .lobby-app-icon { display: block; width: 34px; height: 34px; object-fit: cover; object-position: center; border-radius: 50%; }
     .lobby-kopf h1 {
       min-width: 0; margin: 0; font-size: 1.55rem; line-height: 1;
       letter-spacing: -.035em; white-space: nowrap;
@@ -1042,7 +1061,9 @@
     }
     .spiel-kopf-icon img { display: block; width: 58px; height: 58px; border-radius: 16px; }
     .spiel-logo-badge { width: 58px; height: 58px; }
-    .spiel-logo-badge img { width: 50px; height: 50px; object-fit: contain; border-radius: 0; }
+    /* v95: gleicher Fix wie beim Start-Icon - Kreis-Clip direkt auf dem <img>,
+       object-fit: cover statt contain, damit der Fuchs randfuellend & mittig sitzt. */
+    .spiel-logo-badge img { width: 50px; height: 50px; object-fit: cover; object-position: center; border-radius: 50%; }
     .spiel-kopf-titel strong {
       color: #fff; font-family: "Barlow Condensed", sans-serif; font-style: italic;
       font-size: clamp(2.35rem, 11vw, 3.2rem); line-height: .9; letter-spacing: -.025em;
@@ -1660,6 +1681,16 @@
       padding: 6px 10px; border-radius: 10px; background: rgba(255, 255, 255, .02);
     }
     .wi-countdown { color: var(--club-muted); font-size: 0.85rem; margin: 0 0 14px; }
+
+    /* v95: Liste der bisherigen Fehlversuche dieser Runde - bewusst in Rot/Orange,
+       damit der Punktabzug optisch erkennbar ist, aber deutlich zurückhaltender
+       als der Buzzer-Button, damit nichts mit ihm verwechselt wird. */
+    .wi-falsch-liste { list-style: none; margin: 0 0 14px; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+    .wi-falsch-liste li {
+      color: #ffb4a3; font-size: 0.85rem; font-weight: 600;
+      padding: 7px 10px; border-radius: 10px;
+      background: rgba(255, 91, 54, .1); border: 1px solid rgba(255, 91, 54, .22);
+    }
 
     .wi-buzzer {
       width: 100%; padding: 20px; font-size: 1.35rem; font-weight: 800;
