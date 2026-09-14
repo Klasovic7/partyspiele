@@ -21,9 +21,9 @@ const RUNDEN_DAUER_SEKUNDEN = 40;
 const VORLAGE = `
   <div id="zt-setup" class="bildschirm-karte" hidden>
     <h1>💥 10 Treffer!</h1>
-    <p class="hinweis-text">Ein Begriff wird angezeigt. Findet die zehn Antworten, die wir suchen.</p>
-    <p class="zt-regel">Eine Person oder ein Team rät. Alle anderen sehen die Trefferliste und
-      tippen einen Begriff an, sobald er genannt wurde. Jeder Treffer gibt einen Punkt.</p>
+    <p class="zt-regel">Ein Begriff wird angezeigt. Findet die zehn Antworten, die wir suchen. Eine
+      Person oder ein Team rät. Alle anderen sehen die Trefferliste und tippen einen Begriff an, sobald
+      er genannt wurde. Jeder Treffer gibt einen Punkt.</p>
 
     <p id="zt-teammodus-zeile">
       <label class="schalter-zeile">
@@ -50,17 +50,19 @@ const VORLAGE = `
       <p><button id="zt-teams-mischen" class="btn-flach" hidden>Teams neu mischen</button></p>
     </div>
 
-    <p id="zt-anzahl-zeile" hidden>
-      <label>Anzahl Begriffe:
-        <input id="zt-anzahl" type="number" inputmode="numeric" min="1" style="width:78px;">
-      </label><br>
+    <div id="zt-anzahl-zeile" class="setup-anzahlblock" hidden>
+      <div class="setup-anzahl-zeile">
+        <span>Anzahl Begriffe</span>
+        <span class="anzahl-picker">
+          <input id="zt-anzahl" type="number" inputmode="numeric" min="1" class="anzahl-eingabe">
+        </span>
+      </div>
       <span id="zt-anzahl-hinweis" class="hinweis-text"></span>
-    </p>
+    </div>
 
     <p id="zt-setup-fehler" class="fehler-text"></p>
     <p><button id="zt-starten" class="btn-primaer" hidden>Spiel starten</button></p>
     <p id="zt-setup-warten" hidden><em>Warte, bis der Spielleiter das Spiel startet …</em></p>
-    <p><button id="zt-abbrechen" class="btn-flach" hidden>Zurück zur Spielauswahl</button></p>
   </div>
 
   <div id="zt-runde" class="bildschirm-karte" hidden>
@@ -102,7 +104,6 @@ const VORLAGE = `
   <div id="zt-endstand" class="bildschirm-karte" hidden>
     <h1>Endstand</h1>
     <div id="zt-endstand-inhalt"></div>
-    <p><button id="zt-nochmal" class="btn-primaer" hidden>Zurück zur Spielauswahl</button></p>
     <p id="zt-endstand-warten" hidden><em>Der Spielleiter wählt gleich das nächste Spiel …</em></p>
   </div>
 `;
@@ -286,8 +287,6 @@ function verdrahteBedienelemente() {
   $("zt-teams-mischen").addEventListener("click", teamsNeuMischen);
   $("zt-anzahl").addEventListener("input", () => { anzahlManuellGesetzt = true; });
   $("zt-starten").addEventListener("click", spielStarten);
-  $("zt-abbrechen").addEventListener("click", zurueck);
-  $("zt-nochmal").addEventListener("click", zurueck);
   $("zt-runde-beenden").addEventListener("click", rundeBeenden);
   $("zt-weiter").addEventListener("click", weiter);
 }
@@ -448,7 +447,6 @@ function zeigeSetup() {
   $("zt-anzahl-hinweis").textContent = `${karten.length} Begriffe stehen zur Verfügung.`;
   $("zt-anzahl-zeile").hidden = !api.istLeiter;
   $("zt-starten").hidden = !api.istLeiter;
-  $("zt-abbrechen").hidden = !api.istLeiter;
   $("zt-setup-warten").hidden = api.istLeiter;
 }
 
@@ -726,13 +724,16 @@ function zeigeEndstand() {
   $("zt-endstand-inhalt").innerHTML = teammodus
     ? teamEndstandHtml()
     : zwischenstandHtml(false);
-  $("zt-nochmal").hidden = !api.istLeiter;
   $("zt-endstand-warten").hidden = api.istLeiter;
 }
 
-async function zurueck() {
-  const knopf = status === "beendet" ? $("zt-nochmal") : $("zt-abbrechen");
-  knopf.disabled = true;
+// v104: der eigene "Zurück zur Spielauswahl"-Button (Setup- und Endstand-
+// Bildschirm) ist entfernt, weil oben in der Kopfzeile bereits derselbe
+// Button existiert (siehe gleiches Muster in spiele/schaetzfragen/spiel.js,
+// Kommentar bei dessen "vorZurueck"). app.js ruft diesen exportierten Hook
+// auf, bevor es zur Auswahl zurueckgeht, damit die Rundendaten trotzdem
+// aufgeraeumt werden.
+export async function vorZurueck() {
   try {
     await updateDoc(api.raumRef(), {
       ztStatus: null, ztTeammodus: false, ztTeams: {}, ztReihenfolge: [],
@@ -744,6 +745,5 @@ async function zurueck() {
     await api.zurueckZurAuswahl();
   } catch (e) {
     zeigeDebug("Fehler beim Zurückkehren: " + e.message);
-    knopf.disabled = false;
   }
 }
