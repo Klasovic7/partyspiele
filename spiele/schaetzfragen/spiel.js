@@ -45,8 +45,7 @@ const VORLAGE = `
       <div class="setup-anzahl-zeile">
         <span>Anzahl Fragen</span>
         <span class="anzahl-picker">
-          <span id="sf-anzahl-rad" class="anzahl-rad" role="listbox" aria-label="Anzahl Fragen" tabindex="0"></span>
-          <input id="sf-anzahl" type="hidden" value="1">
+          <input id="sf-anzahl" type="number" inputmode="numeric" min="1" value="1" class="anzahl-eingabe">
         </span>
       </div>
       <span id="sf-anzahl-hinweis" class="hinweis-text"></span>
@@ -133,12 +132,6 @@ let status = null;
 let ausgewertetAusgeloest = false;
 let dummkopfPhaseBeendet = false;
 let anzahlManuellGesetzt = false;
-let anzahlRadZug = null;
-let anzahlRadHatGezogen = false;
-let anzahlRadMausRest = 0;
-let anzahlRadMausTimer = null;
-
-const ANZAHL_RAD_ZEILENHOEHE = 34;
 
 const $ = (id) => el.wurzel.querySelector("#" + id);
 
@@ -183,27 +176,8 @@ export async function starten(uebergebeneApi) {
 function verdrahteBedienelemente() {
   $("sf-alle").addEventListener("click", () => setzeAlleKategorien(true));
   $("sf-keine").addEventListener("click", () => setzeAlleKategorien(false));
-  $("sf-anzahl-rad").addEventListener("click", (event) => {
-    if (anzahlRadHatGezogen) {
-      anzahlRadHatGezogen = false;
-      event.preventDefault();
-      return;
-    }
-    const option = event.target.closest(".anzahl-rad-option");
-    if (!option) return;
-    setzeAnzahlRadWert(parseInt(option.dataset.wert, 10), true, true);
-  });
-  $("sf-anzahl-rad").addEventListener("pointerdown", starteAnzahlRadZug);
-  $("sf-anzahl-rad").addEventListener("pointermove", bewegeAnzahlRadZug);
-  $("sf-anzahl-rad").addEventListener("pointerup", beendeAnzahlRadZug);
-  $("sf-anzahl-rad").addEventListener("pointercancel", beendeAnzahlRadZug);
-  $("sf-anzahl-rad").addEventListener("wheel", dreheAnzahlRadMitMaus, { passive: false });
-  $("sf-anzahl-rad").addEventListener("keydown", (event) => {
-    if (event.key !== "ArrowUp" && event.key !== "ArrowDown") return;
-    event.preventDefault();
-    const richtung = event.key === "ArrowUp" ? -1 : 1;
-    setzeAnzahlRadWert(parseInt($("sf-anzahl").value, 10) + richtung, true, true);
-  });
+  $("sf-anzahl").addEventListener("input", () => { anzahlManuellGesetzt = true; });
+  $("sf-anzahl").addEventListener("change", () => { begrenzeAnzahlFeld(); anzahlManuellGesetzt = true; });
   $("sf-dummkopf").addEventListener("change", async () => {
     if (!api.istLeiter) return;
     try { await updateDoc(api.raumRef(), { sfDummkopf: $("sf-dummkopf").checked }); }
@@ -234,11 +208,6 @@ function starteListener() {
 export function beenden() {
   if (antwortenUnsub) { antwortenUnsub(); antwortenUnsub = null; }
   if (dummkoepfeUnsub) { dummkoepfeUnsub(); dummkoepfeUnsub = null; }
-  clearTimeout(anzahlRadMausTimer);
-  anzahlRadMausTimer = null;
-  anzahlRadZug = null;
-  anzahlRadHatGezogen = false;
-  anzahlRadMausRest = 0;
   el = {};
   index = -1; frageVersion = 0; reihenfolge = []; anzahlFragen = 0;
   kategorien = []; dummkopfModus = false; status = null;
@@ -351,102 +320,17 @@ function verfuegbareFragenAnzahl() {
   return fragen.filter((f) => kategorien.includes(f.kategorie)).length;
 }
 
-function markiereAnzahlRadWert(wert) {
-  const rad = $("sf-anzahl-rad");
-  rad.querySelectorAll(".anzahl-rad-option").forEach((option) => {
-    const aktiv = parseInt(option.dataset.wert, 10) === wert;
-    option.classList.toggle("aktiv", aktiv);
-    option.setAttribute("aria-selected", String(aktiv));
-  });
-  rad.setAttribute("aria-activedescendant", `sf-anzahl-${wert}`);
-}
-
-function starteAnzahlRadZug(event) {
-  if (!api.istLeiter || event.button > 0) return;
-  const rad = $("sf-anzahl-rad");
-  anzahlRadHatGezogen = false;
-  anzahlRadZug = { pointerId: event.pointerId, letzteY: event.clientY, rest: 0 };
-  rad.classList.add("wird-gedreht");
-  rad.setPointerCapture?.(event.pointerId);
-  event.preventDefault();
-}
-
-function bewegeAnzahlRadZug(event) {
-  if (!anzahlRadZug || event.pointerId !== anzahlRadZug.pointerId) return;
-  const delta = anzahlRadZug.letzteY - event.clientY;
-  anzahlRadZug.letzteY = event.clientY;
-  anzahlRadZug.rest += delta;
-  if (Math.abs(anzahlRadZug.rest) >= 18) {
-    const schritte = anzahlRadZug.rest > 0
-      ? Math.floor(anzahlRadZug.rest / 18)
-      : Math.ceil(anzahlRadZug.rest / 18);
-    anzahlRadZug.rest -= schritte * 18;
-    const aktuell = parseInt($("sf-anzahl").value, 10) || 1;
-    setzeAnzahlRadWert(aktuell + schritte, true, false);
-    anzahlRadHatGezogen = true;
-  }
-  event.preventDefault();
-}
-
-function beendeAnzahlRadZug(event) {
-  if (!anzahlRadZug || event.pointerId !== anzahlRadZug.pointerId) return;
-  const rad = $("sf-anzahl-rad");
-  rad.classList.remove("wird-gedreht");
-  if (rad.hasPointerCapture?.(event.pointerId)) rad.releasePointerCapture(event.pointerId);
-  anzahlRadZug = null;
-  setTimeout(() => { anzahlRadHatGezogen = false; }, 0);
-  event.preventDefault();
-}
-
-function dreheAnzahlRadMitMaus(event) {
-  if (!api.istLeiter || event.deltaY === 0) return;
-  event.preventDefault();
-  clearTimeout(anzahlRadMausTimer);
-  anzahlRadMausRest += event.deltaY;
-  const schritte = anzahlRadMausRest > 0
-    ? Math.floor(anzahlRadMausRest / 28)
-    : Math.ceil(anzahlRadMausRest / 28);
-  if (schritte !== 0) {
-    anzahlRadMausRest -= schritte * 28;
-    const aktuell = parseInt($("sf-anzahl").value, 10) || 1;
-    setzeAnzahlRadWert(aktuell + schritte, true, false);
-  }
-  anzahlRadMausTimer = setTimeout(() => { anzahlRadMausRest = 0; }, 140);
-}
-
-function setzeAnzahlRadWert(rohwert, manuell = false, sanft = false) {
-  const rad = $("sf-anzahl-rad");
-  const maximum = Math.max(1, parseInt(rad.dataset.maximum || "1", 10));
-  const wert = Math.min(Math.max(1, Number.isFinite(rohwert) ? rohwert : 1), maximum);
-  $("sf-anzahl").value = String(wert);
-  if (manuell) anzahlManuellGesetzt = true;
-  markiereAnzahlRadWert(wert);
-
-  const ziel = (wert - 1) * ANZAHL_RAD_ZEILENHOEHE;
-  if (Math.abs(rad.scrollTop - ziel) > 1) {
-    rad.scrollTo({ top: ziel, behavior: sanft ? "smooth" : "auto" });
-  }
-}
-
-function fuelleAnzahlRad(maximum, wert) {
-  const rad = $("sf-anzahl-rad");
-  if (parseInt(rad.dataset.maximum || "0", 10) !== maximum) {
-    rad.innerHTML = "";
-    const fragment = document.createDocumentFragment();
-    for (let zahl = 1; zahl <= maximum; zahl += 1) {
-      const option = document.createElement("button");
-      option.type = "button";
-      option.id = `sf-anzahl-${zahl}`;
-      option.className = "anzahl-rad-option";
-      option.dataset.wert = String(zahl);
-      option.setAttribute("role", "option");
-      option.textContent = String(zahl);
-      fragment.appendChild(option);
-    }
-    rad.appendChild(fragment);
-    rad.dataset.maximum = String(maximum);
-  }
-  requestAnimationFrame(() => setzeAnzahlRadWert(wert, false, false));
+// v104: das frühere per Wischgeste bedienbare "Zahlenrad" wurde durch ein
+// gewöhnliches Zahlenfeld ersetzt (auf Wunsch - einheitlich mit den anderen
+// Spielen, siehe stil.css .anzahl-eingabe). "begrenzeAnzahlFeld" sorgt nur
+// noch dafür, dass eine manuelle Eingabe innerhalb von [1, Maximum] bleibt.
+function begrenzeAnzahlFeld() {
+  const feld = $("sf-anzahl");
+  const maximum = Math.max(1, parseInt(feld.max, 10) || 1);
+  let wert = parseInt(feld.value, 10);
+  if (!Number.isFinite(wert) || wert < 1) wert = 1;
+  if (wert > maximum) wert = maximum;
+  feld.value = String(wert);
 }
 
 function mischeIndizes(werte) {
@@ -533,7 +417,8 @@ function zeigeSetup() {
   const auswahl = anzahlManuellGesetzt && Number.isFinite(bisher)
     ? Math.min(Math.max(1, bisher), obergrenze)
     : obergrenze;
-  fuelleAnzahlRad(obergrenze, auswahl);
+  anzahlFeld.max = String(obergrenze);
+  anzahlFeld.value = String(auswahl);
 
   $("sf-anzahl-hinweis").textContent = verfuegbar === 0
     ? "Noch keine Kategorie ausgewählt."
