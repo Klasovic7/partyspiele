@@ -1296,13 +1296,18 @@
     .lobby-avatar-rahmen {
       /* v102: auf Wunsch nur noch EIN Ring in der Spielerfarbe - der
          innere dunkle Ring kam vom Hintergrund (#251b29) in der 3px-
-         Polsterung zwischen Foto und Rahmen, der aeussere weisse Ring vom
-         zusaetzlichen Spread-Schatten "0 0 0 2px var(--club-ivory)". Beides
-         entfernt: Hintergrund jetzt in der Spielerfarbe selbst (dadurch
-         wirkt die Polsterung wie ein Teil des einen farbigen Rings statt
-         wie ein eigener Ring), Schatten nur noch der reine Schlagschatten. */
+         Polsterung zwischen Foto und Rahmen. Entfernt: Hintergrund jetzt in
+         der Spielerfarbe selbst (dadurch wirkt die Polsterung wie ein Teil
+         des einen farbigen Rings statt wie ein eigener Ring).
+         v103: der aeussere weisse Ring kommt auf Wunsch zurueck, aber
+         duenner (1px statt vorher 2px). Bewusst wieder per box-shadow-Spread
+         gelöst (nicht per outline o.ae.) - dieses Element war nie von dem
+         Kerben-Rendering-Bug betroffen, der beim Fuchs-Logo auftrat (dort
+         nur bei #start-icon/.lobby-logo-badge/.spiel-logo-badge, siehe
+         deren Kommentare); hier war der Ring in jedem bisherigen Screenshot
+         sauber rund. */
       background: var(--spieler-farbe);
-      box-shadow: 0 6px 15px rgba(0, 0, 0, .36);
+      box-shadow: 0 0 0 1px var(--club-ivory), 0 6px 15px rgba(0, 0, 0, .36);
     }
     .spiel-kachel {
       color: #23182a;
