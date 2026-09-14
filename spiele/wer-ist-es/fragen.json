@@ -1,146 +1,142 @@
 [
   {
-    "name": "Thomas Müller",
+    "name": "Mats Hummels",
     "kategorie": "fussballer",
     "hinweise": [
-      "Sein Marktwert erreichte 2014/15 einen Höhepunkt von ca. 80 Mio. €",
-      "Wechselte 2025 in die MLS zu den Vancouver Whitecaps",
-      "Ist mindestens 12-facher deutscher Meister",
-      "Hat die Champions League 2013 und 2020 gewonnen",
-      "Wurde bei der WM 2010 Torschützenkönig",
+      "Ist Rechtsfuß",
+      "Ist 191 cm groß",
+      "Position: Innenverteidiger",
+      "Spielte 2016 für einen Verein aus München",
+      "Nahm mit seiner Nationalmannschaft an mehreren Weltmeisterschaften teil",
       "Wurde 2014 Weltmeister",
-      "Ist Rechtsfuß und 190 cm groß",
-      "Spielte seine gesamte Karriere bis 2024 nur für einen einzigen Bundesligaverein",
-      "Nationalität: Deutschland",
-      "Geboren am 13.09.1989"
+      "Ist mindestens 5-facher deutscher Meister - mit zwei verschiedenen Vereinen",
+      "Bekannt für seine spektakulären langen Diagonalpässe"
     ]
   },
   {
-    "name": "Manuel Neuer",
+    "name": "Toni Kroos",
     "kategorie": "fussballer",
     "hinweise": [
-      "Sein Marktwert erreichte 2013/14 einen Höhepunkt von ca. 38 Mio. €",
-      "Wechselte 2011 von Schalke 04 für ca. 30 Mio. € zu seinem heutigen Verein",
-      "Ist mindestens 11-facher deutscher Meister",
-      "Hat die Champions League 2013 und 2020 gewonnen",
-      "Gilt als einer der Pioniere des offensiv mitspielenden Torwarts (\"Sweeper-Keeper\")",
+      "Geboren in Greifswald",
+      "Ist Rechtsfuß",
+      "Position: Zentrales Mittelfeld",
+      "Wechselte 2014 zu einem spanischen Spitzenverein",
       "Wurde 2014 Weltmeister",
-      "Position: Torwart, 193 cm groß",
-      "Nationalität: Deutschland",
-      "Geboren am 27.03.1986"
+      "Ist mindestens 5-facher Champions-League-Sieger",
+      "Beendete 2024 seine Vereinskarriere, kehrte aber für ein großes Turnier nochmal kurz zur Nationalmannschaft zurück",
+      "Gilt als einer der passsichersten Mittelfeldspieler seiner Generation"
     ]
   },
   {
-    "name": "Joshua Kimmich",
+    "name": "Mario Götze",
     "kategorie": "fussballer",
     "hinweise": [
-      "Sein Marktwert erreichte 2021/22 einen Höhepunkt von ca. 90 Mio. €",
-      "Wechselte 2015 von RB Leipzig zu seinem heutigen Verein",
-      "Ist mindestens 8-facher deutscher Meister",
-      "Hat die Champions League 2020 gewonnen",
-      "Spielt meist auf der rechten Verteidigerposition, obwohl er eigentlich gelernter Sechser ist",
-      "Ist Rechtsfuß und 176 cm groß",
-      "Nationalität: Deutschland",
-      "Geboren am 08.02.1995"
-    ]
-  },
-  {
-    "name": "Robert Lewandowski",
-    "kategorie": "fussballer",
-    "hinweise": [
-      "Sein Marktwert erreichte 2021 einen Höhepunkt von ca. 120 Mio. € - ungewöhnlich hoch für sein Alter",
-      "Wechselte 2022 für ca. 45 Mio. € von München nach Barcelona",
-      "Wechselte 2014 ablösefrei von Dortmund nach München",
-      "Stellte 2015 einen Bundesliga-Rekord auf: 5 Tore in nur 9 Minuten",
-      "Hat die Champions League 2020 gewonnen",
-      "Ist Rechtsfuß und 185 cm groß",
-      "Position: Mittelstürmer",
-      "Nationalität: Polen",
-      "Geboren am 21.08.1988"
-    ]
-  },
-  {
-    "name": "Erling Haaland",
-    "kategorie": "fussballer",
-    "hinweise": [
-      "Erreichte 2023 einen der höchsten je verzeichneten Marktwerte im Fußball (ca. 180 Mio. €)",
-      "Wechselte 2022 für ca. 60 Mio. € von Dortmund nach England",
-      "Stellte in seiner Debütsaison 2022/23 einen Premier-League-Rekord auf: 36 Tore",
-      "Hat die Champions League 2023 gewonnen",
-      "Ist Linksfuß und 194 cm groß",
-      "Position: Mittelstürmer",
-      "Nationalität: Norwegen",
-      "Geboren am 21.07.2000"
-    ]
-  },
-  {
-    "name": "Jude Bellingham",
-    "kategorie": "fussballer",
-    "hinweise": [
-      "Wechselte 2023 für eine Grundablöse von ca. 103 Mio. € von Dortmund nach Spanien",
-      "Einer der teuersten Teenager-Transfers der Fußballgeschichte",
-      "Hat die Champions League 2024 gewonnen",
-      "Ist Rechtsfuß und 186 cm groß",
+      "Ist unter 1,80 m groß",
+      "Ist Rechtsfuß",
       "Position: Offensives Mittelfeld",
-      "Nationalität: England",
-      "Geboren am 29.06.2003"
+      "Spielte einige Zeit auch in den Niederlanden",
+      "Wechselte 2013 direkt zum großen Rivalen seines damaligen Vereins",
+      "Wurde 2014 Weltmeister",
+      "Schoss dabei in der Verlängerung das entscheidende Tor im WM-Finale",
+      "Ist mehrfacher deutscher Meister - mit zwei verschiedenen Vereinen"
     ]
   },
   {
-    "name": "Marco Reus",
+    "name": "Ilkay Gündogan",
     "kategorie": "fussballer",
     "hinweise": [
-      "Sein Marktwert erreichte 2015/16 einen Höhepunkt von ca. 45 Mio. €",
-      "Wechselte 2012 für ca. 17 Mio. € von Mönchengladbach nach Dortmund",
-      "Kurioses Rekord-Trivia: wurde in 12 Jahren bei seinem Verein nie deutscher Meister",
-      "Stand 2013 und 2024 im Champions-League-Finale - beide Male ohne Titel",
-      "Ist Rechtsfuß und 180 cm groß",
-      "Position: Offensives Mittelfeld / Flügel",
-      "Nationalität: Deutschland",
-      "Geboren am 31.05.1989"
+      "Geboren in Gelsenkirchen",
+      "Position: Zentrales Mittelfeld",
+      "Ist Rechtsfuß",
+      "Wechselte 2016 nach England",
+      "War über mehrere Jahre Kapitän seines englischen Vereins",
+      "Wechselte 2023 kurzzeitig nach Spanien, kehrte aber schon ein Jahr später nach England zurück",
+      "Hat die Champions League 2023 gewonnen",
+      "Ist mindestens 4-facher englischer Meister"
     ]
   },
   {
-    "name": "Lionel Messi",
+    "name": "Timo Werner",
     "kategorie": "fussballer",
     "hinweise": [
-      "Sein Marktwert erreichte 2018 einen Höhepunkt von ca. 180 Mio. €",
-      "Hat mindestens 8 Ballon d'Or gewonnen - Rekord",
-      "Hat die Champions League 4 mal gewonnen (2006, 2009, 2011, 2015)",
-      "Ist mindestens 10-facher spanischer Meister",
-      "Wurde 2022 Weltmeister",
-      "Ist Linksfuß und nur 170 cm groß",
-      "Position: Rechtsaußen / Stürmer",
-      "Nationalität: Argentinien",
-      "Geboren am 24.06.1987"
-    ]
-  },
-  {
-    "name": "Cristiano Ronaldo",
-    "kategorie": "fussballer",
-    "hinweise": [
-      "Sein Marktwert erreichte 2014/15 einen Höhepunkt von ca. 120 Mio. €",
-      "Wechselte 2009 für die damalige Weltrekordablöse von ca. 94 Mio. € nach Spanien",
-      "Hat mindestens 5 Ballon d'Or gewonnen",
-      "Hat die Champions League 5 mal gewonnen (2008, 2014, 2016, 2017, 2018)",
-      "Ist Rekordtorschütze der gesamten Champions-League-Geschichte",
-      "Ist Rechtsfuß und 187 cm groß",
       "Position: Stürmer",
+      "Bekannt für seine besonders hohe Sprintgeschwindigkeit",
+      "Ist Rechtsfuß",
+      "Spielte bereits als Teenager in der Bundesliga für seinen Heimatverein",
+      "Wechselte 2020 nach England",
+      "Kehrte 2022 wieder zu seinem vorherigen Bundesligaverein zurück",
+      "Hat die Champions League 2021 gewonnen",
+      "Deutscher Nationalspieler seit den späten 2010er-Jahren"
+    ]
+  },
+  {
+    "name": "Niclas Füllkrug",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Trägt den Spitznamen \"Lücke\"",
+      "Ist 189 cm groß",
+      "Position: Mittelstürmer",
+      "Ist Rechtsfuß",
+      "Spielte lange in der 2. Bundesliga, bevor er den Durchbruch schaffte",
+      "Gab sein Nationalmannschafts-Debüt erst mit 30 Jahren",
+      "Wechselte 2023 zu einem Verein aus dem Ruhrgebiet",
+      "Wechselte 2024 nach England"
+    ]
+  },
+  {
+    "name": "Serge Gnabry",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Geboren in Stuttgart",
+      "Position: Flügelspieler",
+      "Wechselte bereits als Jugendlicher 2013 nach England",
+      "Verbrachte danach einige Zeit auf Leihbasis, unter anderem wieder in der Bundesliga",
+      "Erzielte 2020 in einem historischen 8:2-Champions-League-Spiel zwei Tore",
+      "Hat die Champions League 2020 gewonnen",
+      "Ist mindestens 6-facher deutscher Meister",
+      "Deutscher Nationalspieler seit den späten 2010er-Jahren"
+    ]
+  },
+  {
+    "name": "Bruno Fernandes",
+    "kategorie": "fussballer",
+    "hinweise": [
       "Nationalität: Portugal",
-      "Geboren am 05.02.1985"
+      "Position: Offensives Mittelfeld",
+      "Ist Rechtsfuß",
+      "Spielte zuvor in Italien, bevor er nach England wechselte",
+      "Wechselte im Januar 2020 nach England",
+      "Bekannt für seine Ruhe bei Elfmetern",
+      "Wurde einige Jahre nach seinem Wechsel Kapitän seines Vereins",
+      "Mehrfacher portugiesischer Nationalspieler bei großen Turnieren"
     ]
   },
   {
-    "name": "Kylian Mbappé",
+    "name": "Rodri",
     "kategorie": "fussballer",
     "hinweise": [
-      "Wechselte 2018 für ca. 180 Mio. € von Monaco nach Paris - einer der teuersten Transfers der Geschichte",
-      "Wurde 2024 ablösefrei nach Spanien - zu einem der größten Vereine der Welt",
-      "Wurde 2018 mit erst 19 Jahren Weltmeister",
-      "Ist Rechtsfuß und 178 cm groß",
-      "Position: Stürmer",
-      "Nationalität: Frankreich",
-      "Geboren am 20.12.1998"
+      "Position: Defensives Mittelfeld",
+      "Ist 191 cm groß",
+      "Ist Rechtsfuß",
+      "Wechselte 2019 nach England",
+      "Hat die Champions League 2023 gewonnen",
+      "Wurde 2024 Europameister",
+      "Gewann 2024 eine der bedeutendsten individuellen Auszeichnungen des Weltfußballs",
+      "Spanischer Nationalspieler seit den späten 2010er-Jahren"
+    ]
+  },
+  {
+    "name": "Victor Osimhen",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Nationalität: Nigeria",
+      "Position: Mittelstürmer",
+      "Ist Rechtsfuß",
+      "Spielte 2017 auf Leihbasis kurz in der Bundesliga",
+      "Wechselte danach über Belgien und Frankreich weiter nach Italien",
+      "Wurde 2023 mit seinem italienischen Verein zum ersten Mal seit über 30 Jahren Meister",
+      "Wurde in derselben Saison Torschützenkönig der italienischen Liga",
+      "Erreichte 2023 mit Nigeria das Finale des Afrika-Cups"
     ]
   }
 ]
