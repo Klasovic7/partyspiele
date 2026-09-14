@@ -850,7 +850,15 @@
          Kombination mit border-radius manchmal unzuverlaessig - border-radius
          DIREKT auf dem <img> selbst wird dagegen von jedem Browser
          zuverlaessig angewendet und clippt das Bild unabhaengig vom
-         Eltern-Element. Bild und Groesse bleiben sonst wie vor v95. */
+         Eltern-Element.
+         v98: Obwohl die Bounding-Box des Fuchsmotivs im Bild links/rechts
+         exakt symmetrisch ist (je 43px), WIRKT der Fuchskopf beim Nutzer
+         optisch leicht nach links verschoben (der duenne, geschwungene
+         Schweif rechts hat weniger "visuelles Gewicht" als der massive
+         dunkle Kopf) - klassischer Effekt von mathematischer vs. optischer
+         Zentrierung. Fix: Bildinhalt um 24px nach rechts verschoben (mehr
+         Leerraum links als rechts), das kompensiert den Effekt, ohne dass
+         am Kunstwerk selbst etwas veraendert wurde. */
       display: block; width: 102px; height: 102px; object-fit: contain; object-position: center;
       border-radius: 50%;
       filter: none;
