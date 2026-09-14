@@ -775,17 +775,26 @@
          zweimal die Ursache dafuer, dass Aenderungen hier wirkungslos
          blieben bzw. sich gegenseitig ueberschrieben haben).
          Farben 1:1 wie beim Warteraum-Badge (.lobby-logo-badge), das laut
-         Rueckmeldung perfekt aussieht - nur groesser. WICHTIG: das gemeldete
-         "weisse Viereck" war kein CSS-Bug, sondern ein echtes Kontrast-
-         problem - der Fuchs hat selbst cremeweisse Stellen (Schwanzspitze,
-         Wangen), die bei dieser Groesse auf cremeweissem Hintergrund
-         optisch verschmelzen und wie ein unfoermiger heller Klecks wirken.
-         Im Warteraum faellt das bei 42px kaum auf. Falls es bei 112px immer
-         noch komisch aussieht, ist die Farbe (nicht die Groesse) das
-         eigentliche Problem - dann probieren wir wieder den dunklen
-         Farbverlauf, der in v78 sauber aussah. */
+         Rueckmeldung perfekt aussieht - nur groesser. Die fruehere Vermutung
+         hier ("kein CSS-Bug, sondern Kontrastproblem der cremefarbenen
+         Fuchs-Stellen") war falsch bzw. unvollstaendig: die Ecken des
+         weissen/cremefarbenen Rechtecks um den Fuchs blieben auch im
+         privaten Modus sichtbar (also kein Cache-Effekt) UND eine
+         Pixelpruefung der PNG-Datei zeigt an allen vier Bildecken alpha=0
+         (voll transparent) - im Bild selbst steckt an den Ecken also nichts.
+         v93: DAHER echter CSS-Clip-Bug bestaetigt - bekanntes iOS-Safari-
+         Problem, dass "overflow:hidden" + "border-radius:50%" ein
+         <img>-Kind nicht zuverlaessig auf den Kreis clippt (das Bild ist
+         102x102 in einem 112x112-Kreis zentriert - seine RECHTECKIGEN Ecken
+         liegen geometrisch ausserhalb des Kreisradius und wurden bei
+         fehlgeschlagenem Clipping direkt sichtbar). Fix: zusaetzlich
+         clip-path als robusterer, von overflow:hidden unabhaengiger
+         Kreis-Clip - das ist der in iOS Safari fuer genau dieses Muster
+         (rundes Icon-Badge) empfohlene, zuverlaessigere Ansatz. */
       width: 112px; height: 112px; margin: 0 auto 14px; display: grid; place-items: center;
       border-radius: 50%; overflow: hidden;
+      -webkit-clip-path: circle(50%);
+      clip-path: circle(50%);
       background: var(--club-ivory);
       border: 5px solid var(--club-orange);
       box-shadow: 0 9px 22px rgba(0,0,0,.34), 0 0 0 1px rgba(255,145,111,.25);
@@ -869,6 +878,10 @@
       display: grid; place-items: center; flex: 0 0 auto; overflow: hidden;
       border-radius: 50%; background: #35105c; border: 2px solid #ff6b58;
       box-shadow: 0 5px 12px rgba(79,38,93,.18);
+      /* v93: gleicher robusterer Kreis-Clip wie beim Start-Icon (siehe dort),
+         vorsorglich auch hier, falls derselbe iOS-Safari-Clip-Bug zuschlaegt. */
+      -webkit-clip-path: circle(50%);
+      clip-path: circle(50%);
     }
     .lobby-logo-badge { width: 42px; height: 42px; }
     .lobby-app-icon { display: block; width: 36px; height: 36px; object-fit: contain; border-radius: 0; }
