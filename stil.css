@@ -1294,8 +1294,15 @@
     .lobby-spieler strong { color: var(--club-text); }
     .lobby-spieler small { color: var(--club-muted); }
     .lobby-avatar-rahmen {
-      background: #251b29;
-      box-shadow: 0 0 0 2px var(--club-ivory), 0 6px 15px rgba(0, 0, 0, .36);
+      /* v102: auf Wunsch nur noch EIN Ring in der Spielerfarbe - der
+         innere dunkle Ring kam vom Hintergrund (#251b29) in der 3px-
+         Polsterung zwischen Foto und Rahmen, der aeussere weisse Ring vom
+         zusaetzlichen Spread-Schatten "0 0 0 2px var(--club-ivory)". Beides
+         entfernt: Hintergrund jetzt in der Spielerfarbe selbst (dadurch
+         wirkt die Polsterung wie ein Teil des einen farbigen Rings statt
+         wie ein eigener Ring), Schatten nur noch der reine Schlagschatten. */
+      background: var(--spieler-farbe);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, .36);
     }
     .spiel-kachel {
       color: #23182a;
