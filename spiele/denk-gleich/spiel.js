@@ -14,21 +14,23 @@ import { spielerKarte, zeigeDebug } from "../../kern/ui.js";
 const VORLAGE = `
   <div id="dg-setup" class="bildschirm-karte" hidden>
     <h1>🧠 Denk gleich!</h1>
-    <p class="hinweis-text">Beantwortet dieselbe Frage und versucht, auf das Gleiche zu kommen.</p>
-    <p class="dg-regel">Für jede andere Person mit derselben Antwort bekommst du einen Punkt.
-      Drei gleiche Antworten bringen diesen drei Spielern also jeweils zwei Punkte.</p>
+    <p class="dg-regel">Beantwortet dieselbe Frage und versucht, auf das Gleiche zu kommen. Für jede
+      andere Person mit derselben Antwort bekommst du einen Punkt. Drei gleiche Antworten bringen diesen
+      drei Spielern also jeweils zwei Punkte.</p>
 
-    <p id="dg-anzahl-zeile" hidden>
-      <label>Anzahl Fragen:
-        <input id="dg-anzahl" type="number" inputmode="numeric" min="1" style="width:78px;">
-      </label><br>
+    <div id="dg-anzahl-zeile" class="setup-anzahlblock" hidden>
+      <div class="setup-anzahl-zeile">
+        <span>Anzahl Fragen</span>
+        <span class="anzahl-picker">
+          <input id="dg-anzahl" type="number" inputmode="numeric" min="1" class="anzahl-eingabe">
+        </span>
+      </div>
       <span id="dg-anzahl-hinweis" class="hinweis-text"></span>
-    </p>
+    </div>
 
     <p id="dg-setup-fehler" class="fehler-text"></p>
     <p><button id="dg-starten" class="btn-primaer" hidden>Spiel starten</button></p>
     <p id="dg-setup-warten" hidden><em>Warte, bis der Spielleiter das Spiel startet …</em></p>
-    <p><button id="dg-abbrechen" class="btn-flach" hidden>Zurück zur Spielauswahl</button></p>
   </div>
 
   <div id="dg-frage-screen" class="bildschirm-karte" hidden>
@@ -56,7 +58,6 @@ const VORLAGE = `
   <div id="dg-endstand-screen" class="bildschirm-karte" hidden>
     <h1>Endstand</h1>
     <ul id="dg-endstand-liste"></ul>
-    <p><button id="dg-nochmal" class="btn-primaer" hidden>Zurück zur Spielauswahl</button></p>
     <p id="dg-endstand-warten" hidden><em>Der Spielleiter wählt gleich das nächste Spiel …</em></p>
   </div>
 `;
@@ -151,8 +152,6 @@ export async function starten(uebergebeneApi) {
 
 function verdrahteBedienelemente() {
   $("dg-starten").addEventListener("click", spielStarten);
-  $("dg-abbrechen").addEventListener("click", zurueck);
-  $("dg-nochmal").addEventListener("click", zurueck);
   $("dg-absenden").addEventListener("click", antwortAbsenden);
   $("dg-antwort").addEventListener("keydown", (e) => {
     if (e.key === "Enter") antwortAbsenden();
@@ -240,7 +239,6 @@ function zeigeSetup() {
   $("dg-anzahl-hinweis").textContent = `${fragen.length} Fragen stehen zur Verfügung.`;
   $("dg-anzahl-zeile").hidden = !api.istLeiter;
   $("dg-starten").hidden = !api.istLeiter;
-  $("dg-abbrechen").hidden = !api.istLeiter;
   $("dg-setup-warten").hidden = api.istLeiter;
 }
 
@@ -280,9 +278,11 @@ async function raeumeSpieldatenAuf() {
   await Promise.all(spielerListe.map((s) => updateDoc(api.spielerRef(s.id), { punkte: 0 })));
 }
 
-async function zurueck() {
-  const knopf = status === "beendet" ? $("dg-nochmal") : $("dg-abbrechen");
-  knopf.disabled = true;
+// v104: der eigene "Zurück zur Spielauswahl"-Button (Setup- und Endstand-
+// Bildschirm) ist entfernt, weil oben in der Kopfzeile bereits derselbe
+// Button existiert (gleiches Muster wie in spiele/schaetzfragen/spiel.js,
+// siehe dessen "vorZurueck"-Kommentar).
+export async function vorZurueck() {
   try {
     await raeumeSpieldatenAuf();
     await updateDoc(api.raumRef(), {
@@ -292,7 +292,6 @@ async function zurueck() {
     await api.zurueckZurAuswahl();
   } catch (e) {
     zeigeDebug("Fehler beim Zurückkehren: " + e.message);
-    knopf.disabled = false;
   }
 }
 
@@ -586,7 +585,6 @@ function zeigeEndstand() {
     li.innerHTML = spielerKarte(s.name, s.farbe, s.icon, s.punkte ?? 0, { rang: index + 1 });
     liste.appendChild(li);
   });
-  $("dg-nochmal").hidden = !api.istLeiter;
   $("dg-endstand-warten").hidden = api.istLeiter;
 }
 
