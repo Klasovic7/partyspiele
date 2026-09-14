@@ -804,11 +804,26 @@
          zum Clippen - nur entfernt, um genau diese Kombination (die den Bug
          ausloest) aufzubrechen. border-radius bleibt fuer die Form von
          Hintergrund/Rahmen, box-shadow bleibt fuer den Schlagschatten. */
+      /* v101: box-shadow komplett entfernt (auch den Rand-Schatten
+         "0 0 0 1px ..." - der war ohnehin redundant zum echten
+         "border: 5px solid" direkt darunter) und durch filter:drop-shadow
+         ersetzt. Grund: mehrere Tests via Safari Remote Web Inspector am
+         echten iPhone zeigten ein WIDERSPRUECHLICHES Verhalten je nach
+         box-shadow-Wert bzw. sogar bei GLEICHEM Wert bei unterschiedlichen
+         Seiten-Neustarts (mal mit Kerben, mal ohne) - das spricht nicht
+         fuer ein deterministisches CSS-Wert-Problem, sondern fuer einen
+         instabilen WebKit-GPU-Kompositions-Bug beim Zusammenspiel von
+         border-radius:50% + box-shadow auf einem Element. filter:drop-shadow
+         umgeht dieses Problem strukturell: der Schatten wird anhand der
+         tatsaechlich gerenderten (bereits korrekt rund geclippten) Alpha-Form
+         berechnet, nicht per eigener Radius-Clip-Berechnung wie box-shadow -
+         es entfaellt also genau der Schritt, der den Bug ausloest. */
       width: 112px; height: 112px; margin: 0 auto 14px; display: grid; place-items: center;
       border-radius: 50%;
       background: var(--club-ivory);
       border: 5px solid var(--club-orange);
-      box-shadow: 0 9px 22px rgba(0,0,0,.34), 0 0 0 1px rgba(255,145,111,.25);
+      box-shadow: none;
+      filter: drop-shadow(0 9px 22px rgba(0,0,0,.34));
     }
     #start-screen .app-icon {
       /* v77: EINZIGE Regel fuer dieses Element - vorher gab es eine zweite,
@@ -908,13 +923,12 @@
     .lobby-logo-badge, .spiel-logo-badge {
       display: grid; place-items: center; flex: 0 0 auto;
       border-radius: 50%; background: #35105c; border: 2px solid #ff6b58;
-      box-shadow: 0 5px 12px rgba(79,38,93,.18);
-      /* v100: gleicher Fix wie beim Start-Icon (siehe dort) - "overflow:hidden"
-         entfernt, weil die Kombination aus overflow:hidden + border-radius +
-         box-shadow auf demselben Element der eigentliche Ausloeser der
-         Kerben in iOS Safari war. Das <img> hat laengst sein eigenes
-         border-radius:50% (self-clipping), der Wrapper braucht overflow:hidden
-         also gar nicht mehr. */
+      /* v101: box-shadow -> filter:drop-shadow, gleicher Grund wie bei
+         #start-screen .start-icon (siehe dortigen ausfuehrlichen Kommentar) -
+         box-shadow + border-radius:50% auf demselben Element war der
+         instabile WebKit-Kompositions-Bug, der die Kerben verursacht hat. */
+      box-shadow: none;
+      filter: drop-shadow(0 5px 12px rgba(79,38,93,.18));
     }
     .lobby-logo-badge { width: 42px; height: 42px; }
     /* v97: gleicher Fix wie beim Start-Icon - Kreis-Clip direkt auf dem <img>
@@ -1249,7 +1263,13 @@
     .lobby-logo-badge, .spiel-logo-badge {
       background: var(--club-ivory);
       border: 3px solid var(--club-orange);
-      box-shadow: 0 5px 14px rgba(0, 0, 0, .28);
+      /* v101: siehe Kommentar bei #start-screen .start-icon - box-shadow
+         durch filter:drop-shadow ersetzt, um den WebKit-Kerben-Bug zu
+         umgehen. Diese Regel hier ueberschreibt (spaeter in der Kaskade)
+         die weiter oben stehende .lobby-logo-badge-Regel - daher muss der
+         Fix hier ZUSAETZLICH gesetzt werden. */
+      box-shadow: none;
+      filter: drop-shadow(0 5px 14px rgba(0, 0, 0, .28));
     }
     .lobby-verlassen {
       color: #fff4ef;
