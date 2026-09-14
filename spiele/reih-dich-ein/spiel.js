@@ -13,18 +13,20 @@ import {
 
 const VORLAGE = `
   <div id="rd-setup" class="bildschirm-karte" hidden>
-    <button id="rd-abbrechen" class="btn-flach rd-zurueck" hidden>← Spielauswahl</button>
     <h1>↕️ Reih dich ein!</h1>
-    <p class="hinweis-text">Setzt jeden neuen Begriff an die richtige Stelle der Reihe.</p>
-    <p class="rd-regel">Ein Startbegriff ist bereits eingeordnet. Danach ist immer ein Spieler dran.
-      Eine richtige Position gibt einen Pluspunkt – bei einer falschen Position gibt es einen Minuspunkt.</p>
+    <p class="rd-regel">Setzt jeden neuen Begriff an die richtige Stelle der Reihe. Ein Startbegriff ist
+      bereits eingeordnet. Danach ist immer ein Spieler dran. Eine richtige Position gibt einen Pluspunkt –
+      bei einer falschen Position gibt es einen Minuspunkt.</p>
 
-    <p id="rd-anzahl-zeile" hidden>
-      <label>Anzahl Kategorien:
-        <input id="rd-anzahl" type="number" inputmode="numeric" min="1" style="width:78px;">
-      </label><br>
+    <div id="rd-anzahl-zeile" class="setup-anzahlblock" hidden>
+      <div class="setup-anzahl-zeile">
+        <span>Anzahl Kategorien</span>
+        <span class="anzahl-picker">
+          <input id="rd-anzahl" type="number" inputmode="numeric" min="1" class="anzahl-eingabe">
+        </span>
+      </div>
       <span id="rd-anzahl-hinweis" class="hinweis-text"></span>
-    </p>
+    </div>
 
     <p id="rd-setup-fehler" class="fehler-text"></p>
     <p><button id="rd-starten" class="btn-primaer" hidden>Spiel starten</button></p>
@@ -79,7 +81,6 @@ const VORLAGE = `
     <h1>🏁 Endstand</h1>
     <p class="hinweis-text">Wer die meisten Punkte gesammelt hat, gewinnt.</p>
     <div id="rd-endstand-inhalt"></div>
-    <p><button id="rd-nochmal" class="btn-primaer" hidden>Zurück zur Spielauswahl</button></p>
     <p id="rd-endstand-warten" hidden><em>Der Spielleiter wählt gleich das nächste Spiel …</em></p>
   </div>
 `;
@@ -175,8 +176,6 @@ export async function starten(uebergebeneApi) {
 function verdrahteBedienelemente() {
   $("rd-anzahl").addEventListener("input", () => { anzahlManuellGesetzt = true; });
   $("rd-starten").addEventListener("click", spielStarten);
-  $("rd-abbrechen").addEventListener("click", zurueck);
-  $("rd-nochmal").addEventListener("click", zurueck);
   $("rd-naechste-kategorie").addEventListener("click", naechsteKategorie);
   $("rd-andere-kategorie").addEventListener("click", andereKategorie);
 }
@@ -272,7 +271,6 @@ function zeigeSetup() {
   $("rd-anzahl-hinweis").textContent = `${karten.length} Kategorien stehen zur Verfügung.`;
   $("rd-anzahl-zeile").hidden = !api.istLeiter;
   $("rd-starten").hidden = !api.istLeiter;
-  $("rd-abbrechen").hidden = !api.istLeiter;
   $("rd-setup-warten").hidden = api.istLeiter;
 }
 
@@ -651,13 +649,14 @@ async function naechsteKategorie() {
 
 function zeigeEndstand() {
   $("rd-endstand-inhalt").innerHTML = punktestandHtml(false);
-  $("rd-nochmal").hidden = !api.istLeiter;
   $("rd-endstand-warten").hidden = api.istLeiter;
 }
 
-async function zurueck() {
-  const knopf = status === "beendet" ? $("rd-nochmal") : $("rd-abbrechen");
-  knopf.disabled = true;
+// v104: der eigene "← Spielauswahl"/"Zurück zur Spielauswahl"-Button
+// (Setup- und Endstand-Bildschirm) ist entfernt, weil oben in der Kopfzeile
+// bereits derselbe Button existiert (gleiches Muster wie in
+// spiele/schaetzfragen/spiel.js, siehe dessen "vorZurueck"-Kommentar).
+export async function vorZurueck() {
   try {
     await updateDoc(api.raumRef(), {
       rdStatus: null, rdKategorienReihenfolge: [], rdAnzahlKategorien: 0,
@@ -670,6 +669,5 @@ async function zurueck() {
     await api.zurueckZurAuswahl();
   } catch (e) {
     zeigeDebug("Fehler beim Zurückkehren: " + e.message);
-    knopf.disabled = false;
   }
 }
