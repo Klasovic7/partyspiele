@@ -12,10 +12,17 @@
 //    aufgeloest  - Antwort (oder "niemand wusste es") wird gezeigt
 //    beendet     - Endstand
 //
+//  v95: Eine FALSCHE Antwort beendet die Runde NICHT mehr - sie kostet der
+//  ratenden Person einen Punkt, alle sehen den geratenen Namen in der Liste
+//  der bisherigen Fehlversuche, der nächste Hinweis wird sofort aufgedeckt und
+//  jeder (auch die Person, die falsch lag) kann direkt weiter buzzern. Nur eine
+//  RICHTIGE Antwort oder das manuelle Auflösen durch den Spielleiter beendet
+//  die Runde (Status "aufgeloest").
+//
 //  Wie bei Schätzfragen meldet sich dieses Modul über starten/raumDaten/spieler/
 //  beenden zurück (siehe Kommentar in spiele/schaetzfragen/spiel.js).
 // ============================================================================
-import { updateDoc, increment, runTransaction } from "../../kern/firebase.js";
+import { updateDoc, increment, runTransaction, arrayUnion } from "../../kern/firebase.js";
 import { spielerKarte, zeigeDebug } from "../../kern/ui.js";
 
 const HINWEIS_DAUER_MS = 10000;
@@ -49,6 +56,8 @@ const VORLAGE = `
     <p class="wi-hinweis-aktuell" id="wi-hinweis-aktuell"></p>
     <ul class="wi-hinweis-liste" id="wi-hinweis-liste"></ul>
     <p class="wi-countdown" id="wi-countdown"></p>
+
+    <ul class="wi-falsch-liste" id="wi-falsch-liste" hidden></ul>
 
     <p><button id="wi-buzzer" class="wi-buzzer" type="button">🔔 Buzzern!</button></p>
     <p id="wi-frage-status" class="hinweis-text"></p>
@@ -96,6 +105,7 @@ let hinweisSeit = 0;
 let gebuzzertVon = null;
 let antwortText = "";
 let antwortKorrekt = null;
+let falscheVersuche = [];
 let gewuenschteAnzahl = 0;
 let hinweisFortschreibenLaeuft = false;
 let timerId = null;
@@ -213,7 +223,7 @@ export function beenden() {
   el = {}; raum = {}; spielerListe = [];
   index = -1; reihenfolge = []; anzahlFragen = 0; status = null;
   hinweisIndex = 1; hinweisSeit = 0; gebuzzertVon = null;
-  antwortText = ""; antwortKorrekt = null; gewuenschteAnzahl = 0;
+  antwortText = ""; antwortKorrekt = null; falscheVersuche = []; gewuenschteAnzahl = 0;
   hinweisFortschreibenLaeuft = false;
 }
 
@@ -240,6 +250,7 @@ export function raumDaten(daten) {
   gebuzzertVon = daten.wiGebuzzertVon ?? null;
   antwortText = daten.wiAntwortText ?? "";
   antwortKorrekt = daten.wiAntwortKorrekt ?? null;
+  falscheVersuche = daten.wiFalscheVersuche ?? [];
 
   const neuerIndex = daten.wiFragenIndex ?? 0;
   if (index !== neuerIndex) {
@@ -294,7 +305,8 @@ async function setzeGrundzustand(wiStatus) {
   await updateDoc(api.raumRef(), {
     wiStatus, wiReihenfolge: [], wiFragenIndex: 0, wiAnzahlFragen: 0,
     wiHinweisIndex: 1, wiHinweisSeit: 0, wiGebuzzertVon: null,
-    wiAntwortText: "", wiAntwortKorrekt: null, wiPunkteDieserRunde: 0
+    wiAntwortText: "", wiAntwortKorrekt: null, wiPunkteDieserRunde: 0,
+    wiFalscheVersuche: []
   });
 }
 
@@ -316,7 +328,8 @@ async function spielStarten() {
     await updateDoc(api.raumRef(), {
       wiStatus: "frage_aktiv", wiFragenIndex: 0, wiAnzahlFragen: anzahl,
       wiReihenfolge: neueReihenfolge, wiHinweisIndex: 1, wiHinweisSeit: Date.now(),
-      wiGebuzzertVon: null, wiAntwortText: "", wiAntwortKorrekt: null, wiPunkteDieserRunde: 0
+      wiGebuzzertVon: null, wiAntwortText: "", wiAntwortKorrekt: null, wiPunkteDieserRunde: 0,
+      wiFalscheVersuche: []
     });
   } catch (e) {
     zeigeDebug("Fehler beim Start: " + e.message);
@@ -351,6 +364,17 @@ function zeigeFrage() {
     li.textContent = frage.hinweise[i];
     liste.appendChild(li);
   }
+
+  // v95: Bisherige Fehlversuche dieser Runde - für alle sichtbar, damit man
+  // nicht denselben schon genannten falschen Namen nochmal versucht.
+  const falschListe = $("wi-falsch-liste");
+  falschListe.innerHTML = "";
+  falscheVersuche.forEach((v) => {
+    const li = document.createElement("li");
+    li.textContent = `${v.name}: „${v.text}“ - falsch (-1 Punkt)`;
+    falschListe.appendChild(li);
+  });
+  falschListe.hidden = falscheVersuche.length === 0;
 
   const amZug = gebuzzertVon === api.spielerId;
   const jemandBuzzerte = !!gebuzzertVon;
@@ -434,11 +458,27 @@ async function antwortAbsenden() {
   try {
     const frage = frageAn(index);
     const richtig = istAntwortRichtig(text, frage.name);
-    const punkte = richtig ? Math.max(1, frage.hinweise.length - hinweisIndex + 1) : 0;
-    await updateDoc(api.raumRef(), {
-      wiStatus: "aufgeloest", wiAntwortText: text, wiAntwortKorrekt: richtig, wiPunkteDieserRunde: punkte
-    });
-    if (richtig) await updateDoc(api.spielerRef(), { punkte: increment(punkte) });
+    if (richtig) {
+      // Richtig: Runde ist zu Ende, ganz normal auflösen und Punkte gutschreiben.
+      const punkte = Math.max(1, frage.hinweise.length - hinweisIndex + 1);
+      await updateDoc(api.raumRef(), {
+        wiStatus: "aufgeloest", wiAntwortText: text, wiAntwortKorrekt: true, wiPunkteDieserRunde: punkte
+      });
+      await updateDoc(api.spielerRef(), { punkte: increment(punkte) });
+    } else {
+      // v95: Falsch: KEIN Rundenende. Ein Punkt Abzug für die ratende Person,
+      // der genannte Name bleibt für alle sichtbar in der Fehlversuch-Liste,
+      // der Buzzer wird für alle wieder freigegeben und der nächste Hinweis
+      // kommt sofort (ohne auf die volle 10-Sekunden-Wartezeit zu warten).
+      const naechsterHinweisIndex = Math.min(hinweisIndex + 1, frage.hinweise.length);
+      $("wi-antwort-eingabe").value = "";
+      await updateDoc(api.raumRef(), {
+        wiStatus: "frage_aktiv", wiAntwortText: "", wiAntwortKorrekt: null, wiPunkteDieserRunde: 0,
+        wiGebuzzertVon: null, wiHinweisIndex: naechsterHinweisIndex, wiHinweisSeit: Date.now(),
+        wiFalscheVersuche: arrayUnion({ name: api.spielerName, text })
+      });
+      await updateDoc(api.spielerRef(), { punkte: increment(-1) });
+    }
   } catch (e) {
     zeigeDebug("Fehler beim Absenden der Antwort: " + e.message);
   }
@@ -504,7 +544,8 @@ async function weiter() {
       await updateDoc(api.raumRef(), {
         wiStatus: "frage_aktiv", wiFragenIndex: naechster,
         wiHinweisIndex: 1, wiHinweisSeit: Date.now(),
-        wiGebuzzertVon: null, wiAntwortText: "", wiAntwortKorrekt: null, wiPunkteDieserRunde: 0
+        wiGebuzzertVon: null, wiAntwortText: "", wiAntwortKorrekt: null, wiPunkteDieserRunde: 0,
+        wiFalscheVersuche: []
       });
     }
   } catch (e) {
