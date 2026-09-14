@@ -791,10 +791,22 @@
          clip-path als robusterer, von overflow:hidden unabhaengiger
          Kreis-Clip - das ist der in iOS Safari fuer genau dieses Muster
          (rundes Icon-Badge) empfohlene, zuverlaessigere Ansatz. */
+      /* v99: DAS war die eigentliche Ursache der "weissen Ecken"/Kerben - nicht
+         ein Clipping-Fehler, sondern GENAU DAS GEGENTEIL: DREI verschiedene,
+         sich ueberlagernde Kreis-Clips gleichzeitig auf diesem Element
+         (overflow:hidden+border-radius UND zusaetzlich clip-path:circle(50%)),
+         dazu noch border-radius:50% direkt auf dem <img> selbst. In iOS Safari
+         werden overflow-clipping und clip-path-clipping ueber leicht
+         unterschiedliche Rendering-Pfade berechnet - stimmen sie nicht
+         Pixel-genau ueberein, entstehen genau an den Naht-Punkten kleine
+         eckige Kerben, durch die die cremefarbene Flaeche "durchscheint".
+         Per Pixelpruefung bestaetigt: die PNG-Datei selbst ist an allen vier
+         Ecken alpha=0 (komplett leer) - im Bild steckt also nichts. Fix:
+         redundanten clip-path entfernt, nur noch EIN Clip-Mechanismus
+         (overflow:hidden + border-radius auf dem Wrapper), passend zum
+         alleinigen border-radius auf dem <img> selbst. */
       width: 112px; height: 112px; margin: 0 auto 14px; display: grid; place-items: center;
       border-radius: 50%; overflow: hidden;
-      -webkit-clip-path: circle(50%);
-      clip-path: circle(50%);
       background: var(--club-ivory);
       border: 5px solid var(--club-orange);
       box-shadow: 0 9px 22px rgba(0,0,0,.34), 0 0 0 1px rgba(255,145,111,.25);
@@ -898,10 +910,12 @@
       display: grid; place-items: center; flex: 0 0 auto; overflow: hidden;
       border-radius: 50%; background: #35105c; border: 2px solid #ff6b58;
       box-shadow: 0 5px 12px rgba(79,38,93,.18);
-      /* v93: gleicher robusterer Kreis-Clip wie beim Start-Icon (siehe dort),
-         vorsorglich auch hier, falls derselbe iOS-Safari-Clip-Bug zuschlaegt. */
-      -webkit-clip-path: circle(50%);
-      clip-path: circle(50%);
+      /* v99: der zusaetzliche clip-path hier war Teil der eigentlichen Ursache
+         der "weissen Ecken" (siehe ausfuehrlicher Kommentar bei
+         #start-screen .start-icon) - zwei ueberlagernde Kreis-Clips auf
+         demselben Element erzeugten in iOS Safari kleine Kerben am Rand.
+         Entfernt - overflow:hidden + border-radius reicht, passend zum
+         border-radius direkt auf dem <img>. */
     }
     .lobby-logo-badge { width: 42px; height: 42px; }
     /* v97: gleicher Fix wie beim Start-Icon - Kreis-Clip direkt auf dem <img>
