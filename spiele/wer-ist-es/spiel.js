@@ -116,8 +116,6 @@ function mischeIndizes(werte) {
 }
 
 // Nachname reicht auch - Groß-/Kleinschreibung und Akzente spielen keine Rolle.
-// Bewusst einfach gehalten fürs Grundgerüst; Tippfehler-Toleranz kann später
-// noch ergänzt werden.
 function normalisiere(text) {
   return (text ?? "")
     .toLowerCase()
@@ -125,12 +123,51 @@ function normalisiere(text) {
     .replace(/[^a-z0-9 ]/g, "")
     .trim();
 }
+
+// v94: Tippfehler-Toleranz. In der Hektik beim Buzzern werden Namen oft leicht
+// falsch getippt ("Osimen" statt "Osimhen") - das soll trotzdem als richtig
+// zählen. Klassische Levenshtein-Distanz (Anzahl Einfuegen/Loeschen/Ersetzen,
+// um von a zu b zu kommen); je laenger das Wort, desto mehr Abweichung ist
+// erlaubt, damit kurze Namen nicht versehentlich mit einem komplett anderen
+// kurzen Namen verwechselt werden.
+function levenshtein(a, b) {
+  const m = a.length, n = b.length;
+  if (m === 0) return n;
+  if (n === 0) return m;
+  const zeile = new Array(n + 1);
+  for (let j = 0; j <= n; j++) zeile[j] = j;
+  for (let i = 1; i <= m; i++) {
+    let vorherige = zeile[0];
+    zeile[0] = i;
+    for (let j = 1; j <= n; j++) {
+      const temp = zeile[j];
+      const kosten = a[i - 1] === b[j - 1] ? 0 : 1;
+      zeile[j] = Math.min(zeile[j] + 1, zeile[j - 1] + 1, vorherige + kosten);
+      vorherige = temp;
+    }
+  }
+  return zeile[n];
+}
+
+function toleranzFuer(laenge) {
+  if (laenge <= 4) return 0;
+  if (laenge <= 7) return 1;
+  return 2;
+}
+
+function passtUngefaehr(a, b) {
+  if (!a || !b) return false;
+  if (a === b) return true;
+  const toleranz = toleranzFuer(Math.max(a.length, b.length));
+  return toleranz > 0 && levenshtein(a, b) <= toleranz;
+}
+
 function istAntwortRichtig(eingabe, name) {
   const a = normalisiere(eingabe);
   if (!a) return false;
-  if (a === normalisiere(name)) return true;
+  if (passtUngefaehr(a, normalisiere(name))) return true;
   const nachname = normalisiere(name.split(" ").slice(-1)[0]);
-  return a === nachname;
+  return passtUngefaehr(a, nachname);
 }
 
 function formatiertePunkte(p) {
@@ -320,7 +357,9 @@ function zeigeFrage() {
   $("wi-buzzer").hidden = jemandBuzzerte;
   $("wi-buzzer").disabled = jemandBuzzerte;
   $("wi-antwort-bereich").hidden = !amZug;
-  $("wi-ueberspringen").hidden = !api.istLeiter;
+  // v94: Erst ab dem letzten Hinweis anbieten, damit niemand vorzeitig aufgibt,
+  // solange noch Hinweise nachkommen.
+  $("wi-ueberspringen").hidden = !api.istLeiter || sichtbar < gesamt;
 
   if (jemandBuzzerte) {
     const s = spielerListe.find((x) => x.id === gebuzzertVon);
