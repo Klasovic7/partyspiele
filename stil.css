@@ -840,25 +840,18 @@
          mitvergroessert, kaum den Fuchs selbst. Bild jetzt eng auf den
          sichtbaren Inhalt zugeschnitten (mit object-fit:contain skaliert
          sich der Fuchs dadurch bei GLEICHER Boxgroesse deutlich sichtbarer).
-         v95: ZWEI echte Probleme angegangen, aber beim ersten Versuch zu
-         aggressiv - dabei wurde versehentlich der Frageazeichen-Punkt vom
-         Logo komplett weggeschnitten. v96 korrigiert das:
-         1) "Weisses Viereck" in den Ecken: war object-fit:contain + Clipping
-            am AEUSSEREN Wrapper-Element (bei iOS Safari in Kombination mit
-            border-radius manchmal unzuverlaessig) - border-radius DIREKT auf
-            dem <img> selbst wird dagegen von jedem Browser zuverlaessig
-            angewendet und clippt das Bild unabhaengig vom Eltern-Element.
-            Das bleibt der Fix (border-radius:50% auf dem <img>).
-         2) Der Fuchs-Kopf wirkte "nicht mittig", weil der Frageazeichen-Punkt
-            weit unterhalb des Kopfes sass, mit grosser Luecke dazwischen und
-            leicht seitlich versetzt - object-fit:contain zentriert dann die
-            GESAMTE Box inkl. Punkt, wodurch der Kopf selbst verschoben wirkte.
-            v96: Punkt bleibt Teil des Logos (nicht mehr weggeschnitten wie in
-            v95), aber horizontal exakt unter die Kopf-Mitte verschoben und das
-            Bild eng auf Kopf+Schweif+Punkt zugeschnitten. object-fit:contain
-            (statt cover) zeigt dadurch wieder das komplette Motiv inkl. Punkt,
-            ohne etwas abzuschneiden. */
-      display: block; width: 100px; height: 100px; object-fit: contain; object-position: center;
+         v95/v96: Versuche, den Frageazeichen-Punkt neu zu positionieren bzw.
+         wegzuschneiden - kam beim Nutzer optisch schlechter an als das
+         Original. v97: Bilddatei wieder auf den unveraenderten Original-
+         Zustand zurueckgesetzt (Fuchs + Punkt exakt wie urspruenglich, keine
+         Verschiebung mehr). Einzige bleibende, tatsaechlich noetige Aenderung
+         bleibt die Loesung fuer die weissen Ecken: object-fit:contain +
+         Clipping am AEUSSEREN Wrapper-Element ist bei iOS Safari in
+         Kombination mit border-radius manchmal unzuverlaessig - border-radius
+         DIREKT auf dem <img> selbst wird dagegen von jedem Browser
+         zuverlaessig angewendet und clippt das Bild unabhaengig vom
+         Eltern-Element. Bild und Groesse bleiben sonst wie vor v95. */
+      display: block; width: 102px; height: 102px; object-fit: contain; object-position: center;
       border-radius: 50%;
       filter: none;
       box-shadow: none;
@@ -903,10 +896,10 @@
       clip-path: circle(50%);
     }
     .lobby-logo-badge { width: 42px; height: 42px; }
-    /* v96: gleicher Fix wie beim Start-Icon - Kreis-Clip direkt auf dem <img>
-       (border-radius:50%), object-fit:contain damit der Frageazeichen-Punkt
-       sichtbar bleibt (siehe ausfuehrlicher Kommentar bei #start-screen .app-icon). */
-    .lobby-app-icon { display: block; width: 34px; height: 34px; object-fit: contain; object-position: center; border-radius: 50%; }
+    /* v97: gleicher Fix wie beim Start-Icon - Kreis-Clip direkt auf dem <img>
+       (border-radius:50%), Bildgroesse wieder wie vor v95 (siehe ausfuehrlicher
+       Kommentar bei #start-screen .app-icon). */
+    .lobby-app-icon { display: block; width: 36px; height: 36px; object-fit: contain; object-position: center; border-radius: 50%; }
     .lobby-kopf h1 {
       min-width: 0; margin: 0; font-size: 1.55rem; line-height: 1;
       letter-spacing: -.035em; white-space: nowrap;
@@ -1064,9 +1057,9 @@
     }
     .spiel-kopf-icon img { display: block; width: 58px; height: 58px; border-radius: 16px; }
     .spiel-logo-badge { width: 58px; height: 58px; }
-    /* v96: gleicher Fix wie beim Start-Icon - Kreis-Clip direkt auf dem <img>
-       (border-radius:50%), object-fit:contain damit der Frageazeichen-Punkt
-       sichtbar bleibt (siehe ausfuehrlicher Kommentar bei #start-screen .app-icon). */
+    /* v97: gleicher Fix wie beim Start-Icon - Kreis-Clip direkt auf dem <img>
+       (border-radius:50%), Bildgroesse wie vor v95 (siehe ausfuehrlicher
+       Kommentar bei #start-screen .app-icon). */
     .spiel-logo-badge img { width: 50px; height: 50px; object-fit: contain; object-position: center; border-radius: 50%; }
     .spiel-kopf-titel strong {
       color: #fff; font-family: "Barlow Condensed", sans-serif; font-style: italic;
