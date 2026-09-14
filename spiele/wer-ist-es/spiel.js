@@ -35,13 +35,13 @@ const VORLAGE = `
       schwersten zum leichtesten. Wer zuerst buzzert, darf raten. Je weniger Hinweise
       es bis dahin gab, desto mehr Punkte gibt es.</p>
 
-    <div class="wi-anzahl-zeile" id="wi-anzahl-zeile" hidden>
-      <span>Anzahl Runden</span>
-      <span class="wi-anzahl-stepper">
-        <button id="wi-anzahl-minus" type="button" class="btn-flach" aria-label="Weniger Runden">−</button>
-        <strong id="wi-anzahl-wert">8</strong>
-        <button id="wi-anzahl-plus" type="button" class="btn-flach" aria-label="Mehr Runden">+</button>
-      </span>
+    <div id="wi-anzahl-zeile" class="setup-anzahlblock" hidden>
+      <div class="setup-anzahl-zeile">
+        <span>Anzahl Runden</span>
+        <span class="anzahl-picker">
+          <input id="wi-anzahl" type="number" inputmode="numeric" min="1" value="8" class="anzahl-eingabe">
+        </span>
+      </div>
     </div>
 
     <p id="wi-setup-fehler" class="fehler-text"></p>
@@ -208,8 +208,7 @@ export async function starten(uebergebeneApi) {
 }
 
 function verdrahteBedienelemente() {
-  $("wi-anzahl-minus").addEventListener("click", () => anzahlAendern(-1));
-  $("wi-anzahl-plus").addEventListener("click", () => anzahlAendern(1));
+  $("wi-anzahl").addEventListener("change", () => anzahlUebernehmen());
   $("wi-starten").addEventListener("click", spielStarten);
   $("wi-buzzer").addEventListener("click", buzzern);
   $("wi-antwort-absenden").addEventListener("click", antwortAbsenden);
@@ -285,20 +284,22 @@ function alleVerstecken() {
 // ============================================================================
 function zeigeSetup() {
   if (gewuenschteAnzahl === 0) gewuenschteAnzahl = Math.min(STANDARD_ANZAHL, fragen.length);
-  $("wi-anzahl-wert").textContent = String(gewuenschteAnzahl);
-  $("wi-anzahl-minus").disabled = gewuenschteAnzahl <= 1;
-  $("wi-anzahl-plus").disabled = gewuenschteAnzahl >= fragen.length;
+  $("wi-anzahl").max = String(Math.max(1, fragen.length));
+  $("wi-anzahl").value = String(gewuenschteAnzahl);
   $("wi-anzahl-zeile").hidden = !api.istLeiter;
   $("wi-starten").hidden = !api.istLeiter;
   $("wi-setup-warten").hidden = api.istLeiter;
 }
 
-function anzahlAendern(delta) {
+// v104: ersetzt den fruehereren Plus/Minus-Stepper - das Zahlenfeld wird
+// beim Verlassen (change) auf [1, Anzahl verfuegbarer Fragen] begrenzt.
+function anzahlUebernehmen() {
   if (!api.istLeiter) return;
-  gewuenschteAnzahl = Math.min(fragen.length, Math.max(1, gewuenschteAnzahl + delta));
-  $("wi-anzahl-wert").textContent = String(gewuenschteAnzahl);
-  $("wi-anzahl-minus").disabled = gewuenschteAnzahl <= 1;
-  $("wi-anzahl-plus").disabled = gewuenschteAnzahl >= fragen.length;
+  let wert = parseInt($("wi-anzahl").value, 10);
+  if (!Number.isFinite(wert) || wert < 1) wert = 1;
+  if (wert > fragen.length) wert = fragen.length;
+  gewuenschteAnzahl = wert;
+  $("wi-anzahl").value = String(wert);
 }
 
 async function setzeGrundzustand(wiStatus) {
@@ -320,6 +321,7 @@ async function spielStarten() {
     $("wi-setup-fehler").textContent = "Es sind noch keine Fußballer hinterlegt.";
     return;
   }
+  anzahlUebernehmen();
   $("wi-starten").disabled = true;
   try {
     await raeumeSpieldatenAuf();
