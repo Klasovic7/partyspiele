@@ -51,7 +51,7 @@ const VORLAGE = `
           <span class="schalter-text">Teammodus</span>
           <details class="modus-info">
             <summary aria-label="Erklärung zum Teammodus">i</summary>
-            <div>Jeder entscheidet sich für ein Team. Alle dürfen buzzern - eine richtige Antwort gibt nur der buzzernden Person Punkte, eine falsche Antwort kostet dagegen das ganze Team einen Punkt.</div>
+            <div>Jeder entscheidet sich für ein Team. Alle dürfen buzzern, aber die Punkte (richtig oder falsch) bekommt bzw. verliert immer nur die einzelne Person - der Team-Gesamtstand ist einfach die Summe aller Mitgliederpunkte.</div>
           </details>
         </span>
         <label class="schalter-zeile">
@@ -423,7 +423,7 @@ async function setzeGrundzustand(wiStatus) {
     wiStatus, wiReihenfolge: [], wiFragenIndex: 0, wiAnzahlFragen: 0,
     wiHinweisIndex: 1, wiHinweisSeit: 0, wiGebuzzertVon: null,
     wiAntwortText: "", wiAntwortKorrekt: null, wiPunkteDieserRunde: 0,
-    wiFalscheVersuche: [], wiTeammodus: false, wiTeams: {}
+    wiFalscheVersuche: [], wiTeammodus: false, wiTeams: {}, wiRundenDelta: {}
   });
 }
 
@@ -450,7 +450,7 @@ async function spielStarten() {
       wiStatus: "frage_aktiv", wiFragenIndex: 0, wiAnzahlFragen: anzahl,
       wiReihenfolge: neueReihenfolge, wiHinweisIndex: 1, wiHinweisSeit: Date.now(),
       wiGebuzzertVon: null, wiAntwortText: "", wiAntwortKorrekt: null, wiPunkteDieserRunde: 0,
-      wiFalscheVersuche: [], wiTeammodus: teammodus, wiTeams: neueTeams
+      wiFalscheVersuche: [], wiTeammodus: teammodus, wiTeams: neueTeams, wiRundenDelta: {}
     });
   } catch (e) {
     zeigeDebug("Fehler beim Start: " + e.message);
@@ -492,7 +492,7 @@ function zeigeFrage() {
   falschListe.innerHTML = "";
   falscheVersuche.forEach((v) => {
     const li = document.createElement("li");
-    li.textContent = `${v.name}: „${v.text}“ - falsch (-1 Punkt${teammodus ? " fürs Team" : ""})`;
+    li.textContent = `${v.name}: „${v.text}“ - falsch (-1 Punkt)`;
     falschListe.appendChild(li);
   });
   falschListe.hidden = falscheVersuche.length === 0;
@@ -579,39 +579,43 @@ async function antwortAbsenden() {
   try {
     const frage = frageAn(index);
     const richtig = istAntwortRichtig(text, frage.name);
+    // v112: Punkte (richtig +X wie falsch -1) bekommt bzw. verliert immer nur
+    // die einzelne Person, auch im Teammodus - der Team-Gesamtstand ist einfach
+    // die Summe der Mitgliederpunkte (teamEndstandHtml/teamGruppeHtml).
+    // "wiRundenDelta" merkt sich zusätzlich für JEDEN Spieler, wie viele Punkte
+    // er in DIESER Runde bekommen/verloren hat (auch über mehrere Fehlversuche
+    // hinweg, bevor die Runde am Ende richtig aufgelöst wird) - nur so kann das
+    // Rundenergebnis-Badge am Ende auch einen zwischenzeitlichen Fehlversuch
+    // einer anderen Person als der/dem, die/der zuletzt richtig lag, zeigen.
     if (richtig) {
       // Richtig: Runde ist zu Ende, ganz normal auflösen und Punkte gutschreiben.
       const punkte = Math.max(1, frage.hinweise.length - hinweisIndex + 1);
+      const neuesRundenDelta = {
+        ...(raum.wiRundenDelta || {}),
+        [api.spielerId]: (raum.wiRundenDelta?.[api.spielerId] ?? 0) + punkte
+      };
       await updateDoc(api.raumRef(), {
-        wiStatus: "aufgeloest", wiAntwortText: text, wiAntwortKorrekt: true, wiPunkteDieserRunde: punkte
+        wiStatus: "aufgeloest", wiAntwortText: text, wiAntwortKorrekt: true, wiPunkteDieserRunde: punkte,
+        wiRundenDelta: neuesRundenDelta
       });
-      // v111: Bei einer richtigen Antwort bekommt NUR die buzzernde Person die
-      // Punkte gutgeschrieben (auch im Teammodus) - der Team-Gesamtstand ergibt
-      // sich weiterhin einfach als Summe der einzelnen Mitgliederpunkte (siehe
-      // teamEndstandHtml/teamGruppeHtml). Nur bei einer FALSCHEN Antwort trifft
-      // der Punktabzug das ganze Team (siehe unten).
       await updateDoc(api.spielerRef(), { punkte: increment(punkte) });
     } else {
-      // v95: Falsch: KEIN Rundenende. Ein Punkt Abzug, der genannte Name bleibt
-      // für alle sichtbar in der Fehlversuch-Liste, der Buzzer wird für alle
-      // wieder freigegeben und der nächste Hinweis kommt sofort (ohne auf die
-      // volle 10-Sekunden-Wartezeit zu warten).
+      // v95: Falsch: KEIN Rundenende. Ein Punkt Abzug für die ratende Person,
+      // der genannte Name bleibt für alle sichtbar in der Fehlversuch-Liste,
+      // der Buzzer wird für alle wieder freigegeben und der nächste Hinweis
+      // kommt sofort (ohne auf die volle 10-Sekunden-Wartezeit zu warten).
       const naechsterHinweisIndex = Math.min(hinweisIndex + 1, frage.hinweise.length);
+      const neuesRundenDelta = {
+        ...(raum.wiRundenDelta || {}),
+        [api.spielerId]: (raum.wiRundenDelta?.[api.spielerId] ?? 0) - 1
+      };
       $("wi-antwort-eingabe").value = "";
       await updateDoc(api.raumRef(), {
         wiStatus: "frage_aktiv", wiAntwortText: "", wiAntwortKorrekt: null, wiPunkteDieserRunde: 0,
         wiGebuzzertVon: null, wiHinweisIndex: naechsterHinweisIndex, wiHinweisSeit: Date.now(),
-        wiFalscheVersuche: arrayUnion({ name: api.spielerName, text })
+        wiFalscheVersuche: arrayUnion({ name: api.spielerName, text }), wiRundenDelta: neuesRundenDelta
       });
-      // v110: Im Teammodus trifft der Punktabzug bei einer falschen Antwort
-      // ebenfalls das ganze Team, nicht nur die ratende Person.
-      if (teammodus && teams[api.spielerId]) {
-        const eigenesTeam = teams[api.spielerId];
-        const mitglieder = spielerListe.filter((s) => teams[s.id] === eigenesTeam);
-        await Promise.all(mitglieder.map((s) => updateDoc(api.spielerRef(s.id), { punkte: increment(-1) })));
-      } else {
-        await updateDoc(api.spielerRef(), { punkte: increment(-1) });
-      }
+      await updateDoc(api.spielerRef(), { punkte: increment(-1) });
     }
   } catch (e) {
     zeigeDebug("Fehler beim Absenden der Antwort: " + e.message);
@@ -655,25 +659,26 @@ function zeigeErgebnis() {
 
   // v110: Im Teammodus nach Team gruppiert (Kachel mit Gesamtpunktzahl oben,
   // einzelne Spieler mit eigenen Punkten darunter) statt einer gemeinsamen Liste.
-  // v111: Die Punkte für eine richtige Antwort bekommt nur die buzzernde Person
-  // (nicht mehr das ganze Team) - "hatGewonnen" prüft daher immer nur die id.
+  // v112: Sowohl richtige als auch falsche Antworten verändern nur die Punkte der
+  // einzelnen Person. Da eine Runde bei Wer ist es? aus mehreren Buzzer-Versuchen
+  // bestehen kann, reicht "hatGewonnen" (nur der letzte, auflösende Versuch) nicht
+  // mehr aus - "wiRundenDelta" merkt sich für JEDE Person die Summe ihrer Punkte
+  // in DIESER Runde (auch einen zwischenzeitlichen Fehlversuch einer anderen Person).
   if (teammodus) {
     liste.innerHTML = teamGruppeHtml(spielerListe, teams, (s) => {
-      const hatGewonnen = antwortKorrekt && s.id === gebuzzertVon;
       return spielerKarte(
         s.name, s.farbe, s.icon,
-        formatiertePunkte(hatGewonnen ? (raum.wiPunkteDieserRunde ?? 0) : 0),
+        formatiertePunkte(raum.wiRundenDelta?.[s.id] ?? 0),
         { punkteRechts: s.punkte ?? 0 }
       );
     });
   } else {
     liste.innerHTML = "";
     [...spielerListe].sort((a, b) => (b.punkte ?? 0) - (a.punkte ?? 0)).forEach((s) => {
-      const hatGewonnen = antwortKorrekt && s.id === gebuzzertVon;
       const li = document.createElement("li");
       li.innerHTML = spielerKarte(
         s.name, s.farbe, s.icon,
-        formatiertePunkte(hatGewonnen ? (raum.wiPunkteDieserRunde ?? 0) : 0),
+        formatiertePunkte(raum.wiRundenDelta?.[s.id] ?? 0),
         { punkteRechts: s.punkte ?? 0 }
       );
       liste.appendChild(li);
@@ -695,7 +700,7 @@ async function weiter() {
         wiStatus: "frage_aktiv", wiFragenIndex: naechster,
         wiHinweisIndex: 1, wiHinweisSeit: Date.now(),
         wiGebuzzertVon: null, wiAntwortText: "", wiAntwortKorrekt: null, wiPunkteDieserRunde: 0,
-        wiFalscheVersuche: []
+        wiFalscheVersuche: [], wiRundenDelta: {}
       });
     }
   } catch (e) {
