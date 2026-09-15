@@ -14,7 +14,7 @@ import { spielerKarte, zeigeDebug } from "../../kern/ui.js";
 const VORLAGE = `
   <div id="dg-setup" class="bildschirm-karte" hidden>
     <h1>🧠 Denk gleich!</h1>
-    <p class="dg-regel">Beantwortet dieselbe Frage und versucht, auf das Gleiche zu kommen. Für jede
+    <p class="hinweis-text">Beantwortet dieselbe Frage und versucht, auf das Gleiche zu kommen. Für jede
       andere Person mit derselben Antwort bekommst du einen Punkt. Drei gleiche Antworten bringen diesen
       drei Spielern also jeweils zwei Punkte.</p>
 
@@ -22,10 +22,9 @@ const VORLAGE = `
       <div class="setup-anzahl-zeile">
         <span>Anzahl Fragen</span>
         <span class="anzahl-picker">
-          <input id="dg-anzahl" type="number" inputmode="numeric" min="1" class="anzahl-eingabe">
+          <input id="dg-anzahl" type="text" inputmode="numeric" pattern="[0-9]*" min="1" class="anzahl-eingabe">
         </span>
       </div>
-      <span id="dg-anzahl-hinweis" class="hinweis-text"></span>
     </div>
 
     <p id="dg-setup-fehler" class="fehler-text"></p>
@@ -151,6 +150,14 @@ export async function starten(uebergebeneApi) {
 }
 
 function verdrahteBedienelemente() {
+  $("dg-anzahl").addEventListener("input", () => {
+    const feld = $("dg-anzahl");
+    const bereinigt = feld.value.replace(/[^0-9]/g, "");
+    if (bereinigt !== feld.value) feld.value = bereinigt;
+  });
+  // v105: als type="number" ließ sich der vorhandene Wert beim Fokussieren nicht
+  // markieren - jetzt ein Textfeld mit numerischer Tastatur, select() funktioniert.
+  $("dg-anzahl").addEventListener("focus", () => { $("dg-anzahl").select(); });
   $("dg-starten").addEventListener("click", spielStarten);
   $("dg-absenden").addEventListener("click", antwortAbsenden);
   $("dg-antwort").addEventListener("keydown", (e) => {
@@ -236,7 +243,6 @@ function zeigeSetup() {
   const anzahlFeld = $("dg-anzahl");
   anzahlFeld.max = fragen.length;
   if (!anzahlFeld.value) anzahlFeld.value = fragen.length;
-  $("dg-anzahl-hinweis").textContent = `${fragen.length} Fragen stehen zur Verfügung.`;
   $("dg-anzahl-zeile").hidden = !api.istLeiter;
   $("dg-starten").hidden = !api.istLeiter;
   $("dg-setup-warten").hidden = api.istLeiter;
