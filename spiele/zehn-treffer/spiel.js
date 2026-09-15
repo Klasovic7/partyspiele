@@ -73,7 +73,6 @@ const VORLAGE = `
 
   <div id="zt-runde" class="bildschirm-karte" hidden>
     <p class="kategorie">10 Treffer!</p>
-    <p class="fortschritt" id="zt-fortschritt"></p>
     <h1 id="zt-begriff" class="zt-begriff"></h1>
     <p id="zt-aktive-einheit" class="zt-aktive-einheit"></p>
     <div id="zt-timer" class="zt-timer" role="timer" aria-label="40 Sekunden verbleiben">
@@ -99,7 +98,6 @@ const VORLAGE = `
 
   <div id="zt-auswertung" class="bildschirm-karte" hidden>
     <p class="kategorie">10 Treffer!</p>
-    <p class="fortschritt" id="zt-auswertung-fortschritt"></p>
     <h1 id="zt-auswertung-begriff" class="zt-begriff"></h1>
     <p id="zt-runden-ergebnis" class="zt-runden-ergebnis"></p>
     <div id="zt-auswertung-grid" class="zt-treffer-grid"></div>
@@ -379,6 +377,12 @@ function renderAktuellenStatus() {
   ["zt-setup", "zt-runde", "zt-auswertung", "zt-endstand"]
     .forEach((id) => { $(id).hidden = true; });
 
+  // v112: "Begriff X von Y" steht jetzt oben im Spielkopf statt auf jedem
+  // einzelnen Bildschirm separat (siehe api.fortschritt).
+  api.fortschritt(
+    status === "runde" || status === "auswertung" ? `${rundenIndex + 1}/${anzahlRunden}` : ""
+  );
+
   if (status === "setup" || !status) {
     zeigeSetup();
     $("zt-setup").hidden = false;
@@ -558,7 +562,6 @@ function zeigeRunde() {
   const karte = karteAn(rundenIndex);
   if (!karte) return;
   const rolle = eigeneRolle();
-  $("zt-fortschritt").textContent = `Begriff ${rundenIndex + 1} von ${anzahlRunden}`;
   $("zt-begriff").textContent = karte.begriff;
   $("zt-aktive-einheit").textContent = aktiveEinheitText();
   $("zt-rater-ansicht").hidden = rolle !== "rater";
@@ -680,7 +683,6 @@ function zwischenstandHtml(mitRundenpunkten = true) {
 function zeigeAuswertung() {
   const karte = karteAn(rundenIndex);
   if (!karte) return;
-  $("zt-auswertung-fortschritt").textContent = `Begriff ${rundenIndex + 1} von ${anzahlRunden}`;
   $("zt-auswertung-begriff").textContent = karte.begriff;
   $("zt-runden-ergebnis").textContent = `${aktiveEinheitText()}: ${rundenpunkte} von 10 Treffern`;
   rendereTreffer($("zt-auswertung-grid"), false);
