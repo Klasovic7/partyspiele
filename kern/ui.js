@@ -163,8 +163,10 @@ export function teamGruppeHtml(spielerListe, teams, kartenHtmlFn) {
   return `<div class="zt-team-rundenergebnis">` + teamInfo.map((t) => {
     const mitglieder = spielerListe.filter((s) => teams?.[s.id] === t.id);
     return `<section class="zt-team zt-team-${t.id}">` +
-      `<h2>${t.emoji} ${t.name}</h2>` +
-      `<strong class="zt-team-punkte">${summen[t.id]}</strong>` +
+      `<div class="zt-team-kopf">` +
+        `<h2>${t.emoji} ${t.name}</h2>` +
+        `<strong class="zt-team-punkte">${summen[t.id]}</strong>` +
+      `</div>` +
       `<ul class="zt-team-mitglieder">${mitglieder.map((s) => `<li>${kartenHtmlFn(s)}</li>`).join("") || `<li class="zt-team-leer">Niemand</li>`}</ul>` +
     `</section>`;
   }).join("") + `</div>`;
