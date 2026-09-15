@@ -8,7 +8,7 @@
 import { updateDoc, runTransaction, serverTimestamp } from "../../kern/firebase.js";
 import { escapeHtml, avatarHtml, spielerKarte, zeigeDebug } from "../../kern/ui.js";
 import {
-  mischeListe, erstelleTeams, bereinigeTreffer, aktiveSpielerId, aktivesTeam
+  mischeListe, erstelleTeams, ergaenzeFehlendeTeams, bereinigeTreffer, aktiveSpielerId, aktivesTeam
 } from "./logik.js";
 
 const TEAMS = {
@@ -31,7 +31,7 @@ const VORLAGE = `
           <span class="schalter-text">Teammodus</span>
           <details class="modus-info">
             <summary aria-label="Erklärung zum Teammodus">i</summary>
-            <div>Zwei automatisch ausgeglichene Teams treten abwechselnd an.</div>
+            <div>Jeder entscheidet sich für ein Team. Die Teams treten abwechselnd an - wer rät, sieht nur den Begriff, das andere Team markiert die Treffer.</div>
           </details>
         </span>
         <label class="schalter-zeile">
@@ -45,16 +45,16 @@ const VORLAGE = `
 
     <div id="zt-teams" hidden>
       <div class="zt-team-grid">
-        <section class="zt-team zt-team-blau">
+        <button type="button" id="zt-team-wahl-blau" class="zt-team zt-team-blau zt-team-waehlbar">
           <h3>🔵 Team Blau</h3>
           <ul id="zt-team-blau"></ul>
-        </section>
-        <section class="zt-team zt-team-rot">
+        </button>
+        <button type="button" id="zt-team-wahl-rot" class="zt-team zt-team-rot zt-team-waehlbar">
           <h3>🔴 Team Rot</h3>
           <ul id="zt-team-rot"></ul>
-        </section>
+        </button>
       </div>
-      <p><button id="zt-teams-mischen" class="btn-flach" hidden>Teams neu mischen</button></p>
+      <p><button id="zt-teams-zufall" class="btn-flach" hidden>Zufällige Teams</button></p>
     </div>
 
     <div id="zt-anzahl-zeile" class="setup-anzahlblock" hidden>
@@ -290,7 +290,9 @@ function verdrahteBedienelemente() {
   audioFreischaltListener = audioAktivieren;
   el.wurzel.addEventListener("pointerdown", audioFreischaltListener);
   $("zt-teammodus").addEventListener("change", teammodusUmschalten);
-  $("zt-teams-mischen").addEventListener("click", teamsNeuMischen);
+  $("zt-team-wahl-blau").addEventListener("click", () => waehleEigenesTeam("blau"));
+  $("zt-team-wahl-rot").addEventListener("click", () => waehleEigenesTeam("rot"));
+  $("zt-teams-zufall").addEventListener("click", zufaelligeTeams);
   $("zt-anzahl").addEventListener("input", () => {
     const feld = $("zt-anzahl");
     const bereinigt = feld.value.replace(/[^0-9]/g, "");
@@ -392,22 +394,15 @@ function renderAktuellenStatus() {
   }
 }
 
-function aktuelleTeamsVollstaendig() {
-  if (spielerListe.length < 2) return false;
-  const ids = new Set(spielerListe.map((spieler) => spieler.id));
-  const eingeteilt = Object.entries(teams)
-    .filter(([id, team]) => ids.has(id) && (team === "blau" || team === "rot"));
-  return eingeteilt.length === spielerListe.length &&
-    eingeteilt.some(([, team]) => team === "blau") &&
-    eingeteilt.some(([, team]) => team === "rot");
-}
-
+// v109: Teammodus - jeder Spieler wählt sich jetzt selbst ein Team (durch Klick
+// auf die Team-Kachel). Nur der Spielleiter darf über "Zufällige Teams" alle
+// Zuordnungen neu auswürfeln. Startet das Spiel, bevor alle gewählt haben,
+// werden nur die fehlenden Spieler ausgeglichen zugeteilt (siehe
+// ergaenzeFehlendeTeams) - bereits getroffene Wahlen bleiben erhalten.
 async function teammodusUmschalten() {
   if (!api.istLeiter) return;
   const aktiviert = $("zt-teammodus").checked;
-  const neueTeams = aktiviert
-    ? erstelleTeams(spielerListe.map((spieler) => spieler.id))
-    : {};
+  const neueTeams = aktiviert ? teams : {};
   try {
     await updateDoc(api.raumRef(), { ztTeammodus: aktiviert, ztTeams: neueTeams });
   } catch (e) {
@@ -416,9 +411,18 @@ async function teammodusUmschalten() {
   }
 }
 
-async function teamsNeuMischen() {
+async function waehleEigenesTeam(team) {
+  if (!teammodus) return;
+  try {
+    await updateDoc(api.raumRef(), { ztTeams: { ...teams, [api.spielerId]: team } });
+  } catch (e) {
+    zeigeDebug("Team konnte nicht gewählt werden: " + e.message);
+  }
+}
+
+async function zufaelligeTeams() {
   if (!api.istLeiter || !teammodus) return;
-  $("zt-teams-mischen").disabled = true;
+  $("zt-teams-zufall").disabled = true;
   try {
     await updateDoc(api.raumRef(), {
       ztTeams: erstelleTeams(spielerListe.map((spieler) => spieler.id))
@@ -426,7 +430,7 @@ async function teamsNeuMischen() {
   } catch (e) {
     zeigeDebug("Teams konnten nicht neu gemischt werden: " + e.message);
   }
-  $("zt-teams-mischen").disabled = false;
+  $("zt-teams-zufall").disabled = false;
 }
 
 function rendereTeamListe(team) {
@@ -434,7 +438,7 @@ function rendereTeamListe(team) {
   liste.innerHTML = "";
   spielerListe.filter((spieler) => teams[spieler.id] === team).forEach((spieler) => {
     const li = document.createElement("li");
-    li.textContent = spieler.name;
+    li.textContent = spieler.name + (spieler.id === api.spielerId ? " (du)" : "");
     liste.appendChild(li);
   });
   if (!liste.children.length) {
@@ -442,6 +446,7 @@ function rendereTeamListe(team) {
     li.textContent = "Noch niemand";
     liste.appendChild(li);
   }
+  $("zt-team-wahl-" + team).classList.toggle("zt-team-eigenes", teams[api.spielerId] === team);
 }
 
 function zeigeSetup() {
@@ -449,7 +454,7 @@ function zeigeSetup() {
   teamSchalter.checked = teammodus;
   teamSchalter.disabled = !api.istLeiter;
   $("zt-teams").hidden = !teammodus;
-  $("zt-teams-mischen").hidden = !api.istLeiter;
+  $("zt-teams-zufall").hidden = !api.istLeiter;
   if (teammodus) {
     rendereTeamListe("blau");
     rendereTeamListe("rot");
@@ -474,8 +479,8 @@ async function spielStarten() {
   if (!Number.isFinite(anzahl) || anzahl < 1) anzahl = 1;
   if (anzahl > karten.length) anzahl = karten.length;
 
-  const neueTeams = teammodus && !aktuelleTeamsVollstaendig()
-    ? erstelleTeams(spielerListe.map((spieler) => spieler.id))
+  const neueTeams = teammodus
+    ? ergaenzeFehlendeTeams(teams, spielerListe.map((spieler) => spieler.id))
     : teams;
   const neueSpielerReihenfolge = mischeListe(spielerListe.map((spieler) => spieler.id));
   const neuerStart = Math.random() < 0.5 ? "blau" : "rot";
