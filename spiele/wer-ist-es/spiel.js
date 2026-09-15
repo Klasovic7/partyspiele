@@ -23,7 +23,7 @@
 //  beenden zurück (siehe Kommentar in spiele/schaetzfragen/spiel.js).
 // ============================================================================
 import { updateDoc, increment, runTransaction, arrayUnion } from "../../kern/firebase.js";
-import { spielerKarte, teamEndstandHtml, zeigeDebug } from "../../kern/ui.js";
+import { spielerKarte, teamEndstandHtml, teamGruppeHtml, zeigeDebug } from "../../kern/ui.js";
 import { erstelleTeams, ergaenzeFehlendeTeams } from "../../kern/teams.js";
 
 const HINWEIS_DAUER_MS = 10000;
@@ -111,7 +111,7 @@ const VORLAGE = `
     <p class="fortschritt" id="wi-erg-fortschritt"></p>
     <h2 id="wi-erg-status"></h2>
     <p>Gesucht war: <strong id="wi-erg-name"></strong></p>
-    <ul id="wi-erg-liste"></ul>
+    <div id="wi-erg-liste"></div>
     <p><button id="wi-weiter" hidden>Weiter</button></p>
   </div>
 
@@ -656,18 +656,32 @@ function zeigeErgebnis() {
   }
 
   const liste = $("wi-erg-liste");
-  liste.innerHTML = "";
   const gewinnerTeam = teammodus && gebuzzertVon ? teams[gebuzzertVon] : null;
-  [...spielerListe].sort((a, b) => (b.punkte ?? 0) - (a.punkte ?? 0)).forEach((s) => {
-    const hatGewonnen = antwortKorrekt && (s.id === gebuzzertVon || (gewinnerTeam && teams[s.id] === gewinnerTeam));
-    const li = document.createElement("li");
-    li.innerHTML = spielerKarte(
-      s.name, s.farbe, s.icon,
-      formatiertePunkte(hatGewonnen ? (raum.wiPunkteDieserRunde ?? 0) : 0),
-      { punkteRechts: s.punkte ?? 0 }
-    );
-    liste.appendChild(li);
-  });
+
+  // v110: Im Teammodus nach Team gruppiert (Kachel mit Gesamtpunktzahl oben,
+  // einzelne Spieler mit eigenen Punkten darunter) statt einer gemeinsamen Liste.
+  if (teammodus) {
+    liste.innerHTML = teamGruppeHtml(spielerListe, teams, (s) => {
+      const hatGewonnen = antwortKorrekt && gewinnerTeam && teams[s.id] === gewinnerTeam;
+      return spielerKarte(
+        s.name, s.farbe, s.icon,
+        formatiertePunkte(hatGewonnen ? (raum.wiPunkteDieserRunde ?? 0) : 0),
+        { punkteRechts: s.punkte ?? 0 }
+      );
+    });
+  } else {
+    liste.innerHTML = "";
+    [...spielerListe].sort((a, b) => (b.punkte ?? 0) - (a.punkte ?? 0)).forEach((s) => {
+      const hatGewonnen = antwortKorrekt && s.id === gebuzzertVon;
+      const li = document.createElement("li");
+      li.innerHTML = spielerKarte(
+        s.name, s.farbe, s.icon,
+        formatiertePunkte(hatGewonnen ? (raum.wiPunkteDieserRunde ?? 0) : 0),
+        { punkteRechts: s.punkte ?? 0 }
+      );
+      liste.appendChild(li);
+    });
+  }
 
   $("wi-weiter").hidden = !api.istLeiter;
   $("wi-weiter").textContent = index + 1 >= anzahlFragen ? "Endstand anzeigen" : "Nächste Frage";
