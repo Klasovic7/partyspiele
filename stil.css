@@ -122,6 +122,25 @@
       letter-spacing: .01em;
     }
     .profil-auswahlblock { text-align: center; }
+    /* v114: Umschalter zwischen den Bilder-Kategorien "Fußballer" und "Freunde" -
+       zwischen Farbauswahl und Spielerauswahl, passend zum karussell-pfeil-Look. */
+    .profil-kategorie-wahl {
+      display: flex; justify-content: center; gap: 8px; margin: 4px 0 2px;
+    }
+    .profil-kategorie-btn {
+      border: 1px solid rgba(174,205,231,.42); border-radius: 999px;
+      background: rgba(9,29,48,.6); color: #dfe7ff;
+      font-family: "Barlow Condensed", sans-serif; font-weight: 800; font-style: italic;
+      font-size: 1rem; letter-spacing: .02em; padding: 7px 20px;
+      backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+      transition: background .2s ease, color .2s ease, transform .2s ease;
+    }
+    .profil-kategorie-btn:hover { background: rgba(9,29,48,.84); }
+    .profil-kategorie-btn:active { transform: scale(.96); }
+    .profil-kategorie-btn.aktiv {
+      background: var(--profil-farbe); color: var(--profil-text); border-color: transparent;
+      box-shadow: 0 8px 22px rgba(0,0,0,.32), 0 0 16px color-mix(in srgb, var(--profil-farbe) 55%, transparent);
+    }
     .profil-karussell { position: relative; width: 100%; display: flex; align-items: center; justify-content: center; }
     .karussell-buehne {
       width: 100%; min-height: 104px; display: flex; align-items: center;
@@ -1369,6 +1388,16 @@
       box-shadow: 0 8px 22px rgba(0, 0, 0, .34);
     }
     .karussell-pfeil:hover { color: #fff; background: rgba(255, 91, 54, .2); }
+    .profil-kategorie-btn {
+      color: var(--club-text);
+      background: rgba(18, 12, 23, .9);
+      border-color: rgba(255, 112, 78, .82);
+    }
+    .profil-kategorie-btn:hover { background: rgba(255, 91, 54, .2); }
+    .profil-kategorie-btn.aktiv {
+      background: var(--club-orange); color: #fff;
+      box-shadow: 0 0 0 3px rgba(255, 91, 54, .3), 0 9px 24px rgba(0, 0, 0, .42);
+    }
     .farb-option {
       border-color: rgba(255, 250, 243, .62);
       box-shadow: 0 7px 18px rgba(0, 0, 0, .32);

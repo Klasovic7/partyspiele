@@ -5,11 +5,11 @@ import {
   serverTimestamp, runTransaction
 } from "./kern/firebase.js";
 import {
-  FARBEN, AVATARE, escapeHtml, avatarHtml, textFarbeFuer, zeigeDebug, erzeugeZufallsId
+  FARBEN, AVATARE, FREUNDE, escapeHtml, avatarHtml, textFarbeFuer, zeigeDebug, erzeugeZufallsId
 } from "./kern/ui.js";
 import { SPIELE, spielInfo } from "./spiele/register.js";
 
-export const APP_VERSION = "v113";
+export const APP_VERSION = "v114";
 const appVersion = document.getElementById("app-version");
 appVersion.textContent = "Version " + APP_VERSION;
 
@@ -52,6 +52,8 @@ const btnIconZurueck = document.getElementById("btn-icon-zurueck");
 const btnIconWeiter = document.getElementById("btn-icon-weiter");
 const btnProfilAuswaehlen = document.getElementById("btn-profil-auswaehlen");
 const btnProfilVerlassen = document.getElementById("btn-profil-verlassen");
+const btnKategorieFussballer = document.getElementById("btn-kategorie-fussballer");
+const btnKategorieFreunde = document.getElementById("btn-kategorie-freunde");
 const spielerliste = document.getElementById("spielerliste");
 const spieleGrid = document.getElementById("spiele-grid");
 const spielauswahlHinweis = document.getElementById("spielauswahl-hinweis");
@@ -140,6 +142,13 @@ function raumSignatur(daten) {
 
 // ---------- Vollbild-Profilwahl (Farbe + Profilbild) ----------
 const profilEntwurf = { farbe: zustand.farbe, icon: zustand.icon };
+// v114: zweite Bilder-Kategorie ("Freunde") neben den Fußballern - beide
+// Kategorien bleiben bestehen, man kann zwischen ihnen hin- und herwechseln.
+let profilKategorie = "fussballer";
+
+function aktuelleAvatarQuelle() {
+  return profilKategorie === "freunde" ? FREUNDE : AVATARE;
+}
 
 function mischeFarbe(hex, ziel, anteil) {
   const kanal = (start, ende) => Math.round(start + (ende - start) * anteil);
@@ -229,7 +238,7 @@ function renderFarbKarussell() {
 }
 
 function renderIconKarussell() {
-  const optionen = freieOptionen(AVATARE, "icon", "id");
+  const optionen = freieOptionen(aktuelleAvatarQuelle(), "icon", "id");
   iconKarussell.innerHTML = "";
   if (!optionen.length) {
     profilEntwurf.icon = null;
@@ -273,9 +282,24 @@ function renderProfilAuswahl() {
   btnProfilAuswaehlen.disabled = !profilEntwurf.farbe || !profilEntwurf.icon;
 }
 
+// v114: Umschalten zwischen den Bilder-Kategorien "Fußballer" und "Freunde".
+// Beim Wechseln wird das aktuell gewählte Bild zurückgesetzt, damit man nicht
+// versehentlich ein Bild der anderen Kategorie "mitschleppt".
+function setzeKategorie(kategorie) {
+  if (kategorie === profilKategorie) return;
+  profilKategorie = kategorie;
+  profilEntwurf.icon = null;
+  btnKategorieFussballer.classList.toggle("aktiv", kategorie === "fussballer");
+  btnKategorieFussballer.setAttribute("aria-selected", kategorie === "fussballer" ? "true" : "false");
+  btnKategorieFreunde.classList.toggle("aktiv", kategorie === "freunde");
+  btnKategorieFreunde.setAttribute("aria-selected", kategorie === "freunde" ? "true" : "false");
+  renderIconKarussell();
+  btnProfilAuswaehlen.disabled = !profilEntwurf.farbe || !profilEntwurf.icon;
+}
+
 function verschiebeProfilAuswahl(typ, richtung) {
   const istFarbe = typ === "farbe";
-  const optionen = freieOptionen(istFarbe ? FARBEN : AVATARE, typ, istFarbe ? "hex" : "id");
+  const optionen = freieOptionen(istFarbe ? FARBEN : aktuelleAvatarQuelle(), typ, istFarbe ? "hex" : "id");
   if (optionen.length < 2) return;
   const schluessel = istFarbe ? "hex" : "id";
   let index = optionen.findIndex((option) => option[schluessel] === profilEntwurf[typ]);
@@ -301,6 +325,14 @@ function zeigeProfilAuswahl() {
     profilEntwurf.farbe = zustand.farbe;
     profilEntwurf.icon = zustand.icon;
     avatarHinweis.textContent = "";
+    // v114: Kategorie passend zum bereits gewählten Bild vorauswählen (falls
+    // vorhanden), sonst Standard "Fußballer".
+    const istFreund = FREUNDE.some((f) => f.id === zustand.icon);
+    profilKategorie = istFreund ? "freunde" : "fussballer";
+    btnKategorieFussballer.classList.toggle("aktiv", !istFreund);
+    btnKategorieFussballer.setAttribute("aria-selected", istFreund ? "false" : "true");
+    btnKategorieFreunde.classList.toggle("aktiv", istFreund);
+    btnKategorieFreunde.setAttribute("aria-selected", istFreund ? "true" : "false");
   }
   startScreen.hidden = true;
   lobbyScreen.hidden = true;
@@ -356,6 +388,8 @@ btnFarbeWeiter.addEventListener("click", () => verschiebeProfilAuswahl("farbe", 
 btnIconZurueck.addEventListener("click", () => verschiebeProfilAuswahl("icon", -1));
 btnIconWeiter.addEventListener("click", () => verschiebeProfilAuswahl("icon", 1));
 btnProfilAuswaehlen.addEventListener("click", bestaetigeProfilAuswahl);
+btnKategorieFussballer.addEventListener("click", () => setzeKategorie("fussballer"));
+btnKategorieFreunde.addEventListener("click", () => setzeKategorie("freunde"));
 aktiviereWischen(farbKarussell, (richtung) => verschiebeProfilAuswahl("farbe", richtung));
 aktiviereWischen(iconKarussell, (richtung) => verschiebeProfilAuswahl("icon", richtung));
 window.addEventListener("resize", () => requestAnimationFrame(richteStrahlenAufSpieler));
