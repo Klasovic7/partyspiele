@@ -21,7 +21,7 @@ const RUNDEN_DAUER_SEKUNDEN = 40;
 const VORLAGE = `
   <div id="zt-setup" class="bildschirm-karte" hidden>
     <h1>💥 10 Treffer!</h1>
-    <p class="zt-regel">Ein Begriff wird angezeigt. Findet die zehn Antworten, die wir suchen. Eine
+    <p class="hinweis-text">Ein Begriff wird angezeigt. Findet die zehn Antworten, die wir suchen. Eine
       Person oder ein Team rät. Alle anderen sehen die Trefferliste und tippen einen Begriff an, sobald
       er genannt wurde. Jeder Treffer gibt einen Punkt.</p>
 
@@ -54,10 +54,9 @@ const VORLAGE = `
       <div class="setup-anzahl-zeile">
         <span>Anzahl Begriffe</span>
         <span class="anzahl-picker">
-          <input id="zt-anzahl" type="number" inputmode="numeric" min="1" class="anzahl-eingabe">
+          <input id="zt-anzahl" type="text" inputmode="numeric" pattern="[0-9]*" min="1" class="anzahl-eingabe">
         </span>
       </div>
-      <span id="zt-anzahl-hinweis" class="hinweis-text"></span>
     </div>
 
     <p id="zt-setup-fehler" class="fehler-text"></p>
@@ -285,7 +284,15 @@ function verdrahteBedienelemente() {
   el.wurzel.addEventListener("pointerdown", audioFreischaltListener);
   $("zt-teammodus").addEventListener("change", teammodusUmschalten);
   $("zt-teams-mischen").addEventListener("click", teamsNeuMischen);
-  $("zt-anzahl").addEventListener("input", () => { anzahlManuellGesetzt = true; });
+  $("zt-anzahl").addEventListener("input", () => {
+    const feld = $("zt-anzahl");
+    const bereinigt = feld.value.replace(/[^0-9]/g, "");
+    if (bereinigt !== feld.value) feld.value = bereinigt;
+    anzahlManuellGesetzt = true;
+  });
+  // v105: als type="number" ließ sich der vorhandene Wert beim Fokussieren nicht
+  // markieren - jetzt ein Textfeld mit numerischer Tastatur, select() funktioniert.
+  $("zt-anzahl").addEventListener("focus", () => { $("zt-anzahl").select(); });
   $("zt-starten").addEventListener("click", spielStarten);
   $("zt-runde-beenden").addEventListener("click", rundeBeenden);
   $("zt-weiter").addEventListener("click", weiter);
@@ -444,7 +451,6 @@ function zeigeSetup() {
   const anzahlFeld = $("zt-anzahl");
   anzahlFeld.max = karten.length;
   if (!anzahlManuellGesetzt || !anzahlFeld.value) anzahlFeld.value = karten.length;
-  $("zt-anzahl-hinweis").textContent = `${karten.length} Begriffe stehen zur Verfügung.`;
   $("zt-anzahl-zeile").hidden = !api.istLeiter;
   $("zt-starten").hidden = !api.istLeiter;
   $("zt-setup-warten").hidden = api.istLeiter;
