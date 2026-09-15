@@ -108,7 +108,6 @@ const VORLAGE = `
 
   <div id="wi-ergebnis-screen" class="bildschirm-karte" hidden>
     <p class="kategorie">Fußballer</p>
-    <p class="fortschritt" id="wi-erg-fortschritt"></p>
     <h2 id="wi-erg-status"></h2>
     <p>Gesucht war: <strong id="wi-erg-name"></strong></p>
     <div id="wi-erg-liste"></div>
@@ -311,6 +310,16 @@ export function raumDaten(daten) {
     $("wi-antwort-fehler").textContent = "";
   }
 
+  // v112: die frühere "Frage X von Y"-Zeile auf dem Bildschirm ist jetzt die
+  // gemeinsame Fortschrittsanzeige oben im Spielkopf (siehe api.fortschritt) -
+  // dort steht sie während der Setup-/Endstand-Screens aber nicht sinnvoll zur
+  // Verfügung, deshalb nur bei aktiver Frage bzw. Ergebnis anzeigen.
+  api.fortschritt(
+    status === "frage_aktiv" || status === "gebuzzert" || status === "aufgeloest"
+      ? `${index + 1}/${anzahlFragen}`
+      : ""
+  );
+
   alleVerstecken();
   if (status === "setup" || !status) {
     zeigeSetup();
@@ -472,10 +481,12 @@ export async function vorZurueck() {
 function zeigeFrage() {
   const frage = frageAn(index);
   if (!frage) return;
-  $("wi-frage-fortschritt").textContent = `Frage ${index + 1} von ${anzahlFragen}`;
 
+  // v112: "Frage X von Y" steht jetzt oben im Spielkopf (api.fortschritt) - an
+  // dieser Stelle zeigen wir stattdessen, der wievielte Hinweis gerade dran ist.
   const gesamt = frage.hinweise.length;
   const sichtbar = Math.min(Math.max(hinweisIndex, 1), gesamt);
+  $("wi-frage-fortschritt").textContent = `Hinweis ${sichtbar} von ${gesamt}`;
   $("wi-hinweis-aktuell").textContent = frage.hinweise[sichtbar - 1] ?? "";
 
   const liste = $("wi-hinweis-liste");
@@ -643,7 +654,6 @@ async function ueberspringen() {
 function zeigeErgebnis() {
   const frage = frageAn(index);
   if (!frage) return;
-  $("wi-erg-fortschritt").textContent = `Frage ${index + 1} von ${anzahlFragen}`;
   $("wi-erg-name").textContent = frage.name;
 
   const raterName = spielerListe.find((s) => s.id === gebuzzertVon)?.name;
