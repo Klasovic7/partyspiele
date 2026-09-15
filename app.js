@@ -9,7 +9,7 @@ import {
 } from "./kern/ui.js";
 import { SPIELE, spielInfo } from "./spiele/register.js";
 
-export const APP_VERSION = "v128";
+export const APP_VERSION = "v129";
 const appVersion = document.getElementById("app-version");
 appVersion.textContent = "Version " + APP_VERSION;
 
@@ -143,7 +143,7 @@ function raumSignatur(daten) {
 
 // ---------- Vollbild-Profilwahl (Farbe + Profilbild) ----------
 const profilEntwurf = { farbe: zustand.farbe, icon: zustand.icon };
-// v128: zweite Bilder-Kategorie ("Freunde") neben den Fußballern - beide
+// v129: zweite Bilder-Kategorie ("Freunde") neben den Fußballern - beide
 // Kategorien bleiben bestehen, man kann zwischen ihnen hin- und herwechseln.
 let profilKategorie = "fussballer";
 
@@ -239,7 +239,7 @@ function renderFarbKarussell() {
 }
 
 function renderIconKarussell() {
-  // v128: bei "Freunde" steht die Rolle (groß) über dem Namen (klein) - bei
+  // v129: bei "Freunde" steht die Rolle (groß) über dem Namen (klein) - bei
   // "Fußballer" bleibt es wie bisher Vorname (klein) über Nachname (groß).
   profilSpielername.classList.toggle("freunde-modus", profilKategorie === "freunde");
   const optionen = freieOptionen(aktuelleAvatarQuelle(), "icon", "id");
@@ -260,7 +260,7 @@ function renderIconKarussell() {
   profilEntwurf.icon = ausgewaehlt.id;
   profilVorname.textContent = ausgewaehlt.vorname;
   profilNachname.textContent = ausgewaehlt.nachname;
-  // v128: lange, nicht umbrechbare Wörter (z. B. "MEERJUNGFRAU") ragen sonst
+  // v129: lange, nicht umbrechbare Wörter (z. B. "MEERJUNGFRAU") ragen sonst
   // über den Kartenrand hinaus - ab 9 Zeichen wird die Schrift per CSS-Variable
   // passend verkleinert, kürzere Namen bleiben unverändert bei Skala 1.
   const nachnameLaenge = ausgewaehlt.nachname.length;
@@ -293,7 +293,7 @@ function renderProfilAuswahl() {
   btnProfilAuswaehlen.disabled = !profilEntwurf.farbe || !profilEntwurf.icon;
 }
 
-// v128: Umschalten zwischen den Bilder-Kategorien "Fußballer" und "Freunde".
+// v129: Umschalten zwischen den Bilder-Kategorien "Fußballer" und "Freunde".
 // Beim Wechseln wird das aktuell gewählte Bild zurückgesetzt, damit man nicht
 // versehentlich ein Bild der anderen Kategorie "mitschleppt".
 function setzeKategorie(kategorie) {
@@ -336,7 +336,7 @@ function zeigeProfilAuswahl() {
     profilEntwurf.farbe = zustand.farbe;
     profilEntwurf.icon = zustand.icon;
     avatarHinweis.textContent = "";
-    // v128: Kategorie passend zum bereits gewählten Bild vorauswählen (falls
+    // v129: Kategorie passend zum bereits gewählten Bild vorauswählen (falls
     // vorhanden), sonst Standard "Fußballer".
     const istFreund = FREUNDE.some((f) => f.id === zustand.icon);
     profilKategorie = istFreund ? "freunde" : "fussballer";
@@ -575,6 +575,16 @@ function starteListener(code) {
   spielerUnsubscribe = onSnapshot(collection(db, RAEUME, code, "spieler"), (snap) => {
     zustand.spieler = [];
     snap.forEach((d) => zustand.spieler.push({ id: d.id, ...d.data() }));
+    // Sicherheitsnetz: taucht der eigene Eintrag ohne Farbe/Bild auf (z. B. durch
+    // einen inzwischen behobenen, aber vielleicht noch nicht überall ausgerollten
+    // Schreibfehler), zeigt sich das sonst nur als "?"-Avatar ohne jede Möglichkeit,
+    // das selbst zu korrigieren. Stattdessen automatisch zurück zur Profilwahl.
+    const eigenerEintrag = zustand.spieler.find((s) => s.id === spielerId);
+    if (zustand.profilBestaetigt && eigenerEintrag && (!eigenerEintrag.farbe || !eigenerEintrag.icon)) {
+      zustand.profilBestaetigt = false;
+      zeigeProfilAuswahl();
+      return;
+    }
     if (!profilScreen.hidden) renderProfilAuswahl();
     if (!lobbyScreen.hidden) renderLobby();
     aktivesSpielModul?.spieler?.(zustand.spieler);
@@ -745,9 +755,14 @@ async function neuenRaumCodeErzeugen() {
 
 // Farbe und Profilbild aus der letzten Sitzung als Vorauswahl übernehmen, aber nur
 // wenn sie im neuen Raum noch frei sind. Bestätigt wird erst im Vollbild-Schritt.
+// Wichtig: der eigene, schon vorhandene Spieler-Eintrag zählt dabei NICHT als
+// "belegt" - sonst gilt beim erneuten Betreten eines Raums, dem man schon
+// angehört, das eigene Profilbild fälschlich als vergeben und fällt beim
+// Neuschreiben (setDoc) komplett weg -> Spieler wird ohne Bild angezeigt.
 function startWerte(vorhandene) {
-  const belegteFarben = new Set(vorhandene.map((s) => s.farbe).filter(Boolean));
-  const belegteIcons = new Set(vorhandene.map((s) => s.icon).filter(Boolean));
+  const andere = vorhandene.filter((s) => s.id !== spielerId);
+  const belegteFarben = new Set(andere.map((s) => s.farbe).filter(Boolean));
+  const belegteIcons = new Set(andere.map((s) => s.icon).filter(Boolean));
   const werte = { name: zustand.name, punkte: 0 };
   if (zustand.farbe && !belegteFarben.has(zustand.farbe)) werte.farbe = zustand.farbe;
   if (zustand.icon && !belegteIcons.has(zustand.icon)) werte.icon = zustand.icon;
@@ -771,7 +786,7 @@ btnErstellen.addEventListener("click", async () => {
       phase: "lobby",
       aktuellesSpiel: null
     });
-    await setDoc(doc(db, RAEUME, code, "spieler", spielerId), startWerte([]));
+    await setDoc(doc(db, RAEUME, code, "spieler", spielerId), startWerte([]), { merge: true });
 
     zustand.code = code;
     sitzungSpeichern();
@@ -847,9 +862,9 @@ beitretenForm.addEventListener("submit", async (event) => {
     // Belegte Farben/Bilder einmal abfragen, damit man nicht direkt mit einer
     // schon vergebenen Farbe hereinkommt.
     const vorhandene = [];
-    (await getDocs(collection(db, RAEUME, code, "spieler"))).forEach((d) => vorhandene.push(d.data()));
+    (await getDocs(collection(db, RAEUME, code, "spieler"))).forEach((d) => vorhandene.push({ id: d.id, ...d.data() }));
 
-    await setDoc(doc(db, RAEUME, code, "spieler", spielerId), startWerte(vorhandene));
+    await setDoc(doc(db, RAEUME, code, "spieler", spielerId), startWerte(vorhandene), { merge: true });
 
     sitzungSpeichern();
     schliesseBeitretenDialog(false);
@@ -879,6 +894,13 @@ async function versucheSitzungFortzusetzen() {
         ...(gespeicherteSitzung.farbe ? { farbe: gespeicherteSitzung.farbe } : {}),
         ...(gespeicherteSitzung.icon ? { icon: gespeicherteSitzung.icon } : {})
       });
+      // Ohne Farbe/Bild (z. B. wenn der eigene Eintrag zwischenzeitlich gelöscht
+      // wurde und die alte Sitzung keine vollständigen Angaben mehr hatte) muss
+      // die Profilwahl erneut erscheinen - sonst landet man ohne Bild direkt in
+      // der Lobby, ohne die Möglichkeit, das zu korrigieren.
+      if (!gespeicherteSitzung.farbe || !gespeicherteSitzung.icon) {
+        zustand.profilBestaetigt = false;
+      }
     }
     betreteRaum(gespeicherteSitzung.code, gespeicherteSitzung.name);
   } catch (e) {

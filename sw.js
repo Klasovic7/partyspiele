@@ -1,10 +1,10 @@
 // Service Worker: macht die App installierbar und offline startfähig.
 //
-// WICHTIG bei Änderungen: die Zahl in CACHE_NAME hochzählen (z. B. v106 -> v128).
+// WICHTIG bei Änderungen: die Zahl in CACHE_NAME hochzählen (z. B. v106 -> v129).
 // Nur dann wirft der Browser den alten Zwischenspeicher weg und alle Spieler
 // bekommen zuverlässig die neue Version. Das ist der einzige Handgriff, den man
 // nach dem Bearbeiten von Dateien nicht vergessen darf.
-const CACHE_NAME = "partyspiele-v128";
+const CACHE_NAME = "partyspiele-v129";
 
 const DATEIEN = [
   "./",
@@ -39,10 +39,10 @@ const DATEIEN = [
   "bilder/icon-raum-verlassen.svg",
   "bilder/avatar1-hd.jpg?v=38", "bilder/avatar2-hd.jpg?v=38", "bilder/avatar3-hd.jpg?v=38", "bilder/avatar4-hd.jpg?v=38",
   "bilder/avatar5-hd.jpg?v=38", "bilder/avatar6-hd.jpg?v=38", "bilder/avatar7-hd.jpg?v=38", "bilder/avatar8-hd.jpg?v=38",
-  "bilder/freund-rapper-kevin.jpg?v=127", "bilder/freund-zocker-luca.jpg?v=127", "bilder/freund-bettler-nader.jpg?v=127",
-  "bilder/freund-eintracht-sinan.jpg?v=127", "bilder/freund-boxer-kevin.jpg?v=127", "bilder/freund-gay-luca.jpg?v=127",
-  "bilder/freund-diktator-nader.jpg?v=127", "bilder/freund-rambo-sinan.jpg?v=127", "bilder/freund-meerjungfrau-kevin.jpg?v=127",
-  "bilder/freund-baywatch-luca.jpg?v=127", "bilder/freund-baby-nader.jpg?v=127", "bilder/freund-leoparden-sinan.jpg?v=127"
+  "bilder/freund-rapper-kevin.jpg?v=129", "bilder/freund-zocker-luca.jpg?v=129", "bilder/freund-bettler-nader.jpg?v=129",
+  "bilder/freund-eintracht-sinan.jpg?v=129", "bilder/freund-boxer-kevin.jpg?v=129", "bilder/freund-gay-luca.jpg?v=129",
+  "bilder/freund-diktator-nader.jpg?v=129", "bilder/freund-rambo-sinan.jpg?v=129", "bilder/freund-meerjungfrau-kevin.jpg?v=129",
+  "bilder/freund-baywatch-luca.jpg?v=129", "bilder/freund-baby-nader.jpg?v=129", "bilder/freund-leoparden-sinan.jpg?v=129"
 ];
 
 self.addEventListener("install", (event) => {
