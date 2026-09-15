@@ -34,7 +34,6 @@ const VORLAGE = `
 
   <div id="dg-frage-screen" class="bildschirm-karte" hidden>
     <p class="kategorie">Denk gleich!</p>
-    <p class="fortschritt" id="dg-frage-fortschritt"></p>
     <h2 id="dg-frage-text"></h2>
     <p>
       <input id="dg-antwort" type="text" maxlength="80" autocomplete="off"
@@ -48,7 +47,6 @@ const VORLAGE = `
 
   <div id="dg-ergebnis-screen" class="bildschirm-karte" hidden>
     <p class="kategorie">Denk gleich!</p>
-    <p class="fortschritt" id="dg-erg-fortschritt"></p>
     <h2 id="dg-erg-frage"></h2>
     <ul id="dg-erg-liste"></ul>
     <p><button id="dg-weiter" hidden>Weiter</button></p>
@@ -217,6 +215,12 @@ export function raumDaten(daten) {
     frageVersion = neueVersion;
   }
 
+  // v112: "Frage X von Y" steht jetzt oben im Spielkopf statt auf jedem
+  // einzelnen Bildschirm separat (siehe api.fortschritt).
+  api.fortschritt(
+    status === "frage_aktiv" || status === "ausgewertet" ? `${index + 1}/${anzahlFragen}` : ""
+  );
+
   alleVerstecken();
   if (status === "setup" || !status) {
     zeigeSetup();
@@ -304,7 +308,6 @@ export async function vorZurueck() {
 function zeigeFrage(pos) {
   const frage = frageAn(pos);
   if (!frage) return;
-  $("dg-frage-fortschritt").textContent = `Frage ${pos + 1} von ${anzahlFragen}`;
   $("dg-frage-text").textContent = frage.frage;
   $("dg-andere-frage").hidden = !api.istLeiter;
 }
@@ -559,7 +562,6 @@ function zeigeErgebnisListe(pos) {
 function zeigeErgebnis(pos) {
   const frage = frageAn(pos);
   if (!frage) return;
-  $("dg-erg-fortschritt").textContent = `Frage ${pos + 1} von ${anzahlFragen}`;
   $("dg-erg-frage").textContent = frage.frage;
   zeigeErgebnisListe(pos);
   $("dg-weiter").hidden = !api.istLeiter;
