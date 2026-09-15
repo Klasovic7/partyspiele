@@ -174,7 +174,18 @@
       width: 62px; height: 62px; border-radius: 50%;
       background: var(--item-farbe);
     }
-    .farb-option.mitte { width: 82px; height: 82px; }
+    .farb-option.mitte {
+      width: 82px; height: 82px;
+      /* v121: die ausgewählte Farbe jetzt als kräftiger Ring INNEN (direkt an der
+         Kachel) und AUSSEN (direkt am weißen Rahmen) statt nur als schwacher,
+         verwaschener Schein - dadurch bleiben auch dunkle Farben wie Schwarz auf
+         dunklem Hintergrund gut erkennbar. */
+      box-shadow:
+        inset 0 0 0 3px var(--item-farbe),
+        0 0 0 5px var(--item-farbe),
+        0 13px 34px rgba(0,0,0,.46),
+        0 0 20px color-mix(in srgb, var(--item-farbe) 55%, transparent);
+    }
     .spieler-auswahlblock { position: relative; margin-top: -2px; }
     .spieler-auswahlblock .profil-karussell { width: calc(100vw + 22px); margin-left: calc((100% - 100vw - 22px) / 2); }
     .spieler-auswahlblock .karussell-pfeil:first-child { left: 7px; }
