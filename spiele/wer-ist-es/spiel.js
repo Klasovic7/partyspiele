@@ -23,7 +23,8 @@
 //  beenden zurück (siehe Kommentar in spiele/schaetzfragen/spiel.js).
 // ============================================================================
 import { updateDoc, increment, runTransaction, arrayUnion } from "../../kern/firebase.js";
-import { spielerKarte, zeigeDebug } from "../../kern/ui.js";
+import { spielerKarte, teamEndstandHtml, zeigeDebug } from "../../kern/ui.js";
+import { erstelleTeams, ergaenzeFehlendeTeams } from "../../kern/teams.js";
 
 const HINWEIS_DAUER_MS = 10000;
 const STANDARD_ANZAHL = 8;
@@ -42,6 +43,38 @@ const VORLAGE = `
           <input id="wi-anzahl" type="text" inputmode="numeric" pattern="[0-9]*" min="1" value="8" class="anzahl-eingabe">
         </span>
       </div>
+    </div>
+
+    <div id="wi-teammodus-zeile" class="setup-modusblock" hidden>
+      <div class="setup-moduszeile">
+        <span class="modus-text-zeile">
+          <span class="schalter-text">Teammodus</span>
+          <details class="modus-info">
+            <summary aria-label="Erklärung zum Teammodus">i</summary>
+            <div>Jeder entscheidet sich für ein Team. Alle dürfen buzzern - richtig oder falsch, das Ergebnis zählt fürs ganze Team (Punkt bzw. Punktabzug für alle Mitglieder).</div>
+          </details>
+        </span>
+        <label class="schalter-zeile">
+          <span class="schalter">
+            <input type="checkbox" id="wi-teammodus">
+            <span class="schalter-regler"></span>
+          </span>
+        </label>
+      </div>
+    </div>
+
+    <div id="wi-teams" hidden>
+      <div class="zt-team-grid">
+        <button type="button" id="wi-team-wahl-blau" class="zt-team zt-team-blau zt-team-waehlbar">
+          <h3>🔵 Team Blau</h3>
+          <ul id="wi-team-blau"></ul>
+        </button>
+        <button type="button" id="wi-team-wahl-rot" class="zt-team zt-team-rot zt-team-waehlbar">
+          <h3>🔴 Team Rot</h3>
+          <ul id="wi-team-rot"></ul>
+        </button>
+      </div>
+      <p><button id="wi-teams-zufall" class="btn-flach" hidden>Zufällige Teams</button></p>
     </div>
 
     <p id="wi-setup-fehler" class="fehler-text"></p>
@@ -84,6 +117,7 @@ const VORLAGE = `
 
   <div id="wi-endstand-screen" class="bildschirm-karte" hidden>
     <h1>Endstand</h1>
+    <div id="wi-endstand-teams" hidden></div>
     <ul id="wi-endstand-liste"></ul>
     <p id="wi-endstand-warten" hidden><em>Der Spielleiter wählt gleich das nächste Spiel …</em></p>
   </div>
@@ -109,6 +143,8 @@ let falscheVersuche = [];
 let gewuenschteAnzahl = 0;
 let hinweisFortschreibenLaeuft = false;
 let timerId = null;
+let teammodus = false;
+let teams = {};
 
 const $ = (id) => el.wurzel.querySelector("#" + id);
 
@@ -217,6 +253,10 @@ function verdrahteBedienelemente() {
   // v105: als type="number" ließ sich der vorhandene Wert beim Fokussieren nicht
   // markieren - jetzt ein Textfeld mit numerischer Tastatur, select() funktioniert.
   $("wi-anzahl").addEventListener("focus", () => { $("wi-anzahl").select(); });
+  $("wi-teammodus").addEventListener("change", teammodusUmschalten);
+  $("wi-team-wahl-blau").addEventListener("click", () => waehleEigenesTeam("blau"));
+  $("wi-team-wahl-rot").addEventListener("click", () => waehleEigenesTeam("rot"));
+  $("wi-teams-zufall").addEventListener("click", zufaelligeTeams);
   $("wi-starten").addEventListener("click", spielStarten);
   $("wi-buzzer").addEventListener("click", buzzern);
   $("wi-antwort-absenden").addEventListener("click", antwortAbsenden);
@@ -232,6 +272,7 @@ export function beenden() {
   hinweisIndex = 1; hinweisSeit = 0; gebuzzertVon = null;
   antwortText = ""; antwortKorrekt = null; falscheVersuche = []; gewuenschteAnzahl = 0;
   hinweisFortschreibenLaeuft = false;
+  teammodus = false; teams = {};
 }
 
 export function spieler(liste) {
@@ -258,6 +299,10 @@ export function raumDaten(daten) {
   antwortText = daten.wiAntwortText ?? "";
   antwortKorrekt = daten.wiAntwortKorrekt ?? null;
   falscheVersuche = daten.wiFalscheVersuche ?? [];
+  teammodus = !!daten.wiTeammodus;
+  teams = daten.wiTeams ?? {};
+
+  if ($("wi-teammodus").checked !== teammodus) $("wi-teammodus").checked = teammodus;
 
   const neuerIndex = daten.wiFragenIndex ?? 0;
   if (index !== neuerIndex) {
@@ -295,8 +340,71 @@ function zeigeSetup() {
   $("wi-anzahl").max = String(Math.max(1, fragen.length));
   $("wi-anzahl").value = String(gewuenschteAnzahl);
   $("wi-anzahl-zeile").hidden = !api.istLeiter;
+  $("wi-teammodus-zeile").hidden = !api.istLeiter;
+  const teamSchalter = $("wi-teammodus");
+  teamSchalter.checked = teammodus;
+  teamSchalter.disabled = !api.istLeiter;
+  $("wi-teams").hidden = !teammodus;
+  $("wi-teams-zufall").hidden = !api.istLeiter;
+  if (teammodus) {
+    rendereTeamListe("blau");
+    rendereTeamListe("rot");
+  }
   $("wi-starten").hidden = !api.istLeiter;
   $("wi-setup-warten").hidden = api.istLeiter;
+}
+
+// v109: Teammodus - alle dürfen buzzern, gewinnt aber das ganze Team die Punkte
+// (siehe antwortAbsenden). Jeder wählt sich selbst ein Team; nur der Spielleiter
+// darf über "Zufällige Teams" alle Zuordnungen neu auswürfeln.
+async function teammodusUmschalten() {
+  if (!api.istLeiter) return;
+  const aktiviert = $("wi-teammodus").checked;
+  const neueTeams = aktiviert ? teams : {};
+  try {
+    await updateDoc(api.raumRef(), { wiTeammodus: aktiviert, wiTeams: neueTeams });
+  } catch (e) {
+    $("wi-teammodus").checked = teammodus;
+    zeigeDebug("Teammodus konnte nicht geändert werden: " + e.message);
+  }
+}
+
+async function waehleEigenesTeam(team) {
+  if (!teammodus) return;
+  try {
+    await updateDoc(api.raumRef(), { wiTeams: { ...teams, [api.spielerId]: team } });
+  } catch (e) {
+    zeigeDebug("Team konnte nicht gewählt werden: " + e.message);
+  }
+}
+
+async function zufaelligeTeams() {
+  if (!api.istLeiter || !teammodus) return;
+  $("wi-teams-zufall").disabled = true;
+  try {
+    await updateDoc(api.raumRef(), {
+      wiTeams: erstelleTeams(spielerListe.map((spieler) => spieler.id))
+    });
+  } catch (e) {
+    zeigeDebug("Teams konnten nicht neu gemischt werden: " + e.message);
+  }
+  $("wi-teams-zufall").disabled = false;
+}
+
+function rendereTeamListe(team) {
+  const liste = $("wi-team-" + team);
+  liste.innerHTML = "";
+  spielerListe.filter((spieler) => teams[spieler.id] === team).forEach((spieler) => {
+    const li = document.createElement("li");
+    li.textContent = spieler.name + (spieler.id === api.spielerId ? " (du)" : "");
+    liste.appendChild(li);
+  });
+  if (!liste.children.length) {
+    const li = document.createElement("li");
+    li.textContent = "Noch niemand";
+    liste.appendChild(li);
+  }
+  $("wi-team-wahl-" + team).classList.toggle("zt-team-eigenes", teams[api.spielerId] === team);
 }
 
 // v104: ersetzt den fruehereren Plus/Minus-Stepper - das Zahlenfeld wird
@@ -315,7 +423,7 @@ async function setzeGrundzustand(wiStatus) {
     wiStatus, wiReihenfolge: [], wiFragenIndex: 0, wiAnzahlFragen: 0,
     wiHinweisIndex: 1, wiHinweisSeit: 0, wiGebuzzertVon: null,
     wiAntwortText: "", wiAntwortKorrekt: null, wiPunkteDieserRunde: 0,
-    wiFalscheVersuche: []
+    wiFalscheVersuche: [], wiTeammodus: false, wiTeams: {}
   });
 }
 
@@ -335,11 +443,14 @@ async function spielStarten() {
     await raeumeSpieldatenAuf();
     const anzahl = Math.min(gewuenschteAnzahl || fragen.length, fragen.length);
     const neueReihenfolge = mischeIndizes(fragen.map((_, i) => i)).slice(0, anzahl);
+    const neueTeams = teammodus
+      ? ergaenzeFehlendeTeams(teams, spielerListe.map((spieler) => spieler.id))
+      : teams;
     await updateDoc(api.raumRef(), {
       wiStatus: "frage_aktiv", wiFragenIndex: 0, wiAnzahlFragen: anzahl,
       wiReihenfolge: neueReihenfolge, wiHinweisIndex: 1, wiHinweisSeit: Date.now(),
       wiGebuzzertVon: null, wiAntwortText: "", wiAntwortKorrekt: null, wiPunkteDieserRunde: 0,
-      wiFalscheVersuche: []
+      wiFalscheVersuche: [], wiTeammodus: teammodus, wiTeams: neueTeams
     });
   } catch (e) {
     zeigeDebug("Fehler beim Start: " + e.message);
@@ -381,7 +492,7 @@ function zeigeFrage() {
   falschListe.innerHTML = "";
   falscheVersuche.forEach((v) => {
     const li = document.createElement("li");
-    li.textContent = `${v.name}: „${v.text}“ - falsch (-1 Punkt)`;
+    li.textContent = `${v.name}: „${v.text}“ - falsch (-1 Punkt${teammodus ? " fürs Team" : ""})`;
     falschListe.appendChild(li);
   });
   falschListe.hidden = falscheVersuche.length === 0;
@@ -474,12 +585,21 @@ async function antwortAbsenden() {
       await updateDoc(api.raumRef(), {
         wiStatus: "aufgeloest", wiAntwortText: text, wiAntwortKorrekt: true, wiPunkteDieserRunde: punkte
       });
-      await updateDoc(api.spielerRef(), { punkte: increment(punkte) });
+      // v110: Im Teammodus bekommt/verliert das ganze Team die Punkte, nicht nur
+      // die buzzernde Person - der Gesamtstand pro Team ist dabei immer die
+      // Summe der einzelnen Mitgliederpunkte (siehe teamEndstandHtml).
+      if (teammodus && teams[api.spielerId]) {
+        const eigenesTeam = teams[api.spielerId];
+        const mitglieder = spielerListe.filter((s) => teams[s.id] === eigenesTeam);
+        await Promise.all(mitglieder.map((s) => updateDoc(api.spielerRef(s.id), { punkte: increment(punkte) })));
+      } else {
+        await updateDoc(api.spielerRef(), { punkte: increment(punkte) });
+      }
     } else {
-      // v95: Falsch: KEIN Rundenende. Ein Punkt Abzug für die ratende Person,
-      // der genannte Name bleibt für alle sichtbar in der Fehlversuch-Liste,
-      // der Buzzer wird für alle wieder freigegeben und der nächste Hinweis
-      // kommt sofort (ohne auf die volle 10-Sekunden-Wartezeit zu warten).
+      // v95: Falsch: KEIN Rundenende. Ein Punkt Abzug, der genannte Name bleibt
+      // für alle sichtbar in der Fehlversuch-Liste, der Buzzer wird für alle
+      // wieder freigegeben und der nächste Hinweis kommt sofort (ohne auf die
+      // volle 10-Sekunden-Wartezeit zu warten).
       const naechsterHinweisIndex = Math.min(hinweisIndex + 1, frage.hinweise.length);
       $("wi-antwort-eingabe").value = "";
       await updateDoc(api.raumRef(), {
@@ -487,7 +607,15 @@ async function antwortAbsenden() {
         wiGebuzzertVon: null, wiHinweisIndex: naechsterHinweisIndex, wiHinweisSeit: Date.now(),
         wiFalscheVersuche: arrayUnion({ name: api.spielerName, text })
       });
-      await updateDoc(api.spielerRef(), { punkte: increment(-1) });
+      // v110: Im Teammodus trifft der Punktabzug bei einer falschen Antwort
+      // ebenfalls das ganze Team, nicht nur die ratende Person.
+      if (teammodus && teams[api.spielerId]) {
+        const eigenesTeam = teams[api.spielerId];
+        const mitglieder = spielerListe.filter((s) => teams[s.id] === eigenesTeam);
+        await Promise.all(mitglieder.map((s) => updateDoc(api.spielerRef(s.id), { punkte: increment(-1) })));
+      } else {
+        await updateDoc(api.spielerRef(), { punkte: increment(-1) });
+      }
     }
   } catch (e) {
     zeigeDebug("Fehler beim Absenden der Antwort: " + e.message);
@@ -529,8 +657,9 @@ function zeigeErgebnis() {
 
   const liste = $("wi-erg-liste");
   liste.innerHTML = "";
+  const gewinnerTeam = teammodus && gebuzzertVon ? teams[gebuzzertVon] : null;
   [...spielerListe].sort((a, b) => (b.punkte ?? 0) - (a.punkte ?? 0)).forEach((s) => {
-    const hatGewonnen = s.id === gebuzzertVon && antwortKorrekt;
+    const hatGewonnen = antwortKorrekt && (s.id === gebuzzertVon || (gewinnerTeam && teams[s.id] === gewinnerTeam));
     const li = document.createElement("li");
     li.innerHTML = spielerKarte(
       s.name, s.farbe, s.icon,
@@ -574,6 +703,9 @@ function zeigeEndstand() {
     li.innerHTML = spielerKarte(s.name, s.farbe, s.icon, s.punkte ?? 0, { rang: i + 1 });
     liste.appendChild(li);
   });
+  const teamsEl = $("wi-endstand-teams");
+  teamsEl.hidden = !teammodus;
+  if (teammodus) teamsEl.innerHTML = teamEndstandHtml(spielerListe, teams);
   $("wi-endstand-warten").hidden = api.istLeiter;
 }
 
