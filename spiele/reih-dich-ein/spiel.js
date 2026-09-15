@@ -14,7 +14,7 @@ import {
 const VORLAGE = `
   <div id="rd-setup" class="bildschirm-karte" hidden>
     <h1>↕️ Reih dich ein!</h1>
-    <p class="rd-regel">Setzt jeden neuen Begriff an die richtige Stelle der Reihe. Ein Startbegriff ist
+    <p class="hinweis-text">Setzt jeden neuen Begriff an die richtige Stelle der Reihe. Ein Startbegriff ist
       bereits eingeordnet. Danach ist immer ein Spieler dran. Eine richtige Position gibt einen Pluspunkt –
       bei einer falschen Position gibt es einen Minuspunkt.</p>
 
@@ -22,10 +22,9 @@ const VORLAGE = `
       <div class="setup-anzahl-zeile">
         <span>Anzahl Kategorien</span>
         <span class="anzahl-picker">
-          <input id="rd-anzahl" type="number" inputmode="numeric" min="1" class="anzahl-eingabe">
+          <input id="rd-anzahl" type="text" inputmode="numeric" pattern="[0-9]*" min="1" class="anzahl-eingabe">
         </span>
       </div>
-      <span id="rd-anzahl-hinweis" class="hinweis-text"></span>
     </div>
 
     <p id="rd-setup-fehler" class="fehler-text"></p>
@@ -174,7 +173,15 @@ export async function starten(uebergebeneApi) {
 }
 
 function verdrahteBedienelemente() {
-  $("rd-anzahl").addEventListener("input", () => { anzahlManuellGesetzt = true; });
+  $("rd-anzahl").addEventListener("input", () => {
+    const feld = $("rd-anzahl");
+    const bereinigt = feld.value.replace(/[^0-9]/g, "");
+    if (bereinigt !== feld.value) feld.value = bereinigt;
+    anzahlManuellGesetzt = true;
+  });
+  // v105: als type="number" ließ sich der vorhandene Wert beim Fokussieren nicht
+  // markieren - jetzt ein Textfeld mit numerischer Tastatur, select() funktioniert.
+  $("rd-anzahl").addEventListener("focus", () => { $("rd-anzahl").select(); });
   $("rd-starten").addEventListener("click", spielStarten);
   $("rd-naechste-kategorie").addEventListener("click", naechsteKategorie);
   $("rd-andere-kategorie").addEventListener("click", andereKategorie);
@@ -268,7 +275,6 @@ function zeigeSetup() {
   const anzahlFeld = $("rd-anzahl");
   anzahlFeld.max = karten.length;
   if (!anzahlManuellGesetzt || !anzahlFeld.value) anzahlFeld.value = Math.min(3, karten.length);
-  $("rd-anzahl-hinweis").textContent = `${karten.length} Kategorien stehen zur Verfügung.`;
   $("rd-anzahl-zeile").hidden = !api.istLeiter;
   $("rd-starten").hidden = !api.istLeiter;
   $("rd-setup-warten").hidden = api.istLeiter;
