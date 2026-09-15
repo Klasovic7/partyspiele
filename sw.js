@@ -1,10 +1,10 @@
 // Service Worker: macht die App installierbar und offline startfähig.
 //
-// WICHTIG bei Änderungen: die Zahl in CACHE_NAME hochzählen (z. B. v106 -> v107).
+// WICHTIG bei Änderungen: die Zahl in CACHE_NAME hochzählen (z. B. v106 -> v109).
 // Nur dann wirft der Browser den alten Zwischenspeicher weg und alle Spieler
 // bekommen zuverlässig die neue Version. Das ist der einzige Handgriff, den man
 // nach dem Bearbeiten von Dateien nicht vergessen darf.
-const CACHE_NAME = "partyspiele-v107";
+const CACHE_NAME = "partyspiele-v109";
 
 const DATEIEN = [
   "./",
@@ -14,6 +14,7 @@ const DATEIEN = [
   "manifest.json",
   "kern/firebase.js",
   "kern/ui.js",
+  "kern/teams.js",
   "spiele/register.js",
   "spiele/schaetzfragen/spiel.js",
   "spiele/schaetzfragen/fragen.json",
