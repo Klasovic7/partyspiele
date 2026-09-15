@@ -1022,12 +1022,14 @@
     }
     .lobby-spielerleiste::-webkit-scrollbar { display: none; }
     .lobby-spieler {
-      width: 66px; flex: 0 0 66px; display: flex; flex-direction: column; align-items: center;
+      width: 78px; flex: 0 0 78px; display: flex; flex-direction: column; align-items: center;
       margin: 0; color: var(--text-dunkel); text-align: center;
     }
     .lobby-avatar-rahmen {
-      position: relative; width: 62px; height: 62px; display: block; padding: 3px;
-      border: 3px solid var(--spieler-farbe); border-radius: 50%; background: #fff;
+      /* v123: Kreis vergrößert (Bild besser erkennbar) und der farbige Rand
+         dünner - vorher wirkte die Linie neben dem größeren Foto zu dominant. */
+      position: relative; width: 76px; height: 76px; display: block; padding: 2px;
+      border: 2px solid var(--spieler-farbe); border-radius: 50%; background: #fff;
       box-shadow: 0 6px 13px rgba(36,28,45,.17);
     }
     .lobby-avatar { width: 100%; height: 100%; display: block; border-radius: 50%; object-fit: cover; }
@@ -1037,7 +1039,7 @@
       text-shadow: 0 2px 2px rgba(0,0,0,.18); transform: rotate(10deg);
     }
     .lobby-spieler strong {
-      width: 82px; margin-top: 7px; font-size: .76rem; white-space: nowrap;
+      width: 100px; margin-top: 7px; font-size: .76rem; white-space: nowrap;
       overflow: hidden; text-overflow: ellipsis;
     }
     .lobby-spieler small { margin-top: 2px; color: var(--text-hell); font-size: .62rem; line-height: 1.05; }
