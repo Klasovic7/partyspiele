@@ -4,7 +4,7 @@
 // Nur dann wirft der Browser den alten Zwischenspeicher weg und alle Spieler
 // bekommen zuverlässig die neue Version. Das ist der einzige Handgriff, den man
 // nach dem Bearbeiten von Dateien nicht vergessen darf.
-const CACHE_NAME = "partyspiele-v130";
+const CACHE_NAME = "partyspiele-v131";
 
 const DATEIEN = [
   "./",
@@ -30,6 +30,14 @@ const DATEIEN = [
   "spiele/wer-ist-es/fragen.json",
   "spiele/blitzquiz/spiel.js",
   "spiele/blitzquiz/fragen.json",
+  "spiele/blitzquiz/bilder/lampe.jpg",
+  "spiele/blitzquiz/bilder/sonnenbrille.jpg",
+  "spiele/blitzquiz/bilder/regenschirm.jpg",
+  "spiele/blitzquiz/bilder/anker.png",
+  "spiele/blitzquiz/bilder/rakete.jpg",
+  "spiele/blitzquiz/bilder/kerze.jpg",
+  "spiele/blitzquiz/bilder/glocke.png",
+  "spiele/blitzquiz/bilder/pizza.jpg",
   "bilder/icon-192.png",
   "bilder/icon-512.png",
   "bilder/icon-512-maskable.png",
@@ -39,10 +47,10 @@ const DATEIEN = [
   "bilder/icon-raum-verlassen.svg",
   "bilder/avatar1-hd.jpg?v=38", "bilder/avatar2-hd.jpg?v=38", "bilder/avatar3-hd.jpg?v=38", "bilder/avatar4-hd.jpg?v=38",
   "bilder/avatar5-hd.jpg?v=38", "bilder/avatar6-hd.jpg?v=38", "bilder/avatar7-hd.jpg?v=38", "bilder/avatar8-hd.jpg?v=38",
-  "bilder/freund-rapper-kevin.jpg?v=130", "bilder/freund-zocker-luca.jpg?v=130", "bilder/freund-bettler-nader.jpg?v=130",
-  "bilder/freund-eintracht-sinan.jpg?v=130", "bilder/freund-boxer-kevin.jpg?v=130", "bilder/freund-gay-luca.jpg?v=130",
-  "bilder/freund-diktator-nader.jpg?v=130", "bilder/freund-rambo-sinan.jpg?v=130", "bilder/freund-meerjungfrau-kevin.jpg?v=130",
-  "bilder/freund-baywatch-luca.jpg?v=130", "bilder/freund-baby-nader.jpg?v=130", "bilder/freund-leoparden-sinan.jpg?v=130"
+  "bilder/freund-rapper-kevin.jpg?v=131", "bilder/freund-zocker-luca.jpg?v=131", "bilder/freund-bettler-nader.jpg?v=131",
+  "bilder/freund-eintracht-sinan.jpg?v=131", "bilder/freund-boxer-kevin.jpg?v=131", "bilder/freund-gay-luca.jpg?v=131",
+  "bilder/freund-diktator-nader.jpg?v=131", "bilder/freund-rambo-sinan.jpg?v=131", "bilder/freund-meerjungfrau-kevin.jpg?v=131",
+  "bilder/freund-baywatch-luca.jpg?v=131", "bilder/freund-baby-nader.jpg?v=131", "bilder/freund-leoparden-sinan.jpg?v=131"
 ];
 
 self.addEventListener("install", (event) => {

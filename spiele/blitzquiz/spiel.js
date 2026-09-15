@@ -584,13 +584,13 @@ function rendereBuchstabenReihe(frage, pos) {
 function rendereBildAnzeige(frage) {
   const wrapper = $("bz-bild-anzeige");
   if (wrapper.dataset.loesung !== frage.loesung) {
-    wrapper.innerHTML = frage.bild;
+    wrapper.innerHTML = `<img src="${frage.bild}" alt="" loading="lazy">`;
     wrapper.dataset.loesung = frage.loesung;
   }
-  const svg = wrapper.querySelector("svg");
-  if (svg) {
+  const img = wrapper.querySelector("img");
+  if (img) {
     const stufe = Math.min(aufdeckAnzahl, BILD_BLUR_STUFEN.length - 1);
-    svg.style.filter = `blur(${BILD_BLUR_STUFEN[stufe]}px)`;
+    img.style.filter = `blur(${BILD_BLUR_STUFEN[stufe]}px)`;
   }
 }
 
@@ -823,7 +823,7 @@ function zeigeErgebnis() {
     : frage.antworten[frage.richtig];
   const bildEl = $("bz-erg-bild");
   bildEl.hidden = frage.typ !== "bild";
-  if (frage.typ === "bild") bildEl.innerHTML = frage.bild;
+  if (frage.typ === "bild") bildEl.innerHTML = `<img src="${frage.bild}" alt="" loading="lazy">`;
   zeigeErgebnisListe(index);
   $("bz-weiter").hidden = !api.istLeiter;
   $("bz-weiter").textContent = index + 1 >= anzahlFragen ? "Endstand anzeigen" : "Nächste Frage";

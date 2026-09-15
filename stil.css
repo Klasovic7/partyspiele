@@ -1801,3 +1801,10 @@
       transform: scale(1.18);
       transition: filter .6s ease;
     }
+    .bz-bild-anzeige img {
+      width: min(240px, 65vw); height: min(240px, 65vw);
+      object-fit: cover;
+      border-radius: 16px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, .35);
+      transition: filter .6s ease;
+    }
