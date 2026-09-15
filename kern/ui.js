@@ -136,7 +136,8 @@ export function teamEndstandHtml(spielerListe, teams) {
     { id: "rot", name: "Team Rot", emoji: "🔴" }
   ];
   return `<div class="zt-team-endstand">` + teamInfo.map((t) => {
-    const mitglieder = spielerListe.filter((s) => teams?.[s.id] === t.id);
+    const mitglieder = spielerListe.filter((s) => teams?.[s.id] === t.id)
+      .sort((a, b) => (b.punkte ?? 0) - (a.punkte ?? 0));
     return `<section class="zt-team zt-team-${t.id}${gewinner === t.id ? " gewinner" : ""}">` +
       `<h2>${gewinner === t.id ? "🏆 " : ""}${t.emoji} ${t.name}</h2>` +
       `<strong class="zt-team-punkte">${summen[t.id]}</strong>` +
@@ -161,7 +162,8 @@ export function teamGruppeHtml(spielerListe, teams, kartenHtmlFn) {
     { id: "rot", name: "Team Rot", emoji: "🔴" }
   ];
   return `<div class="zt-team-rundenergebnis">` + teamInfo.map((t) => {
-    const mitglieder = spielerListe.filter((s) => teams?.[s.id] === t.id);
+    const mitglieder = spielerListe.filter((s) => teams?.[s.id] === t.id)
+      .sort((a, b) => (b.punkte ?? 0) - (a.punkte ?? 0));
     return `<section class="zt-team zt-team-${t.id}">` +
       `<div class="zt-team-kopf">` +
         `<h2>${t.emoji} ${t.name}</h2>` +
