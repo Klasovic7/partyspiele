@@ -25,16 +25,23 @@ const VORLAGE = `
       Person oder ein Team rät. Alle anderen sehen die Trefferliste und tippen einen Begriff an, sobald
       er genannt wurde. Jeder Treffer gibt einen Punkt.</p>
 
-    <p id="zt-teammodus-zeile">
-      <label class="schalter-zeile">
-        <span class="schalter">
-          <input type="checkbox" id="zt-teammodus">
-          <span class="schalter-regler"></span>
+    <div id="zt-teammodus-zeile" class="setup-modusblock">
+      <div class="setup-moduszeile">
+        <span class="modus-text-zeile">
+          <span class="schalter-text">Teammodus</span>
+          <details class="modus-info">
+            <summary aria-label="Erklärung zum Teammodus">i</summary>
+            <div>Zwei automatisch ausgeglichene Teams treten abwechselnd an.</div>
+          </details>
         </span>
-        <span class="schalter-text">Teammodus</span>
-      </label>
-      <span class="schalter-hinweis">Zwei automatisch ausgeglichene Teams treten abwechselnd an.</span>
-    </p>
+        <label class="schalter-zeile">
+          <span class="schalter">
+            <input type="checkbox" id="zt-teammodus">
+            <span class="schalter-regler"></span>
+          </span>
+        </label>
+      </div>
+    </div>
 
     <div id="zt-teams" hidden>
       <div class="zt-team-grid">
