@@ -206,7 +206,11 @@
       position: absolute; z-index: 5; left: 50%; bottom: 25px; width: min(190px, 52vw); min-height: 54px;
       margin: 0; padding: 0 8px; text-align: center; transform: translateX(-50%);
       color: #fff; text-shadow: 0 3px 9px rgba(0,0,0,.85); pointer-events: none;
+      display: flex; flex-direction: column;
     }
+    /* v115: bei der Freunde-Kategorie steht die Rolle (groß) über dem Namen
+       (klein) - bei den Fußballern bleibt die bisherige Reihenfolge. */
+    .profil-spielername.freunde-modus { flex-direction: column-reverse; }
     .profil-spielername span, .profil-spielername strong { display: block; }
     .profil-spielername span { font-family: "Barlow Condensed", sans-serif; font-size: 1.15rem; font-style: italic; line-height: .95; font-weight: 800; }
     .profil-spielername strong {
