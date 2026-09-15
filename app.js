@@ -9,7 +9,7 @@ import {
 } from "./kern/ui.js";
 import { SPIELE, spielInfo } from "./spiele/register.js";
 
-export const APP_VERSION = "v112";
+export const APP_VERSION = "v113";
 const appVersion = document.getElementById("app-version");
 appVersion.textContent = "Version " + APP_VERSION;
 
@@ -23,6 +23,7 @@ const btnVerlassen = document.getElementById("btn-verlassen");
 const spielKopfTitel = document.getElementById("spiel-kopf-titel");
 const spielKopfIcon = document.getElementById("spiel-kopf-icon");
 const spielKopfName = document.getElementById("spiel-kopf-name");
+const spielKopfFortschritt = document.getElementById("spiel-kopf-fortschritt");
 const btnLobbyVerlassen = document.getElementById("btn-lobby-verlassen");
 const raumVerlassenDialog = document.getElementById("raum-verlassen-dialog");
 const btnRaumVerlassenNein = document.getElementById("btn-raum-verlassen-nein");
@@ -433,6 +434,13 @@ function baueApi() {
       try { await updateDoc(raumRef(), { aktuellesSpiel: null, phase: "lobby" }); }
       catch (e) { zeigeDebug("Fehler beim Zurückkehren: " + e.message); }
     },
+    // v113: gemeinsame Rundenfortschrittsanzeige oben rechts im Spielkopf (z. B.
+    // "2/8") - jedes Spiel ruft das bei jeder Statusänderung mit seinem eigenen
+    // Text auf, ein leerer/undefinierter Wert blendet die Anzeige wieder aus.
+    fortschritt: (text) => {
+      spielKopfFortschritt.textContent = text || "";
+      spielKopfFortschritt.hidden = !text;
+    },
     fehler: zeigeDebug
   };
 }
@@ -470,6 +478,10 @@ function aktualisiereRaumNavigation(spielId) {
   btnVerlassen.disabled = false;
   btnVerlassen.hidden = imSpiel && !zustand.istLeiter;
   spielKopfTitel.hidden = !imSpiel;
+  // v113: bei jedem Spielwechsel (oder Rückkehr zur Auswahl) erstmal ausblenden -
+  // das aktive Spiel setzt den Text direkt danach über api.fortschritt() wieder.
+  spielKopfFortschritt.hidden = true;
+  spielKopfFortschritt.textContent = "";
   if (info?.emoji) {
     spielKopfIcon.textContent = info.emoji;
   } else {
