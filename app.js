@@ -9,7 +9,7 @@ import {
 } from "./kern/ui.js";
 import { SPIELE, spielInfo } from "./spiele/register.js";
 
-export const APP_VERSION = "v121";
+export const APP_VERSION = "v122";
 const appVersion = document.getElementById("app-version");
 appVersion.textContent = "Version " + APP_VERSION;
 
@@ -143,7 +143,7 @@ function raumSignatur(daten) {
 
 // ---------- Vollbild-Profilwahl (Farbe + Profilbild) ----------
 const profilEntwurf = { farbe: zustand.farbe, icon: zustand.icon };
-// v121: zweite Bilder-Kategorie ("Freunde") neben den Fußballern - beide
+// v122: zweite Bilder-Kategorie ("Freunde") neben den Fußballern - beide
 // Kategorien bleiben bestehen, man kann zwischen ihnen hin- und herwechseln.
 let profilKategorie = "fussballer";
 
@@ -239,7 +239,7 @@ function renderFarbKarussell() {
 }
 
 function renderIconKarussell() {
-  // v121: bei "Freunde" steht die Rolle (groß) über dem Namen (klein) - bei
+  // v122: bei "Freunde" steht die Rolle (groß) über dem Namen (klein) - bei
   // "Fußballer" bleibt es wie bisher Vorname (klein) über Nachname (groß).
   profilSpielername.classList.toggle("freunde-modus", profilKategorie === "freunde");
   const optionen = freieOptionen(aktuelleAvatarQuelle(), "icon", "id");
@@ -260,7 +260,7 @@ function renderIconKarussell() {
   profilEntwurf.icon = ausgewaehlt.id;
   profilVorname.textContent = ausgewaehlt.vorname;
   profilNachname.textContent = ausgewaehlt.nachname;
-  // v121: lange, nicht umbrechbare Wörter (z. B. "MEERJUNGFRAU") ragen sonst
+  // v122: lange, nicht umbrechbare Wörter (z. B. "MEERJUNGFRAU") ragen sonst
   // über den Kartenrand hinaus - ab 9 Zeichen wird die Schrift per CSS-Variable
   // passend verkleinert, kürzere Namen bleiben unverändert bei Skala 1.
   const nachnameLaenge = ausgewaehlt.nachname.length;
@@ -293,7 +293,7 @@ function renderProfilAuswahl() {
   btnProfilAuswaehlen.disabled = !profilEntwurf.farbe || !profilEntwurf.icon;
 }
 
-// v121: Umschalten zwischen den Bilder-Kategorien "Fußballer" und "Freunde".
+// v122: Umschalten zwischen den Bilder-Kategorien "Fußballer" und "Freunde".
 // Beim Wechseln wird das aktuell gewählte Bild zurückgesetzt, damit man nicht
 // versehentlich ein Bild der anderen Kategorie "mitschleppt".
 function setzeKategorie(kategorie) {
@@ -336,7 +336,7 @@ function zeigeProfilAuswahl() {
     profilEntwurf.farbe = zustand.farbe;
     profilEntwurf.icon = zustand.icon;
     avatarHinweis.textContent = "";
-    // v121: Kategorie passend zum bereits gewählten Bild vorauswählen (falls
+    // v122: Kategorie passend zum bereits gewählten Bild vorauswählen (falls
     // vorhanden), sonst Standard "Fußballer".
     const istFreund = FREUNDE.some((f) => f.id === zustand.icon);
     profilKategorie = istFreund ? "freunde" : "fussballer";
