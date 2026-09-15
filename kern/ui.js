@@ -32,18 +32,18 @@ export const AVATARE = [
 // "nachname" trägt hier die Rolle (groß dargestellt), "vorname" den Namen
 // (klein dargestellt) - dieselbe Beschriftungslogik wie bei den Fußballern.
 export const FREUNDE = [
-  { id: "freund-rapper-kevin",       bild: "bilder/freund-rapper-kevin.jpg?v=118",       vorname: "Kevin", nachname: "Rapper" },
-  { id: "freund-zocker-luca",        bild: "bilder/freund-zocker-luca.jpg?v=118",        vorname: "Luca",  nachname: "Zocker" },
-  { id: "freund-bettler-nader",      bild: "bilder/freund-bettler-nader.jpg?v=118",      vorname: "Nader", nachname: "Bettler" },
-  { id: "freund-eintracht-sinan",    bild: "bilder/freund-eintracht-sinan.jpg?v=118",    vorname: "Sinan", nachname: "Eintracht" },
-  { id: "freund-boxer-kevin",        bild: "bilder/freund-boxer-kevin.jpg?v=118",        vorname: "Kevin", nachname: "Boxer" },
-  { id: "freund-gay-luca",           bild: "bilder/freund-gay-luca.jpg?v=118",           vorname: "Luca",  nachname: "Gay" },
-  { id: "freund-diktator-nader",     bild: "bilder/freund-diktator-nader.jpg?v=118",     vorname: "Nader", nachname: "Diktator" },
-  { id: "freund-rambo-sinan",        bild: "bilder/freund-rambo-sinan.jpg?v=118",        vorname: "Sinan", nachname: "Rambo" },
-  { id: "freund-meerjungfrau-kevin", bild: "bilder/freund-meerjungfrau-kevin.jpg?v=118", vorname: "Kevin", nachname: "Meerjungfrau" },
-  { id: "freund-baywatch-luca",      bild: "bilder/freund-baywatch-luca.jpg?v=118",      vorname: "Luca",  nachname: "Baywatch" },
-  { id: "freund-baby-nader",         bild: "bilder/freund-baby-nader.jpg?v=118",         vorname: "Nader", nachname: "Baby" },
-  { id: "freund-leoparden-sinan",    bild: "bilder/freund-leoparden-sinan.jpg?v=118",    vorname: "Sinan", nachname: "Leoparden" }
+  { id: "freund-rapper-kevin",       bild: "bilder/freund-rapper-kevin.jpg?v=119",       vorname: "Kevin", nachname: "Rapper" },
+  { id: "freund-zocker-luca",        bild: "bilder/freund-zocker-luca.jpg?v=119",        vorname: "Luca",  nachname: "Zocker" },
+  { id: "freund-bettler-nader",      bild: "bilder/freund-bettler-nader.jpg?v=119",      vorname: "Nader", nachname: "Bettler" },
+  { id: "freund-eintracht-sinan",    bild: "bilder/freund-eintracht-sinan.jpg?v=119",    vorname: "Sinan", nachname: "Eintracht" },
+  { id: "freund-boxer-kevin",        bild: "bilder/freund-boxer-kevin.jpg?v=119",        vorname: "Kevin", nachname: "Boxer" },
+  { id: "freund-gay-luca",           bild: "bilder/freund-gay-luca.jpg?v=119",           vorname: "Luca",  nachname: "Gay" },
+  { id: "freund-diktator-nader",     bild: "bilder/freund-diktator-nader.jpg?v=119",     vorname: "Nader", nachname: "Diktator" },
+  { id: "freund-rambo-sinan",        bild: "bilder/freund-rambo-sinan.jpg?v=119",        vorname: "Sinan", nachname: "Rambo" },
+  { id: "freund-meerjungfrau-kevin", bild: "bilder/freund-meerjungfrau-kevin.jpg?v=119", vorname: "Kevin", nachname: "Meerjungfrau" },
+  { id: "freund-baywatch-luca",      bild: "bilder/freund-baywatch-luca.jpg?v=119",      vorname: "Luca",  nachname: "Baywatch" },
+  { id: "freund-baby-nader",         bild: "bilder/freund-baby-nader.jpg?v=119",         vorname: "Nader", nachname: "Baby" },
+  { id: "freund-leoparden-sinan",    bild: "bilder/freund-leoparden-sinan.jpg?v=119",    vorname: "Sinan", nachname: "Leoparden" }
 ];
 
 // Kombinierte Liste für Nachschlagen (z. B. in der Lobby, im laufenden Spiel,

@@ -9,7 +9,7 @@ import {
 } from "./kern/ui.js";
 import { SPIELE, spielInfo } from "./spiele/register.js";
 
-export const APP_VERSION = "v118";
+export const APP_VERSION = "v119";
 const appVersion = document.getElementById("app-version");
 appVersion.textContent = "Version " + APP_VERSION;
 
@@ -143,7 +143,7 @@ function raumSignatur(daten) {
 
 // ---------- Vollbild-Profilwahl (Farbe + Profilbild) ----------
 const profilEntwurf = { farbe: zustand.farbe, icon: zustand.icon };
-// v118: zweite Bilder-Kategorie ("Freunde") neben den Fußballern - beide
+// v119: zweite Bilder-Kategorie ("Freunde") neben den Fußballern - beide
 // Kategorien bleiben bestehen, man kann zwischen ihnen hin- und herwechseln.
 let profilKategorie = "fussballer";
 
@@ -239,7 +239,7 @@ function renderFarbKarussell() {
 }
 
 function renderIconKarussell() {
-  // v118: bei "Freunde" steht die Rolle (groß) über dem Namen (klein) - bei
+  // v119: bei "Freunde" steht die Rolle (groß) über dem Namen (klein) - bei
   // "Fußballer" bleibt es wie bisher Vorname (klein) über Nachname (groß).
   profilSpielername.classList.toggle("freunde-modus", profilKategorie === "freunde");
   const optionen = freieOptionen(aktuelleAvatarQuelle(), "icon", "id");
@@ -286,7 +286,7 @@ function renderProfilAuswahl() {
   btnProfilAuswaehlen.disabled = !profilEntwurf.farbe || !profilEntwurf.icon;
 }
 
-// v118: Umschalten zwischen den Bilder-Kategorien "Fußballer" und "Freunde".
+// v119: Umschalten zwischen den Bilder-Kategorien "Fußballer" und "Freunde".
 // Beim Wechseln wird das aktuell gewählte Bild zurückgesetzt, damit man nicht
 // versehentlich ein Bild der anderen Kategorie "mitschleppt".
 function setzeKategorie(kategorie) {
@@ -329,7 +329,7 @@ function zeigeProfilAuswahl() {
     profilEntwurf.farbe = zustand.farbe;
     profilEntwurf.icon = zustand.icon;
     avatarHinweis.textContent = "";
-    // v118: Kategorie passend zum bereits gewählten Bild vorauswählen (falls
+    // v119: Kategorie passend zum bereits gewählten Bild vorauswählen (falls
     // vorhanden), sonst Standard "Fußballer".
     const istFreund = FREUNDE.some((f) => f.id === zustand.icon);
     profilKategorie = istFreund ? "freunde" : "fussballer";
