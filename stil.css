@@ -1743,3 +1743,51 @@
 
     .wi-antwort-zeile { display: flex; gap: 8px; }
     .wi-antwort-zeile input { flex: 1; }
+
+    /* ======================================================================
+       Blitzquiz - Mehrfachauswahl-Kacheln, Buchstaben-Rätsel
+       ====================================================================== */
+    .bz-antwort-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;
+      margin: 14px 0;
+    }
+    .bz-antwort-btn {
+      min-height: 64px; margin: 0; padding: 12px 10px;
+      border: 1px solid rgba(255, 130, 101, .32); border-radius: 16px;
+      background: rgba(255, 255, 255, .035);
+      color: var(--club-text); font-size: 0.98rem; font-weight: 700; line-height: 1.25;
+      transition: background-color .15s ease, box-shadow .15s ease, transform .05s ease;
+    }
+    .bz-antwort-btn:not(:disabled):active { transform: scale(.97); }
+    .bz-antwort-btn.bz-eigene-wahl {
+      border-color: var(--club-orange); background: rgba(255, 91, 54, .16);
+      box-shadow: 0 0 0 2px var(--club-orange);
+    }
+    .bz-antwort-btn:disabled { opacity: .6; }
+    /* Nach der Auswertung (im Ergebnis-Bildschirm gibt es keine bz-antwort-btn
+       mehr, die Fragen-Karte zeigt dann nur noch Text) bleibt die Kachel der
+       eigenen Wahl auch dann sichtbar hervorgehoben, wenn man selbst schon
+       geantwortet hat, aber die Runde noch läuft (siehe .bz-eigene-wahl oben). */
+
+    .bz-buchstaben-reihe {
+      display: flex; flex-wrap: wrap; justify-content: center; gap: 6px;
+      margin: 16px 0 6px;
+    }
+    .bz-buchstabe-kasten {
+      width: clamp(28px, 8vw, 38px); height: clamp(34px, 9.5vw, 46px);
+      display: grid; place-items: center;
+      border: 1px solid rgba(255, 130, 101, .4); border-radius: 8px;
+      background: rgba(255, 255, 255, .035);
+      color: var(--club-text); font-size: 1.15rem; font-weight: 800;
+      text-transform: uppercase;
+    }
+    .bz-buchstabe-kasten.bz-aufgedeckt {
+      border-color: var(--club-orange); background: rgba(255, 91, 54, .14);
+    }
+    .bz-buchstabe-luecke {
+      width: 12px; display: grid; place-items: center;
+      color: var(--club-muted); font-weight: 800;
+    }
+    .bz-countdown { color: var(--club-muted); font-size: 0.85rem; margin: 0 0 14px; }
+    .bz-antwort-zeile { display: flex; gap: 8px; }
+    .bz-antwort-zeile input { flex: 1; }

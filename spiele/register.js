@@ -49,6 +49,14 @@ export const SPIELE = [
     beschreibung: "Buzzere zuerst und errate den Fußballer",
     minSpieler: 2,
     laden: () => import("./wer-ist-es/spiel.js")
+  },
+  {
+    id: "blitzquiz",
+    name: "Blitzquiz",
+    emoji: "⚡",
+    beschreibung: "Mehrfachauswahl, Schnelligkeit und Buchstaben-Rätsel",
+    minSpieler: 1,
+    laden: () => import("./blitzquiz/spiel.js")
   }
 ];
 
