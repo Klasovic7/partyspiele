@@ -213,7 +213,11 @@
     .profil-spielername span { font-family: "Barlow Condensed", sans-serif; font-size: 1.15rem; font-style: italic; line-height: .95; font-weight: 800; }
     .profil-spielername strong {
       margin-top: 1px; font-family: "Barlow Condensed", sans-serif;
-      font-size: clamp(2.2rem, 10vw, 3rem); font-style: italic; line-height: .92;
+      /* v120: --name-skala verkleinert lange Wörter (z. B. "MEERJUNGFRAU"), damit
+         sie nicht über den Kartenrand hinausragen - wird per JS gesetzt, siehe
+         app.js. Ohne JS-Wert (z. B. alte Fußballer-Nachnamen) bleibt es bei 1. */
+      font-size: calc(clamp(2.2rem, 10vw, 3rem) * var(--name-skala, 1));
+      font-style: italic; line-height: .92;
       letter-spacing: .01em; text-transform: uppercase;
     }
     .profil-verlassen {
@@ -255,7 +259,7 @@
       .icon-option.mitte { width: 176px; height: 250px; }
       .profil-spielername { bottom: 20px; min-height: 42px; }
       .profil-spielername span { font-size: .95rem; }
-      .profil-spielername strong { font-size: 2rem; }
+      .profil-spielername strong { font-size: calc(2rem * var(--name-skala, 1)); }
     }
     @media (min-width: 760px) and (orientation: landscape) {
       .profil-inhalt { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 20px 38px; }
