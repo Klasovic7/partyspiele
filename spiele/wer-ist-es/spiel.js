@@ -39,7 +39,7 @@ const VORLAGE = `
       <div class="setup-anzahl-zeile">
         <span>Anzahl Runden</span>
         <span class="anzahl-picker">
-          <input id="wi-anzahl" type="number" inputmode="numeric" min="1" value="8" class="anzahl-eingabe">
+          <input id="wi-anzahl" type="text" inputmode="numeric" pattern="[0-9]*" min="1" value="8" class="anzahl-eingabe">
         </span>
       </div>
     </div>
@@ -208,7 +208,15 @@ export async function starten(uebergebeneApi) {
 }
 
 function verdrahteBedienelemente() {
+  $("wi-anzahl").addEventListener("input", () => {
+    const feld = $("wi-anzahl");
+    const bereinigt = feld.value.replace(/[^0-9]/g, "");
+    if (bereinigt !== feld.value) feld.value = bereinigt;
+  });
   $("wi-anzahl").addEventListener("change", () => anzahlUebernehmen());
+  // v105: als type="number" ließ sich der vorhandene Wert beim Fokussieren nicht
+  // markieren - jetzt ein Textfeld mit numerischer Tastatur, select() funktioniert.
+  $("wi-anzahl").addEventListener("focus", () => { $("wi-anzahl").select(); });
   $("wi-starten").addEventListener("click", spielStarten);
   $("wi-buzzer").addEventListener("click", buzzern);
   $("wi-antwort-absenden").addEventListener("click", antwortAbsenden);
