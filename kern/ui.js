@@ -145,6 +145,31 @@ export function teamEndstandHtml(spielerListe, teams) {
   }).join("") + `</div>`;
 }
 
+// v110: Rundenergebnis nach Team gruppiert - eine Kachel pro Team mit der
+// Gesamtpunktzahl (Summe der einzelnen Mitgliederpunkte) oben und darunter die
+// einzelnen Spieler mit ihren eigenen Punkten (kartenHtmlFn liefert dafür die
+// fertige spielerKarte-HTML je Spieler, damit jedes Spiel seine eigenen Extras
+// - z. B. die Schätzung bei Schätzfragen - weiterhin selbst bestimmen kann).
+export function teamGruppeHtml(spielerListe, teams, kartenHtmlFn) {
+  const summen = { blau: 0, rot: 0 };
+  spielerListe.forEach((s) => {
+    const team = teams?.[s.id];
+    if (team === "blau" || team === "rot") summen[team] += (s.punkte ?? 0);
+  });
+  const teamInfo = [
+    { id: "blau", name: "Team Blau", emoji: "🔵" },
+    { id: "rot", name: "Team Rot", emoji: "🔴" }
+  ];
+  return `<div class="zt-team-rundenergebnis">` + teamInfo.map((t) => {
+    const mitglieder = spielerListe.filter((s) => teams?.[s.id] === t.id);
+    return `<section class="zt-team zt-team-${t.id}">` +
+      `<h2>${t.emoji} ${t.name}</h2>` +
+      `<strong class="zt-team-punkte">${summen[t.id]}</strong>` +
+      `<ul class="zt-team-mitglieder">${mitglieder.map((s) => `<li>${kartenHtmlFn(s)}</li>`).join("") || `<li class="zt-team-leer">Niemand</li>`}</ul>` +
+    `</section>`;
+  }).join("") + `</div>`;
+}
+
 // Sichtbare Fehlermeldung - besser als eine stumme Konsole auf dem Handy.
 export function zeigeDebug(text) {
   const el = document.getElementById("debug-log");
