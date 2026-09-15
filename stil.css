@@ -542,6 +542,17 @@
     .zt-team-endstand .zt-team { text-align: center; }
     .zt-team-punkte { display: block; font-size: 3rem; line-height: 1; }
 
+    /* v110: Rundenergebnis nach Team gruppiert (Schätzfragen, Wer ist es?) -
+       eine Kachel pro Team mit Gesamtpunktzahl oben, darunter die einzelnen
+       Spieler mit ihren eigenen Punkten dieser Runde. */
+    .zt-team-rundenergebnis { display: grid; gap: 14px; }
+    .zt-team-rundenergebnis .zt-team { text-align: center; }
+    .zt-team-rundenergebnis .zt-team-punkte { display: block; font-size: 2.4rem; line-height: 1; }
+    .zt-team-mitglieder { margin: 10px 0 0; padding: 0; list-style: none; text-align: left; }
+    .zt-team-mitglieder li { margin-bottom: 6px; font-size: 1rem; font-weight: 400; }
+    .zt-team-mitglieder li:last-child { margin-bottom: 0; }
+    .zt-team-leer { text-align: center; font-weight: 700; opacity: .7; }
+
     @media (max-width: 360px) {
       .zt-treffer-grid { grid-template-columns: 1fr; }
     }
