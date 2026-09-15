@@ -45,10 +45,9 @@ const VORLAGE = `
       <div class="setup-anzahl-zeile">
         <span>Anzahl Fragen</span>
         <span class="anzahl-picker">
-          <input id="sf-anzahl" type="number" inputmode="numeric" min="1" value="1" class="anzahl-eingabe">
+          <input id="sf-anzahl" type="text" inputmode="numeric" pattern="[0-9]*" min="1" value="1" class="anzahl-eingabe">
         </span>
       </div>
-      <span id="sf-anzahl-hinweis" class="hinweis-text"></span>
     </div>
 
     <div id="sf-dummkopf-zeile" class="setup-modusblock" hidden>
@@ -176,8 +175,18 @@ export async function starten(uebergebeneApi) {
 function verdrahteBedienelemente() {
   $("sf-alle").addEventListener("click", () => setzeAlleKategorien(true));
   $("sf-keine").addEventListener("click", () => setzeAlleKategorien(false));
-  $("sf-anzahl").addEventListener("input", () => { anzahlManuellGesetzt = true; });
+  $("sf-anzahl").addEventListener("input", () => {
+    const feld = $("sf-anzahl");
+    const bereinigt = feld.value.replace(/[^0-9]/g, "");
+    if (bereinigt !== feld.value) feld.value = bereinigt;
+    anzahlManuellGesetzt = true;
+  });
   $("sf-anzahl").addEventListener("change", () => { begrenzeAnzahlFeld(); anzahlManuellGesetzt = true; });
+  // v105: als type="number" ließ sich der vorhandene Wert beim Fokussieren nicht
+  // markieren (Browser unterstützen bei diesem Feldtyp keine Textauswahl) - daher
+  // jetzt ein normales Textfeld mit numerischer Tastatur, dessen Inhalt select()
+  // zuverlässig markiert.
+  $("sf-anzahl").addEventListener("focus", () => { $("sf-anzahl").select(); });
   $("sf-dummkopf").addEventListener("change", async () => {
     if (!api.istLeiter) return;
     try { await updateDoc(api.raumRef(), { sfDummkopf: $("sf-dummkopf").checked }); }
@@ -316,10 +325,6 @@ async function setzeAlleKategorien(alle) {
   } catch (e) { zeigeDebug("Fehler bei der Kategorie-Auswahl: " + e.message); }
 }
 
-function verfuegbareFragenAnzahl() {
-  return fragen.filter((f) => kategorien.includes(f.kategorie)).length;
-}
-
 // v104: das frühere per Wischgeste bedienbare "Zahlenrad" wurde durch ein
 // gewöhnliches Zahlenfeld ersetzt (auf Wunsch - einheitlich mit den anderen
 // Spielen, siehe stil.css .anzahl-eingabe). "begrenzeAnzahlFeld" sorgt nur
@@ -409,7 +414,6 @@ function zeigeSetup() {
     grid.appendChild(div);
   });
 
-  const verfuegbar = verfuegbareFragenAnzahl();
   const maximalSpielbar = maximaleFragenOhneKategorieNachbarn(fragen, kategorien);
   const anzahlFeld = $("sf-anzahl");
   const obergrenze = Math.max(1, maximalSpielbar);
@@ -419,12 +423,6 @@ function zeigeSetup() {
     : obergrenze;
   anzahlFeld.max = String(obergrenze);
   anzahlFeld.value = String(auswahl);
-
-  $("sf-anzahl-hinweis").textContent = verfuegbar === 0
-    ? "Noch keine Kategorie ausgewählt."
-    : maximalSpielbar < verfuegbar
-      ? `${verfuegbar} Fragen verfügbar. Ohne gleiche Kategorien direkt hintereinander können davon höchstens ${maximalSpielbar} gespielt werden.`
-      : `${verfuegbar} Frage${verfuegbar === 1 ? "" : "n"} insgesamt in den ausgewählten Kategorien verfügbar.`;
 
   $("sf-anzahl-zeile").hidden = !api.istLeiter;
   $("sf-dummkopf-zeile").hidden = !api.istLeiter;
