@@ -27,9 +27,13 @@
 //  liegen (wie bei Schätzfragen) in einer eigenen Unter-Sammlung
 //  "raeume/{code}/bzantworten", damit der Spielleiter live sieht, wer schon
 //  geantwortet hat, ohne dass alle Geräte gleichzeitig ins Raum-Dokument
-//  schreiben müssen. Bei "wort"/"bild" landet dort NUR eine bereits richtige
-//  Lösung - falsche Versuche bleiben rein lokal (kein Rundenende, einfach
-//  nochmal).
+//  schreiben müssen. Jeder Eintrag trägt ein Feld "richtig" (true/false).
+//  Bei "wort"/"bild" ist EIN Versuch pro Runde erlaubt - liegt man falsch,
+//  ist man für den Rest der Runde gesperrt (kein erneutes Tippen), damit die
+//  Runde trotzdem zuverlässig endet, sobald alle entweder gelöst haben oder
+//  gesperrt sind. Es gibt keinen manuellen "Runde auswerten"-Knopf mehr -
+//  als Sicherheitsnetz gegen eine hängende Runde (falls jemand gar nicht
+//  reagiert) wertet der Spielleiter nach FRAGE_TIMEOUT_MS automatisch aus.
 //
 //  Wie bei den anderen Spielen meldet sich dieses Modul über
 //  starten/raumDaten/spieler/beenden zurück (siehe schaetzfragen/spiel.js).
@@ -43,9 +47,14 @@ import { erstelleTeams, ergaenzeFehlendeTeams } from "../../kern/teams.js";
 
 const AUFDECK_DAUER_MS = 10000;
 const STANDARD_ANZAHL = 10;
+// Sicherheitsnetz: es gibt keinen manuellen "Runde auswerten"-Knopf mehr, also
+// wertet der Spielleiter eine Runde spätestens nach dieser Zeit automatisch
+// aus - auch wenn nicht alle geantwortet/gelöst/sich verbraucht haben (z. B.
+// weil jemand gar nicht reagiert).
+const FRAGE_TIMEOUT_MS = 90000;
 // Unschärfe-Stufen für "bild" (von stark unscharf zu fast scharf) - der letzte
 // Wert bleibt immer stehen, analog zum letzten Buchstaben bei "wort".
-const BILD_BLUR_STUFEN = [22, 16, 11, 7, 4];
+const BILD_BLUR_STUFEN = [26, 20, 15, 10, 6];
 
 const TYP_LABEL = { speed: "Schnelligkeit", wort: "Wortrate", bild: "Bild-Reveal" };
 
@@ -121,10 +130,10 @@ const VORLAGE = `
       </p>
       <p id="bz-wort-fehler" class="fehler-text"></p>
       <p id="bz-wort-status-eigenes" class="hinweis-text" hidden>✅ Du hast es gelöst - warte auf die anderen.</p>
+      <p id="bz-wort-status-falsch" class="hinweis-text" hidden>❌ Leider falsch - du bist für diese Runde raus. Warte auf die anderen.</p>
     </div>
 
     <p id="bz-frage-status" class="hinweis-text"></p>
-    <p><button id="bz-ueberspringen" class="btn-flach" hidden>Runde jetzt auswerten</button></p>
   </div>
 
   <div id="bz-ergebnis-screen" class="bildschirm-karte" hidden>
@@ -248,7 +257,7 @@ export async function starten(uebergebeneApi) {
     await setzeGrundzustand("setup");
   }
 
-  timerId = setInterval(() => { aktualisiereCountdown(); pruefeAufdeckFortschritt(); }, 300);
+  timerId = setInterval(() => { aktualisiereCountdown(); pruefeAufdeckFortschritt(); pruefeZeitlimit(); }, 300);
 }
 
 function verdrahteBedienelemente() {
@@ -266,7 +275,6 @@ function verdrahteBedienelemente() {
   $("bz-starten").addEventListener("click", spielStarten);
   $("bz-wort-absenden").addEventListener("click", wortAbsenden);
   $("bz-wort-eingabe").addEventListener("keydown", (e) => { if (e.key === "Enter") wortAbsenden(); });
-  $("bz-ueberspringen").addEventListener("click", ueberspringen);
   $("bz-weiter").addEventListener("click", weiter);
 }
 
@@ -524,12 +532,12 @@ function zeigeFrage() {
     else rendereBildAnzeige(frage);
     $("bz-wort-eingabe").disabled = !!eigene;
     $("bz-wort-absenden").disabled = !!eigene;
-    $("bz-wort-status-eigenes").hidden = !eigene;
+    $("bz-wort-status-eigenes").hidden = !(eigene && eigene.richtig);
+    $("bz-wort-status-falsch").hidden = !(eigene && !eigene.richtig);
   } else {
     rendereMcGrid(frage, eigene);
   }
 
-  $("bz-ueberspringen").hidden = !api.istLeiter;
   aktualisiereAntworten();
 }
 
@@ -622,6 +630,15 @@ async function pruefeAufdeckFortschritt() {
   aufdeckFortschreibenLaeuft = false;
 }
 
+// Sicherheitsnetz gegen eine hängende Runde: läuft unabhängig davon, ob
+// überhaupt neue Firestore-Einträge geschrieben werden (z. B. weil jemand
+// bei der Schnelligkeits-Frage gar nicht tippt) - läuft alle 300ms mit,
+// siehe starten().
+async function pruefeZeitlimit() {
+  if (!api?.istLeiter || status !== "frage_aktiv" || ausgewertetAusgeloest) return;
+  if (Date.now() - frageSeit >= FRAGE_TIMEOUT_MS) await loeseRundeAuf();
+}
+
 async function antworteMC(antwortIndex) {
   if (status !== "frage_aktiv" || eigeneAntwortAnzeige(index)) return;
   const frage = frageAn(index);
@@ -629,7 +646,7 @@ async function antworteMC(antwortIndex) {
   const millisekunden = Date.now() - frageSeit;
   const eintrag = {
     spielerId: api.spielerId, spielerName: api.spielerName, fragenIndex: index,
-    antwortIndex, millisekunden
+    antwortIndex, millisekunden, richtig: antwortIndex === frage.richtig
   };
   // Sofort lokal merken und die Kacheln neu zeichnen, damit die eigene Wahl
   // ohne Wartezeit auf den Listener hervorgehoben/gesperrt erscheint - siehe
@@ -647,9 +664,10 @@ async function antworteMC(antwortIndex) {
   }
 }
 
-// v121: falsche Versuche beim Wortrate-Rätsel beenden die Runde NICHT - es wird
-// einfach nichts gespeichert und man kann sofort nochmal tippen. Nur eine
-// RICHTIGE Lösung landet in "bzantworten" (mit der bis dahin verstrichenen Zeit).
+// Nur EIN Versuch pro Runde: wer falsch liegt, ist für den Rest der Runde
+// gesperrt (kein erneutes Tippen) - der Versuch wird trotzdem gespeichert
+// (mit "richtig: false"), damit die Runde zuverlässig endet, sobald alle
+// entweder gelöst haben oder verbraucht sind (siehe aktualisiereAntworten()).
 async function wortAbsenden() {
   if (status !== "frage_aktiv" || eigeneAntwortAnzeige(index)) return;
   const eingabe = $("bz-wort-eingabe").value.trim();
@@ -659,16 +677,14 @@ async function wortAbsenden() {
   }
   const frage = frageAn(index);
   if (!frage) return;
-  if (normalisiere(eingabe) !== normalisiere(frage.loesung)) {
-    $("bz-wort-fehler").textContent = "Leider falsch - versuch's nochmal.";
-    return;
-  }
+  const richtig = normalisiere(eingabe) === normalisiere(frage.loesung);
   $("bz-wort-fehler").textContent = "";
   $("bz-wort-eingabe").disabled = true;
   $("bz-wort-absenden").disabled = true;
-  $("bz-wort-status-eigenes").hidden = false;
+  $("bz-wort-status-eigenes").hidden = !richtig;
+  $("bz-wort-status-falsch").hidden = richtig;
   const millisekunden = Date.now() - frageSeit;
-  const eintrag = { spielerId: api.spielerId, spielerName: api.spielerName, fragenIndex: index, millisekunden };
+  const eintrag = { spielerId: api.spielerId, spielerName: api.spielerName, fragenIndex: index, millisekunden, richtig };
   // Wie bei antworteMC: sofort lokal merken, damit ein zwischenzeitlicher
   // Raum-Listener-Trigger den gerade gesetzten Sperr-Zustand nicht zurücksetzt.
   eigeneAntwortenLokal[index] = eintrag;
@@ -681,15 +697,9 @@ async function wortAbsenden() {
     $("bz-wort-eingabe").disabled = false;
     $("bz-wort-absenden").disabled = false;
     $("bz-wort-status-eigenes").hidden = true;
+    $("bz-wort-status-falsch").hidden = true;
     zeigeDebug("Fehler beim Absenden der Lösung: " + e.message);
   }
-}
-
-// Spielleiter kann jederzeit auswerten - z. B. wenn jemand gar nicht antwortet
-// oder beim Wortrate-Rätsel steckenbleibt.
-async function ueberspringen() {
-  if (!api.istLeiter) return;
-  await loeseRundeAuf();
 }
 
 async function aktualisiereAntworten() {
@@ -698,13 +708,19 @@ async function aktualisiereAntworten() {
   if (!frage) return;
   const dieserRunde = alleAntworten.filter((a) => a.fragenIndex === index);
   if (status === "frage_aktiv") {
-    $("bz-frage-status").textContent = (frage.typ === "wort" || frage.typ === "bild")
-      ? `${dieserRunde.length} von ${spielerListe.length} haben es schon gelöst`
-      : `${dieserRunde.length} von ${spielerListe.length} haben geantwortet`;
+    if (frage.typ === "wort" || frage.typ === "bild") {
+      const geloest = dieserRunde.filter((a) => a.richtig).length;
+      $("bz-frage-status").textContent = `${geloest} von ${spielerListe.length} haben es schon gelöst`;
+    } else {
+      $("bz-frage-status").textContent = `${dieserRunde.length} von ${spielerListe.length} haben geantwortet`;
+    }
 
-    // Sobald wirklich alle geantwortet bzw. gelöst haben, wertet nur der
-    // Spielleiter automatisch aus - beim Wortrate-Rätsel klappt das nur, wenn
-    // niemand aufgibt; sonst greift der manuelle "Runde jetzt auswerten"-Button.
+    // Jeder Eintrag zählt hier mit, ob richtig oder falsch (bei "wort"/"bild"
+    // ist ein falscher Versuch der einzige, den man je bekommt - siehe
+    // wortAbsenden()) - sobald also wirklich alle entweder gelöst haben oder
+    // verbraucht sind, wertet nur der Spielleiter automatisch aus. Reagiert
+    // jemand gar nicht (kein einziger Klick/Tipp, also auch kein neuer
+    // Firestore-Eintrag), greift stattdessen pruefeZeitlimit() unten.
     if (api.istLeiter && !ausgewertetAusgeloest &&
         spielerListe.length > 0 && dieserRunde.length >= spielerListe.length) {
       await loeseRundeAuf();
@@ -717,20 +733,17 @@ async function aktualisiereAntworten() {
 // ============================================================================
 //  Auswertung
 // ============================================================================
-// "speed": unter den RICHTIGEN Antworten (antwortIndex === frage.richtig)
-// bekommt die schnellste so viele Punkte wie Mitspieler mitmachen, jede
-// weitere einen Punkt weniger. "wort"/"bild": genauso, aber automatisch alle
-// gespeicherten Antworten sind schon richtig, da falsche Versuche gar nicht
-// gespeichert werden (siehe wortAbsenden()).
+// Jeder gespeicherte Eintrag trägt ein Feld "richtig" (siehe antworteMC()/
+// wortAbsenden()). Unter allen RICHTIGEN Antworten bekommt die schnellste so
+// viele Punkte wie Mitspieler mitmachen, jede weitere einen Punkt weniger -
+// bei allen drei Frage-Typen gleich.
 function berechneRundenpunkte(pos) {
   const frage = frageAn(pos);
   if (!frage) return {};
   const antworten = alleAntworten.filter((a) => a.fragenIndex === pos);
   const ergebnis = {};
 
-  const richtige = frage.typ === "speed"
-    ? antworten.filter((a) => a.antwortIndex === frage.richtig)
-    : antworten;
+  const richtige = antworten.filter((a) => a.richtig);
   const sortiert = [...richtige].sort((a, b) => (a.millisekunden ?? 0) - (b.millisekunden ?? 0));
   const n = spielerListe.length;
   sortiert.forEach((a, i) => {
@@ -767,11 +780,14 @@ function zeigeErgebnisListe(pos) {
 
   const kartenFuerSpieler = (s) => {
     const antwort = dieserRunde.find((a) => a.spielerId === s.id);
+    const istTextRaetsel = frage.typ === "wort" || frage.typ === "bild";
     let extra;
-    if (antwort) {
-      extra = zeitText(antwort.millisekunden);
+    if (!antwort) {
+      extra = istTextRaetsel ? "nicht gelöst" : "nicht geantwortet";
+    } else if (istTextRaetsel) {
+      extra = antwort.richtig ? zeitText(antwort.millisekunden) : "falsch";
     } else {
-      extra = (frage.typ === "wort" || frage.typ === "bild") ? "nicht gelöst" : "nicht geantwortet";
+      extra = zeitText(antwort.millisekunden);
     }
     return spielerKarte(
       s.name, s.farbe, s.icon,
@@ -854,9 +870,7 @@ export function _berechneRundenpunkteFuerTest(frage, antworten, spielerAnzahl) {
   // ohne die Modul-internen Variablen (fragen/reihenfolge/alleAntworten/
   // spielerListe) - so lässt sie sich isoliert mit erfundenen Daten prüfen.
   const ergebnis = {};
-  const richtige = frage.typ === "speed"
-    ? antworten.filter((a) => a.antwortIndex === frage.richtig)
-    : antworten;
+  const richtige = antworten.filter((a) => a.richtig);
   const sortiert = [...richtige].sort((a, b) => (a.millisekunden ?? 0) - (b.millisekunden ?? 0));
   sortiert.forEach((a, i) => {
     const punkte = spielerAnzahl - i;
