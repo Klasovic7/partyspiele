@@ -2,8 +2,9 @@
 //  Wer ist es?
 // ----------------------------------------------------------------------------
 //  Jeder bekommt nacheinander Hinweise zu einer Person (bisher nur Kategorie
-//  "Fußballer") - vom schwersten zum leichtesten. Wer zuerst buzzert, darf als
-//  Erstes raten. Je weniger Hinweise bis dahin aufgedeckt waren, desto mehr
+//  "Fußballer") - in zufälliger Reihenfolge, bei jeder Frage neu gemischt (v117,
+//  vorher immer fest vom schwersten zum leichtesten). Wer zuerst buzzert, darf
+//  als Erstes raten. Je weniger Hinweise bis dahin aufgedeckt waren, desto mehr
 //  Punkte gibt es für eine richtige Antwort.
 //
 //  Ablauf pro Runde (Felder im Raum-Dokument, alle mit Präfix "wi"):
@@ -32,8 +33,8 @@ const STANDARD_ANZAHL = 8;
 const VORLAGE = `
   <div id="wi-setup" class="bildschirm-karte" hidden>
     <h1>🕵️ Wer ist es?</h1>
-    <p class="hinweis-text">Ihr bekommt nacheinander Hinweise zu einem Fußballer - vom
-      schwersten zum leichtesten. Wer zuerst buzzert, darf raten. Je weniger Hinweise
+    <p class="hinweis-text">Ihr bekommt nacheinander Hinweise zu einem Fußballer - in
+      zufälliger Reihenfolge. Wer zuerst buzzert, darf raten. Je weniger Hinweise
       es bis dahin gab, desto mehr Punkte gibt es.</p>
 
     <div id="wi-anzahl-zeile" class="setup-anzahlblock" hidden>
@@ -131,6 +132,10 @@ let spielerListe = [];
 
 let index = -1;
 let reihenfolge = [];
+// v117: pro Frage eine eigene, zufällige Hinweis-Reihenfolge (statt immer
+// fest vom schwersten zum leichtesten) - ein Array parallel zu "reihenfolge",
+// jeder Eintrag ist eine Permutation der Hinweis-Indizes dieser Frage.
+let hinweisReihenfolgen = [];
 let anzahlFragen = 0;
 let status = null;
 let hinweisIndex = 1;
@@ -149,6 +154,13 @@ const $ = (id) => el.wurzel.querySelector("#" + id);
 
 function frageAn(pos) {
   return fragen[reihenfolge[pos]];
+}
+
+// v117: liefert die Hinweis-Reihenfolge für die Frage an Position "pos" - eine
+// Permutation der Hinweis-Indizes. Fällt auf die unveränderte Reihenfolge
+// zurück, falls (noch) keine gespeichert ist.
+function hinweisPermutation(pos) {
+  return hinweisReihenfolgen[pos] ?? frageAn(pos)?.hinweise.map((_, i) => i) ?? [];
 }
 
 function mischeIndizes(werte) {
@@ -267,7 +279,7 @@ function verdrahteBedienelemente() {
 export function beenden() {
   if (timerId) { clearInterval(timerId); timerId = null; }
   el = {}; raum = {}; spielerListe = [];
-  index = -1; reihenfolge = []; anzahlFragen = 0; status = null;
+  index = -1; reihenfolge = []; hinweisReihenfolgen = []; anzahlFragen = 0; status = null;
   hinweisIndex = 1; hinweisSeit = 0; gebuzzertVon = null;
   antwortText = ""; antwortKorrekt = null; falscheVersuche = []; gewuenschteAnzahl = 0;
   hinweisFortschreibenLaeuft = false;
@@ -291,6 +303,7 @@ export function raumDaten(daten) {
   raum = daten;
   status = daten.wiStatus ?? null;
   reihenfolge = daten.wiReihenfolge ?? [];
+  hinweisReihenfolgen = daten.wiHinweisReihenfolgen ?? [];
   anzahlFragen = daten.wiAnzahlFragen ?? 0;
   hinweisIndex = daten.wiHinweisIndex ?? 1;
   hinweisSeit = daten.wiHinweisSeit ?? 0;
@@ -429,7 +442,7 @@ function anzahlUebernehmen() {
 
 async function setzeGrundzustand(wiStatus) {
   await updateDoc(api.raumRef(), {
-    wiStatus, wiReihenfolge: [], wiFragenIndex: 0, wiAnzahlFragen: 0,
+    wiStatus, wiReihenfolge: [], wiHinweisReihenfolgen: [], wiFragenIndex: 0, wiAnzahlFragen: 0,
     wiHinweisIndex: 1, wiHinweisSeit: 0, wiGebuzzertVon: null,
     wiAntwortText: "", wiAntwortKorrekt: null, wiPunkteDieserRunde: 0,
     wiFalscheVersuche: [], wiTeammodus: false, wiTeams: {}, wiRundenDelta: {}
@@ -452,12 +465,18 @@ async function spielStarten() {
     await raeumeSpieldatenAuf();
     const anzahl = Math.min(gewuenschteAnzahl || fragen.length, fragen.length);
     const neueReihenfolge = mischeIndizes(fragen.map((_, i) => i)).slice(0, anzahl);
+    // v117: für jede Frage eine eigene, zufällige Hinweis-Reihenfolge - nicht
+    // mehr immer die feste Autoren-Reihenfolge (schwer -> leicht).
+    const neueHinweisReihenfolgen = neueReihenfolge.map((frageIndex) =>
+      mischeIndizes(fragen[frageIndex].hinweise.map((_, i) => i))
+    );
     const neueTeams = teammodus
       ? ergaenzeFehlendeTeams(teams, spielerListe.map((spieler) => spieler.id))
       : teams;
     await updateDoc(api.raumRef(), {
       wiStatus: "frage_aktiv", wiFragenIndex: 0, wiAnzahlFragen: anzahl,
-      wiReihenfolge: neueReihenfolge, wiHinweisIndex: 1, wiHinweisSeit: Date.now(),
+      wiReihenfolge: neueReihenfolge, wiHinweisReihenfolgen: neueHinweisReihenfolgen,
+      wiHinweisIndex: 1, wiHinweisSeit: Date.now(),
       wiGebuzzertVon: null, wiAntwortText: "", wiAntwortKorrekt: null, wiPunkteDieserRunde: 0,
       wiFalscheVersuche: [], wiTeammodus: teammodus, wiTeams: neueTeams, wiRundenDelta: {}
     });
@@ -486,14 +505,15 @@ function zeigeFrage() {
   // dieser Stelle zeigen wir stattdessen, der wievielte Hinweis gerade dran ist.
   const gesamt = frage.hinweise.length;
   const sichtbar = Math.min(Math.max(hinweisIndex, 1), gesamt);
+  const perm = hinweisPermutation(index);
   $("wi-frage-fortschritt").textContent = `Hinweis ${sichtbar} von ${gesamt}`;
-  $("wi-hinweis-aktuell").textContent = frage.hinweise[sichtbar - 1] ?? "";
+  $("wi-hinweis-aktuell").textContent = frage.hinweise[perm[sichtbar - 1] ?? sichtbar - 1] ?? "";
 
   const liste = $("wi-hinweis-liste");
   liste.innerHTML = "";
   for (let i = 0; i < sichtbar - 1; i++) {
     const li = document.createElement("li");
-    li.textContent = frage.hinweise[i];
+    li.textContent = frage.hinweise[perm[i] ?? i];
     liste.appendChild(li);
   }
 
