@@ -15,7 +15,7 @@ import {
   doc, setDoc, updateDoc, deleteDoc, collection, getDocs, onSnapshot,
   serverTimestamp, increment, arrayUnion, arrayRemove
 } from "../../kern/firebase.js";
-import { escapeHtml, textMitZusatz, spielerKarte, teamEndstandHtml, zeigeDebug } from "../../kern/ui.js";
+import { escapeHtml, textMitZusatz, spielerKarte, teamEndstandHtml, teamGruppeHtml, zeigeDebug } from "../../kern/ui.js";
 import { erstelleTeams, ergaenzeFehlendeTeams } from "../../kern/teams.js";
 
 export const KATEGORIEN = [
@@ -134,7 +134,7 @@ const VORLAGE = `
     <p class="fortschritt" id="sf-erg-fortschritt"></p>
     <h2 id="sf-erg-frage"></h2>
     <p>Richtige Antwort: <strong id="sf-erg-antwort"></strong></p>
-    <ul id="sf-erg-liste"></ul>
+    <div id="sf-erg-liste"></div>
     <p><button id="sf-weiter" hidden>Weiter</button></p>
   </div>
 
@@ -845,12 +845,11 @@ function zeigeErgebnisListe(pos) {
   const rundenpunkte = berechneRundenpunkte(pos);
   const dummkoepfe = dummkopfModus ? dummkoepfeDerRunde(pos) : [];
   const tipps = dummkopfModus ? dummkopfTippsDieserRunde(pos) : [];
-  const sortiert = alleAntworten.filter((a) => a.fragenIndex === pos)
+  const antwortenDieserRunde = alleAntworten.filter((a) => a.fragenIndex === pos);
+  const sortiert = [...antwortenDieserRunde]
     .sort((a, b) => Math.abs(a.schaetzung - richtig) - Math.abs(b.schaetzung - richtig));
 
-  const liste = $("sf-erg-liste");
-  liste.innerHTML = "";
-  sortiert.forEach((antwort) => {
+  const kartenFuerAntwort = (antwort) => {
     const s = spielerListe.find((x) => x.id === antwort.spielerId);
     let extra = `Schätzung ${antwort.schaetzung}`;
     if (dummkopfModus) {
@@ -858,14 +857,33 @@ function zeigeErgebnisListe(pos) {
       const tipp = tipps.find((t) => t.spielerId === antwort.spielerId);
       if (tipp && dummkoepfe.includes(tipp.zielSpielerId)) extra += " · Tipp richtig +1";
     }
-    const li = document.createElement("li");
-    li.innerHTML = spielerKarte(
+    return spielerKarte(
       antwort.spielerName, s?.farbe, s?.icon,
       formatiertePunkte(rundenpunkte[antwort.spielerId] ?? 0),
       { extra, punkteRechts: s ? (s.punkte ?? 0) : "?" }
     );
-    liste.appendChild(li);
-  });
+  };
+
+  const liste = $("sf-erg-liste");
+
+  // v110: Im Teammodus nach Team gruppiert (Kachel mit Gesamtpunktzahl oben,
+  // einzelne Spieler mit eigener Schätzung/Punkten darunter) statt einer
+  // gemeinsamen, nach Nähe zur richtigen Antwort sortierten Liste.
+  if (teammodus) {
+    liste.innerHTML = teamGruppeHtml(spielerListe, teams, (s) => {
+      const antwort = antwortenDieserRunde.find((a) => a.spielerId === s.id);
+      return antwort
+        ? kartenFuerAntwort(antwort)
+        : spielerKarte(s.name, s.farbe, s.icon, formatiertePunkte(0), { punkteRechts: s.punkte ?? 0 });
+    });
+  } else {
+    liste.innerHTML = "";
+    sortiert.forEach((antwort) => {
+      const li = document.createElement("li");
+      li.innerHTML = kartenFuerAntwort(antwort);
+      liste.appendChild(li);
+    });
+  }
 }
 
 function zeigeErgebnis(pos) {
