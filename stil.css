@@ -417,7 +417,6 @@
     .schalter input:checked + .schalter-regler { background: var(--akzent); }
     .schalter input:checked + .schalter-regler::after { transform: translateX(20px); }
     .schalter-text { font-weight: 700; }
-    .schalter-hinweis { display: block; font-size: 0.75rem; color: var(--text-hell); margin-top: 4px; }
 
     .dummkopf-wahl { cursor: pointer; }
     .dummkopf-wahl .spieler-karte { transition: box-shadow .15s ease, transform .05s ease; }
@@ -1378,8 +1377,7 @@
     #spiel-wurzel h1, #spiel-wurzel h2, #spiel-wurzel h3,
     #spiel-wurzel .schalter-text { color: var(--club-text); }
     #spiel-wurzel .kategorie { color: #ff8567; }
-    #spiel-wurzel .hinweis-text, #spiel-wurzel .fortschritt,
-    #spiel-wurzel .schalter-hinweis { color: var(--club-muted); }
+    #spiel-wurzel .hinweis-text, #spiel-wurzel .fortschritt { color: var(--club-muted); }
     #spiel-wurzel hr { border-color: rgba(255, 130, 101, .28); }
     .zt-regel,
     .zt-rater-ansicht, .rd-kategorie-kopf, .rd-kandidat {
@@ -1504,19 +1502,19 @@
        Zahlenfelder (Reih dich ein!, Denk gleich!, 10 Treffer!). */
     .anzahl-picker {
       position: relative;
-      flex: 0 0 104px;
+      flex: 0 0 80px;
     }
     .anzahl-eingabe {
       width: 100%;
-      min-height: 50px;
+      min-height: 40px;
       margin: 0;
-      padding: 8px 10px;
+      padding: 5px 8px;
       color: #24182a;
       background: var(--club-ivory);
       border: 1px solid #dfd2c6;
-      border-radius: 13px;
+      border-radius: 11px;
       font: inherit;
-      font-size: 1.12rem;
+      font-size: 1rem;
       font-weight: 800;
       text-align: center;
       font-variant-numeric: tabular-nums;
@@ -1533,17 +1531,24 @@
       font-size: .8rem;
       line-height: 1.35;
     }
-    .setup-moduszeile .schalter-zeile { min-width: 0; }
+    /* v106: der Modus-Umschalter (Dummkopf-/Team-Modus) zeigt den Text jetzt
+       immer links und den Schalter immer rechts im Kästchen; das Info-"i"
+       sitzt klein und hochgestellt direkt hinter dem Wort statt separat am
+       rechten Rand. Der Schalter steckt dafür in einem eigenen <label>, das
+       nur ihn selbst umschließt - so löst ein Klick auf das "i" nicht
+       versehentlich den Schalter mit aus. */
+    .modus-text-zeile { display: inline-flex; align-items: baseline; gap: 2px; min-width: 0; }
     .setup-moduszeile .schalter-text { white-space: nowrap; }
+    .setup-moduszeile .schalter-zeile { flex: 0 0 auto; }
     .modus-info {
       position: relative;
-      align-self: flex-start;
-      flex: 0 0 auto;
-      margin-top: -5px;
+      display: inline-flex;
+      vertical-align: top;
+      margin-left: 1px;
     }
     .modus-info summary {
-      width: 25px;
-      height: 25px;
+      width: 15px;
+      height: 15px;
       display: grid;
       place-items: center;
       cursor: pointer;
@@ -1553,19 +1558,19 @@
       border: 1px solid #ff9b81;
       border-radius: 50%;
       font-family: Georgia, serif;
-      font-size: .88rem;
+      font-size: .58rem;
       font-weight: 800;
       font-style: italic;
-      box-shadow: 0 4px 10px rgba(0,0,0,.24);
+      box-shadow: 0 3px 8px rgba(0,0,0,.22);
     }
     .modus-info summary::-webkit-details-marker { display: none; }
     .modus-info[open] summary { background: var(--club-orange-dunkel); }
     .modus-info > div {
       position: absolute;
       z-index: 20;
-      top: 33px;
-      right: 0;
-      width: min(270px, calc(100vw - 92px));
+      top: 22px;
+      left: 0;
+      width: min(260px, calc(100vw - 92px));
       padding: 12px 13px;
       color: #302334;
       background: var(--club-ivory);
@@ -1580,8 +1585,8 @@
     @media (max-width: 350px) {
       .setup-anzahlblock, .setup-modusblock { padding-inline: 11px; }
       .setup-anzahl-zeile, .setup-moduszeile { gap: 9px; font-size: .92rem; }
-      .anzahl-picker { flex-basis: 88px; }
-      .setup-moduszeile .schalter-text { white-space: normal; }
+      .anzahl-picker { flex-basis: 68px; }
+      .modus-text-zeile { white-space: normal; }
     }
 
     /* v70: kein rechteckiger Safari-Filterrand am Logo */
