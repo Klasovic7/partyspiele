@@ -122,8 +122,10 @@ function spielerNachId(id) {
   return spielerListe.find((spieler) => spieler.id === id) ?? null;
 }
 
+// v112: die Kategorie-Zählung steht jetzt oben im Spielkopf (api.fortschritt) -
+// hier bleibt nur noch die feinere Zählung innerhalb der aktuellen Kategorie.
 function rundenFortschritt() {
-  return `Kategorie ${kategorieIndex + 1} von ${anzahlKategorien} · Begriff ${begriffIndex + 1} von ${begriffeReihenfolge.length}`;
+  return `Begriff ${begriffIndex + 1} von ${begriffeReihenfolge.length}`;
 }
 
 function skalenBeschriftung(karte) {
@@ -255,6 +257,14 @@ function renderAktuellenStatus() {
   if (!el.wurzel) return;
   ["rd-setup", "rd-runde", "rd-feedback", "rd-endstand"]
     .forEach((id) => { $(id).hidden = true; });
+
+  // v112: die äußere Kategorie-Zählung ("Kategorie X von Y") steht jetzt oben
+  // im Spielkopf statt auf jedem einzelnen Bildschirm separat (siehe
+  // api.fortschritt) - auf dem Bildschirm selbst bleibt nur noch die feinere
+  // Zählung innerhalb der Kategorie ("Begriff X von Y", siehe rundenFortschritt).
+  api.fortschritt(
+    status === "runde" || status === "feedback" ? `${kategorieIndex + 1}/${anzahlKategorien}` : ""
+  );
 
   if (status === "setup" || !status) {
     zeigeSetup();
