@@ -15,7 +15,8 @@ import {
   doc, setDoc, updateDoc, deleteDoc, collection, getDocs, onSnapshot,
   serverTimestamp, increment, arrayUnion, arrayRemove
 } from "../../kern/firebase.js";
-import { escapeHtml, textMitZusatz, spielerKarte, zeigeDebug } from "../../kern/ui.js";
+import { escapeHtml, textMitZusatz, spielerKarte, teamEndstandHtml, zeigeDebug } from "../../kern/ui.js";
+import { erstelleTeams, ergaenzeFehlendeTeams } from "../../kern/teams.js";
 
 export const KATEGORIEN = [
   { id: "fussball",             name: "Fußball",                emoji: "⚽️" },
@@ -68,6 +69,38 @@ const VORLAGE = `
       </div>
     </div>
 
+    <div id="sf-teammodus-zeile" class="setup-modusblock" hidden>
+      <div class="setup-moduszeile">
+        <span class="modus-text-zeile">
+          <span class="schalter-text">Teammodus</span>
+          <details class="modus-info">
+            <summary aria-label="Erklärung zum Teammodus">i</summary>
+            <div>Jeder entscheidet sich für ein Team. Die Punkte werden weiterhin einzeln vergeben, zusätzlich seht ihr die Summe pro Team.</div>
+          </details>
+        </span>
+        <label class="schalter-zeile">
+          <span class="schalter">
+            <input type="checkbox" id="sf-teammodus">
+            <span class="schalter-regler"></span>
+          </span>
+        </label>
+      </div>
+    </div>
+
+    <div id="sf-teams" hidden>
+      <div class="zt-team-grid">
+        <button type="button" id="sf-team-wahl-blau" class="zt-team zt-team-blau zt-team-waehlbar">
+          <h3>🔵 Team Blau</h3>
+          <ul id="sf-team-blau"></ul>
+        </button>
+        <button type="button" id="sf-team-wahl-rot" class="zt-team zt-team-rot zt-team-waehlbar">
+          <h3>🔴 Team Rot</h3>
+          <ul id="sf-team-rot"></ul>
+        </button>
+      </div>
+      <p><button id="sf-teams-zufall" class="btn-flach" hidden>Zufällige Teams</button></p>
+    </div>
+
     <p id="sf-setup-fehler" class="fehler-text"></p>
     <p><button id="sf-starten" class="btn-primaer" hidden>Spiel starten</button></p>
     <p id="sf-setup-warten" hidden><em>Warte, bis der Spielleiter das Spiel startet …</em></p>
@@ -107,6 +140,7 @@ const VORLAGE = `
 
   <div id="sf-endstand-screen" class="bildschirm-karte" hidden>
     <h1>Endstand</h1>
+    <div id="sf-endstand-teams" hidden></div>
     <ul id="sf-endstand-liste"></ul>
     <p id="sf-endstand-warten" hidden><em>Der Spielleiter wählt gleich das nächste Spiel …</em></p>
   </div>
@@ -129,6 +163,8 @@ let reihenfolge = [];
 let anzahlFragen = 0;
 let kategorien = [];
 let dummkopfModus = false;
+let teammodus = false;
+let teams = {};
 let status = null;
 let ausgewertetAusgeloest = false;
 let dummkopfPhaseBeendet = false;
@@ -169,6 +205,7 @@ export async function starten(uebergebeneApi) {
   if (api.istLeiter && !api.raum?.sfStatus) {
     await updateDoc(api.raumRef(), {
       sfStatus: "setup", sfKategorien: [], sfDummkopf: false,
+      sfTeammodus: false, sfTeams: {},
       sfFragenIndex: 0, sfFrageVersion: 0, sfReihenfolge: [], sfAnzahlFragen: 0
     });
   }
@@ -194,6 +231,10 @@ function verdrahteBedienelemente() {
     try { await updateDoc(api.raumRef(), { sfDummkopf: $("sf-dummkopf").checked }); }
     catch (e) { zeigeDebug("Fehler beim Umschalten des Dummkopf-Modus: " + e.message); }
   });
+  $("sf-teammodus").addEventListener("change", teammodusUmschalten);
+  $("sf-team-wahl-blau").addEventListener("click", () => waehleEigenesTeam("blau"));
+  $("sf-team-wahl-rot").addEventListener("click", () => waehleEigenesTeam("rot"));
+  $("sf-teams-zufall").addEventListener("click", zufaelligeTeams);
   $("sf-starten").addEventListener("click", spielStarten);
   $("sf-absenden").addEventListener("click", schaetzungAbsenden);
   $("sf-schaetzung").addEventListener("keydown", (e) => { if (e.key === "Enter") schaetzungAbsenden(); });
@@ -222,6 +263,7 @@ export function beenden() {
   el = {};
   index = -1; frageVersion = 0; reihenfolge = []; anzahlFragen = 0;
   kategorien = []; dummkopfModus = false; status = null;
+  teammodus = false; teams = {};
   alleAntworten = []; alleDummkoepfe = [];
   ausgewertetAusgeloest = false; dummkopfPhaseBeendet = false; anzahlManuellGesetzt = false;
 }
@@ -247,8 +289,11 @@ export function raumDaten(daten) {
   reihenfolge = daten.sfReihenfolge ?? [];
   dummkopfModus = !!daten.sfDummkopf;
   kategorien = daten.sfKategorien ?? [];
+  teammodus = !!daten.sfTeammodus;
+  teams = daten.sfTeams ?? {};
 
   if ($("sf-dummkopf").checked !== dummkopfModus) $("sf-dummkopf").checked = dummkopfModus;
+  if ($("sf-teammodus").checked !== teammodus) $("sf-teammodus").checked = teammodus;
 
   const neueVersion = daten.sfFrageVersion ?? 0;
   const neuerIndex = daten.sfFragenIndex ?? 0;
@@ -317,6 +362,60 @@ async function schalteKategorieFuerSpiel(katId) {
       sfKategorien: dabei ? arrayRemove(katId) : arrayUnion(katId)
     });
   } catch (e) { zeigeDebug("Fehler bei der Kategorie-Auswahl: " + e.message); }
+}
+
+// v109: Teammodus - die Punktevergabe bleibt komplett unverändert (jeder tippt und
+// bekommt seine Punkte einzeln), die Teams dienen hier nur der zusätzlichen
+// Summenanzeige im Endstand. Jeder Spieler wählt sich selbst ein Team; nur der
+// Spielleiter darf über "Zufällige Teams" alle Zuordnungen neu auswürfeln.
+async function teammodusUmschalten() {
+  if (!api.istLeiter) return;
+  const aktiviert = $("sf-teammodus").checked;
+  const neueTeams = aktiviert ? teams : {};
+  try {
+    await updateDoc(api.raumRef(), { sfTeammodus: aktiviert, sfTeams: neueTeams });
+  } catch (e) {
+    $("sf-teammodus").checked = teammodus;
+    zeigeDebug("Teammodus konnte nicht geändert werden: " + e.message);
+  }
+}
+
+async function waehleEigenesTeam(team) {
+  if (!teammodus) return;
+  try {
+    await updateDoc(api.raumRef(), { sfTeams: { ...teams, [api.spielerId]: team } });
+  } catch (e) {
+    zeigeDebug("Team konnte nicht gewählt werden: " + e.message);
+  }
+}
+
+async function zufaelligeTeams() {
+  if (!api.istLeiter || !teammodus) return;
+  $("sf-teams-zufall").disabled = true;
+  try {
+    await updateDoc(api.raumRef(), {
+      sfTeams: erstelleTeams(spielerListe.map((spieler) => spieler.id))
+    });
+  } catch (e) {
+    zeigeDebug("Teams konnten nicht neu gemischt werden: " + e.message);
+  }
+  $("sf-teams-zufall").disabled = false;
+}
+
+function rendereTeamListe(team) {
+  const liste = $("sf-team-" + team);
+  liste.innerHTML = "";
+  spielerListe.filter((spieler) => teams[spieler.id] === team).forEach((spieler) => {
+    const li = document.createElement("li");
+    li.textContent = spieler.name + (spieler.id === api.spielerId ? " (du)" : "");
+    liste.appendChild(li);
+  });
+  if (!liste.children.length) {
+    const li = document.createElement("li");
+    li.textContent = "Noch niemand";
+    liste.appendChild(li);
+  }
+  $("sf-team-wahl-" + team).classList.toggle("zt-team-eigenes", teams[api.spielerId] === team);
 }
 
 async function setzeAlleKategorien(alle) {
@@ -428,6 +527,16 @@ function zeigeSetup() {
 
   $("sf-anzahl-zeile").hidden = !api.istLeiter;
   $("sf-dummkopf-zeile").hidden = !api.istLeiter;
+  $("sf-teammodus-zeile").hidden = !api.istLeiter;
+  const teamSchalter = $("sf-teammodus");
+  teamSchalter.checked = teammodus;
+  teamSchalter.disabled = !api.istLeiter;
+  $("sf-teams").hidden = !teammodus;
+  $("sf-teams-zufall").hidden = !api.istLeiter;
+  if (teammodus) {
+    rendereTeamListe("blau");
+    rendereTeamListe("rot");
+  }
   $("sf-starten").hidden = !api.istLeiter;
   $("sf-setup-warten").hidden = api.istLeiter;
 }
@@ -453,12 +562,17 @@ async function spielStarten() {
     // Reste einer vorherigen Runde entfernen und Punkte auf 0 setzen.
     await raeumeSpieldatenAuf();
 
+    const neueTeams = teammodus
+      ? ergaenzeFehlendeTeams(teams, spielerListe.map((spieler) => spieler.id))
+      : teams;
+
     await updateDoc(api.raumRef(), {
       sfStatus: dummkopfModus ? "dummkopf_wahl" : "frage_aktiv",
       sfFragenIndex: 0,
       sfAnzahlFragen: anzahl,
       sfReihenfolge: gemischt,
-      sfFrageVersion: 0
+      sfFrageVersion: 0,
+      sfTeams: neueTeams
     });
   } catch (e) {
     zeigeDebug("Fehler beim Start: " + e.message);
@@ -486,7 +600,8 @@ export async function vorZurueck() {
   await raeumeSpieldatenAuf();
   await updateDoc(api.raumRef(), {
     sfStatus: null, sfKategorien: [], sfReihenfolge: [],
-    sfFragenIndex: 0, sfAnzahlFragen: 0, sfFrageVersion: 0
+    sfFragenIndex: 0, sfAnzahlFragen: 0, sfFrageVersion: 0,
+    sfTeammodus: false, sfTeams: {}
   });
   await api.zurueckZurAuswahl();
 }
@@ -791,6 +906,9 @@ function zeigeEndstand() {
     li.innerHTML = spielerKarte(s.name, s.farbe, s.icon, s.punkte ?? 0, { rang: index + 1 });
     liste.appendChild(li);
   });
+  const teamsEl = $("sf-endstand-teams");
+  teamsEl.hidden = !teammodus;
+  if (teammodus) teamsEl.innerHTML = teamEndstandHtml(spielerListe, teams);
   $("sf-endstand-warten").hidden = api.istLeiter;
 }
 
