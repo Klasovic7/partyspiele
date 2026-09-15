@@ -52,17 +52,19 @@ const VORLAGE = `
 
     <div id="sf-dummkopf-zeile" class="setup-modusblock" hidden>
       <div class="setup-moduszeile">
+        <span class="modus-text-zeile">
+          <span class="schalter-text">Dummkopf-Modus</span>
+          <details class="modus-info">
+            <summary aria-label="Erklärung zum Dummkopf-Modus">i</summary>
+            <div>Vor jeder Frage tippt jeder, wer am weitesten danebenliegt. Wer richtig tippt, bekommt einen Extrapunkt.</div>
+          </details>
+        </span>
         <label class="schalter-zeile">
           <span class="schalter">
             <input type="checkbox" id="sf-dummkopf">
             <span class="schalter-regler"></span>
           </span>
-          <span class="schalter-text">Dummkopf-Modus</span>
         </label>
-        <details class="modus-info">
-          <summary aria-label="Erklärung zum Dummkopf-Modus">i</summary>
-          <div>Vor jeder Frage tippt jeder, wer am weitesten danebenliegt. Wer richtig tippt, bekommt einen Extrapunkt.</div>
-        </details>
       </div>
     </div>
 
