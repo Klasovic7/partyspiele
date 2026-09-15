@@ -51,7 +51,7 @@ const VORLAGE = `
           <span class="schalter-text">Teammodus</span>
           <details class="modus-info">
             <summary aria-label="Erklärung zum Teammodus">i</summary>
-            <div>Jeder entscheidet sich für ein Team. Alle dürfen buzzern - richtig oder falsch, das Ergebnis zählt fürs ganze Team (Punkt bzw. Punktabzug für alle Mitglieder).</div>
+            <div>Jeder entscheidet sich für ein Team. Alle dürfen buzzern - eine richtige Antwort gibt nur der buzzernden Person Punkte, eine falsche Antwort kostet dagegen das ganze Team einen Punkt.</div>
           </details>
         </span>
         <label class="schalter-zeile">
@@ -585,16 +585,12 @@ async function antwortAbsenden() {
       await updateDoc(api.raumRef(), {
         wiStatus: "aufgeloest", wiAntwortText: text, wiAntwortKorrekt: true, wiPunkteDieserRunde: punkte
       });
-      // v110: Im Teammodus bekommt/verliert das ganze Team die Punkte, nicht nur
-      // die buzzernde Person - der Gesamtstand pro Team ist dabei immer die
-      // Summe der einzelnen Mitgliederpunkte (siehe teamEndstandHtml).
-      if (teammodus && teams[api.spielerId]) {
-        const eigenesTeam = teams[api.spielerId];
-        const mitglieder = spielerListe.filter((s) => teams[s.id] === eigenesTeam);
-        await Promise.all(mitglieder.map((s) => updateDoc(api.spielerRef(s.id), { punkte: increment(punkte) })));
-      } else {
-        await updateDoc(api.spielerRef(), { punkte: increment(punkte) });
-      }
+      // v111: Bei einer richtigen Antwort bekommt NUR die buzzernde Person die
+      // Punkte gutgeschrieben (auch im Teammodus) - der Team-Gesamtstand ergibt
+      // sich weiterhin einfach als Summe der einzelnen Mitgliederpunkte (siehe
+      // teamEndstandHtml/teamGruppeHtml). Nur bei einer FALSCHEN Antwort trifft
+      // der Punktabzug das ganze Team (siehe unten).
+      await updateDoc(api.spielerRef(), { punkte: increment(punkte) });
     } else {
       // v95: Falsch: KEIN Rundenende. Ein Punkt Abzug, der genannte Name bleibt
       // für alle sichtbar in der Fehlversuch-Liste, der Buzzer wird für alle
@@ -656,13 +652,14 @@ function zeigeErgebnis() {
   }
 
   const liste = $("wi-erg-liste");
-  const gewinnerTeam = teammodus && gebuzzertVon ? teams[gebuzzertVon] : null;
 
   // v110: Im Teammodus nach Team gruppiert (Kachel mit Gesamtpunktzahl oben,
   // einzelne Spieler mit eigenen Punkten darunter) statt einer gemeinsamen Liste.
+  // v111: Die Punkte für eine richtige Antwort bekommt nur die buzzernde Person
+  // (nicht mehr das ganze Team) - "hatGewonnen" prüft daher immer nur die id.
   if (teammodus) {
     liste.innerHTML = teamGruppeHtml(spielerListe, teams, (s) => {
-      const hatGewonnen = antwortKorrekt && gewinnerTeam && teams[s.id] === gewinnerTeam;
+      const hatGewonnen = antwortKorrekt && s.id === gebuzzertVon;
       return spielerKarte(
         s.name, s.farbe, s.icon,
         formatiertePunkte(hatGewonnen ? (raum.wiPunkteDieserRunde ?? 0) : 0),
