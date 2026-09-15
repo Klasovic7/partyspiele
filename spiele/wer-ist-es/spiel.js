@@ -303,7 +303,12 @@ export function raumDaten(daten) {
   raum = daten;
   status = daten.wiStatus ?? null;
   reihenfolge = daten.wiReihenfolge ?? [];
-  hinweisReihenfolgen = daten.wiHinweisReihenfolgen ?? [];
+  // v124: Firestore erlaubt keine verschachtelten Arrays - pro Frage wird die
+  // Hinweis-Reihenfolge deshalb als kommagetrennte Zeichenkette abgelegt und
+  // hier wieder in ein Zahlen-Array zurückverwandelt.
+  hinweisReihenfolgen = (daten.wiHinweisReihenfolgen ?? []).map((eintrag) =>
+    typeof eintrag === "string" ? eintrag.split(",").map(Number) : (eintrag ?? [])
+  );
   anzahlFragen = daten.wiAnzahlFragen ?? 0;
   hinweisIndex = daten.wiHinweisIndex ?? 1;
   hinweisSeit = daten.wiHinweisSeit ?? 0;
@@ -467,8 +472,10 @@ async function spielStarten() {
     const neueReihenfolge = mischeIndizes(fragen.map((_, i) => i)).slice(0, anzahl);
     // v117: für jede Frage eine eigene, zufällige Hinweis-Reihenfolge - nicht
     // mehr immer die feste Autoren-Reihenfolge (schwer -> leicht).
+    // Als kommagetrennte Zeichenkette statt verschachteltem Array speichern -
+    // Firestore-Dokumente dürfen kein Array-im-Array enthalten (siehe raumDaten()).
     const neueHinweisReihenfolgen = neueReihenfolge.map((frageIndex) =>
-      mischeIndizes(fragen[frageIndex].hinweise.map((_, i) => i))
+      mischeIndizes(fragen[frageIndex].hinweise.map((_, i) => i)).join(",")
     );
     const neueTeams = teammodus
       ? ergaenzeFehlendeTeams(teams, spielerListe.map((spieler) => spieler.id))

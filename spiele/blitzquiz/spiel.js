@@ -158,6 +158,13 @@ let teams = {};
 let ausgewertetAusgeloest = false;
 let aufdeckFortschreibenLaeuft = false;
 let timerId = null;
+// Merkt sich die eigene Antwort sofort beim Absenden, unabhängig vom
+// Firestore-Listener. Der Mock (und in seltenen Fällen auch das echte
+// Firestore) kann den Raum-Listener neu auslösen, bevor die eigene
+// Antwort in alleAntworten angekommen ist - ohne dieses lokale Gedächtnis
+// würde ein zwischenzeitliches zeigeFrage() den gerade gesetzten
+// "gesperrt/hervorgehoben"-Zustand wieder zurücksetzen.
+let eigeneAntwortenLokal = {};
 
 const $ = (id) => el.wurzel.querySelector("#" + id);
 
@@ -202,6 +209,12 @@ function formatiertePunkte(p) {
 
 function eigeneAntwort(pos) {
   return alleAntworten.find((a) => a.spielerId === api.spielerId && a.fragenIndex === pos);
+}
+
+// Wie eigeneAntwort(), aber fällt auf den lokal-optimistisch gemerkten Wert
+// zurück, solange der Listener die eigene Antwort noch nicht bestätigt hat.
+function eigeneAntwortAnzeige(pos) {
+  return eigeneAntwort(pos) || eigeneAntwortenLokal[pos] || null;
 }
 
 // ============================================================================
@@ -283,7 +296,12 @@ export function raumDaten(daten) {
   raum = daten;
   status = daten.bzStatus ?? null;
   reihenfolge = daten.bzReihenfolge ?? [];
-  buchstabenReihenfolgen = daten.bzBuchstabenReihenfolgen ?? [];
+  // Firestore erlaubt keine verschachtelten Arrays - pro Frage wird die
+  // Buchstaben-Reihenfolge deshalb als kommagetrennte Zeichenkette abgelegt
+  // und hier wieder in ein Zahlen-Array zurückverwandelt.
+  buchstabenReihenfolgen = (daten.bzBuchstabenReihenfolgen ?? []).map((eintrag) =>
+    eintrag ? eintrag.split(",").map(Number) : []
+  );
   anzahlFragen = daten.bzAnzahlFragen ?? 0;
   frageSeit = daten.bzFrageSeit ?? 0;
   aufdeckAnzahl = daten.bzAufdeckAnzahl ?? 0;
@@ -298,6 +316,7 @@ export function raumDaten(daten) {
     $("bz-wort-eingabe").value = "";
     $("bz-wort-fehler").textContent = "";
     ausgewertetAusgeloest = false;
+    eigeneAntwortenLokal = {};
   } else if (status === "ausgewertet") {
     index = neuerIndex;
   }
@@ -433,9 +452,11 @@ async function spielStarten() {
     await raeumeSpieldatenAuf();
     const anzahl = Math.min(gewuenschteAnzahl || fragen.length, fragen.length);
     const neueReihenfolge = mischeIndizes(fragen.map((_, i) => i)).slice(0, anzahl);
+    // Als kommagetrennte Zeichenkette statt verschachteltem Array speichern -
+    // Firestore-Dokumente dürfen kein Array-im-Array enthalten (siehe raumDaten()).
     const neueBuchstabenReihenfolgen = neueReihenfolge.map((frageIndex) => {
       const frage = fragen[frageIndex];
-      return frage.typ === "wort" ? mischeIndizes(buchstabenIndizes(frage.loesung)) : [];
+      return frage.typ === "wort" ? mischeIndizes(buchstabenIndizes(frage.loesung)).join(",") : "";
     });
     const neueTeams = teammodus
       ? ergaenzeFehlendeTeams(teams, spielerListe.map((spieler) => spieler.id))
@@ -479,7 +500,7 @@ function zeigeFrage() {
   $("bz-mc-bereich").hidden = istWort;
   $("bz-wort-bereich").hidden = !istWort;
 
-  const eigene = eigeneAntwort(index);
+  const eigene = eigeneAntwortAnzeige(index);
   if (istWort) {
     rendereBuchstabenReihe(frage, index);
     $("bz-wort-eingabe").disabled = !!eigene;
@@ -561,16 +582,26 @@ async function pruefeAufdeckFortschritt() {
 }
 
 async function antworteMC(antwortIndex) {
-  if (status !== "frage_aktiv" || eigeneAntwort(index)) return;
+  if (status !== "frage_aktiv" || eigeneAntwortAnzeige(index)) return;
   const frage = frageAn(index);
   if (!frage) return;
   const millisekunden = Date.now() - frageSeit;
+  const eintrag = {
+    spielerId: api.spielerId, spielerName: api.spielerName, fragenIndex: index,
+    antwortIndex, millisekunden
+  };
+  // Sofort lokal merken und die Kacheln neu zeichnen, damit die eigene Wahl
+  // ohne Wartezeit auf den Listener hervorgehoben/gesperrt erscheint - siehe
+  // eigeneAntwortenLokal weiter oben.
+  eigeneAntwortenLokal[index] = eintrag;
+  rendereMcGrid(frage, eintrag);
   try {
     await setDoc(doc(api.db, "raeume", api.code, "bzantworten", `${api.spielerId}_${index}`), {
-      spielerId: api.spielerId, spielerName: api.spielerName, fragenIndex: index,
-      antwortIndex, millisekunden, zeitpunkt: serverTimestamp()
+      ...eintrag, zeitpunkt: serverTimestamp()
     });
   } catch (e) {
+    delete eigeneAntwortenLokal[index];
+    rendereMcGrid(frage, eigeneAntwortAnzeige(index));
     zeigeDebug("Fehler beim Absenden der Antwort: " + e.message);
   }
 }
@@ -579,7 +610,7 @@ async function antworteMC(antwortIndex) {
 // einfach nichts gespeichert und man kann sofort nochmal tippen. Nur eine
 // RICHTIGE Lösung landet in "bzantworten" (mit der bis dahin verstrichenen Zeit).
 async function wortAbsenden() {
-  if (status !== "frage_aktiv" || eigeneAntwort(index)) return;
+  if (status !== "frage_aktiv" || eigeneAntwortAnzeige(index)) return;
   const eingabe = $("bz-wort-eingabe").value.trim();
   if (!eingabe) {
     $("bz-wort-fehler").textContent = "Bitte eine Antwort eingeben.";
@@ -594,15 +625,21 @@ async function wortAbsenden() {
   $("bz-wort-fehler").textContent = "";
   $("bz-wort-eingabe").disabled = true;
   $("bz-wort-absenden").disabled = true;
+  $("bz-wort-status-eigenes").hidden = false;
   const millisekunden = Date.now() - frageSeit;
+  const eintrag = { spielerId: api.spielerId, spielerName: api.spielerName, fragenIndex: index, millisekunden };
+  // Wie bei antworteMC: sofort lokal merken, damit ein zwischenzeitlicher
+  // Raum-Listener-Trigger den gerade gesetzten Sperr-Zustand nicht zurücksetzt.
+  eigeneAntwortenLokal[index] = eintrag;
   try {
     await setDoc(doc(api.db, "raeume", api.code, "bzantworten", `${api.spielerId}_${index}`), {
-      spielerId: api.spielerId, spielerName: api.spielerName, fragenIndex: index,
-      millisekunden, zeitpunkt: serverTimestamp()
+      ...eintrag, zeitpunkt: serverTimestamp()
     });
   } catch (e) {
+    delete eigeneAntwortenLokal[index];
     $("bz-wort-eingabe").disabled = false;
     $("bz-wort-absenden").disabled = false;
+    $("bz-wort-status-eigenes").hidden = true;
     zeigeDebug("Fehler beim Absenden der Lösung: " + e.message);
   }
 }
