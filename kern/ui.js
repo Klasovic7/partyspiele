@@ -121,6 +121,30 @@ export function spielerKarte(name, farbe, icon, punkte, optionen = {}) {
   );
 }
 
+// v109: Team-Endstand für Spiele, in denen weiterhin jede Person einzeln Punkte
+// bekommt (Schätzfragen, Wer ist es?) - die Punkte der Teammitglieder werden nur
+// für die Anzeige zusammengezählt, das Punktesystem selbst bleibt unverändert.
+export function teamEndstandHtml(spielerListe, teams) {
+  const summen = { blau: 0, rot: 0 };
+  spielerListe.forEach((s) => {
+    const team = teams?.[s.id];
+    if (team === "blau" || team === "rot") summen[team] += (s.punkte ?? 0);
+  });
+  const gewinner = summen.blau === summen.rot ? null : (summen.blau > summen.rot ? "blau" : "rot");
+  const teamInfo = [
+    { id: "blau", name: "Team Blau", emoji: "🔵" },
+    { id: "rot", name: "Team Rot", emoji: "🔴" }
+  ];
+  return `<div class="zt-team-endstand">` + teamInfo.map((t) => {
+    const mitglieder = spielerListe.filter((s) => teams?.[s.id] === t.id);
+    return `<section class="zt-team zt-team-${t.id}${gewinner === t.id ? " gewinner" : ""}">` +
+      `<h2>${gewinner === t.id ? "🏆 " : ""}${t.emoji} ${t.name}</h2>` +
+      `<strong class="zt-team-punkte">${summen[t.id]}</strong>` +
+      `<p>${mitglieder.map((s) => escapeHtml(s.name)).join(", ") || "Niemand"}</p>` +
+    `</section>`;
+  }).join("") + `</div>`;
+}
+
 // Sichtbare Fehlermeldung - besser als eine stumme Konsole auf dem Handy.
 export function zeigeDebug(text) {
   const el = document.getElementById("debug-log");
