@@ -54,7 +54,7 @@ export const SPIELE = [
     id: "blitzquiz",
     name: "Blitzquiz",
     emoji: "⚡",
-    beschreibung: "Mehrfachauswahl, Schnelligkeit und Buchstaben-Rätsel",
+    beschreibung: "Drei Frage-Typen auf Zeit: Schnelligkeit, Wortrate, Bild-Reveal",
     minSpieler: 1,
     laden: () => import("./blitzquiz/spiel.js")
   }

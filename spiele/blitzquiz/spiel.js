@@ -2,10 +2,9 @@
 //  Blitzquiz
 // ----------------------------------------------------------------------------
 //  Drei verschiedene Frage-Mechaniken, gemischt in einer Runde (jede Frage
-//  trägt in fragen.json ein Feld "typ"):
+//  trägt in fragen.json ein Feld "typ") - ALLE auf Zeit, die schnellste
+//  richtige Antwort bekommt jeweils die meisten Punkte:
 //
-//    "mc"    - Mehrfachauswahl: 4 Antworten, JEDER der richtig liegt bekommt
-//              1 Punkt. Keine Zeitkomponente.
 //    "speed" - Mehrfachauswahl auf Schnelligkeit: unter allen RICHTIGEN
 //              Antworten bekommt die schnellste so viele Punkte wie Mitspieler
 //              mitspielen, die zweitschnellste einen weniger, usw. Falsche
@@ -18,13 +17,19 @@
 //              bis auf den letzten (der bleibt immer verdeckt). Punktevergabe
 //              wie bei "speed": schnellste korrekte Lösung bekommt die
 //              meisten Punkte.
+//    "bild"  - Bild-Reveal: ein Bild startet stark unscharf, alle 10 Sekunden
+//              wird es (für alle gleich) einen Schritt schärfer, bis auf den
+//              letzten Schritt (der bleibt immer leicht unscharf). Wie bei
+//              "wort" wird nur eine bereits richtige Lösung gespeichert -
+//              Punktevergabe genauso: schnellste korrekte Lösung gewinnt.
 //
 //  Alle Felder dieses Spiels im Raum-Dokument beginnen mit "bz". Antworten
 //  liegen (wie bei Schätzfragen) in einer eigenen Unter-Sammlung
 //  "raeume/{code}/bzantworten", damit der Spielleiter live sieht, wer schon
 //  geantwortet hat, ohne dass alle Geräte gleichzeitig ins Raum-Dokument
-//  schreiben müssen. Bei "wort" landet dort NUR eine bereits richtige Lösung -
-//  falsche Versuche bleiben rein lokal (kein Rundenende, einfach nochmal).
+//  schreiben müssen. Bei "wort"/"bild" landet dort NUR eine bereits richtige
+//  Lösung - falsche Versuche bleiben rein lokal (kein Rundenende, einfach
+//  nochmal).
 //
 //  Wie bei den anderen Spielen meldet sich dieses Modul über
 //  starten/raumDaten/spieler/beenden zurück (siehe schaetzfragen/spiel.js).
@@ -38,16 +43,19 @@ import { erstelleTeams, ergaenzeFehlendeTeams } from "../../kern/teams.js";
 
 const AUFDECK_DAUER_MS = 10000;
 const STANDARD_ANZAHL = 10;
+// Unschärfe-Stufen für "bild" (von stark unscharf zu fast scharf) - der letzte
+// Wert bleibt immer stehen, analog zum letzten Buchstaben bei "wort".
+const BILD_BLUR_STUFEN = [22, 16, 11, 7, 4];
 
-const TYP_LABEL = { mc: "Mehrfachauswahl", speed: "Schnelligkeit", wort: "Wortrate" };
+const TYP_LABEL = { speed: "Schnelligkeit", wort: "Wortrate", bild: "Bild-Reveal" };
 
 const VORLAGE = `
   <div id="bz-setup" class="bildschirm-karte" hidden>
     <h1>⚡ Blitzquiz</h1>
-    <p class="hinweis-text">Drei Frage-Typen im Wechsel: normale Mehrfachauswahl,
-      Mehrfachauswahl auf Schnelligkeit und ein Buchstaben-Rätsel. Bei den
-      schnelligkeitsbasierten Fragen bekommt die schnellste richtige Antwort
-      die meisten Punkte.</p>
+    <p class="hinweis-text">Drei Frage-Typen im Wechsel, alle auf Zeit: Mehrfachauswahl
+      auf Schnelligkeit, ein Buchstaben-Rätsel und ein Bild, das sich langsam
+      schärfer zeigt. Überall bekommt die schnellste richtige Antwort die
+      meisten Punkte.</p>
 
     <div id="bz-anzahl-zeile" class="setup-anzahlblock" hidden>
       <div class="setup-anzahl-zeile">
@@ -104,7 +112,8 @@ const VORLAGE = `
     </div>
 
     <div id="bz-wort-bereich" hidden>
-      <div id="bz-buchstaben-reihe" class="bz-buchstaben-reihe"></div>
+      <div id="bz-buchstaben-reihe" class="bz-buchstaben-reihe" hidden></div>
+      <div id="bz-bild-anzeige" class="bz-bild-anzeige" hidden></div>
       <p class="bz-countdown" id="bz-countdown"></p>
       <p class="bz-antwort-zeile">
         <input id="bz-wort-eingabe" type="text" placeholder="Deine Lösung" autocomplete="off">
@@ -122,6 +131,7 @@ const VORLAGE = `
     <p class="kategorie" id="bz-erg-typ"></p>
     <h2 id="bz-erg-frage"></h2>
     <p id="bz-erg-antwort-zeile">Richtige Antwort: <strong id="bz-erg-antwort"></strong></p>
+    <div id="bz-erg-bild" class="bz-bild-anzeige" hidden></div>
     <div id="bz-erg-liste"></div>
     <p><button id="bz-weiter" hidden>Weiter</button></p>
   </div>
@@ -483,9 +493,13 @@ export async function vorZurueck() {
 //  Frage
 // ============================================================================
 function maxAufdeckAnzahl(pos) {
+  const frage = frageAn(pos);
+  if (!frage) return 0;
+  if (frage.typ === "bild") return BILD_BLUR_STUFEN.length - 1;
   const anzahl = (buchstabenReihenfolgen[pos] ?? []).length;
   // Der letzte Buchstabe bleibt immer verdeckt, damit das Rätsel nicht von
-  // allein "fertig aufgedeckt" wird.
+  // allein "fertig aufgedeckt" wird (beim Bild bleibt analog die letzte
+  // Unschärfe-Stufe stehen).
   return Math.max(0, anzahl - 1);
 }
 
@@ -497,12 +511,17 @@ function zeigeFrage() {
   $("bz-frage-text").innerHTML = textMitZusatz(frage.frage);
 
   const istWort = frage.typ === "wort";
-  $("bz-mc-bereich").hidden = istWort;
-  $("bz-wort-bereich").hidden = !istWort;
+  const istBild = frage.typ === "bild";
+  const istTextEingabe = istWort || istBild;
+  $("bz-mc-bereich").hidden = istTextEingabe;
+  $("bz-wort-bereich").hidden = !istTextEingabe;
+  $("bz-buchstaben-reihe").hidden = !istWort;
+  $("bz-bild-anzeige").hidden = !istBild;
 
   const eigene = eigeneAntwortAnzeige(index);
-  if (istWort) {
-    rendereBuchstabenReihe(frage, index);
+  if (istTextEingabe) {
+    if (istWort) rendereBuchstabenReihe(frage, index);
+    else rendereBildAnzeige(frage);
     $("bz-wort-eingabe").disabled = !!eigene;
     $("bz-wort-absenden").disabled = !!eigene;
     $("bz-wort-status-eigenes").hidden = !eigene;
@@ -550,23 +569,45 @@ function rendereBuchstabenReihe(frage, pos) {
   }
 }
 
+// Zeichnet das Bild nur einmal pro Frage neu (nicht bei jedem Aufruf) - sonst
+// würde die CSS-Übergangsanimation der Unschärfe bei jedem Re-Render (z. B.
+// durch den unten beschriebenen Listener-Trigger) neu anspringen bzw. gar
+// nicht sichtbar sein, weil das SVG jedes Mal frisch eingefügt würde.
+function rendereBildAnzeige(frage) {
+  const wrapper = $("bz-bild-anzeige");
+  if (wrapper.dataset.loesung !== frage.loesung) {
+    wrapper.innerHTML = frage.bild;
+    wrapper.dataset.loesung = frage.loesung;
+  }
+  const svg = wrapper.querySelector("svg");
+  if (svg) {
+    const stufe = Math.min(aufdeckAnzahl, BILD_BLUR_STUFEN.length - 1);
+    svg.style.filter = `blur(${BILD_BLUR_STUFEN[stufe]}px)`;
+  }
+}
+
 function aktualisiereCountdown() {
   if (!el.wurzel || status !== "frage_aktiv") return;
   const frage = frageAn(index);
-  if (!frage || frage.typ !== "wort") { $("bz-countdown").textContent = ""; return; }
+  if (!frage || (frage.typ !== "wort" && frage.typ !== "bild")) { $("bz-countdown").textContent = ""; return; }
   const maximal = maxAufdeckAnzahl(index);
-  if (aufdeckAnzahl >= maximal) { $("bz-countdown").textContent = "Kein weiterer Buchstabe mehr"; return; }
+  if (aufdeckAnzahl >= maximal) {
+    $("bz-countdown").textContent = frage.typ === "wort" ? "Kein weiterer Buchstabe mehr" : "Bild bleibt jetzt so";
+    return;
+  }
   const naechsteAufdeckungBei = frageSeit + (aufdeckAnzahl + 1) * AUFDECK_DAUER_MS;
   const rest = Math.max(0, naechsteAufdeckungBei - Date.now());
-  $("bz-countdown").textContent = `Nächster Buchstabe in ${Math.ceil(rest / 1000)}s`;
+  $("bz-countdown").textContent = frage.typ === "wort"
+    ? `Nächster Buchstabe in ${Math.ceil(rest / 1000)}s`
+    : `Bild wird schärfer in ${Math.ceil(rest / 1000)}s`;
 }
 
 // Nur der Spielleiter-Client schreibt das Aufdecken in den Raum - sonst
-// würden mehrere Geräte gleichzeitig denselben nächsten Buchstaben aufdecken.
+// würden mehrere Geräte gleichzeitig denselben nächsten Schritt aufdecken.
 async function pruefeAufdeckFortschritt() {
   if (!api?.istLeiter || status !== "frage_aktiv" || aufdeckFortschreibenLaeuft) return;
   const frage = frageAn(index);
-  if (!frage || frage.typ !== "wort") return;
+  if (!frage || (frage.typ !== "wort" && frage.typ !== "bild")) return;
   const maximal = maxAufdeckAnzahl(index);
   if (aufdeckAnzahl >= maximal) return;
   const gewuenscht = Math.min(maximal, Math.floor((Date.now() - frageSeit) / AUFDECK_DAUER_MS));
@@ -576,7 +617,7 @@ async function pruefeAufdeckFortschritt() {
   try {
     await updateDoc(api.raumRef(), { bzAufdeckAnzahl: gewuenscht });
   } catch (e) {
-    zeigeDebug("Fehler beim Aufdecken des nächsten Buchstabens: " + e.message);
+    zeigeDebug("Fehler beim Aufdecken: " + e.message);
   }
   aufdeckFortschreibenLaeuft = false;
 }
@@ -657,7 +698,7 @@ async function aktualisiereAntworten() {
   if (!frage) return;
   const dieserRunde = alleAntworten.filter((a) => a.fragenIndex === index);
   if (status === "frage_aktiv") {
-    $("bz-frage-status").textContent = frage.typ === "wort"
+    $("bz-frage-status").textContent = (frage.typ === "wort" || frage.typ === "bild")
       ? `${dieserRunde.length} von ${spielerListe.length} haben es schon gelöst`
       : `${dieserRunde.length} von ${spielerListe.length} haben geantwortet`;
 
@@ -676,22 +717,16 @@ async function aktualisiereAntworten() {
 // ============================================================================
 //  Auswertung
 // ============================================================================
-// "mc": jeder mit der richtigen antwortIndex bekommt 1 Punkt.
-// "speed"/"wort": unter den RICHTIGEN Antworten (bei "wort" sind das automatisch
-// alle, da falsche Versuche gar nicht gespeichert werden) bekommt die schnellste
-// so viele Punkte wie Mitspieler mitmachen, jede weitere einen Punkt weniger.
+// "speed": unter den RICHTIGEN Antworten (antwortIndex === frage.richtig)
+// bekommt die schnellste so viele Punkte wie Mitspieler mitmachen, jede
+// weitere einen Punkt weniger. "wort"/"bild": genauso, aber automatisch alle
+// gespeicherten Antworten sind schon richtig, da falsche Versuche gar nicht
+// gespeichert werden (siehe wortAbsenden()).
 function berechneRundenpunkte(pos) {
   const frage = frageAn(pos);
   if (!frage) return {};
   const antworten = alleAntworten.filter((a) => a.fragenIndex === pos);
   const ergebnis = {};
-
-  if (frage.typ === "mc") {
-    antworten.forEach((a) => {
-      if (a.antwortIndex === frage.richtig) ergebnis[a.spielerId] = 1;
-    });
-    return ergebnis;
-  }
 
   const richtige = frage.typ === "speed"
     ? antworten.filter((a) => a.antwortIndex === frage.richtig)
@@ -733,12 +768,10 @@ function zeigeErgebnisListe(pos) {
   const kartenFuerSpieler = (s) => {
     const antwort = dieserRunde.find((a) => a.spielerId === s.id);
     let extra;
-    if (frage.typ === "mc") {
-      extra = antwort ? (antwort.antwortIndex === frage.richtig ? "richtig" : "falsch") : "nicht geantwortet";
-    } else if (antwort) {
+    if (antwort) {
       extra = zeitText(antwort.millisekunden);
     } else {
-      extra = frage.typ === "wort" ? "nicht gelöst" : "nicht geantwortet";
+      extra = (frage.typ === "wort" || frage.typ === "bild") ? "nicht gelöst" : "nicht geantwortet";
     }
     return spielerKarte(
       s.name, s.farbe, s.icon,
@@ -768,13 +801,13 @@ function zeigeErgebnis() {
   if (!frage) return;
   $("bz-erg-typ").textContent = TYP_LABEL[frage.typ] ?? "";
   $("bz-erg-frage").innerHTML = textMitZusatz(frage.frage);
-  if (frage.typ === "wort") {
-    $("bz-erg-antwort-zeile").hidden = false;
-    $("bz-erg-antwort").textContent = frage.loesung.toUpperCase();
-  } else {
-    $("bz-erg-antwort-zeile").hidden = false;
-    $("bz-erg-antwort").textContent = frage.antworten[frage.richtig];
-  }
+  $("bz-erg-antwort-zeile").hidden = false;
+  $("bz-erg-antwort").textContent = (frage.typ === "wort" || frage.typ === "bild")
+    ? frage.loesung.toUpperCase()
+    : frage.antworten[frage.richtig];
+  const bildEl = $("bz-erg-bild");
+  bildEl.hidden = frage.typ !== "bild";
+  if (frage.typ === "bild") bildEl.innerHTML = frage.bild;
   zeigeErgebnisListe(index);
   $("bz-weiter").hidden = !api.istLeiter;
   $("bz-weiter").textContent = index + 1 >= anzahlFragen ? "Endstand anzeigen" : "Nächste Frage";
@@ -821,12 +854,6 @@ export function _berechneRundenpunkteFuerTest(frage, antworten, spielerAnzahl) {
   // ohne die Modul-internen Variablen (fragen/reihenfolge/alleAntworten/
   // spielerListe) - so lässt sie sich isoliert mit erfundenen Daten prüfen.
   const ergebnis = {};
-  if (frage.typ === "mc") {
-    antworten.forEach((a) => {
-      if (a.antwortIndex === frage.richtig) ergebnis[a.spielerId] = 1;
-    });
-    return ergebnis;
-  }
   const richtige = frage.typ === "speed"
     ? antworten.filter((a) => a.antwortIndex === frage.richtig)
     : antworten;

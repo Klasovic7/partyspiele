@@ -1791,3 +1791,13 @@
     .bz-countdown { color: var(--club-muted); font-size: 0.85rem; margin: 0 0 14px; }
     .bz-antwort-zeile { display: flex; gap: 8px; }
     .bz-antwort-zeile input { flex: 1; }
+    .bz-bild-anzeige {
+      display: flex; justify-content: center; align-items: center;
+      margin: 10px 0 18px;
+    }
+    .bz-bild-anzeige svg {
+      width: min(200px, 55vw); height: min(200px, 55vw);
+      color: var(--club-orange);
+      transform: scale(1.18);
+      transition: filter .6s ease;
+    }
