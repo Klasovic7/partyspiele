@@ -1,16 +1,4 @@
-export function mischeListe(werte, zufall = Math.random) {
-  const gemischt = [...werte];
-  for (let i = gemischt.length - 1; i > 0; i--) {
-    const j = Math.floor(zufall() * (i + 1));
-    [gemischt[i], gemischt[j]] = [gemischt[j], gemischt[i]];
-  }
-  return gemischt;
-}
-
-export function erstelleTeams(spielerIds, zufall = Math.random) {
-  const gemischt = mischeListe(spielerIds, zufall);
-  return Object.fromEntries(gemischt.map((id, index) => [id, index % 2 === 0 ? "blau" : "rot"]));
-}
+export { mischeListe, erstelleTeams, ergaenzeFehlendeTeams } from "../../kern/teams.js";
 
 export function bereinigeTreffer(treffer, anzahl = 10) {
   return [...new Set((treffer || []).filter((wert) =>
