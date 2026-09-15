@@ -108,7 +108,6 @@ const VORLAGE = `
 
   <div id="sf-dummkopf-screen" class="bildschirm-karte" hidden>
     <p class="kategorie" id="sf-dk-kategorie"></p>
-    <p class="fortschritt" id="sf-dk-fortschritt"></p>
     <h2>Wer liegt am weitesten daneben?</h2>
     <p class="hinweis-text">Tippe auf einen Mitspieler. Liegt er bei dieser Frage am weitesten
       daneben, bekommst du einen Extrapunkt.</p>
@@ -118,7 +117,6 @@ const VORLAGE = `
 
   <div id="sf-frage-screen" class="bildschirm-karte" hidden>
     <p class="kategorie" id="sf-frage-kategorie"></p>
-    <p class="fortschritt" id="sf-frage-fortschritt"></p>
     <h2 id="sf-frage-text"></h2>
     <p>
       <input id="sf-schaetzung" type="number" step="any" inputmode="decimal" placeholder="Deine Schätzung">
@@ -131,7 +129,6 @@ const VORLAGE = `
 
   <div id="sf-ergebnis-screen" class="bildschirm-karte" hidden>
     <p class="kategorie" id="sf-erg-kategorie"></p>
-    <p class="fortschritt" id="sf-erg-fortschritt"></p>
     <h2 id="sf-erg-frage"></h2>
     <p>Richtige Antwort: <strong id="sf-erg-antwort"></strong></p>
     <div id="sf-erg-liste"></div>
@@ -315,6 +312,14 @@ export function raumDaten(daten) {
   } else if (status === "ausgewertet") {
     index = neuerIndex;
   }
+
+  // v112: "Frage X von Y" steht jetzt oben im Spielkopf statt auf jedem
+  // einzelnen Bildschirm separat (siehe api.fortschritt).
+  api.fortschritt(
+    status === "dummkopf_wahl" || status === "frage_aktiv" || status === "ausgewertet"
+      ? `${index + 1}/${anzahlFragen}`
+      : ""
+  );
 
   alleVerstecken();
   if (status === "setup" || !status) {
@@ -641,7 +646,6 @@ function zeigeDummkopfWahl(pos) {
   if (pos < 0 || !el.wurzel) return;
   const frage = frageAn(pos);
   if (frage) $("sf-dk-kategorie").textContent = kategorieName(frage.kategorie);
-  $("sf-dk-fortschritt").textContent = `Frage ${pos + 1} von ${anzahlFragen}`;
 
   const eigenerTipp = eigenerDummkopfTipp(pos);
   const liste = $("sf-dk-liste");
@@ -677,7 +681,6 @@ function zeigeFrage(pos) {
   const frage = frageAn(pos);
   if (!frage) return;
   $("sf-frage-kategorie").textContent = kategorieName(frage.kategorie);
-  $("sf-frage-fortschritt").textContent = `Frage ${pos + 1} von ${anzahlFragen}`;
   $("sf-frage-text").innerHTML = textMitZusatz(frage.frage);
 }
 
@@ -890,7 +893,6 @@ function zeigeErgebnis(pos) {
   const frage = frageAn(pos);
   if (!frage) return;
   $("sf-erg-kategorie").textContent = kategorieName(frage.kategorie);
-  $("sf-erg-fortschritt").textContent = `Frage ${pos + 1} von ${anzahlFragen}`;
   $("sf-erg-frage").innerHTML = textMitZusatz(frage.frage);
   $("sf-erg-antwort").textContent = frage.antwort;
   zeigeErgebnisListe(pos);
