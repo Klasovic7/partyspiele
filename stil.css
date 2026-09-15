@@ -426,10 +426,6 @@
 
     /* ---------- Denk gleich! ---------- */
     #dg-antwort { width: 100%; }
-    .dg-regel {
-      margin: 10px 0 18px; padding: 10px 12px; border-radius: 12px;
-      background: #f6f4fb; color: var(--text-hell); font-size: 0.82rem; line-height: 1.35;
-    }
 
     /* ---------- 10 Treffer! ---------- */
     .zt-regel {
@@ -536,10 +532,6 @@
     }
 
     /* ---------- Reih dich ein! ---------- */
-    .rd-regel {
-      padding: 14px; border-radius: 16px; color: var(--text-hell); background: #f6f4fb;
-      font-size: 0.9rem; line-height: 1.4;
-    }
     .rd-kategorie-kopf {
       margin: 10px 0 14px; padding: 16px; border: 2px solid #ddd6fe; border-radius: 18px;
       background: linear-gradient(145deg, #faf8ff, #f1edff);
@@ -1052,7 +1044,7 @@
       line-height: .98; letter-spacing: -.02em;
     }
     #spiel-wurzel .bildschirm-karte > h1 { margin-top: 8px; }
-    .kategorie-kachel, .zt-rater-ansicht, .dg-regel, .zt-regel, .rd-regel {
+    .kategorie-kachel, .zt-rater-ansicht, .zt-regel {
       background: var(--flaeche-klar); border: 1px solid var(--linie);
     }
     .rd-kategorie-kopf {
@@ -1389,14 +1381,14 @@
     #spiel-wurzel .hinweis-text, #spiel-wurzel .fortschritt,
     #spiel-wurzel .schalter-hinweis { color: var(--club-muted); }
     #spiel-wurzel hr { border-color: rgba(255, 130, 101, .28); }
-    .dg-regel, .zt-regel, .rd-regel,
+    .zt-regel,
     .zt-rater-ansicht, .rd-kategorie-kopf, .rd-kandidat {
       color: #2a1c2d;
       background: linear-gradient(145deg, #fffdf7, #fff5e9);
       border: 1px solid rgba(255, 91, 54, .58);
       box-shadow: 0 8px 18px rgba(0, 0, 0, .19);
     }
-    .dg-regel, .zt-regel, .rd-regel,
+    .zt-regel,
     .rd-kategorie-kopf p { color: #6f6672; }
     #spiel-wurzel .rd-kategorie-kopf h1, .rd-kandidat strong { color: #2d1735; }
     .rd-kategorie-kopf strong { color: #7b2eea; background: #f1e8ff; }
