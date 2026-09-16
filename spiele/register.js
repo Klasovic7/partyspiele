@@ -14,6 +14,7 @@ export const SPIELE = [
     id: "schaetzfragen",
     name: "Schätzfragen",
     emoji: "🎯",
+    farbe: "#ff6b5c",
     beschreibung: "Wer tippt am nächsten dran?",
     minSpieler: 1,
     laden: () => import("./schaetzfragen/spiel.js")
@@ -22,6 +23,7 @@ export const SPIELE = [
     id: "denk-gleich",
     name: "Denk gleich!",
     emoji: "🧠",
+    farbe: "#818cf8",
     beschreibung: "Gleiche Antwort, gleiche Punkte!",
     minSpieler: 2,
     laden: () => import("./denk-gleich/spiel.js")
@@ -30,6 +32,7 @@ export const SPIELE = [
     id: "zehn-treffer",
     name: "10 Treffer!",
     emoji: "💥",
+    farbe: "#ffa94d",
     beschreibung: "Ein Begriff, zehn gesuchte Treffer!",
     minSpieler: 2,
     laden: () => import("./zehn-treffer/spiel.js")
@@ -38,6 +41,7 @@ export const SPIELE = [
     id: "reih-dich-ein",
     name: "Reih dich ein!",
     emoji: "↕️",
+    farbe: "#2dd4bf",
     beschreibung: "Setz den Begriff an die richtige Stelle!",
     minSpieler: 2,
     laden: () => import("./reih-dich-ein/spiel.js")
@@ -46,6 +50,7 @@ export const SPIELE = [
     id: "wer-ist-es",
     name: "Wer ist es?",
     emoji: "🕵️",
+    farbe: "#4ade80",
     beschreibung: "Buzzere zuerst und errate den Fußballer",
     minSpieler: 2,
     laden: () => import("./wer-ist-es/spiel.js")
@@ -54,6 +59,7 @@ export const SPIELE = [
     id: "blitzquiz",
     name: "Blitzquiz",
     emoji: "⚡",
+    farbe: "#fbbf24",
     beschreibung: "Drei Frage-Typen auf Zeit: Schnelligkeit, Wortrate, Bild-Reveal",
     minSpieler: 1,
     laden: () => import("./blitzquiz/spiel.js")

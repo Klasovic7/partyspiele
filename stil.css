@@ -1219,6 +1219,15 @@
       --club-glow: linear-gradient(135deg, #3d2544 0%, #251728 32%, #18101d 62%, #120d17 100%);
     }
 
+    /* v137: --club-glow je aktivem Spiel eingefaerbt statt immer Lila -
+       gleiche Verlaufsstruktur, nur die erste Farbe wechselt (Vorschlag B). */
+    body[data-spiel="schaetzfragen"]  { --club-glow: linear-gradient(135deg, color-mix(in srgb, #ff6b5c 32%, #3d2544) 0%, #251728 32%, #18101d 62%, #120d17 100%); }
+    body[data-spiel="denk-gleich"]    { --club-glow: linear-gradient(135deg, color-mix(in srgb, #818cf8 32%, #3d2544) 0%, #251728 32%, #18101d 62%, #120d17 100%); }
+    body[data-spiel="zehn-treffer"]   { --club-glow: linear-gradient(135deg, color-mix(in srgb, #ffa94d 32%, #3d2544) 0%, #251728 32%, #18101d 62%, #120d17 100%); }
+    body[data-spiel="reih-dich-ein"] { --club-glow: linear-gradient(135deg, color-mix(in srgb, #2dd4bf 32%, #3d2544) 0%, #251728 32%, #18101d 62%, #120d17 100%); }
+    body[data-spiel="wer-ist-es"]     { --club-glow: linear-gradient(135deg, color-mix(in srgb, #4ade80 32%, #3d2544) 0%, #251728 32%, #18101d 62%, #120d17 100%); }
+    body[data-spiel="blitzquiz"]      { --club-glow: linear-gradient(135deg, color-mix(in srgb, #fbbf24 32%, #3d2544) 0%, #251728 32%, #18101d 62%, #120d17 100%); }
+
     html { background: var(--app-hintergrund); }
     body {
       color: var(--club-text);
@@ -1372,13 +1381,16 @@
       box-shadow: 0 0 0 1px var(--club-ivory), 0 6px 15px rgba(0, 0, 0, .36);
     }
     .spiel-kachel {
+      /* v137: Kachelfarbe je Spiel (--spiel-farbe, von app.js gesetzt) - als
+         Mischung eingeblendet statt voller Deckkraft, Fallback bleibt Orange. */
+      --sf: var(--spiel-farbe, #ff5b36);
       color: #23182a;
-      background: linear-gradient(155deg, #fffdf7, #fff7eb);
-      border: 1.5px solid rgba(255, 91, 54, .85);
+      background: linear-gradient(155deg, color-mix(in srgb, var(--sf) 20%, #fffdf7), color-mix(in srgb, var(--sf) 13%, #fff7eb));
+      border: 1.5px solid color-mix(in srgb, var(--sf) 70%, transparent);
       box-shadow: 0 8px 18px rgba(0, 0, 0, .2);
     }
-    .spiel-kachel:hover { color: #23182a; background: #fff3e5; border-color: #ff3f24; }
-    .spiel-kachel.passiv:hover { background: #fffaf1; border-color: rgba(255, 91, 54, .48); }
+    .spiel-kachel:hover { color: #23182a; background: color-mix(in srgb, var(--sf) 27%, #fff3e5); border-color: var(--sf); }
+    .spiel-kachel.passiv:hover { background: color-mix(in srgb, var(--sf) 12%, #fffaf1); border-color: color-mix(in srgb, var(--sf) 60%, transparent); }
     .spiel-name { color: #32163b; }
     .spiel-beschreibung { color: #6f6672; }
 

@@ -9,7 +9,7 @@ import {
 } from "./kern/ui.js";
 import { SPIELE, spielInfo } from "./spiele/register.js";
 
-export const APP_VERSION = "v136";
+export const APP_VERSION = "v137";
 const appVersion = document.getElementById("app-version");
 appVersion.textContent = "Version " + APP_VERSION;
 
@@ -433,6 +433,7 @@ function renderSpieleAuswahl() {
     const zuWenige = zustand.spieler.length < spiel.minSpieler;
     const klickbar = zustand.istLeiter && !zuWenige && !spiel.kommtBald;
     div.className = "spiel-kachel" + (klickbar ? "" : " passiv") + (spiel.kommtBald ? " kommt-bald" : "");
+    if (spiel.farbe) div.style.setProperty("--spiel-farbe", spiel.farbe);
     div.innerHTML =
       `<span class="spiel-emoji">${spiel.emoji}</span>` +
       `<span class="spiel-name">${escapeHtml(spiel.name)}</span>` +
@@ -518,6 +519,10 @@ function entladeSpiel() {
 function aktualisiereRaumNavigation(spielId) {
   const imSpiel = Boolean(spielId);
   const info = imSpiel ? spielInfo(spielId) : null;
+  // v137: der diagonale Verlauf im Hintergrund faerbt sich je aktivem Spiel um
+  // (statt immer Lila) - siehe body[data-spiel] in stil.css.
+  if (imSpiel) document.body.dataset.spiel = spielId;
+  else delete document.body.dataset.spiel;
   topBar.classList.toggle("im-spiel", imSpiel);
   btnVerlassen.textContent = imSpiel ? "←  Spielauswahl" : "Raum verlassen";
   btnVerlassen.disabled = false;
