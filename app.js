@@ -9,7 +9,7 @@ import {
 } from "./kern/ui.js";
 import { SPIELE, spielInfo } from "./spiele/register.js";
 
-export const APP_VERSION = "v141";
+export const APP_VERSION = "v142";
 const appVersion = document.getElementById("app-version");
 appVersion.textContent = "Version " + APP_VERSION;
 
@@ -382,11 +382,32 @@ async function bestaetigeProfilAuswahl() {
     zustand.icon = profilEntwurf.icon;
     zustand.profilBestaetigt = true;
     sitzungSpeichern();
+
+    // v142: Die Aenderung kam per Transaktion herein, die - anders als setDoc/
+    // updateDoc - keine optimistische lokale Aktualisierung auslöst. Der
+    // Realtime-Listener fuer die Spieler-Sammlung bekommt die neue Farbe/das
+    // Bild deshalb erst nach einem Server-Roundtrip mit, was kurz nach dem
+    // Bestaetigen zu einem "?"-Platzhalter-Avatar in der Lobby fuehren konnte
+    // (und, falls der Listener genau in diesem Moment noch auf den - da noch
+    // verstecktem - Lobby-Screen traf, sogar dauerhaft, weil kein weiteres
+    // Rendern mehr ausgeloest wurde). Deshalb hier den eigenen Eintrag sofort
+    // lokal nachziehen und in jedem Fall aktiv neu rendern, statt nur die
+    // Lobby einzublenden.
+    const eigenerEintrag = zustand.spieler.find((s) => s.id === spielerId);
+    if (eigenerEintrag) {
+      eigenerEintrag.farbe = profilEntwurf.farbe;
+      eigenerEintrag.icon = profilEntwurf.icon;
+    }
+
     profilScreen.hidden = true;
     document.body.classList.remove("profil-offen");
     topBar.hidden = false;
-    if (zustand.raum) reagiereAufRaum(zustand.raum);
-    else lobbyScreen.hidden = false;
+    if (zustand.raum) {
+      reagiereAufRaum(zustand.raum);
+    } else {
+      lobbyScreen.hidden = false;
+      renderLobby();
+    }
   } catch (e) {
     if (e.message === "FARBE_VERGEBEN" || e.message === "ICON_VERGEBEN") {
       avatarHinweis.textContent = e.message === "FARBE_VERGEBEN"
