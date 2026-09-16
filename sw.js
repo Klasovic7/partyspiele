@@ -4,7 +4,7 @@
 // Nur dann wirft der Browser den alten Zwischenspeicher weg und alle Spieler
 // bekommen zuverlässig die neue Version. Das ist der einzige Handgriff, den man
 // nach dem Bearbeiten von Dateien nicht vergessen darf.
-const CACHE_NAME = "partyspiele-v133";
+const CACHE_NAME = "partyspiele-v134";
 
 const DATEIEN = [
   "./",
@@ -38,6 +38,48 @@ const DATEIEN = [
   "spiele/blitzquiz/bilder/kerze.jpg",
   "spiele/blitzquiz/bilder/glocke.png",
   "spiele/blitzquiz/bilder/pizza.jpg",
+  "spiele/blitzquiz/bilder/schere.jpg",
+  "spiele/blitzquiz/bilder/hammer.jpg",
+  "spiele/blitzquiz/bilder/leiter.jpg",
+  "spiele/blitzquiz/bilder/gitarre.jpg",
+  "spiele/blitzquiz/bilder/trompete.jpg",
+  "spiele/blitzquiz/bilder/fahrrad.jpg",
+  "spiele/blitzquiz/bilder/zahnbuerste.jpg",
+  "spiele/blitzquiz/bilder/hufeisen.jpg",
+  "spiele/blitzquiz/bilder/kompass.jpg",
+  "spiele/blitzquiz/bilder/schluessel.jpg",
+  "spiele/blitzquiz/bilder/zange.jpg",
+  "spiele/blitzquiz/bilder/kaktus.jpg",
+  "spiele/blitzquiz/bilder/weinglas.jpg",
+  "spiele/blitzquiz/bilder/igel.jpg",
+  "spiele/blitzquiz/bilder/schmetterling.jpg",
+  "spiele/blitzquiz/bilder/pinguin.jpg",
+  "spiele/blitzquiz/bilder/flamingo.jpg",
+  "spiele/blitzquiz/bilder/elefant.jpg",
+  "spiele/blitzquiz/bilder/zitrone.jpg",
+  "spiele/blitzquiz/bilder/erdbeere.jpg",
+  "spiele/blitzquiz/bilder/avocado.jpg",
+  "spiele/blitzquiz/bilder/brokkoli.jpg",
+  "spiele/blitzquiz/bilder/pilz.jpg",
+  "spiele/blitzquiz/bilder/tomate.jpg",
+  "spiele/blitzquiz/bilder/wuerfel.jpg",
+  "spiele/blitzquiz/bilder/trommel.jpg",
+  "spiele/blitzquiz/bilder/geige.jpg",
+  "spiele/blitzquiz/bilder/saxophon.jpg",
+  "spiele/blitzquiz/bilder/kamera.jpg",
+  "spiele/blitzquiz/bilder/fernglas.jpg",
+  "spiele/blitzquiz/bilder/globus.jpg",
+  "spiele/blitzquiz/bilder/zahnrad.jpg",
+  "spiele/blitzquiz/bilder/magnet.jpg",
+  "spiele/blitzquiz/bilder/laterne.jpg",
+  "spiele/blitzquiz/bilder/sanduhr.jpg",
+  "spiele/blitzquiz/bilder/krone.jpg",
+  "spiele/blitzquiz/bilder/muschel.jpg",
+  "spiele/blitzquiz/bilder/seestern.jpg",
+  "spiele/blitzquiz/bilder/qualle.jpg",
+  "spiele/blitzquiz/bilder/kuerbis.jpg",
+  "spiele/blitzquiz/bilder/giraffe.jpg",
+  "spiele/blitzquiz/bilder/auto.jpg",
   "bilder/icon-192.png",
   "bilder/icon-512.png",
   "bilder/icon-512-maskable.png",
@@ -47,10 +89,10 @@ const DATEIEN = [
   "bilder/icon-raum-verlassen.svg",
   "bilder/avatar1-hd.jpg?v=38", "bilder/avatar2-hd.jpg?v=38", "bilder/avatar3-hd.jpg?v=38", "bilder/avatar4-hd.jpg?v=38",
   "bilder/avatar5-hd.jpg?v=38", "bilder/avatar6-hd.jpg?v=38", "bilder/avatar7-hd.jpg?v=38", "bilder/avatar8-hd.jpg?v=38",
-  "bilder/freund-rapper-kevin.jpg?v=133", "bilder/freund-zocker-luca.jpg?v=133", "bilder/freund-bettler-nader.jpg?v=133",
-  "bilder/freund-eintracht-sinan.jpg?v=133", "bilder/freund-boxer-kevin.jpg?v=133", "bilder/freund-gay-luca.jpg?v=133",
-  "bilder/freund-diktator-nader.jpg?v=133", "bilder/freund-rambo-sinan.jpg?v=133", "bilder/freund-meerjungfrau-kevin.jpg?v=133",
-  "bilder/freund-baywatch-luca.jpg?v=133", "bilder/freund-baby-nader.jpg?v=133", "bilder/freund-leoparden-sinan.jpg?v=133"
+  "bilder/freund-rapper-kevin.jpg?v=134", "bilder/freund-zocker-luca.jpg?v=134", "bilder/freund-bettler-nader.jpg?v=134",
+  "bilder/freund-eintracht-sinan.jpg?v=134", "bilder/freund-boxer-kevin.jpg?v=134", "bilder/freund-gay-luca.jpg?v=134",
+  "bilder/freund-diktator-nader.jpg?v=134", "bilder/freund-rambo-sinan.jpg?v=134", "bilder/freund-meerjungfrau-kevin.jpg?v=134",
+  "bilder/freund-baywatch-luca.jpg?v=134", "bilder/freund-baby-nader.jpg?v=134", "bilder/freund-leoparden-sinan.jpg?v=134"
 ];
 
 self.addEventListener("install", (event) => {

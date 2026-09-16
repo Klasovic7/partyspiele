@@ -218,5 +218,885 @@
     "frage": "Was zeigt dieses Bild?",
     "loesung": "PIZZA",
     "bild": "bilder/pizza.jpg"
+  },
+  {
+    "typ": "speed",
+    "frage": "Wie viele Kontinente gibt es?",
+    "antworten": [
+      "5",
+      "6",
+      "7",
+      "8"
+    ],
+    "richtig": 2
+  },
+  {
+    "typ": "speed",
+    "frage": "In welchem Land steht die Freiheitsstatue?",
+    "antworten": [
+      "USA",
+      "Frankreich",
+      "Kanada",
+      "Großbritannien"
+    ],
+    "richtig": 0
+  },
+  {
+    "typ": "speed",
+    "frage": "Wie viele Saiten hat eine klassische Gitarre?",
+    "antworten": [
+      "4",
+      "5",
+      "6",
+      "7"
+    ],
+    "richtig": 2
+  },
+  {
+    "typ": "speed",
+    "frage": "Welches ist das größte Land der Welt (Fläche)?",
+    "antworten": [
+      "Kanada",
+      "China",
+      "USA",
+      "Russland"
+    ],
+    "richtig": 3
+  },
+  {
+    "typ": "speed",
+    "frage": "Wie viele Planeten hat unser Sonnensystem?",
+    "antworten": [
+      "7",
+      "8",
+      "9",
+      "10"
+    ],
+    "richtig": 1
+  },
+  {
+    "typ": "speed",
+    "frage": "In welchem Jahr begann der Zweite Weltkrieg?",
+    "antworten": [
+      "1937",
+      "1938",
+      "1939",
+      "1940"
+    ],
+    "richtig": 2
+  },
+  {
+    "typ": "speed",
+    "frage": "Wie viele Zähne hat ein erwachsener Mensch normalerweise?",
+    "antworten": [
+      "28",
+      "30",
+      "32",
+      "34"
+    ],
+    "richtig": 2
+  },
+  {
+    "typ": "speed",
+    "frage": "Welches Gas macht den größten Anteil unserer Atmosphäre aus?",
+    "antworten": [
+      "Sauerstoff",
+      "Stickstoff",
+      "Kohlendioxid",
+      "Argon"
+    ],
+    "richtig": 1
+  },
+  {
+    "typ": "speed",
+    "frage": "Wie viele Ringe hat die olympische Flagge?",
+    "antworten": [
+      "4",
+      "5",
+      "6",
+      "7"
+    ],
+    "richtig": 1
+  },
+  {
+    "typ": "speed",
+    "frage": "In welcher Stadt steht der Eiffelturm?",
+    "antworten": [
+      "London",
+      "Paris",
+      "Rom",
+      "Berlin"
+    ],
+    "richtig": 1
+  },
+  {
+    "typ": "speed",
+    "frage": "Wie viele Bundesländer hat Deutschland?",
+    "antworten": [
+      "14",
+      "15",
+      "16",
+      "17"
+    ],
+    "richtig": 2
+  },
+  {
+    "typ": "speed",
+    "frage": "Welches Tier ist das schnellste Landtier?",
+    "antworten": [
+      "Löwe",
+      "Gepard",
+      "Antilope",
+      "Pferd"
+    ],
+    "richtig": 1
+  },
+  {
+    "typ": "speed",
+    "frage": "Wie viele Minuten dauert eine Fußball-Halbzeit normalerweise?",
+    "antworten": [
+      "40",
+      "45",
+      "50",
+      "60"
+    ],
+    "richtig": 1
+  },
+  {
+    "typ": "speed",
+    "frage": "In welchem Ozean liegen die Bermudas?",
+    "antworten": [
+      "Atlantik",
+      "Pazifik",
+      "Indischer Ozean",
+      "Arktis"
+    ],
+    "richtig": 0
+  },
+  {
+    "typ": "speed",
+    "frage": "Wie viele Farben hat ein Regenbogen klassischerweise?",
+    "antworten": [
+      "5",
+      "6",
+      "7",
+      "8"
+    ],
+    "richtig": 2
+  },
+  {
+    "typ": "speed",
+    "frage": "Welches Metall ist bei Zimmertemperatur flüssig?",
+    "antworten": [
+      "Blei",
+      "Quecksilber",
+      "Zink",
+      "Eisen"
+    ],
+    "richtig": 1
+  },
+  {
+    "typ": "speed",
+    "frage": "Wie viele Spieler stehen bei einem Basketballteam gleichzeitig auf dem Feld?",
+    "antworten": [
+      "4",
+      "5",
+      "6",
+      "7"
+    ],
+    "richtig": 1
+  },
+  {
+    "typ": "speed",
+    "frage": "In welchem Land wurde Pizza erfunden?",
+    "antworten": [
+      "Frankreich",
+      "Griechenland",
+      "Italien",
+      "Spanien"
+    ],
+    "richtig": 2
+  },
+  {
+    "typ": "speed",
+    "frage": "Wie viele Stunden hat ein Tag?",
+    "antworten": [
+      "12",
+      "20",
+      "24",
+      "26"
+    ],
+    "richtig": 2
+  },
+  {
+    "typ": "speed",
+    "frage": "Welcher Planet ist der Sonne am nächsten?",
+    "antworten": [
+      "Venus",
+      "Merkur",
+      "Erde",
+      "Mars"
+    ],
+    "richtig": 1
+  },
+  {
+    "typ": "speed",
+    "frage": "Wie viele Buchstaben hat das klassische deutsche Alphabet ohne Umlaute?",
+    "antworten": [
+      "24",
+      "26",
+      "28",
+      "30"
+    ],
+    "richtig": 1
+  },
+  {
+    "typ": "speed",
+    "frage": "Welches ist das größte Meerestier?",
+    "antworten": [
+      "Blauwal",
+      "Weißer Hai",
+      "Riesenkrake",
+      "Walhai"
+    ],
+    "richtig": 0
+  },
+  {
+    "typ": "speed",
+    "frage": "Wie viele Spieler hat eine Volleyballmannschaft auf dem Feld?",
+    "antworten": [
+      "5",
+      "6",
+      "7",
+      "8"
+    ],
+    "richtig": 1
+  },
+  {
+    "typ": "speed",
+    "frage": "In welcher Stadt fand das erste moderne Olympia statt?",
+    "antworten": [
+      "Paris",
+      "Athen",
+      "London",
+      "Rom"
+    ],
+    "richtig": 1
+  },
+  {
+    "typ": "speed",
+    "frage": "Welches Organ produziert Insulin?",
+    "antworten": [
+      "Leber",
+      "Niere",
+      "Bauchspeicheldrüse",
+      "Magen"
+    ],
+    "richtig": 2
+  },
+  {
+    "typ": "speed",
+    "frage": "Wie viele Karten hat ein normales Skatblatt?",
+    "antworten": [
+      "32",
+      "36",
+      "52",
+      "54"
+    ],
+    "richtig": 0
+  },
+  {
+    "typ": "speed",
+    "frage": "In welchem Land steht Machu Picchu?",
+    "antworten": [
+      "Chile",
+      "Peru",
+      "Bolivien",
+      "Ecuador"
+    ],
+    "richtig": 1
+  },
+  {
+    "typ": "speed",
+    "frage": "Wie viele Beine hat eine Spinne?",
+    "antworten": [
+      "6",
+      "8",
+      "10",
+      "12"
+    ],
+    "richtig": 1
+  },
+  {
+    "typ": "speed",
+    "frage": "Welches Land hat aktuell die meisten Einwohner?",
+    "antworten": [
+      "China",
+      "Indien",
+      "USA",
+      "Indonesien"
+    ],
+    "richtig": 1
+  },
+  {
+    "typ": "speed",
+    "frage": "Wie viele Minuten hat eine Stunde?",
+    "antworten": [
+      "30",
+      "45",
+      "60",
+      "90"
+    ],
+    "richtig": 2
+  },
+  {
+    "typ": "speed",
+    "frage": "In welchem Land liegt Bali?",
+    "antworten": [
+      "Thailand",
+      "Indonesien",
+      "Malaysia",
+      "Philippinen"
+    ],
+    "richtig": 1
+  },
+  {
+    "typ": "speed",
+    "frage": "Wie viele Symphonien komponierte Beethoven?",
+    "antworten": [
+      "7",
+      "8",
+      "9",
+      "10"
+    ],
+    "richtig": 2
+  },
+  {
+    "typ": "speed",
+    "frage": "Welches ist das kleinste Land der Welt?",
+    "antworten": [
+      "Monaco",
+      "Vatikanstadt",
+      "San Marino",
+      "Liechtenstein"
+    ],
+    "richtig": 1
+  },
+  {
+    "typ": "speed",
+    "frage": "Wie viele Zeitzonen gibt es weltweit ungefähr?",
+    "antworten": [
+      "12",
+      "18",
+      "24",
+      "30"
+    ],
+    "richtig": 2
+  },
+  {
+    "typ": "speed",
+    "frage": "In welchem Land befindet sich der Ayers Rock?",
+    "antworten": [
+      "Neuseeland",
+      "Australien",
+      "Südafrika",
+      "USA"
+    ],
+    "richtig": 1
+  },
+  {
+    "typ": "speed",
+    "frage": "Wie viele Herzen hat ein Regenwurm?",
+    "antworten": [
+      "1",
+      "3",
+      "5",
+      "7"
+    ],
+    "richtig": 2
+  },
+  {
+    "typ": "speed",
+    "frage": "Welcher Fluss fließt durch Ägypten?",
+    "antworten": [
+      "Nil",
+      "Kongo",
+      "Niger",
+      "Sambesi"
+    ],
+    "richtig": 0
+  },
+  {
+    "typ": "speed",
+    "frage": "Wie viele Spieler hat eine Handballmannschaft auf dem Feld (inkl. Torwart)?",
+    "antworten": [
+      "6",
+      "7",
+      "8",
+      "9"
+    ],
+    "richtig": 1
+  },
+  {
+    "typ": "wort",
+    "frage": "Wie heißt die Hauptstadt von Australien?",
+    "loesung": "CANBERRA"
+  },
+  {
+    "typ": "wort",
+    "frage": "Wie nennt man die Angst vor Spinnen?",
+    "loesung": "ARACHNOPHOBIE"
+  },
+  {
+    "typ": "wort",
+    "frage": "Wie heißt der längste Fluss Europas?",
+    "loesung": "WOLGA"
+  },
+  {
+    "typ": "wort",
+    "frage": "Nachname des Erfinders des Telefons?",
+    "loesung": "BELL"
+  },
+  {
+    "typ": "wort",
+    "frage": "Wie heißt die Hauptstadt von Kanada?",
+    "loesung": "OTTAWA"
+  },
+  {
+    "typ": "wort",
+    "frage": "Wie nennt man die Lehre vom Wetter?",
+    "loesung": "METEOROLOGIE"
+  },
+  {
+    "typ": "wort",
+    "frage": "Wie heißt der größte Ozean der Welt?",
+    "loesung": "PAZIFIK"
+  },
+  {
+    "typ": "wort",
+    "frage": "Wie heißt die Hauptstadt von Japan?",
+    "loesung": "TOKIO"
+  },
+  {
+    "typ": "wort",
+    "frage": "Wie nennt man die Angst vor Höhen?",
+    "loesung": "AKROPHOBIE"
+  },
+  {
+    "typ": "wort",
+    "frage": "Wie heißt die größte heiße Wüste der Welt?",
+    "loesung": "SAHARA"
+  },
+  {
+    "typ": "wort",
+    "frage": "Vorname des Malers der Mona Lisa?",
+    "loesung": "LEONARDO"
+  },
+  {
+    "typ": "wort",
+    "frage": "Wie heißt die Hauptstadt von Ägypten?",
+    "loesung": "KAIRO"
+  },
+  {
+    "typ": "wort",
+    "frage": "Wie nennt man die Lehre von den Pflanzen?",
+    "loesung": "BOTANIK"
+  },
+  {
+    "typ": "wort",
+    "frage": "Wie heißt der kleinste Planet unseres Sonnensystems?",
+    "loesung": "MERKUR"
+  },
+  {
+    "typ": "wort",
+    "frage": "Wie heißt die Hauptstadt von Brasilien?",
+    "loesung": "BRASILIA"
+  },
+  {
+    "typ": "wort",
+    "frage": "Nachname des Physikers, der die Relativitätstheorie entwickelte?",
+    "loesung": "EINSTEIN"
+  },
+  {
+    "typ": "wort",
+    "frage": "Wie nennt man die Lehre von den Tieren?",
+    "loesung": "ZOOLOGIE"
+  },
+  {
+    "typ": "wort",
+    "frage": "Wie heißt die Hauptstadt von Südkorea?",
+    "loesung": "SEOUL"
+  },
+  {
+    "typ": "wort",
+    "frage": "Wie heißt der größte Kontinent der Welt?",
+    "loesung": "ASIEN"
+  },
+  {
+    "typ": "wort",
+    "frage": "Wie nennt man eine Person, die kein Fleisch isst?",
+    "loesung": "VEGETARIER"
+  },
+  {
+    "typ": "wort",
+    "frage": "Wie heißt die Hauptstadt von Chile?",
+    "loesung": "SANTIAGO"
+  },
+  {
+    "typ": "wort",
+    "frage": "Nachname des Komponisten der 9. Symphonie?",
+    "loesung": "BEETHOVEN"
+  },
+  {
+    "typ": "wort",
+    "frage": "Wie heißt die Hauptstadt von Portugal?",
+    "loesung": "LISSABON"
+  },
+  {
+    "typ": "wort",
+    "frage": "Wie nennt man die Angst vor Dunkelheit?",
+    "loesung": "NYKTOPHOBIE"
+  },
+  {
+    "typ": "wort",
+    "frage": "Wie heißt der größte See Afrikas?",
+    "loesung": "VICTORIASEE"
+  },
+  {
+    "typ": "wort",
+    "frage": "Wie heißt die Hauptstadt von Griechenland?",
+    "loesung": "ATHEN"
+  },
+  {
+    "typ": "wort",
+    "frage": "Nachname des Wissenschaftlers, der die Gravitation beschrieb (Apfel)?",
+    "loesung": "NEWTON"
+  },
+  {
+    "typ": "wort",
+    "frage": "Wie heißt die Hauptstadt von Norwegen?",
+    "loesung": "OSLO"
+  },
+  {
+    "typ": "wort",
+    "frage": "Wie nennt man die Wissenschaft vom Leben?",
+    "loesung": "BIOLOGIE"
+  },
+  {
+    "typ": "wort",
+    "frage": "Wie heißt die Hauptstadt von Schweden?",
+    "loesung": "STOCKHOLM"
+  },
+  {
+    "typ": "wort",
+    "frage": "Wie heißt die Hauptstadt von Finnland?",
+    "loesung": "HELSINKI"
+  },
+  {
+    "typ": "wort",
+    "frage": "Nachname des Malers, der 'Die Sternennacht' malte?",
+    "loesung": "GOGH"
+  },
+  {
+    "typ": "wort",
+    "frage": "Wie heißt die Hauptstadt von Polen?",
+    "loesung": "WARSCHAU"
+  },
+  {
+    "typ": "wort",
+    "frage": "Wie nennt man die Lehre von den Gesteinen?",
+    "loesung": "GEOLOGIE"
+  },
+  {
+    "typ": "wort",
+    "frage": "Wie heißt die Hauptstadt von Irland?",
+    "loesung": "DUBLIN"
+  },
+  {
+    "typ": "wort",
+    "frage": "Wie heißt der zweitgrößte Planet unseres Sonnensystems?",
+    "loesung": "SATURN"
+  },
+  {
+    "typ": "wort",
+    "frage": "Wie heißt die Hauptstadt von Thailand?",
+    "loesung": "BANGKOK"
+  },
+  {
+    "typ": "wort",
+    "frage": "Nachname des Komponisten von 'Die Zauberflöte'?",
+    "loesung": "MOZART"
+  },
+  {
+    "typ": "wort",
+    "frage": "Wie heißt die Hauptstadt von Ungarn?",
+    "loesung": "BUDAPEST"
+  },
+  {
+    "typ": "wort",
+    "frage": "Wie nennt man die Angst vor Menschenmengen bzw. offenen Plätzen?",
+    "loesung": "AGORAPHOBIE"
+  },
+  {
+    "typ": "wort",
+    "frage": "Wie heißt die Hauptstadt von Vietnam?",
+    "loesung": "HANOI"
+  },
+  {
+    "typ": "wort",
+    "frage": "Wie heißt die Hauptstadt von Kenia?",
+    "loesung": "NAIROBI"
+  },
+  {
+    "typ": "bild",
+    "frage": "Was zeigt dieses Bild?",
+    "loesung": "SCHERE",
+    "bild": "bilder/schere.jpg"
+  },
+  {
+    "typ": "bild",
+    "frage": "Was zeigt dieses Bild?",
+    "loesung": "HAMMER",
+    "bild": "bilder/hammer.jpg"
+  },
+  {
+    "typ": "bild",
+    "frage": "Was zeigt dieses Bild?",
+    "loesung": "LEITER",
+    "bild": "bilder/leiter.jpg"
+  },
+  {
+    "typ": "bild",
+    "frage": "Was zeigt dieses Bild?",
+    "loesung": "GITARRE",
+    "bild": "bilder/gitarre.jpg"
+  },
+  {
+    "typ": "bild",
+    "frage": "Was zeigt dieses Bild?",
+    "loesung": "TROMPETE",
+    "bild": "bilder/trompete.jpg"
+  },
+  {
+    "typ": "bild",
+    "frage": "Was zeigt dieses Bild?",
+    "loesung": "FAHRRAD",
+    "bild": "bilder/fahrrad.jpg"
+  },
+  {
+    "typ": "bild",
+    "frage": "Was zeigt dieses Bild?",
+    "loesung": "ZAHNBUERSTE",
+    "bild": "bilder/zahnbuerste.jpg"
+  },
+  {
+    "typ": "bild",
+    "frage": "Was zeigt dieses Bild?",
+    "loesung": "HUFEISEN",
+    "bild": "bilder/hufeisen.jpg"
+  },
+  {
+    "typ": "bild",
+    "frage": "Was zeigt dieses Bild?",
+    "loesung": "KOMPASS",
+    "bild": "bilder/kompass.jpg"
+  },
+  {
+    "typ": "bild",
+    "frage": "Was zeigt dieses Bild?",
+    "loesung": "SCHLUESSEL",
+    "bild": "bilder/schluessel.jpg"
+  },
+  {
+    "typ": "bild",
+    "frage": "Was zeigt dieses Bild?",
+    "loesung": "ZANGE",
+    "bild": "bilder/zange.jpg"
+  },
+  {
+    "typ": "bild",
+    "frage": "Was zeigt dieses Bild?",
+    "loesung": "KAKTUS",
+    "bild": "bilder/kaktus.jpg"
+  },
+  {
+    "typ": "bild",
+    "frage": "Was zeigt dieses Bild?",
+    "loesung": "WEINGLAS",
+    "bild": "bilder/weinglas.jpg"
+  },
+  {
+    "typ": "bild",
+    "frage": "Was zeigt dieses Bild?",
+    "loesung": "IGEL",
+    "bild": "bilder/igel.jpg"
+  },
+  {
+    "typ": "bild",
+    "frage": "Was zeigt dieses Bild?",
+    "loesung": "SCHMETTERLING",
+    "bild": "bilder/schmetterling.jpg"
+  },
+  {
+    "typ": "bild",
+    "frage": "Was zeigt dieses Bild?",
+    "loesung": "PINGUIN",
+    "bild": "bilder/pinguin.jpg"
+  },
+  {
+    "typ": "bild",
+    "frage": "Was zeigt dieses Bild?",
+    "loesung": "FLAMINGO",
+    "bild": "bilder/flamingo.jpg"
+  },
+  {
+    "typ": "bild",
+    "frage": "Was zeigt dieses Bild?",
+    "loesung": "ELEFANT",
+    "bild": "bilder/elefant.jpg"
+  },
+  {
+    "typ": "bild",
+    "frage": "Was zeigt dieses Bild?",
+    "loesung": "ZITRONE",
+    "bild": "bilder/zitrone.jpg"
+  },
+  {
+    "typ": "bild",
+    "frage": "Was zeigt dieses Bild?",
+    "loesung": "ERDBEERE",
+    "bild": "bilder/erdbeere.jpg"
+  },
+  {
+    "typ": "bild",
+    "frage": "Was zeigt dieses Bild?",
+    "loesung": "AVOCADO",
+    "bild": "bilder/avocado.jpg"
+  },
+  {
+    "typ": "bild",
+    "frage": "Was zeigt dieses Bild?",
+    "loesung": "BROKKOLI",
+    "bild": "bilder/brokkoli.jpg"
+  },
+  {
+    "typ": "bild",
+    "frage": "Was zeigt dieses Bild?",
+    "loesung": "PILZ",
+    "bild": "bilder/pilz.jpg"
+  },
+  {
+    "typ": "bild",
+    "frage": "Was zeigt dieses Bild?",
+    "loesung": "TOMATE",
+    "bild": "bilder/tomate.jpg"
+  },
+  {
+    "typ": "bild",
+    "frage": "Was zeigt dieses Bild?",
+    "loesung": "WUERFEL",
+    "bild": "bilder/wuerfel.jpg"
+  },
+  {
+    "typ": "bild",
+    "frage": "Was zeigt dieses Bild?",
+    "loesung": "TROMMEL",
+    "bild": "bilder/trommel.jpg"
+  },
+  {
+    "typ": "bild",
+    "frage": "Was zeigt dieses Bild?",
+    "loesung": "GEIGE",
+    "bild": "bilder/geige.jpg"
+  },
+  {
+    "typ": "bild",
+    "frage": "Was zeigt dieses Bild?",
+    "loesung": "SAXOPHON",
+    "bild": "bilder/saxophon.jpg"
+  },
+  {
+    "typ": "bild",
+    "frage": "Was zeigt dieses Bild?",
+    "loesung": "KAMERA",
+    "bild": "bilder/kamera.jpg"
+  },
+  {
+    "typ": "bild",
+    "frage": "Was zeigt dieses Bild?",
+    "loesung": "FERNGLAS",
+    "bild": "bilder/fernglas.jpg"
+  },
+  {
+    "typ": "bild",
+    "frage": "Was zeigt dieses Bild?",
+    "loesung": "GLOBUS",
+    "bild": "bilder/globus.jpg"
+  },
+  {
+    "typ": "bild",
+    "frage": "Was zeigt dieses Bild?",
+    "loesung": "ZAHNRAD",
+    "bild": "bilder/zahnrad.jpg"
+  },
+  {
+    "typ": "bild",
+    "frage": "Was zeigt dieses Bild?",
+    "loesung": "MAGNET",
+    "bild": "bilder/magnet.jpg"
+  },
+  {
+    "typ": "bild",
+    "frage": "Was zeigt dieses Bild?",
+    "loesung": "LATERNE",
+    "bild": "bilder/laterne.jpg"
+  },
+  {
+    "typ": "bild",
+    "frage": "Was zeigt dieses Bild?",
+    "loesung": "SANDUHR",
+    "bild": "bilder/sanduhr.jpg"
+  },
+  {
+    "typ": "bild",
+    "frage": "Was zeigt dieses Bild?",
+    "loesung": "KRONE",
+    "bild": "bilder/krone.jpg"
+  },
+  {
+    "typ": "bild",
+    "frage": "Was zeigt dieses Bild?",
+    "loesung": "MUSCHEL",
+    "bild": "bilder/muschel.jpg"
+  },
+  {
+    "typ": "bild",
+    "frage": "Was zeigt dieses Bild?",
+    "loesung": "SEESTERN",
+    "bild": "bilder/seestern.jpg"
+  },
+  {
+    "typ": "bild",
+    "frage": "Was zeigt dieses Bild?",
+    "loesung": "QUALLE",
+    "bild": "bilder/qualle.jpg"
+  },
+  {
+    "typ": "bild",
+    "frage": "Was zeigt dieses Bild?",
+    "loesung": "KUERBIS",
+    "bild": "bilder/kuerbis.jpg"
+  },
+  {
+    "typ": "bild",
+    "frage": "Was zeigt dieses Bild?",
+    "loesung": "GIRAFFE",
+    "bild": "bilder/giraffe.jpg"
+  },
+  {
+    "typ": "bild",
+    "frage": "Was zeigt dieses Bild?",
+    "loesung": "AUTO",
+    "bild": "bilder/auto.jpg"
   }
 ]
