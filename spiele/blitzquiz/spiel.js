@@ -44,6 +44,7 @@ import {
 } from "../../kern/firebase.js";
 import { escapeHtml, textMitZusatz, spielerKarte, teamEndstandHtml, teamGruppeHtml, zeigeDebug } from "../../kern/ui.js";
 import { erstelleTeams, ergaenzeFehlendeTeams } from "../../kern/teams.js";
+import { speichereWertung } from "../../kern/wertung.js";
 
 const AUFDECK_DAUER_MS = 10000;
 const STANDARD_ANZAHL = 10;
@@ -860,6 +861,7 @@ async function weiter() {
     const naechster = index + 1;
     if (naechster >= anzahlFragen) {
       await updateDoc(api.raumRef(), { bzStatus: "beendet" });
+      speichereWertung(api, "blitzquiz", Object.fromEntries(spielerListe.map((s) => [s.id, s.punkte ?? 0])));
     } else {
       await updateDoc(api.raumRef(), {
         bzStatus: "frage_aktiv", bzFragenIndex: naechster,

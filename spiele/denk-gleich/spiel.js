@@ -10,6 +10,7 @@ import {
   serverTimestamp, increment, writeBatch
 } from "../../kern/firebase.js";
 import { spielerKarte, zeigeDebug } from "../../kern/ui.js";
+import { speichereWertung } from "../../kern/wertung.js";
 
 const VORLAGE = `
   <div id="dg-setup" class="bildschirm-karte" hidden>
@@ -575,6 +576,7 @@ async function weiter() {
     const naechster = index + 1;
     if (naechster >= anzahlFragen) {
       await updateDoc(api.raumRef(), { dgStatus: "beendet" });
+      speichereWertung(api, "denk-gleich", Object.fromEntries(spielerListe.map((s) => [s.id, s.punkte ?? 0])));
     } else {
       await updateDoc(api.raumRef(), { dgStatus: "frage_aktiv", dgFragenIndex: naechster });
     }

@@ -9,7 +9,7 @@ import {
 } from "./kern/ui.js";
 import { SPIELE, spielInfo } from "./spiele/register.js";
 
-export const APP_VERSION = "v140";
+export const APP_VERSION = "v141";
 const appVersion = document.getElementById("app-version");
 appVersion.textContent = "Version " + APP_VERSION;
 
@@ -59,6 +59,10 @@ const spielerliste = document.getElementById("spielerliste");
 const spieleGrid = document.getElementById("spiele-grid");
 const spielauswahlHinweis = document.getElementById("spielauswahl-hinweis");
 const lobbyFehler = document.getElementById("lobby-fehler");
+const wertungKachel = document.getElementById("wertung-kachel");
+const wertungDialog = document.getElementById("wertung-dialog");
+const btnWertungSchliessen = document.getElementById("btn-wertung-schliessen");
+const wertungTabelle = document.getElementById("wertung-tabelle");
 
 window.addEventListener("error", (e) => zeigeDebug("Fehler: " + e.message));
 window.addEventListener("unhandledrejection", (e) => zeigeDebug("Fehler: " + (e.reason?.message || e.reason)));
@@ -112,11 +116,13 @@ const zustand = {
   profilBestaetigt: gespeicherteSitzung?.profilBestaetigt ?? false,
   raum: null,
   spieler: [],
-  istLeiter: false
+  istLeiter: false,
+  wertung: {}
 };
 
 let raumUnsubscribe = null;
 let spielerUnsubscribe = null;
+let wertungUnsubscribe = null;
 let aktivesSpielModul = null;
 let aktivesSpielId = null;
 let raumSyncIntervall = null;
@@ -459,8 +465,74 @@ function renderLobby() {
       (istSpielleiter ? `<small>Spielleiter</small>` : "");
     spielerliste.appendChild(li);
   });
+  aktualisiereWertungsKachel();
   renderSpieleAuswahl();
 }
+
+// ---------- Wertung (Punkte aus allen bisher gespielten Spielen) ----------
+function hatWertung() {
+  return Object.values(zustand.wertung).some((punkte) => punkte && Object.keys(punkte).length > 0);
+}
+
+function aktualisiereWertungsKachel() {
+  wertungKachel.hidden = !hatWertung();
+}
+
+function renderWertungTabelle() {
+  const wertung = zustand.wertung;
+  const gespielteSpiele = SPIELE.filter((s) => wertung[s.id] && Object.keys(wertung[s.id]).length > 0);
+
+  const zeilen = zustand.spieler
+    .map((spieler) => {
+      const werte = gespielteSpiele.map((s) => wertung[s.id]?.[spieler.id] ?? 0);
+      const gesamt = werte.reduce((summe, wert) => summe + wert, 0);
+      return { spieler, werte, gesamt };
+    })
+    .sort((a, b) => b.gesamt - a.gesamt);
+
+  const kopfzeile = gespielteSpiele
+    .map((s) => `<th scope="col" title="${escapeHtml(s.name)}">${s.emoji}</th>`)
+    .join("");
+
+  const zeilenHtml = zeilen
+    .map(({ spieler, werte, gesamt }) => {
+      const zellen = werte.map((wert) => `<td>${wert}</td>`).join("");
+      return (
+        `<tr>` +
+        `<td class="wertung-spieler-zelle">${avatarHtml(spieler.icon, "wertung-avatar")}<span>${escapeHtml(spieler.name)}</span></td>` +
+        zellen +
+        `<td class="wertung-gesamt-zelle">${gesamt}</td>` +
+        `</tr>`
+      );
+    })
+    .join("");
+
+  wertungTabelle.innerHTML =
+    `<thead><tr><th scope="col" class="wertung-spieler-kopf">Spieler</th>${kopfzeile}<th scope="col">Gesamt</th></tr></thead>` +
+    `<tbody>${zeilenHtml}</tbody>`;
+}
+
+function oeffneWertungDialog() {
+  renderWertungTabelle();
+  wertungDialog.hidden = false;
+  document.body.classList.add("wertung-offen");
+  requestAnimationFrame(() => btnWertungSchliessen.focus());
+}
+
+function schliesseWertungDialog(fokusZurueck = true) {
+  wertungDialog.hidden = true;
+  document.body.classList.remove("wertung-offen");
+  if (fokusZurueck && !wertungKachel.hidden) wertungKachel.focus();
+}
+
+wertungKachel.addEventListener("click", oeffneWertungDialog);
+btnWertungSchliessen.addEventListener("click", () => schliesseWertungDialog());
+wertungDialog.addEventListener("click", (event) => {
+  if (event.target === wertungDialog) schliesseWertungDialog();
+});
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && !wertungDialog.hidden) schliesseWertungDialog();
+});
 
 // ---------- Spielmodul laden / entladen ----------
 // Die Schnittstelle, die jedes Spiel bekommt.
@@ -595,6 +667,13 @@ function starteListener(code) {
     aktivesSpielModul?.spieler?.(zustand.spieler);
   });
 
+  wertungUnsubscribe = onSnapshot(collection(db, RAEUME, code, "wertung"), (snap) => {
+    zustand.wertung = {};
+    snap.forEach((d) => { zustand.wertung[d.id] = d.data()?.punkte ?? {}; });
+    aktualisiereWertungsKachel();
+    if (!wertungDialog.hidden) renderWertungTabelle();
+  });
+
   const uebernehmeRaum = (daten) => {
     letzteRaumSignatur = raumSignatur(daten);
     reagiereAufRaum(daten);
@@ -649,9 +728,12 @@ async function verlasseRaum() {
 
   if (raumUnsubscribe) { raumUnsubscribe(); raumUnsubscribe = null; }
   if (spielerUnsubscribe) { spielerUnsubscribe(); spielerUnsubscribe = null; }
+  if (wertungUnsubscribe) { wertungUnsubscribe(); wertungUnsubscribe = null; }
   if (raumSyncIntervall) { clearInterval(raumSyncIntervall); raumSyncIntervall = null; }
   raumSyncAbrufLaeuft = false;
   letzteRaumSignatur = null;
+  zustand.wertung = {};
+  schliesseWertungDialog(false);
   entladeSpiel();
 
   if (zustand.code) {

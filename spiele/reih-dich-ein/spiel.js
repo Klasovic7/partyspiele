@@ -6,6 +6,7 @@
 // ============================================================================
 import { updateDoc, runTransaction } from "../../kern/firebase.js";
 import { escapeHtml, spielerKarte, zeigeDebug } from "../../kern/ui.js";
+import { speichereWertung } from "../../kern/wertung.js";
 import {
   mischeListe, begriffNachId, richtigerEinfuegeIndex, fuegeEin, aktiveSpielerId,
   punkteNachAntwort
@@ -625,6 +626,10 @@ async function naechsteKategorie() {
   aktionLaeuft = true;
   $("rd-naechste-kategorie").disabled = true;
   const erwarteteKategorie = kategorienReihenfolge[kategorieIndex];
+  // Wird innerhalb der Transaktion gesetzt, sobald der letzte Durchgang endet -
+  // danach (auesserhalb, die Transaktion kann sonst nicht in eine andere
+  // Sammlung schreiben) einmalig in der Wertung gespeichert.
+  let endstandPunkte = null;
   try {
     await runTransaction(api.db, async (transaktion) => {
       const ref = api.raumRef();
@@ -638,6 +643,7 @@ async function naechsteKategorie() {
 
       if (katIndex + 1 >= (daten.rdAnzahlKategorien ?? 0)) {
         transaktion.update(ref, { rdStatus: "beendet", rdAktiveId: null });
+        endstandPunkte = daten.rdPunkte ?? {};
         return;
       }
 
@@ -660,6 +666,7 @@ async function naechsteKategorie() {
   } catch (e) {
     zeigeDebug("Nächste Kategorie konnte nicht gestartet werden: " + e.message);
   }
+  if (endstandPunkte) speichereWertung(api, "reih-dich-ein", endstandPunkte);
   aktionLaeuft = false;
   renderAktuellenStatus();
 }

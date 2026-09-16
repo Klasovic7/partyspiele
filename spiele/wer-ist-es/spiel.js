@@ -26,6 +26,7 @@
 import { updateDoc, increment, runTransaction, arrayUnion } from "../../kern/firebase.js";
 import { spielerKarte, teamEndstandHtml, teamGruppeHtml, zeigeDebug } from "../../kern/ui.js";
 import { erstelleTeams, ergaenzeFehlendeTeams } from "../../kern/teams.js";
+import { speichereWertung } from "../../kern/wertung.js";
 
 const HINWEIS_DAUER_MS = 10000;
 const STANDARD_ANZAHL = 8;
@@ -733,6 +734,7 @@ async function weiter() {
     const naechster = index + 1;
     if (naechster >= anzahlFragen) {
       await updateDoc(api.raumRef(), { wiStatus: "beendet" });
+      speichereWertung(api, "wer-ist-es", Object.fromEntries(spielerListe.map((s) => [s.id, s.punkte ?? 0])));
     } else {
       await updateDoc(api.raumRef(), {
         wiStatus: "frage_aktiv", wiFragenIndex: naechster,

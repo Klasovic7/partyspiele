@@ -7,6 +7,7 @@
 // ============================================================================
 import { updateDoc, runTransaction, serverTimestamp } from "../../kern/firebase.js";
 import { escapeHtml, avatarHtml, spielerKarte, zeigeDebug } from "../../kern/ui.js";
+import { speichereWertung } from "../../kern/wertung.js";
 import {
   mischeListe, erstelleTeams, ergaenzeFehlendeTeams, bereinigeTreffer, aktiveSpielerId, aktivesTeam
 } from "./logik.js";
@@ -702,6 +703,7 @@ async function weiter() {
   try {
     if (naechsterIndex >= anzahlRunden) {
       await updateDoc(api.raumRef(), { ztStatus: "beendet" });
+      speichereWertung(api, "zehn-treffer", Object.fromEntries(spielerListe.map((s) => [s.id, s.punkte ?? 0])));
     } else {
       const ids = spielerListe.map((spieler) => spieler.id);
       await updateDoc(api.raumRef(), {

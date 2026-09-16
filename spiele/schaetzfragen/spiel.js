@@ -17,6 +17,7 @@ import {
 } from "../../kern/firebase.js";
 import { escapeHtml, textMitZusatz, spielerKarte, teamEndstandHtml, teamGruppeHtml, zeigeDebug } from "../../kern/ui.js";
 import { erstelleTeams, ergaenzeFehlendeTeams } from "../../kern/teams.js";
+import { speichereWertung } from "../../kern/wertung.js";
 
 export const KATEGORIEN = [
   { id: "fussball",             name: "Fußball",                emoji: "⚽️" },
@@ -908,6 +909,7 @@ async function weiter() {
     const naechster = index + 1;
     if (naechster >= anzahlFragen) {
       await updateDoc(api.raumRef(), { sfStatus: "beendet" });
+      speichereWertung(api, "schaetzfragen", Object.fromEntries(spielerListe.map((s) => [s.id, s.punkte ?? 0])));
     } else {
       await updateDoc(api.raumRef(), {
         sfStatus: dummkopfModus ? "dummkopf_wahl" : "frage_aktiv",

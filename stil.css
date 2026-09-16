@@ -352,6 +352,37 @@
     .btn-gefahr { color: #fff; background: #dc493d; }
     .btn-gefahr:hover { background: #c83c31; }
 
+    /* ---------- Wertung: Punktetabelle aller bisher gespielten Spiele ---------- */
+    body.wertung-offen { overflow: hidden; }
+    .wertung-dialog[hidden] { display: none; }
+    .wertung-dialog {
+      position: fixed; z-index: 75; inset: 0; display: grid; place-items: center;
+      padding: max(20px, env(safe-area-inset-top)) 18px max(20px, env(safe-area-inset-bottom));
+      background: rgba(17,12,46,.62); backdrop-filter: blur(7px); -webkit-backdrop-filter: blur(7px);
+    }
+    .wertung-dialog-inhalt {
+      position: relative; width: min(100%, 480px); max-height: 82vh; overflow-y: auto;
+      padding: 27px 22px 22px; border-radius: 24px; background: #fff;
+      box-shadow: 0 24px 60px rgba(17,12,46,.42); animation: beitreten-einblenden .18s ease-out;
+    }
+    .wertung-dialog-inhalt h2 { margin: 0 42px 5px 0; font-size: 1.55rem; }
+    .wertung-dialog-inhalt .hinweis-text { margin: 0 0 16px; }
+    .wertung-tabelle-wrapper { overflow-x: auto; margin: 0 -4px; padding: 0 4px; }
+    .wertung-tabelle { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+    .wertung-tabelle th, .wertung-tabelle td {
+      padding: 8px 10px; text-align: center; white-space: nowrap;
+      border-bottom: 1px solid var(--linie, #e6e0da);
+    }
+    .wertung-tabelle thead th { font-size: 1.3rem; padding-bottom: 10px; }
+    .wertung-tabelle .wertung-spieler-kopf { text-align: left; font-size: .78rem; text-transform: uppercase; letter-spacing: .06em; color: #6f6672; }
+    .wertung-tabelle .wertung-spieler-zelle {
+      display: flex; align-items: center; gap: 8px; text-align: left; font-weight: 700;
+    }
+    .wertung-avatar { width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0; }
+    .wertung-avatar-text { display: flex; align-items: center; justify-content: center; background: #eee; font-size: .68rem; }
+    .wertung-tabelle .wertung-gesamt-zelle { font-weight: 900; color: var(--akzent); }
+    .wertung-tabelle tbody tr:last-child td { border-bottom: none; }
+
     .auswahl-reihe { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0 16px; }
     .farb-swatch {
       width: 36px; height: 36px; border-radius: 50%; border: 2px solid rgba(0,0,0,0.15);
@@ -1048,6 +1079,21 @@
     }
     .lobby-spieler small { margin-top: 2px; color: var(--text-hell); font-size: .62rem; line-height: 1.05; }
 
+    /* v141: rechteckige Kachel zwischen Mitspieler-Leiste und Spielauswahl,
+       sichtbar sobald in diesem Raum mindestens ein Spiel beendet wurde -
+       oeffnet den Wertungs-Dialog mit der Punktetabelle aller Spiele. */
+    .wertung-kachel {
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      width: 100%; margin: 2px 0 4px; padding: 14px 18px; border: none; border-radius: 16px;
+      background: linear-gradient(90deg, var(--akzent), #a78bfa);
+      color: #fff; font: inherit; font-family: "Barlow Condensed", sans-serif;
+      font-size: 1.3rem; font-weight: 800; letter-spacing: .02em;
+      box-shadow: 0 8px 18px rgba(124,58,237,.28); cursor: pointer;
+    }
+    .wertung-kachel:hover { filter: brightness(1.06); }
+    .wertung-kachel:active { transform: scale(.99); }
+    .wertung-kachel-symbol { font-size: 1.35rem; }
+
     /* Größere Spielkacheln – Spielname und Symbol bilden den Blickfang. */
     .spiele-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
     .spiel-kachel {
@@ -1325,6 +1371,23 @@
       background: linear-gradient(135deg, #ff6742, #e9402a);
       border: 1px solid #ff8064;
     }
+
+    .wertung-kachel {
+      background: linear-gradient(90deg, var(--club-orange), #ffb066);
+      color: #2a1305;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, .35);
+    }
+    .wertung-dialog { background: rgba(8, 5, 11, .78); backdrop-filter: blur(12px); }
+    .wertung-dialog-inhalt {
+      color: var(--club-text);
+      background: var(--club-glow) center/100% 100% no-repeat, var(--club-ink);
+      border: 1px solid rgba(255, 115, 90, .7);
+      box-shadow: 0 24px 70px rgba(0, 0, 0, .55);
+    }
+    .wertung-dialog-inhalt h2 { color: var(--club-text); }
+    .wertung-tabelle th, .wertung-tabelle td { border-bottom-color: rgba(255, 255, 255, .14); }
+    .wertung-tabelle .wertung-spieler-kopf { color: #cfc3d1; }
+    .wertung-tabelle .wertung-gesamt-zelle { color: var(--club-orange); }
 
     #lobby-screen {
       background: var(--club-glow) center/100% 100% no-repeat, linear-gradient(158deg, #251728 0%, #18101d 54%, #120d17 100%);
