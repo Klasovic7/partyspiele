@@ -247,7 +247,8 @@ function zeigeSetup() {
   const anzahlFeld = $("dg-anzahl");
   anzahlFeld.max = fragen.length;
   if (!anzahlFeld.value) anzahlFeld.value = fragen.length;
-  $("dg-anzahl-zeile").hidden = !api.istLeiter;
+  $("dg-anzahl-zeile").hidden = false;
+  anzahlFeld.disabled = !api.istLeiter;
   $("dg-starten").hidden = !api.istLeiter;
   $("dg-setup-warten").hidden = api.istLeiter;
 }

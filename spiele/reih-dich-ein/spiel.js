@@ -285,7 +285,8 @@ function zeigeSetup() {
   const anzahlFeld = $("rd-anzahl");
   anzahlFeld.max = karten.length;
   if (!anzahlManuellGesetzt || !anzahlFeld.value) anzahlFeld.value = Math.min(3, karten.length);
-  $("rd-anzahl-zeile").hidden = !api.istLeiter;
+  $("rd-anzahl-zeile").hidden = false;
+  anzahlFeld.disabled = !api.istLeiter;
   $("rd-starten").hidden = !api.istLeiter;
   $("rd-setup-warten").hidden = api.istLeiter;
 }

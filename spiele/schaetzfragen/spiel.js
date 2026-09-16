@@ -530,9 +530,11 @@ function zeigeSetup() {
   anzahlFeld.max = String(obergrenze);
   anzahlFeld.value = String(auswahl);
 
-  $("sf-anzahl-zeile").hidden = !api.istLeiter;
-  $("sf-dummkopf-zeile").hidden = !api.istLeiter;
-  $("sf-teammodus-zeile").hidden = !api.istLeiter;
+  $("sf-anzahl-zeile").hidden = false;
+  anzahlFeld.disabled = !api.istLeiter;
+  $("sf-dummkopf-zeile").hidden = false;
+  $("sf-dummkopf").disabled = !api.istLeiter;
+  $("sf-teammodus-zeile").hidden = false;
   const teamSchalter = $("sf-teammodus");
   teamSchalter.checked = teammodus;
   teamSchalter.disabled = !api.istLeiter;

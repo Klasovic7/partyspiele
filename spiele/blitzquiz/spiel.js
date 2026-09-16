@@ -371,8 +371,9 @@ function zeigeSetup() {
   if (gewuenschteAnzahl === 0) gewuenschteAnzahl = Math.min(STANDARD_ANZAHL, fragen.length);
   $("bz-anzahl").max = String(Math.max(1, fragen.length));
   $("bz-anzahl").value = String(gewuenschteAnzahl);
-  $("bz-anzahl-zeile").hidden = !api.istLeiter;
-  $("bz-teammodus-zeile").hidden = !api.istLeiter;
+  $("bz-anzahl-zeile").hidden = false;
+  $("bz-anzahl").disabled = !api.istLeiter;
+  $("bz-teammodus-zeile").hidden = false;
   const teamSchalter = $("bz-teammodus");
   teamSchalter.checked = teammodus;
   teamSchalter.disabled = !api.istLeiter;

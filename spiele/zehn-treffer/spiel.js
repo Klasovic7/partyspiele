@@ -467,7 +467,8 @@ function zeigeSetup() {
   const anzahlFeld = $("zt-anzahl");
   anzahlFeld.max = karten.length;
   if (!anzahlManuellGesetzt || !anzahlFeld.value) anzahlFeld.value = karten.length;
-  $("zt-anzahl-zeile").hidden = !api.istLeiter;
+  $("zt-anzahl-zeile").hidden = false;
+  anzahlFeld.disabled = !api.istLeiter;
   $("zt-starten").hidden = !api.istLeiter;
   $("zt-setup-warten").hidden = api.istLeiter;
 }

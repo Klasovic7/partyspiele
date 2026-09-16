@@ -448,6 +448,10 @@
     }
     .schalter input:checked + .schalter-regler { background: var(--akzent); }
     .schalter input:checked + .schalter-regler::after { transform: translateX(20px); }
+    /* v140: Einstellungen sind jetzt fuer alle sichtbar, aber nur der
+       Spielleiter darf sie aendern - deaktivierte Schalter/Felder etwas
+       ausgeblendet, damit klar ist, dass man hier nur zuschaut. */
+    .schalter input:disabled + .schalter-regler { opacity: .5; cursor: default; }
     .schalter-text { font-weight: 700; }
 
     .dummkopf-wahl { cursor: pointer; }
@@ -1498,6 +1502,7 @@
     .rd-kategorie-kopf strong { color: #7b2eea; background: #f1e8ff; }
     .schalter-regler { background: #53495a; border: 1px solid rgba(255,255,255,.18); }
     .schalter input:checked + .schalter-regler { background: var(--club-orange); }
+    .schalter input:disabled + .schalter-regler { opacity: .5; }
     .kategorien-aktionen button {
       color: var(--club-orange);
       background: transparent;
@@ -1632,6 +1637,7 @@
       outline-offset: 2px;
       border-color: var(--club-orange);
     }
+    .anzahl-eingabe:disabled { opacity: .55; }
     .setup-anzahlblock > .hinweis-text {
       display: block;
       margin-top: 9px;

@@ -366,8 +366,9 @@ function zeigeSetup() {
   if (gewuenschteAnzahl === 0) gewuenschteAnzahl = Math.min(STANDARD_ANZAHL, fragen.length);
   $("wi-anzahl").max = String(Math.max(1, fragen.length));
   $("wi-anzahl").value = String(gewuenschteAnzahl);
-  $("wi-anzahl-zeile").hidden = !api.istLeiter;
-  $("wi-teammodus-zeile").hidden = !api.istLeiter;
+  $("wi-anzahl-zeile").hidden = false;
+  $("wi-anzahl").disabled = !api.istLeiter;
+  $("wi-teammodus-zeile").hidden = false;
   const teamSchalter = $("wi-teammodus");
   teamSchalter.checked = teammodus;
   teamSchalter.disabled = !api.istLeiter;
