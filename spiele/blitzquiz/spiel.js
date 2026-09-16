@@ -581,10 +581,14 @@ function rendereBuchstabenReihe(frage, pos) {
 // würde die CSS-Übergangsanimation der Unschärfe bei jedem Re-Render (z. B.
 // durch den unten beschriebenen Listener-Trigger) neu anspringen bzw. gar
 // nicht sichtbar sein, weil das SVG jedes Mal frisch eingefügt würde.
+function bildUrl(pfad) {
+  return new URL(pfad, import.meta.url).href;
+}
+
 function rendereBildAnzeige(frage) {
   const wrapper = $("bz-bild-anzeige");
   if (wrapper.dataset.loesung !== frage.loesung) {
-    wrapper.innerHTML = `<img src="${frage.bild}" alt="" loading="lazy">`;
+    wrapper.innerHTML = `<img src="${bildUrl(frage.bild)}" alt="" loading="lazy">`;
     wrapper.dataset.loesung = frage.loesung;
   }
   const img = wrapper.querySelector("img");
@@ -823,7 +827,7 @@ function zeigeErgebnis() {
     : frage.antworten[frage.richtig];
   const bildEl = $("bz-erg-bild");
   bildEl.hidden = frage.typ !== "bild";
-  if (frage.typ === "bild") bildEl.innerHTML = `<img src="${frage.bild}" alt="" loading="lazy">`;
+  if (frage.typ === "bild") bildEl.innerHTML = `<img src="${bildUrl(frage.bild)}" alt="" loading="lazy">`;
   zeigeErgebnisListe(index);
   $("bz-weiter").hidden = !api.istLeiter;
   $("bz-weiter").textContent = index + 1 >= anzahlFragen ? "Endstand anzeigen" : "Nächste Frage";
