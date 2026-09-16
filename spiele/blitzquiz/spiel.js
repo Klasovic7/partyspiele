@@ -52,9 +52,10 @@ const STANDARD_ANZAHL = 10;
 // aus - auch wenn nicht alle geantwortet/gelöst/sich verbraucht haben (z. B.
 // weil jemand gar nicht reagiert).
 const FRAGE_TIMEOUT_MS = 90000;
-// Unschärfe-Stufen für "bild" (von stark unscharf zu fast scharf) - der letzte
-// Wert bleibt immer stehen, analog zum letzten Buchstaben bei "wort".
-const BILD_BLUR_STUFEN = [26, 20, 15, 10, 6];
+// "bild": die Unschärfe nimmt kontinuierlich ab (nicht in Stufen) und endet
+// nach BILD_SCHARF_DAUER_MS beim Originalbild in voller Schärfe.
+const BILD_BLUR_START_PX = 26;
+const BILD_SCHARF_DAUER_MS = 40000;
 
 const TYP_LABEL = { speed: "Schnelligkeit", wort: "Wortrate", bild: "Bild-Reveal" };
 
@@ -257,7 +258,7 @@ export async function starten(uebergebeneApi) {
     await setzeGrundzustand("setup");
   }
 
-  timerId = setInterval(() => { aktualisiereCountdown(); pruefeAufdeckFortschritt(); pruefeZeitlimit(); }, 300);
+  timerId = setInterval(() => { aktualisiereCountdown(); pruefeAufdeckFortschritt(); pruefeZeitlimit(); aktualisiereBildSchaerfe(); }, 300);
 }
 
 function verdrahteBedienelemente() {
@@ -503,11 +504,10 @@ export async function vorZurueck() {
 function maxAufdeckAnzahl(pos) {
   const frage = frageAn(pos);
   if (!frage) return 0;
-  if (frage.typ === "bild") return BILD_BLUR_STUFEN.length - 1;
   const anzahl = (buchstabenReihenfolgen[pos] ?? []).length;
   // Der letzte Buchstabe bleibt immer verdeckt, damit das Rätsel nicht von
-  // allein "fertig aufgedeckt" wird (beim Bild bleibt analog die letzte
-  // Unschärfe-Stufe stehen).
+  // allein "fertig aufgedeckt" wird. (Gilt nur für "wort" - bei "bild" läuft
+  // die Schärfe kontinuierlich über die Zeit, siehe aktualisiereBildSchaerfe().)
   return Math.max(0, anzahl - 1);
 }
 
@@ -591,27 +591,48 @@ function rendereBildAnzeige(frage) {
     wrapper.innerHTML = `<img src="${bildUrl(frage.bild)}" alt="" loading="lazy">`;
     wrapper.dataset.loesung = frage.loesung;
   }
-  const img = wrapper.querySelector("img");
-  if (img) {
-    const stufe = Math.min(aufdeckAnzahl, BILD_BLUR_STUFEN.length - 1);
-    img.style.filter = `blur(${BILD_BLUR_STUFEN[stufe]}px)`;
-  }
+  // Sofort die aktuell passende Schärfe setzen - sonst wäre das Bild für den
+  // ersten Tick (bis zu 300ms, siehe timerId-Intervall) noch komplett scharf
+  // zu sehen, bevor aktualisiereBildSchaerfe() zum ersten Mal läuft.
+  aktualisiereBildSchaerfe();
+}
+
+// Läuft alle 300ms mit (siehe timerId-Intervall) und blendet die Unschärfe
+// stetig aus - rein zeitbasiert über frageSeit, ohne Netzwerk-Zwischenschritte
+// (im Unterschied zum Buchstaben-Aufdecken bei "wort", das über Firestore
+// synchronisiert wird). Nach BILD_SCHARF_DAUER_MS ist das Bild komplett scharf
+// und bleibt es auch, falls die Frage noch länger offen ist.
+function aktualisiereBildSchaerfe() {
+  if (!el.wurzel || status !== "frage_aktiv") return;
+  const frage = frageAn(index);
+  if (!frage || frage.typ !== "bild") return;
+  const img = $("bz-bild-anzeige").querySelector("img");
+  if (!img) return;
+  const fortschritt = Math.min(1, Math.max(0, (Date.now() - frageSeit) / BILD_SCHARF_DAUER_MS));
+  img.style.filter = `blur(${BILD_BLUR_START_PX * (1 - fortschritt)}px)`;
 }
 
 function aktualisiereCountdown() {
   if (!el.wurzel || status !== "frage_aktiv") return;
   const frage = frageAn(index);
   if (!frage || (frage.typ !== "wort" && frage.typ !== "bild")) { $("bz-countdown").textContent = ""; return; }
+
+  if (frage.typ === "bild") {
+    const rest = Math.max(0, frageSeit + BILD_SCHARF_DAUER_MS - Date.now());
+    $("bz-countdown").textContent = rest > 0
+      ? `Bild wird in ${Math.ceil(rest / 1000)}s ganz scharf`
+      : "Bild ist jetzt ganz scharf";
+    return;
+  }
+
   const maximal = maxAufdeckAnzahl(index);
   if (aufdeckAnzahl >= maximal) {
-    $("bz-countdown").textContent = frage.typ === "wort" ? "Kein weiterer Buchstabe mehr" : "Bild bleibt jetzt so";
+    $("bz-countdown").textContent = "Kein weiterer Buchstabe mehr";
     return;
   }
   const naechsteAufdeckungBei = frageSeit + (aufdeckAnzahl + 1) * AUFDECK_DAUER_MS;
   const rest = Math.max(0, naechsteAufdeckungBei - Date.now());
-  $("bz-countdown").textContent = frage.typ === "wort"
-    ? `Nächster Buchstabe in ${Math.ceil(rest / 1000)}s`
-    : `Bild wird schärfer in ${Math.ceil(rest / 1000)}s`;
+  $("bz-countdown").textContent = `Nächster Buchstabe in ${Math.ceil(rest / 1000)}s`;
 }
 
 // Nur der Spielleiter-Client schreibt das Aufdecken in den Raum - sonst
@@ -619,7 +640,7 @@ function aktualisiereCountdown() {
 async function pruefeAufdeckFortschritt() {
   if (!api?.istLeiter || status !== "frage_aktiv" || aufdeckFortschreibenLaeuft) return;
   const frage = frageAn(index);
-  if (!frage || (frage.typ !== "wort" && frage.typ !== "bild")) return;
+  if (!frage || frage.typ !== "wort") return;
   const maximal = maxAufdeckAnzahl(index);
   if (aufdeckAnzahl >= maximal) return;
   const gewuenscht = Math.min(maximal, Math.floor((Date.now() - frageSeit) / AUFDECK_DAUER_MS));

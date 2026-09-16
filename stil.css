@@ -1806,5 +1806,8 @@
       object-fit: cover;
       border-radius: 16px;
       box-shadow: 0 6px 20px rgba(0, 0, 0, .35);
-      transition: filter .6s ease;
+      /* Kurze, lineare Übergangszeit passend zum 300ms-Update-Takt in
+         spiel.js - dadurch wirkt die stetig sinkende Unschärfe als
+         durchgehende, gleichmäßige Bewegung statt als Sprünge. */
+      transition: filter .3s linear;
     }
