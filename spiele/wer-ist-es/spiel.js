@@ -220,12 +220,22 @@ function passtUngefaehr(a, b) {
   return toleranz > 0 && levenshtein(a, b) <= toleranz;
 }
 
+// v143: Vorher zaehlte als "Nachname" nur das allerletzte Wort - bei mehr-
+// teiligen Nachnamen wie "Virgil van Dijk" oder "Kevin de Bruyne" wurde damit
+// nur "Dijk"/"Bruyne" akzeptiert, "van Dijk"/"de Bruyne" aber faelschlich als
+// falsch gewertet. Jetzt werden alle moeglichen Endungen ab dem zweiten Wort
+// geprueft (bei drei Woertern also sowohl das letzte Wort als auch die
+// letzten zwei), sodass jede gaengige Nachname-Schreibweise durchgeht.
 function istAntwortRichtig(eingabe, name) {
   const a = normalisiere(eingabe);
   if (!a) return false;
   if (passtUngefaehr(a, normalisiere(name))) return true;
-  const nachname = normalisiere(name.split(" ").slice(-1)[0]);
-  return passtUngefaehr(a, nachname);
+  const woerter = name.split(" ");
+  for (let i = 1; i < woerter.length; i++) {
+    const nachnameKandidat = normalisiere(woerter.slice(i).join(" "));
+    if (passtUngefaehr(a, nachnameKandidat)) return true;
+  }
+  return false;
 }
 
 function formatiertePunkte(p) {
