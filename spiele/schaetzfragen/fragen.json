@@ -5648,5 +5648,2605 @@
     "kategorie": "kurioses",
     "frage": "Wie viele Kilogramm wiegt die Zunge eines Blauwals ungefähr?",
     "antwort": 2700
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Spieler hat eine Fußballmannschaft auf dem Feld?",
+    "antwort": 11
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Spieler hat eine Eishockeymannschaft auf dem Feld ohne Torwart?",
+    "antwort": 5
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Löcher hat eine Standard-Golfrunde?",
+    "antwort": 18
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Farben hat ein klassischer Zauberwürfel?",
+    "antwort": 6
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Felder hat ein Schachbrett?",
+    "antwort": 64
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Figuren hat jede Seite beim Schach zu Beginn?",
+    "antwort": 16
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Bauern hat jede Seite beim Schach zu Beginn?",
+    "antwort": 8
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Steine hat ein klassischer Doppel-Sechs-Dominosatz?",
+    "antwort": 28
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Spielkarten hat ein französisches Kartenspiel ohne Joker?",
+    "antwort": 52
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Joker gibt es typischerweise in einem Kartenspiel?",
+    "antwort": 2
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Farben hat ein klassisches Skatspiel?",
+    "antwort": 4
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Buchstaben hat das Wort Deutschland?",
+    "antwort": 12
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Zeilen hat ein klassisches Sudoku-Raster?",
+    "antwort": 9
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Kästchen hat ein Sudoku-Raster insgesamt?",
+    "antwort": 81
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Felder hat ein Mensch-ärgere-dich-nicht-Spielplan für vier Spieler?",
+    "antwort": 40
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Spieler können maximal an einem klassischen Poker-Tisch sitzen?",
+    "antwort": 10
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Karten bekommt jeder Spieler bei Texas Hold'em auf die Hand?",
+    "antwort": 2
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Ecken hat ein Würfel?",
+    "antwort": 8
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Kanten hat ein Würfel?",
+    "antwort": 12
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Flächen hat ein Würfel?",
+    "antwort": 6
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Seiten hat ein klassischer Spielwürfel (W6)?",
+    "antwort": 6
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Ecken hat ein klassischer Fußball insgesamt?",
+    "antwort": 60
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Fünfecke hat ein klassischer Fußball?",
+    "antwort": 12
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Sechsecke hat ein klassischer Fußball?",
+    "antwort": 20
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Saiten hat eine klassische Violine?",
+    "antwort": 4
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Saiten hat ein klassischer Kontrabass?",
+    "antwort": 4
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Tasten hat eine Standard-Klaviatur?",
+    "antwort": 88
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele weiße Tasten hat ein Klavier?",
+    "antwort": 52
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele schwarze Tasten hat ein Klavier?",
+    "antwort": 36
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Ventile hat eine Standard-Trompete?",
+    "antwort": 3
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Saiten hat eine klassische E-Gitarre normalerweise?",
+    "antwort": 6
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Bünde hat eine typische E-Gitarre?",
+    "antwort": 22
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Konsonanten hat das deutsche Alphabet ohne Umlaute?",
+    "antwort": 21
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Minuten dauert ein Fußballspiel regulär?",
+    "antwort": 90
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Spieler stehen bei einer Volleyballmannschaft gleichzeitig auf dem Feld?",
+    "antwort": 6
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Sätze müssen bei einem Volleyballspiel normalerweise gewonnen werden?",
+    "antwort": 3
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Punkte braucht man normalerweise für einen Volleyball-Satzgewinn?",
+    "antwort": 25
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Bahnen hat eine olympische Schwimmbahn meist?",
+    "antwort": 8
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Meter lang ist eine olympische Laufbahn (eine Runde)?",
+    "antwort": 400
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Hürden stehen bei einem 110-Meter-Hürdenlauf?",
+    "antwort": 10
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Ringe hat das olympische Symbol?",
+    "antwort": 5
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Farben haben die olympischen Ringe?",
+    "antwort": 5
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Spiele braucht man mindestens, um einen Tennissatz zu gewinnen?",
+    "antwort": 6
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Sätze müssen Männer bei Grand-Slam-Turnieren im Tennis maximal spielen?",
+    "antwort": 5
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Sätze müssen Frauen bei Grand-Slam-Turnieren im Tennis maximal spielen?",
+    "antwort": 3
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Spieler bilden eine Basketballmannschaft auf dem Feld?",
+    "antwort": 5
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Punkte zählt ein regulärer Feldkorb beim Basketball?",
+    "antwort": 2
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Punkte zählt ein Dreier beim Basketball?",
+    "antwort": 3
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Freiwürfe bekommt man normalerweise bei einem Foul beim Basketball?",
+    "antwort": 2
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Minuten dauert ein Viertel in der NBA?",
+    "antwort": 12
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Viertel hat ein NBA-Spiel?",
+    "antwort": 4
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Spieler stehen bei American Football pro Team auf dem Feld?",
+    "antwort": 11
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Punkte gibt ein Touchdown beim American Football?",
+    "antwort": 6
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Pins stehen auf einer Bowlingbahn?",
+    "antwort": 10
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Würfe hat man normalerweise pro Frame beim Bowling?",
+    "antwort": 2
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Frames hat ein reguläres Bowling-Spiel?",
+    "antwort": 10
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Ecken hat ein Stoppschild?",
+    "antwort": 8
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Seiten hat ein Fünfeck?",
+    "antwort": 5
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Seiten hat ein Sechseck?",
+    "antwort": 6
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Seiten hat ein Achteck?",
+    "antwort": 8
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Grad hat ein rechter Winkel?",
+    "antwort": 90
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Grad hat ein gestreckter Winkel?",
+    "antwort": 180
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Grad hat ein Vollkreis?",
+    "antwort": 360
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Zentimeter hat ein Meter?",
+    "antwort": 100
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Millimeter hat ein Zentimeter?",
+    "antwort": 10
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Gramm hat ein Kilogramm?",
+    "antwort": 1000
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Milliliter hat ein Liter?",
+    "antwort": 1000
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Sekunden hat eine Minute?",
+    "antwort": 60
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Minuten hat eine Stunde?",
+    "antwort": 60
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Monate hat ein Jahr?",
+    "antwort": 12
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Wochen hat ein Jahr ungefähr?",
+    "antwort": 52
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Tage hat ein Schaltjahr?",
+    "antwort": 366
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Tage hat der Februar in einem Schaltjahr?",
+    "antwort": 29
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Buchstaben hat das lateinische Alphabet?",
+    "antwort": 26
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Vokale hat das deutsche Alphabet ohne Umlaute?",
+    "antwort": 5
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Bundesländer hat Österreich?",
+    "antwort": 9
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Kantone hat die Schweiz?",
+    "antwort": 26
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Zeitzonen hat Deutschland offiziell?",
+    "antwort": 1
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Zeitzonen hat das Festland der USA offiziell?",
+    "antwort": 4
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Spiele umfasst eine Fußball-Bundesliga-Saison pro Team?",
+    "antwort": 34
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Vereine spielen normalerweise in der 1. Fußball-Bundesliga?",
+    "antwort": 18
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Minuten dauert eine Halbzeit im Handball?",
+    "antwort": 30
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Spieler hat eine Handballmannschaft auf dem Feld inklusive Torwart?",
+    "antwort": 7
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Autos stehen bei einem Formel-1-Start normalerweise in einer Startreihe?",
+    "antwort": 2
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Reifen wechselt ein Formel-1-Boxenstopp normalerweise?",
+    "antwort": 4
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Gänge hat ein moderner Formel-1-Wagen normalerweise?",
+    "antwort": 8
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Speichen hat ein klassisches Fahrradlaufrad häufig?",
+    "antwort": 32
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Gänge hat ein klassisches 21-Gang-Mountainbike?",
+    "antwort": 21
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Räder hat ein klassisches Fahrrad?",
+    "antwort": 2
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Räder hat ein klassischer Pkw?",
+    "antwort": 4
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Zylinder hat ein klassischer Vierzylindermotor?",
+    "antwort": 4
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Takte hat ein klassischer Viertaktmotor?",
+    "antwort": 4
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Saiten hat eine Ukulele normalerweise?",
+    "antwort": 4
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Grifflöcher hat eine Blockflöte normalerweise vorne?",
+    "antwort": 7
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Farben hat der Regenbogen nach klassischer Zählung?",
+    "antwort": 7
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Planeten hat unser Sonnensystem offiziell?",
+    "antwort": 8
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Kontinente werden üblicherweise unterschieden?",
+    "antwort": 7
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Weltmeere gibt es nach klassischer Zählung?",
+    "antwort": 5
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Buchstaben hat das griechische Alphabet?",
+    "antwort": 24
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Bücher hat die Bibel im protestantischen Kanon insgesamt?",
+    "antwort": 66
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Gebote umfasst der biblische Dekalog?",
+    "antwort": 10
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Tage dauert eine Mondphase im Schnitt von Neumond zu Neumond?",
+    "antwort": 29
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Jahreszeiten gibt es in Mitteleuropa klassisch?",
+    "antwort": 4
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Zwerge hat Schneewittchen im Märchen der Brüder Grimm?",
+    "antwort": 7
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Musketiere gibt es im Romantitel von Alexandre Dumas?",
+    "antwort": 3
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Gänge umfasst ein klassisches Menü nach französischem Vorbild?",
+    "antwort": 3
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Ecken hat eine Pyramide mit quadratischer Grundfläche?",
+    "antwort": 5
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Seitenflächen hat eine quadratische Pyramide insgesamt?",
+    "antwort": 5
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Ecken hat ein Tetraeder?",
+    "antwort": 4
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Flächen hat ein Tetraeder?",
+    "antwort": 4
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Ecken hat ein Oktaeder?",
+    "antwort": 6
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Flächen hat ein Oktaeder?",
+    "antwort": 8
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Beine hat ein Insekt normalerweise?",
+    "antwort": 6
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Flügel hat ein typischer Käfer?",
+    "antwort": 4
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Augen hat eine typische Spinne oft?",
+    "antwort": 8
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Herzkammern hat das menschliche Herz?",
+    "antwort": 4
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Vorhöfe hat das menschliche Herz?",
+    "antwort": 2
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Liter Blut hat ein erwachsener Mensch im Körper ungefähr?",
+    "antwort": 5
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Hauptblutgruppen gibt es nach dem AB0-System?",
+    "antwort": 4
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Milchzähne hat ein Kleinkind normalerweise?",
+    "antwort": 20
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Rippenpaare hat der Mensch?",
+    "antwort": 12
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Lungenflügel hat der Mensch?",
+    "antwort": 2
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Lungenlappen hat die rechte Lunge normalerweise?",
+    "antwort": 3
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Lungenlappen hat die linke Lunge normalerweise?",
+    "antwort": 2
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Nieren hat ein Mensch normalerweise?",
+    "antwort": 2
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Sinne werden dem Menschen klassisch zugeschrieben?",
+    "antwort": 5
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Häuser darf man bei Monopoly maximal auf einem Grundstück bauen, bevor man zum Hotel wechselt?",
+    "antwort": 4
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Hotels darf man bei Monopoly maximal auf einem Grundstück bauen?",
+    "antwort": 1
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele Eckfelder hat ein Monopoly-Spielbrett?",
+    "antwort": 4
+  },
+  {
+    "kategorie": "unnuetzes-wissen",
+    "frage": "Wie viele gefängnisbezogene Felder gibt es beim klassischen Monopoly (Los ins Gefängnis und Gefängnis selbst)?",
+    "antwort": 2
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Kilometer lang ist der längste Fluss der Welt, der Nil, ungefähr?",
+    "antwort": 6650
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Kilometer lang ist der Amazonas, der wasserreichste Fluss der Welt, ungefähr?",
+    "antwort": 6400
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie hoch ist der Mount Everest, der höchste Berg der Welt, in Metern?",
+    "antwort": 8849
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Kilometer lang ist das Great Barrier Reef vor Australien ungefähr?",
+    "antwort": 2300
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Quadratkilometer misst der größte See der Welt, das Kaspische Meer, ungefähr?",
+    "antwort": 371000
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Meter tief ist der tiefste See der Welt, der Baikalsee?",
+    "antwort": 1642
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Kilometer lang ist der längste Straßentunnel der Welt, der Lærdalstunnel in Norwegen, ungefähr?",
+    "antwort": 25
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Meter hoch ist der höchste Wasserfall Europas, der Vinnufossen in Norwegen, ungefähr?",
+    "antwort": 860
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele km/h erreichte Felix Baumgartner beim freien Fall seines Stratos-Sprungs 2012 ungefähr?",
+    "antwort": 1357
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Kilometer Höhe sprang Felix Baumgartner 2012 beim Stratos-Sprung ungefähr ab?",
+    "antwort": 39
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Meter lang ist eines der größten Kreuzfahrtschiffe der Welt, die Icon of the Seas, ungefähr?",
+    "antwort": 365
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Passagiere fasst die Icon of the Seas maximal ungefähr?",
+    "antwort": 7600
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Meter hoch ist der Central Park Tower in New York, eines der höchsten Wohngebäude der Welt, ungefähr?",
+    "antwort": 472
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Kilometer lang ist der Pan-American Highway, die längste befahrbare Straße der Welt, ungefähr?",
+    "antwort": 30000
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Kilogramm wiegt der schwerste je dokumentierte erwachsene Mensch der Geschichte ungefähr?",
+    "antwort": 635
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Meter groß war der größte Mensch der Geschichte laut Guinness-Buch, Robert Wadlow, ungefähr?",
+    "antwort": 2.72
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele km/h erreicht der schnellste Mensch der Welt im Speed-Skiing ungefähr?",
+    "antwort": 254
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele km/h erreichte der schnellste Zug der Welt im Testbetrieb, ein japanischer Magnetschwebezug, ungefähr?",
+    "antwort": 603
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele km/h fährt der ICE in Deutschland im Regelbetrieb höchstens?",
+    "antwort": 300
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Meter hoch ist der Tokyo Skytree, einer der höchsten Fernsehtürme der Welt?",
+    "antwort": 634
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Meter misst die Hauptspannweite der Çanakkale-Brücke in der Türkei, einer der längsten Hängebrücken der Welt?",
+    "antwort": 2023
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Karat wog der größte je gefundene Rohdiamant, der Cullinan-Diamant?",
+    "antwort": 3106
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Jahre regierte Königin Elisabeth II., eine der am längsten amtierenden Monarchinnen der Geschichte?",
+    "antwort": 70
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Jahre regierte Ludwig XIV., einer der am längsten regierenden Monarchen der europäischen Geschichte?",
+    "antwort": 72
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Meter weit flog der Diskus beim aktuellen Weltrekord der Männer ungefähr?",
+    "antwort": 74
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Meter weit ist der Weltrekord im Kugelstoßen der Männer ungefähr?",
+    "antwort": 23
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Meter weit ist der Weltrekord im Weitsprung der Männer ungefähr?",
+    "antwort": 8.95
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Meter hoch ist der Weltrekord im Stabhochsprung der Männer ungefähr?",
+    "antwort": 6.24
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Meter weit ist der Weltrekord im Speerwurf der Männer ungefähr?",
+    "antwort": 98
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Sekunden schnell lief der Weltrekord über 200 Meter der Männer?",
+    "antwort": 19.19
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Sekunden schnell lief der Weltrekord über 400 Meter der Männer ungefähr?",
+    "antwort": 43
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Stunden dauert der aktuelle Marathon-Weltrekord der Männer ungefähr?",
+    "antwort": 2
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Meter tief taucht der Rekordhalter im freien Tauchen ohne Gerät (No-Limits) ungefähr?",
+    "antwort": 214
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Minuten hielt der Weltrekordhalter im statischen Apnoetauchen die Luft an ungefähr?",
+    "antwort": 24
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Dezibel erreichte der lauteste je gemessene menschliche Schrei ungefähr?",
+    "antwort": 129
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Stunden dauerte die längste ununterbrochene Rede im US-Senat (Filibuster) ungefähr?",
+    "antwort": 24
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Kilogramm wiegt der größte je gefangene Süßwasserfisch, ein Mekong-Riesenwels, ungefähr?",
+    "antwort": 300
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Meter lang kann die größte Riesenschlange, die Netzpython, werden ungefähr?",
+    "antwort": 10
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Kilogramm wiegt der schwerste je bei einem Wettbewerb gewogene Kürbis ungefähr?",
+    "antwort": 1226
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Meter lang war die Antonow An-225, das größte je gebaute Frachtflugzeug, ungefähr?",
+    "antwort": 84
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Tonnen konnte die Antonow An-225 maximal an Fracht transportieren ungefähr?",
+    "antwort": 250
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Passagiere fasst der Airbus A380, das größte Passagierflugzeug der Welt, maximal ungefähr?",
+    "antwort": 850
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Meter lang ist der Airbus A380 ungefähr?",
+    "antwort": 73
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele km/h erreicht die SR-71 Blackbird, eines der schnellsten je gebauten bemannten Flugzeuge, ungefähr?",
+    "antwort": 3500
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele km/h erreichte der Bloodhound-Raketenwagen-Prototyp im Testlauf ungefähr?",
+    "antwort": 1000
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele km/h betrug die Spitzengeschwindigkeit von Usain Bolt bei seinem 100-Meter-Weltrekord ungefähr?",
+    "antwort": 44
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Meter weit warf der Weltrekordhalter im Hammerwurf der Männer ungefähr?",
+    "antwort": 86
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Meter hoch sprang der Weltrekordhalter im Hochsprung der Männer ungefähr?",
+    "antwort": 2.45
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Meter weit ist der Weltrekord im Dreisprung der Männer ungefähr?",
+    "antwort": 18
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Jahre war Papst Pius IX., der am längsten amtierende Papst der Geschichte, im Amt?",
+    "antwort": 31
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Jahre war Fidel Castro Staatschef Kubas?",
+    "antwort": 49
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Jahre regierte Kim Il-sung als Staatschef Nordkoreas?",
+    "antwort": 46
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Meter breit ist die Front der Iguazú-Fälle in Südamerika ungefähr?",
+    "antwort": 2700
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele einzelne Wasserfälle umfassen die Iguazú-Fälle ungefähr?",
+    "antwort": 275
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Meter hoch sind die Victoriafälle in Afrika ungefähr?",
+    "antwort": 108
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Meter breit sind die Victoriafälle in Afrika ungefähr?",
+    "antwort": 1700
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Kilometer lang ist der Lambert-Gletscher in der Antarktis, einer der längsten Gletscher der Welt, ungefähr?",
+    "antwort": 400
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Quadratkilometer misst der Fedchenko-Gletscher, einer der größten Gletscher außerhalb der Polarregionen, ungefähr?",
+    "antwort": 700
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Meter dick ist die dickste je gemessene Eisschicht der Antarktis ungefähr?",
+    "antwort": 4800
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Grad Celsius kalt war die tiefste je auf der Erde gemessene Temperatur an der Wostok-Station in der Antarktis?",
+    "antwort": -89
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele km/h erreichte der Wind beim Zyklon Olivia, eine der stärksten je gemessenen Windböen, ungefähr?",
+    "antwort": 408
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele km/h erreichte der schnellste je gemessene nicht-tornadische Windstoß am Mount-Washington-Observatorium ungefähr?",
+    "antwort": 372
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Meter Niederschlag fielen im regenreichsten Jahr der Erde in Cherrapunji, Indien, ungefähr?",
+    "antwort": 26
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Blitze pro Quadratkilometer und Jahr schlagen am blitzreichsten Ort der Erde am Lake Maracaibo in Venezuela ungefähr ein?",
+    "antwort": 233
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Jahre lebte der älteste je registrierte Baum der Welt, eine Grannen-Kiefer, ungefähr?",
+    "antwort": 5000
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Meter hoch ist der höchste lebende Baum der Welt, ein Redwood namens Hyperion, ungefähr?",
+    "antwort": 116
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Jahre war Robert Walpole, der erste und am längsten amtierende britische Premierminister, im Amt?",
+    "antwort": 20
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Jahre war Fürst Rainier III. Herrscher von Monaco?",
+    "antwort": 56
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Millionen Exemplare verkaufte die Buchreihe Harry Potter insgesamt ungefähr?",
+    "antwort": 600
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Millionen Exemplare verkaufte 'Der kleine Prinz', eines der meistübersetzten Bücher der Welt, ungefähr?",
+    "antwort": 200
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Millionen Exemplare wurden vom meistverkauften Videospiel der Welt, Minecraft, ungefähr verkauft?",
+    "antwort": 300
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Millionen Exemplare wurden von der meistverkauften Spielkonsole der Welt, der PlayStation 2, ungefähr verkauft?",
+    "antwort": 155
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Millionen Menschen sahen die Mondlandung 1969 weltweit im Fernsehen ungefähr?",
+    "antwort": 600
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Millionen Menschen sahen ein Champions-League-Finale im Fernsehen weltweit ungefähr?",
+    "antwort": 400
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Millionen Follower hatte der meistgefolgte Instagram-Account zeitweise ungefähr?",
+    "antwort": 600
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Millionen Abonnenten hat einer der größten YouTube-Kanäle der Welt ungefähr?",
+    "antwort": 400
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Milliarden Aufrufe hat das meistgesehene YouTube-Video der Welt, 'Baby Shark Dance', ungefähr?",
+    "antwort": 15
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Millionen Dollar spielte der erfolgreichste Kinofilm aller Zeiten, Avatar, weltweit ungefähr ein?",
+    "antwort": 2900
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Milliarden Dollar Vermögen besaß der reichste Mensch der Welt zeitweise ungefähr?",
+    "antwort": 250
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Karat wog der Excelsior-Diamant, einer der größten je gefundenen Rohdiamanten vor dem Cullinan?",
+    "antwort": 995
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Meter lang war der längste je gemessene menschliche Bart ungefähr?",
+    "antwort": 5
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Zentimeter lang waren die längsten je gemessenen Fingernägel einer Frau insgesamt ungefähr?",
+    "antwort": 909
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Meter hoch schießt der Steamboat-Geysir im Yellowstone-Nationalpark, der höchste aktive Geysir der Welt, bei Ausbrüchen ungefähr?",
+    "antwort": 115
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Meter hoch spritzt der Fountain Hills Fountain in Arizona, einer der höchsten künstlichen Springbrunnen der Welt?",
+    "antwort": 171
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Meter hoch war der größte je gebaute Schneemann der Welt ungefähr?",
+    "antwort": 34
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Jahre alt wurde Jeanne Calment, die älteste bestätigte Frau der Geschichte, tatsächlich?",
+    "antwort": 122
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Jahre alt wurde der älteste bestätigte Mann der Geschichte ungefähr?",
+    "antwort": 116
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Kilometer lang ist die längste ununterbrochene Zugstrecke der Welt ohne Umsteigen (Moskau–Pjöngjang) ungefähr?",
+    "antwort": 10214
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Millionen Quadratkilometer groß ist die Sahara, die größte heiße Wüste der Welt, ungefähr?",
+    "antwort": 9
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Millionen US-Dollar kostete 'Salvator Mundi', eines der teuersten je verkauften Gemälde?",
+    "antwort": 450
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Welche Stärke (Magnitude) hatte das stärkste je gemessene Erdbeben, 1960 in Chile?",
+    "antwort": 9.5
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele km/h fährt Formula Rossa in Abu Dhabi, eine der schnellsten Achterbahnen der Welt?",
+    "antwort": 240
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Millionen Exemplare verkaufte 'Thriller' von Michael Jackson, eines der erfolgreichsten Alben der Geschichte, ungefähr?",
+    "antwort": 70
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Zuschauer fasst das Rungrado-Stadion in Pjöngjang, eines der größten Stadien der Welt?",
+    "antwort": 114000
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Stunden dauert der längste Nonstop-Linienflug der Welt (Singapur–New York) ungefähr?",
+    "antwort": 18
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Meter hoch ist Kingda Ka in New Jersey, eine der höchsten Achterbahnen der Welt?",
+    "antwort": 139
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Sprachen sprach der mehrsprachigste Mensch laut Guinness-Buch ungefähr?",
+    "antwort": 58
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Kilometer lang ist die Danyang-Kunshan-Großbrücke in China, eine der längsten Brücken der Welt, ungefähr?",
+    "antwort": 165
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Meter hoch ist der Salto Ángel in Venezuela, einer der höchsten Wasserfälle der Welt?",
+    "antwort": 979
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Kilometer lang ist der Gotthard-Basistunnel, einer der längsten Eisenbahntunnel der Welt?",
+    "antwort": 57
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Meter hoch ist die Cheops-Pyramide heute ungefähr?",
+    "antwort": 139
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Grad Celsius war die höchste je auf der Erde gemessene Temperatur ungefähr?",
+    "antwort": 57
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Kilometer lang ist die Transsibirische Eisenbahn von Moskau nach Wladiwostok ungefähr?",
+    "antwort": 9289
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Kilometer hoch ist der Olympus Mons auf dem Mars, der höchste Berg im Sonnensystem, ungefähr?",
+    "antwort": 22
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Meter tief ist der Marianengraben, die tiefste Stelle der Weltmeere, ungefähr?",
+    "antwort": 10994
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Sekunden schnell lief Usain Bolt bei seinem 100-Meter-Weltrekord?",
+    "antwort": 9.58
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Kilogramm wiegt der schwerste je gefangene Fisch der Welt, ein Weißer Hai, ungefähr?",
+    "antwort": 3000
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Meter lang war das größte je gemessene Salzwasserkrokodil ungefähr?",
+    "antwort": 6
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Kilogramm wog das größte je gemessene Salzwasserkrokodil ungefähr?",
+    "antwort": 1000
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Kilogramm wiegt der größte je gefangene Hummer ungefähr?",
+    "antwort": 20
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Meter groß wurde der größte je gemessene Braunbär aufgerichtet ungefähr?",
+    "antwort": 3
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Kilogramm wog der schwerste je gemessene Eisbär ungefähr?",
+    "antwort": 1000
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Kilogramm wiegt der größte je gemessene Gorilla ungefähr?",
+    "antwort": 220
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Meter Spannweite hatte der größte je vermessene Vogelflügel, ein Wanderalbatros, ungefähr?",
+    "antwort": 3.7
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Kilogramm wiegt der schwerste flugfähige Vogel der Welt, die Große Trappe, ungefähr?",
+    "antwort": 21
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele km/h erreicht der schnellste Fisch der Welt, der Schwertfisch, im Wasser ungefähr?",
+    "antwort": 100
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Meter lang wird der größte je gemessene Riesenkalmar ungefähr?",
+    "antwort": 13
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Kilogramm wiegt der größte je gefangene Pazifische Riesenkrake ungefähr?",
+    "antwort": 270
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Zentimeter lang wird der größte Käfer der Welt, der Herkuleskäfer, ungefähr?",
+    "antwort": 17
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Zentimeter Flügelspannweite hat der größte Schmetterling der Welt, der Königin-Alexandra-Vogelfalter, ungefähr?",
+    "antwort": 28
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Zentimeter Beinspannweite hat die größte Spinne der Welt, die Riesenvogelspinne, ungefähr?",
+    "antwort": 30
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Zentimeter lang wird das längste Insekt der Welt, eine Stabschrecke, ungefähr?",
+    "antwort": 64
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Zentimeter Flügelspannweite hat der Atlasspinner, einer der größten Nachtfalter der Welt, ungefähr?",
+    "antwort": 30
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Jahre kann ein Hummer laut Schätzungen für die ältesten Exemplare theoretisch alt werden?",
+    "antwort": 100
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Kilogramm wiegt der größte je gefangene Beluga-Stör ungefähr?",
+    "antwort": 1000
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Meter lang wurde der längste je gemessene Regenwurm in Südafrika ungefähr?",
+    "antwort": 6.7
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Zentimeter lang wird der größte Frosch der Welt, der Goliathfrosch, ungefähr?",
+    "antwort": 32
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Kilogramm wiegt der größte je gemessene Goliathfrosch ungefähr?",
+    "antwort": 3.3
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Meter lang wird das größte Nagetier der Welt, das Wasserschwein (Capybara), in Kopf-Rumpf-Länge ungefähr?",
+    "antwort": 1.3
+  },
+  {
+    "kategorie": "rekorde",
+    "frage": "Wie viele Kilogramm wiegt das größte Nagetier der Welt, das Wasserschwein (Capybara), ungefähr?",
+    "antwort": 65
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Bundestagsabgeordnete hat der deutsche Bundestag in etwa?",
+    "antwort": 630
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Bundesländer hat Deutschland?",
+    "antwort": 16
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Sterne hat die Flagge der Europäischen Union?",
+    "antwort": 12
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "In welchem Jahr wurde die Bundesrepublik Deutschland gegründet?",
+    "antwort": 1949
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "In welchem Jahr fand die deutsche Wiedervereinigung statt?",
+    "antwort": 1990
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "In welchem Jahr fiel die Berliner Mauer?",
+    "antwort": 1989
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Jahre war Deutschland geteilt (1949 bis 1990)?",
+    "antwort": 41
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "In welchem Jahr trat Deutschland der EWG, der Vorgängerin der EU, bei?",
+    "antwort": 1957
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Gründungsmitglieder hatte die EWG 1957?",
+    "antwort": 6
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "In welchem Jahr wurde der Euro als Buchgeld eingeführt?",
+    "antwort": 1999
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "In welchem Jahr wurde der Euro als Bargeld eingeführt?",
+    "antwort": 2002
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Länder haben aktuell den Euro als Währung eingeführt?",
+    "antwort": 20
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "In welchem Jahr wurde die Weimarer Republik ausgerufen?",
+    "antwort": 1918
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "In welchem Jahr endete der Erste Weltkrieg?",
+    "antwort": 1918
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "In welchem Jahr endete der Zweite Weltkrieg in Europa?",
+    "antwort": 1945
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Jahre dauerte der Dreißigjährige Krieg?",
+    "antwort": 30
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "In welchem Jahr wurde das Deutsche Kaiserreich gegründet?",
+    "antwort": 1871
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Amtszeiten darf ein US-Präsident laut Verfassung regulär gewählt werden?",
+    "antwort": 2
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Jahre dauert eine Amtszeit eines US-Präsidenten?",
+    "antwort": 4
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Wahlmänner umfasst das US Electoral College insgesamt?",
+    "antwort": 538
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Bundesstaaten haben die USA?",
+    "antwort": 50
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Provinzen und Territorien hat Kanada insgesamt?",
+    "antwort": 13
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Richter hat der Oberste Gerichtshof der USA (Supreme Court)?",
+    "antwort": 9
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Abgeordnete hat das Europäische Parlament ungefähr?",
+    "antwort": 720
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Mitglieder hat die Europäische Kommission ungefähr, ein Kommissar pro Mitgliedsstaat?",
+    "antwort": 27
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Amtssprachen hat die Europäische Union offiziell?",
+    "antwort": 24
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Richter hat der Europäische Gerichtshof, ein Richter pro Mitgliedsstaat?",
+    "antwort": 27
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Staaten gehörten der ehemaligen Sowjetunion an?",
+    "antwort": 15
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "In welchem Jahr löste sich die Sowjetunion auf?",
+    "antwort": 1991
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Staaten sind aktuell Mitglied der Afrikanischen Union?",
+    "antwort": 55
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Staaten sind aktuell Mitglied des Commonwealth of Nations ungefähr?",
+    "antwort": 56
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele permanente Mitglieder mit Vetorecht hat der UN-Sicherheitsrat?",
+    "antwort": 5
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele nichtständige Mitglieder hat der UN-Sicherheitsrat?",
+    "antwort": 10
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "In welchem Jahr wurde der Vertrag von Maastricht unterzeichnet?",
+    "antwort": 1992
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "In welchem Jahr trat der Vertrag von Lissabon in Kraft?",
+    "antwort": 2009
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "In welchem Jahr verließ Großbritannien die EU endgültig (Brexit-Vollzug)?",
+    "antwort": 2020
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Jahre war Großbritannien Mitglied der EU (1973 bis 2020)?",
+    "antwort": 47
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "In welchem Jahr wurde die Allgemeine Erklärung der Menschenrechte der UNO verkündet?",
+    "antwort": 1948
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Artikel hat die Allgemeine Erklärung der Menschenrechte?",
+    "antwort": 30
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Artikel hat das deutsche Grundgesetz insgesamt ungefähr?",
+    "antwort": 146
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "In welchem Jahr trat das deutsche Grundgesetz in Kraft?",
+    "antwort": 1949
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Bundeskanzler hatte die Bundesrepublik Deutschland bisher insgesamt ungefähr?",
+    "antwort": 9
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Bundespräsidenten hatte die Bundesrepublik Deutschland bisher insgesamt ungefähr?",
+    "antwort": 12
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Jahre dauert eine Legislaturperiode des Bundestages regulär?",
+    "antwort": 4
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Prozent der Stimmen braucht eine Partei in Deutschland mindestens, um über die Fünf-Prozent-Hürde in den Bundestag einzuziehen?",
+    "antwort": 5
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Wahlkreise gibt es bei der Bundestagswahl in Deutschland ungefähr?",
+    "antwort": 299
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Jahre muss man in Deutschland mindestens alt sein, um wählen zu dürfen?",
+    "antwort": 18
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Jahre muss man in Deutschland mindestens alt sein, um Bundestagsabgeordneter zu werden?",
+    "antwort": 18
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Emirate bilden die Vereinigten Arabischen Emirate?",
+    "antwort": 7
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Amtssprachen hat die Schweiz offiziell?",
+    "antwort": 4
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Bundesländer hat Österreich?",
+    "antwort": 9
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Regionen hat das französische Mutterland aktuell?",
+    "antwort": 13
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele autonome Gemeinschaften hat Spanien?",
+    "antwort": 17
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Basiseinheiten definiert das Internationale Einheitensystem (SI)?",
+    "antwort": 7
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Protonen hat ein Wasserstoffatom im Kern?",
+    "antwort": 1
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Protonen hat ein Kohlenstoffatom im Kern?",
+    "antwort": 6
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Protonen hat ein Sauerstoffatom im Kern?",
+    "antwort": 8
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Elektronen umkreisen ein neutrales Kohlenstoffatom?",
+    "antwort": 6
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele klassische Aggregatzustände werden meist unterschieden (fest, flüssig, gasförmig)?",
+    "antwort": 3
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Grundkräfte der Physik unterscheidet das Standardmodell?",
+    "antwort": 4
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Quark-Arten (Flavors) kennt das Standardmodell der Teilchenphysik?",
+    "antwort": 6
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Chromosomenpaare hat der Mensch normalerweise?",
+    "antwort": 23
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Milliarden Basenpaare hat das menschliche Genom ungefähr?",
+    "antwort": 3
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Herzkammern hat ein Fischherz normalerweise?",
+    "antwort": 2
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Herzkammern hat ein Vogelherz?",
+    "antwort": 4
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Erdtage dauert ein Marsjahr, ein Umlauf des Mars um die Sonne, ungefähr?",
+    "antwort": 687
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Erdjahre dauert ein Umlauf des Saturn um die Sonne?",
+    "antwort": 29
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Erdjahre dauert ein Umlauf des Uranus um die Sonne?",
+    "antwort": 84
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Monde hat der Planet Mars?",
+    "antwort": 2
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Monde hat der Planet Erde?",
+    "antwort": 1
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Monde hat der Planet Saturn nach aktuellem Kenntnisstand ungefähr?",
+    "antwort": 146
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Planeten im Sonnensystem haben Ringe?",
+    "antwort": 4
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Zwergplaneten sind aktuell offiziell von der Internationalen Astronomischen Union anerkannt?",
+    "antwort": 5
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Erdradien passen ungefähr in den Radius der Sonne?",
+    "antwort": 109
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Kilometer beträgt der Radius der Erde ungefähr?",
+    "antwort": 6371
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Kilometer beträgt der Radius des Mondes ungefähr?",
+    "antwort": 1737
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Prozent der Erdoberfläche sind ungefähr von Wasser bedeckt?",
+    "antwort": 71
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Prozent der Erdatmosphäre besteht ungefähr aus Stickstoff?",
+    "antwort": 78
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Prozent der Erdatmosphäre besteht ungefähr aus Sauerstoff?",
+    "antwort": 21
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "In wie viel Kilometer Höhe beginnt die Ozonschicht über der Erde ungefähr?",
+    "antwort": 15
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Hauptschichten hat die Erdatmosphäre klassisch, von der Troposphäre bis zur Exosphäre?",
+    "antwort": 5
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Kilometer dick ist die Erdkruste unter den Kontinenten ungefähr?",
+    "antwort": 35
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Grad Celsius heiß ist der Erdkern im Zentrum ungefähr?",
+    "antwort": 6000
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele tektonische Hauptplatten werden bei der Erde klassisch unterschieden?",
+    "antwort": 7
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele aktive Vulkane gibt es weltweit schätzungsweise ungefähr?",
+    "antwort": 1500
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Nobelpreis-Kategorien gab es ursprünglich seit der ersten Verleihung 1901?",
+    "antwort": 5
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Nobelpreis-Kategorien gibt es heute insgesamt, inklusive Wirtschaftswissenschaften seit 1969?",
+    "antwort": 6
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "In welchem Jahr erhielt Marie Curie ihren ersten Nobelpreis?",
+    "antwort": 1903
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Nobelpreise gewann Marie Curie insgesamt?",
+    "antwort": 2
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "In welchem Jahr veröffentlichte Albert Einstein seine spezielle Relativitätstheorie?",
+    "antwort": 1905
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "In welchem Jahr veröffentlichte Charles Darwin 'Die Entstehung der Arten'?",
+    "antwort": 1859
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "In welchem Jahr entdeckte Alexander Fleming das Penicillin?",
+    "antwort": 1928
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "In welchem Jahr wurde die Doppelhelix-Struktur der DNA von Watson und Crick beschrieben?",
+    "antwort": 1953
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "In welchem Jahr wurde das erste Schaf, Dolly, geklont?",
+    "antwort": 1996
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "In welchem Jahr startete der erste künstliche Satellit Sputnik 1?",
+    "antwort": 1957
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "In welchem Jahr flog Juri Gagarin als erster Mensch ins Weltall?",
+    "antwort": 1961
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "In welchem Jahr wurde die Internationale Raumstation ISS erstmals dauerhaft besetzt?",
+    "antwort": 2000
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Kilometer über der Erde befindet sich die ISS auf ihrer Umlaufbahn ungefähr?",
+    "antwort": 400
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Minuten braucht die ISS für eine Erdumkreisung ungefähr?",
+    "antwort": 90
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Jahre dauert es ungefähr, bis der Halleysche Komet wieder von der Erde aus sichtbar wird?",
+    "antwort": 76
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "In welchem Jahr wurde das Higgs-Boson am CERN experimentell nachgewiesen?",
+    "antwort": 2012
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Kilometer misst der Umfang des Teilchenbeschleunigers LHC am CERN ungefähr?",
+    "antwort": 27
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Mitgliedsstaaten hat die Europäische Weltraumorganisation ESA ungefähr?",
+    "antwort": 22
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "In welchem Jahr schlug Tim Berners-Lee am CERN das World Wide Web vor?",
+    "antwort": 1989
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "In welchem Jahr wurde der erste Mikroprozessor, der Intel 4004, vorgestellt?",
+    "antwort": 1971
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "In welchem Jahr wurde das erste iPhone vorgestellt?",
+    "antwort": 2007
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Sprachen werden aktuell weltweit schätzungsweise gesprochen?",
+    "antwort": 7000
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Buchstaben hat das russische kyrillische Alphabet?",
+    "antwort": 33
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Zeitzonen umfasst Russland offiziell?",
+    "antwort": 11
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Chromosomen hat eine Fruchtfliege (Drosophila)?",
+    "antwort": 8
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Chromosomen hat ein Schimpanse?",
+    "antwort": 48
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Chromosomen hat eine Kartoffelpflanze ungefähr?",
+    "antwort": 48
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Gene hat das Bakterium E. coli ungefähr?",
+    "antwort": 4400
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Grundgeschmacksrichtungen unterscheidet die moderne Sinnesphysiologie (süß, sauer, salzig, bitter, umami)?",
+    "antwort": 5
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "In welchem Jahrhundert fand die Französische Revolution statt?",
+    "antwort": 18
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "In welchem Jahr begann die Französische Revolution?",
+    "antwort": 1789
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "In welchem Jahr wurde die amerikanische Unabhängigkeitserklärung unterschrieben?",
+    "antwort": 1776
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Kolonien unterschrieben die amerikanische Unabhängigkeitserklärung ursprünglich?",
+    "antwort": 13
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "In welchem Jahr endete die Apartheid in Südafrika offiziell?",
+    "antwort": 1994
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "In welchem Jahr wurde Nelson Mandela aus der Haft entlassen?",
+    "antwort": 1990
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Jahre saß Nelson Mandela insgesamt im Gefängnis?",
+    "antwort": 27
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "In welchem Jahr trat die Bundesrepublik Deutschland der NATO bei?",
+    "antwort": 1955
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Gründungsmitglieder hatte die NATO 1949?",
+    "antwort": 12
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "In welchem Jahr wurde die NATO gegründet?",
+    "antwort": 1949
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Jahre bestand das Römische Reich ungefähr, von der Gründung Roms bis zum Fall Westroms (753 v. Chr. bis 476 n. Chr.)?",
+    "antwort": 1229
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Jahre bestand das Byzantinische Reich (Oströmisches Reich) insgesamt ungefähr (395 bis 1453)?",
+    "antwort": 1058
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Jahre dauerte der Kalte Krieg ungefähr (1947 bis 1991)?",
+    "antwort": 44
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "In welchem Jahr begann der Koreakrieg?",
+    "antwort": 1950
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "In welchem Jahr endete der Vietnamkrieg?",
+    "antwort": 1975
+  },
+  {
+    "kategorie": "politik-wissenschaft",
+    "frage": "Wie viele Mitgliedsstaaten hatte die EU vor dem Brexit (2016)?",
+    "antwort": 28
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde Barack Obama geboren?",
+    "antwort": 1961
+  },
+  {
+    "kategorie": "promis",
+    "frage": "Wie viele Jahre war Barack Obama US-Präsident?",
+    "antwort": 8
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde Donald Trump geboren?",
+    "antwort": 1946
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde Taylor Swift geboren?",
+    "antwort": 1989
+  },
+  {
+    "kategorie": "promis",
+    "frage": "Wie viele Grammy Awards hat Taylor Swift bisher ungefähr gewonnen?",
+    "antwort": 14
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde Beyoncé geboren?",
+    "antwort": 1981
+  },
+  {
+    "kategorie": "promis",
+    "frage": "Wie viele Grammy Awards hat Beyoncé insgesamt ungefähr gewonnen (Rekordhalterin)?",
+    "antwort": 32
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde Cristiano Ronaldo geboren?",
+    "antwort": 1985
+  },
+  {
+    "kategorie": "promis",
+    "frage": "Wie viele Ballon d'Or-Auszeichnungen hat Cristiano Ronaldo gewonnen?",
+    "antwort": 5
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde Lionel Messi geboren?",
+    "antwort": 1987
+  },
+  {
+    "kategorie": "promis",
+    "frage": "Wie viele Ballon d'Or-Auszeichnungen hat Lionel Messi gewonnen (Rekordhalter)?",
+    "antwort": 8
+  },
+  {
+    "kategorie": "promis",
+    "frage": "Wie viele Weltmeistertitel hat Lionel Messi mit Argentinien gewonnen?",
+    "antwort": 1
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde Roger Federer geboren?",
+    "antwort": 1981
+  },
+  {
+    "kategorie": "promis",
+    "frage": "Wie viele Grand-Slam-Titel gewann Roger Federer insgesamt?",
+    "antwort": 20
+  },
+  {
+    "kategorie": "promis",
+    "frage": "Wie viele Grand-Slam-Titel gewann Rafael Nadal insgesamt?",
+    "antwort": 22
+  },
+  {
+    "kategorie": "promis",
+    "frage": "Wie viele Grand-Slam-Titel gewann Novak Djokovic insgesamt ungefähr (Rekordhalter)?",
+    "antwort": 24
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde Serena Williams geboren?",
+    "antwort": 1981
+  },
+  {
+    "kategorie": "promis",
+    "frage": "Wie viele Grand-Slam-Einzeltitel gewann Serena Williams insgesamt?",
+    "antwort": 23
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde Michael Jordan geboren?",
+    "antwort": 1963
+  },
+  {
+    "kategorie": "promis",
+    "frage": "Wie viele NBA-Meisterschaften gewann Michael Jordan mit den Chicago Bulls?",
+    "antwort": 6
+  },
+  {
+    "kategorie": "promis",
+    "frage": "Wie viele NBA-Meisterschaften gewann LeBron James bisher ungefähr?",
+    "antwort": 4
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde LeBron James geboren?",
+    "antwort": 1984
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde Muhammad Ali geboren?",
+    "antwort": 1942
+  },
+  {
+    "kategorie": "promis",
+    "frage": "Wie alt wurde Muhammad Ali?",
+    "antwort": 74
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde Pablo Picasso geboren?",
+    "antwort": 1881
+  },
+  {
+    "kategorie": "promis",
+    "frage": "Wie alt wurde Pablo Picasso?",
+    "antwort": 91
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde Wolfgang Amadeus Mozart geboren?",
+    "antwort": 1756
+  },
+  {
+    "kategorie": "promis",
+    "frage": "Wie alt wurde Wolfgang Amadeus Mozart?",
+    "antwort": 35
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde Ludwig van Beethoven geboren?",
+    "antwort": 1770
+  },
+  {
+    "kategorie": "promis",
+    "frage": "Wie alt wurde Ludwig van Beethoven?",
+    "antwort": 56
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde William Shakespeare geboren?",
+    "antwort": 1564
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde Leonardo da Vinci geboren?",
+    "antwort": 1452
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde Charlie Chaplin geboren?",
+    "antwort": 1889
+  },
+  {
+    "kategorie": "promis",
+    "frage": "Wie alt wurde Charlie Chaplin?",
+    "antwort": 88
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde Walt Disney geboren?",
+    "antwort": 1901
+  },
+  {
+    "kategorie": "promis",
+    "frage": "Wie alt wurde Walt Disney?",
+    "antwort": 65
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde Steve Jobs geboren?",
+    "antwort": 1955
+  },
+  {
+    "kategorie": "promis",
+    "frage": "Wie alt wurde Steve Jobs?",
+    "antwort": 56
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde Bill Gates geboren?",
+    "antwort": 1955
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde Mark Zuckerberg geboren?",
+    "antwort": 1984
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde Jeff Bezos geboren?",
+    "antwort": 1964
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr gründete Elon Musk das Unternehmen SpaceX?",
+    "antwort": 2002
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde Oprah Winfrey geboren?",
+    "antwort": 1954
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde Whitney Houston geboren?",
+    "antwort": 1963
+  },
+  {
+    "kategorie": "promis",
+    "frage": "Wie alt wurde Whitney Houston?",
+    "antwort": 48
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde Amy Winehouse geboren?",
+    "antwort": 1983
+  },
+  {
+    "kategorie": "promis",
+    "frage": "Wie alt wurde Amy Winehouse?",
+    "antwort": 27
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde David Bowie geboren?",
+    "antwort": 1947
+  },
+  {
+    "kategorie": "promis",
+    "frage": "Wie alt wurde David Bowie?",
+    "antwort": 69
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde Prince geboren?",
+    "antwort": 1958
+  },
+  {
+    "kategorie": "promis",
+    "frage": "Wie alt wurde Prince?",
+    "antwort": 57
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde John Lennon geboren?",
+    "antwort": 1940
+  },
+  {
+    "kategorie": "promis",
+    "frage": "Wie alt wurde John Lennon?",
+    "antwort": 40
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde Paul McCartney geboren?",
+    "antwort": 1942
+  },
+  {
+    "kategorie": "promis",
+    "frage": "Wie viele Studioalben veröffentlichten die Beatles insgesamt?",
+    "antwort": 12
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr trennten sich die Beatles offiziell?",
+    "antwort": 1970
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde Elvis Presley geboren?",
+    "antwort": 1935
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde Marilyn Monroe geboren?",
+    "antwort": 1926
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde Audrey Hepburn geboren?",
+    "antwort": 1929
+  },
+  {
+    "kategorie": "promis",
+    "frage": "Wie alt wurde Audrey Hepburn?",
+    "antwort": 63
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde Grace Kelly geboren?",
+    "antwort": 1929
+  },
+  {
+    "kategorie": "promis",
+    "frage": "Wie alt wurde Grace Kelly?",
+    "antwort": 52
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde Königin Elizabeth II. geboren?",
+    "antwort": 1926
+  },
+  {
+    "kategorie": "promis",
+    "frage": "Wie alt wurde Königin Elizabeth II.?",
+    "antwort": 96
+  },
+  {
+    "kategorie": "promis",
+    "frage": "Wie viele Jahre war Elizabeth II. Königin von Großbritannien?",
+    "antwort": 70
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde König Charles III. geboren?",
+    "antwort": 1948
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde Prinzessin Diana geboren?",
+    "antwort": 1961
+  },
+  {
+    "kategorie": "promis",
+    "frage": "Wie alt wurde Prinzessin Diana?",
+    "antwort": 36
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde Meghan Markle geboren?",
+    "antwort": 1981
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde Prinz William geboren?",
+    "antwort": 1982
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde Papst Franziskus geboren?",
+    "antwort": 1936
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde Papst Johannes Paul II. geboren?",
+    "antwort": 1920
+  },
+  {
+    "kategorie": "promis",
+    "frage": "Wie viele Jahre war Papst Johannes Paul II. im Amt?",
+    "antwort": 26
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde Mahatma Gandhi geboren?",
+    "antwort": 1869
+  },
+  {
+    "kategorie": "promis",
+    "frage": "Wie alt wurde Mahatma Gandhi?",
+    "antwort": 78
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde Nelson Mandela geboren?",
+    "antwort": 1918
+  },
+  {
+    "kategorie": "promis",
+    "frage": "Wie alt wurde Nelson Mandela?",
+    "antwort": 95
+  },
+  {
+    "kategorie": "promis",
+    "frage": "Wie viele Jahre war Nelson Mandela Präsident Südafrikas?",
+    "antwort": 5
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde Martin Luther King Jr. geboren?",
+    "antwort": 1929
+  },
+  {
+    "kategorie": "promis",
+    "frage": "Wie alt wurde Martin Luther King Jr.?",
+    "antwort": 39
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr erhielt Martin Luther King Jr. den Friedensnobelpreis?",
+    "antwort": 1964
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde Malala Yousafzai geboren?",
+    "antwort": 1997
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr erhielt Malala Yousafzai als jüngste Preisträgerin den Friedensnobelpreis?",
+    "antwort": 2014
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde Greta Thunberg geboren?",
+    "antwort": 2003
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr erhielt Albert Einstein den Nobelpreis für Physik?",
+    "antwort": 1921
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde Stephen Hawking geboren?",
+    "antwort": 1942
+  },
+  {
+    "kategorie": "promis",
+    "frage": "Wie alt wurde Stephen Hawking?",
+    "antwort": 76
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr veröffentlichte Stephen Hawking sein bekanntestes Buch 'Eine kurze Geschichte der Zeit'?",
+    "antwort": 1988
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde J.K. Rowling geboren?",
+    "antwort": 1965
+  },
+  {
+    "kategorie": "promis",
+    "frage": "Wie viele Bände umfasst die ursprüngliche Harry-Potter-Buchreihe?",
+    "antwort": 7
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr erschien der erste Harry-Potter-Band?",
+    "antwort": 1997
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde Arnold Schwarzenegger geboren?",
+    "antwort": 1947
+  },
+  {
+    "kategorie": "promis",
+    "frage": "Wie viele Mr.-Olympia-Titel gewann Arnold Schwarzenegger im Bodybuilding?",
+    "antwort": 7
+  },
+  {
+    "kategorie": "promis",
+    "frage": "Wie viele Jahre war Arnold Schwarzenegger Gouverneur von Kalifornien?",
+    "antwort": 7
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde Tom Cruise geboren?",
+    "antwort": 1962
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde Brad Pitt geboren?",
+    "antwort": 1963
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde Johnny Depp geboren?",
+    "antwort": 1963
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde Will Smith geboren?",
+    "antwort": 1968
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr gewann Will Smith seinen ersten Oscar?",
+    "antwort": 2022
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde Jennifer Lawrence geboren?",
+    "antwort": 1990
+  },
+  {
+    "kategorie": "promis",
+    "frage": "Wie viele Oscars hat Jennifer Lawrence gewonnen?",
+    "antwort": 1
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde Tom Hanks geboren?",
+    "antwort": 1956
+  },
+  {
+    "kategorie": "promis",
+    "frage": "Wie viele Oscars hat Tom Hanks gewonnen?",
+    "antwort": 2
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde Denzel Washington geboren?",
+    "antwort": 1954
+  },
+  {
+    "kategorie": "promis",
+    "frage": "Wie viele Oscars hat Denzel Washington gewonnen?",
+    "antwort": 2
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde Jack Nicholson geboren?",
+    "antwort": 1937
+  },
+  {
+    "kategorie": "promis",
+    "frage": "Wie viele Oscars hat Jack Nicholson gewonnen?",
+    "antwort": 3
+  },
+  {
+    "kategorie": "promis",
+    "frage": "Wie viele Oscars hat Katharine Hepburn gewonnen?",
+    "antwort": 4
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde Katharine Hepburn geboren?",
+    "antwort": 1907
+  },
+  {
+    "kategorie": "promis",
+    "frage": "Wie alt wurde Katharine Hepburn?",
+    "antwort": 96
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde Marlon Brando geboren?",
+    "antwort": 1924
+  },
+  {
+    "kategorie": "promis",
+    "frage": "Wie alt wurde Marlon Brando?",
+    "antwort": 80
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde Robert De Niro geboren?",
+    "antwort": 1943
+  },
+  {
+    "kategorie": "promis",
+    "frage": "Wie viele Oscars hat Robert De Niro gewonnen?",
+    "antwort": 2
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde Al Pacino geboren?",
+    "antwort": 1940
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde Morgan Freeman geboren?",
+    "antwort": 1937
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde Samuel L. Jackson geboren?",
+    "antwort": 1948
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde Dwayne Johnson (The Rock) geboren?",
+    "antwort": 1972
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde Keanu Reeves geboren?",
+    "antwort": 1964
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde Robbie Williams geboren?",
+    "antwort": 1974
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr verließ Robbie Williams die Band Take That erstmals?",
+    "antwort": 1995
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde Rihanna geboren?",
+    "antwort": 1988
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde Adele geboren?",
+    "antwort": 1988
+  },
+  {
+    "kategorie": "promis",
+    "frage": "Wie viele Grammy Awards hat Adele bisher ungefähr gewonnen?",
+    "antwort": 16
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde Ed Sheeran geboren?",
+    "antwort": 1991
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde Justin Bieber geboren?",
+    "antwort": 1994
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde Lady Gaga geboren?",
+    "antwort": 1986
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde die Band Rammstein gegründet?",
+    "antwort": 1994
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde die Band Metallica gegründet?",
+    "antwort": 1981
+  },
+  {
+    "kategorie": "promis",
+    "frage": "In welchem Jahr wurde die Band Queen gegründet?",
+    "antwort": 1970
   }
 ]
