@@ -61,7 +61,6 @@ const TYP_LABEL = { speed: "Schnelligkeit", wort: "Wortrate", bild: "Bild-Reveal
 
 const VORLAGE = `
   <div id="bz-setup" class="bildschirm-karte" hidden>
-    <h1>⚡ Blitzquiz</h1>
     <p class="hinweis-text">Drei Frage-Typen im Wechsel, alle auf Zeit: Mehrfachauswahl
       auf Schnelligkeit, ein Buchstaben-Rätsel und ein Bild, das sich langsam
       schärfer zeigt. Überall bekommt die schnellste richtige Antwort die
