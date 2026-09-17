@@ -1,8 +1,402 @@
 [
-  { "frage": "Wie nennt man eine Gruppe von Flamingos - das offizielle Sammelwort im Englischen?", "antwort": "Flamboyance" },
-  { "frage": "Welches Tier hat gleich drei Herzen?", "antwort": "Der Oktopus" },
-  { "frage": "Wie nennt man eine Gruppe von Krähen - das offizielle Sammelwort im Englischen?", "antwort": "A Murder" },
-  { "frage": "Wie heißt der Geruch von Regen auf trockener Erde offiziell?", "antwort": "Petrichor" },
-  { "frage": "Wie heißt die kleine Furche zwischen Nase und Oberlippe medizinisch?", "antwort": "Philtrum" },
-  { "frage": "Wie heißt der kleinste Knochen im menschlichen Körper?", "antwort": "Der Steigbügel" }
+  {
+    "frage": "Wie nennt man eine Gruppe von Flamingos - das offizielle Sammelwort im Englischen?",
+    "antwort": "Flamboyance"
+  },
+  {
+    "frage": "Welches Tier hat gleich drei Herzen?",
+    "antwort": "Der Oktopus"
+  },
+  {
+    "frage": "Wie nennt man eine Gruppe von Krähen - das offizielle Sammelwort im Englischen?",
+    "antwort": "A Murder"
+  },
+  {
+    "frage": "Wie heißt der Geruch von Regen auf trockener Erde offiziell?",
+    "antwort": "Petrichor"
+  },
+  {
+    "frage": "Wie heißt die kleine Furche zwischen Nase und Oberlippe medizinisch?",
+    "antwort": "Philtrum"
+  },
+  {
+    "frage": "Wie heißt der kleinste Knochen im menschlichen Körper?",
+    "antwort": "Der Steigbügel"
+  },
+  {
+    "frage": "Wie nennt man eine Gruppe von Pandas - das offizielle Sammelwort im Englischen?",
+    "antwort": "An Embarrassment"
+  },
+  {
+    "frage": "Wie nennt man eine Gruppe von Löwen - das offizielle Sammelwort im Englischen?",
+    "antwort": "A Pride"
+  },
+  {
+    "frage": "Wie nennt man eine Gruppe von Eulen - das offizielle Sammelwort im Englischen?",
+    "antwort": "A Parliament"
+  },
+  {
+    "frage": "Wie nennt man eine Gruppe von Giraffen - das offizielle Sammelwort im Englischen?",
+    "antwort": "A Tower"
+  },
+  {
+    "frage": "Wie nennt man eine Gruppe von Flusspferden - das offizielle Sammelwort im Englischen?",
+    "antwort": "A Bloat"
+  },
+  {
+    "frage": "Wie nennt man eine Gruppe von Frettchen - das offizielle Sammelwort im Englischen?",
+    "antwort": "A Business"
+  },
+  {
+    "frage": "Wie nennt man eine Gruppe von Papageien - das offizielle Sammelwort im Englischen?",
+    "antwort": "A Pandemonium"
+  },
+  {
+    "frage": "Wie nennt man eine Gruppe von Quallen - das offizielle Sammelwort im Englischen?",
+    "antwort": "A Smack"
+  },
+  {
+    "frage": "Wie viele Herzen hat ein Regenwurm?",
+    "antwort": "Fünf"
+  },
+  {
+    "frage": "Wie viele Zähne hat eine Schnecke ungefähr (verteilt auf ihre Raspelzunge)?",
+    "antwort": "Etwa 14.000"
+  },
+  {
+    "frage": "Welches Säugetier legt Eier, anstatt lebende Junge zu gebären?",
+    "antwort": "Das Schnabeltier"
+  },
+  {
+    "frage": "Welches Säugetier kann als einziges nicht springen?",
+    "antwort": "Der Elefant"
+  },
+  {
+    "frage": "Wie viele Beine hat ein Hummer?",
+    "antwort": "Zehn"
+  },
+  {
+    "frage": "Wie heißt das Baby eines Kängurus?",
+    "antwort": "Joey"
+  },
+  {
+    "frage": "Welches Tier hat das größte Auge im gesamten Tierreich?",
+    "antwort": "Der Riesenkalmar"
+  },
+  {
+    "frage": "Um wie viel Grad kann eine Eule ihren Kopf drehen?",
+    "antwort": "270 Grad"
+  },
+  {
+    "frage": "Wie viele Mägen hat eine Kuh?",
+    "antwort": "Vier"
+  },
+  {
+    "frage": "Welches Landtier gilt als das schnellste der Welt?",
+    "antwort": "Der Gepard"
+  },
+  {
+    "frage": "Wie viele Stunden schläft eine Giraffe im Schnitt pro Tag?",
+    "antwort": "Etwa zwei Stunden"
+  },
+  {
+    "frage": "Wie heißt das dritte, durchsichtige Augenlid, das Katzen besitzen?",
+    "antwort": "Nickhaut"
+  },
+  {
+    "frage": "Wie viele verschiedene Farbrezeptoren hat das Auge eines Fangschreckenkrebses?",
+    "antwort": "16"
+  },
+  {
+    "frage": "Wie oft tauscht ein Hai im Laufe seines Lebens ungefähr seine Zähne aus (Gesamtzahl)?",
+    "antwort": "Mehrere Tausend"
+  },
+  {
+    "frage": "Wie hieß das erste Säugetier, das jemals geklont wurde?",
+    "antwort": "Das Schaf Dolly"
+  },
+  {
+    "frage": "Welches Lebewesen war 1947 das allererste Tier im Weltall - noch vor Hunden oder Affen?",
+    "antwort": "Fruchtfliegen"
+  },
+  {
+    "frage": "Welcher Vogel kann als einziger rückwärts fliegen?",
+    "antwort": "Der Kolibri"
+  },
+  {
+    "frage": "Welches Land besitzt die einzige Nationalflagge der Welt, die nicht rechteckig ist?",
+    "antwort": "Nepal"
+  },
+  {
+    "frage": "Welcher Kontinent hat keine einzige wildlebende Reptilienart?",
+    "antwort": "Die Antarktis"
+  },
+  {
+    "frage": "Wie viele Knochen hat ein neugeborenes Baby ungefähr - deutlich mehr als ein Erwachsener?",
+    "antwort": "Etwa 300"
+  },
+  {
+    "frage": "Wie nennt man die Angst vor der Zahl 13?",
+    "antwort": "Triskaidekaphobie"
+  },
+  {
+    "frage": "Wie nennt man die Angst davor, sein Handy zu verlieren oder ohne es zu sein?",
+    "antwort": "Nomophobie"
+  },
+  {
+    "frage": "Was ist das härteste natürlich vorkommende Material der Erde?",
+    "antwort": "Diamant"
+  },
+  {
+    "frage": "Welches Organ des menschlichen Körpers regeneriert sich am schnellsten?",
+    "antwort": "Die Leber"
+  },
+  {
+    "frage": "Wie viele Grundgeschmacksrichtungen kann die menschliche Zunge unterscheiden?",
+    "antwort": "Fünf"
+  },
+  {
+    "frage": "Wie heißt der wissenschaftliche Fachbegriff für das Geräusch beim Fingerknacken?",
+    "antwort": "Kavitation"
+  },
+  {
+    "frage": "Welches Organ verbraucht im Ruhezustand die meiste Energie des Körpers?",
+    "antwort": "Das Gehirn"
+  },
+  {
+    "frage": "Welche Farbe kommt im sichtbaren Lichtspektrum eines Regenbogens gar nicht vor, obwohl wir sie kennen?",
+    "antwort": "Pink"
+  },
+  {
+    "frage": "Wie heißt der längste Muskel im menschlichen Körper?",
+    "antwort": "Der Schneidermuskel"
+  },
+  {
+    "frage": "Wie heiß wird ein Blitz ungefähr - deutlich heißer als die Sonnenoberfläche?",
+    "antwort": "Etwa 30.000 Grad Celsius"
+  },
+  {
+    "frage": "Wie nennt man die (ironisch selbst sehr lange) Angst vor langen Wörtern?",
+    "antwort": "Hippopotomonstrosesquipedaliophobie"
+  },
+  {
+    "frage": "Welche Blutgruppe ist weltweit am häufigsten vertreten?",
+    "antwort": "0 positiv"
+  },
+  {
+    "frage": "Wie viele Liter Blut pumpt das menschliche Herz durchschnittlich an einem Tag?",
+    "antwort": "Über 7.000 Liter"
+  },
+  {
+    "frage": "Wie nennt man die Angst vor Clowns?",
+    "antwort": "Coulrophobie"
+  },
+  {
+    "frage": "Wie nennt man ein Wort, das vorwärts wie rückwärts gelesen gleich lautet?",
+    "antwort": "Palindrom"
+  },
+  {
+    "frage": "Welches deutsche Wort enthält als eines der wenigen drei gleiche Buchstaben direkt hintereinander?",
+    "antwort": "Schifffahrt"
+  },
+  {
+    "frage": "Welche Zahl ist im Deutschen die einzige, deren Wort genauso viele Buchstaben hat wie sie selbst wert ist?",
+    "antwort": "Vier"
+  },
+  {
+    "frage": "Welches Alphabet der Welt gilt mit rund 74 Buchstaben als das längste?",
+    "antwort": "Das Khmer-Alphabet"
+  },
+  {
+    "frage": "Wie hieß das jahrelang längste Wort im deutschen Gesetzestext, bevor das Gesetz dahinter abgeschafft wurde?",
+    "antwort": "Rindfleischetikettierungsüberwachungsaufgabenübertragungsgesetz"
+  },
+  {
+    "frage": "Wie lange dauerte der kürzeste Krieg der Geschichte zwischen Großbritannien und Sansibar?",
+    "antwort": "38 Minuten"
+  },
+  {
+    "frage": "Wie viele Jahre sollte der Eiffelturm ursprünglich nur stehen bleiben, bevor er abgerissen werden sollte?",
+    "antwort": "20 Jahre"
+  },
+  {
+    "frage": "Wie viele Jahre dauerte der sogenannte 'Hundertjährige Krieg' tatsächlich?",
+    "antwort": "116 Jahre"
+  },
+  {
+    "frage": "Aus welchem Land stammt der Kaffee ursprünglich - der Legende nach entdeckt durch tanzende Ziegen?",
+    "antwort": "Äthiopien"
+  },
+  {
+    "frage": "Welches Lebensmittel wurde 1893 von einem US-Gericht offiziell zum Gemüse erklärt, obwohl es botanisch eine Frucht ist?",
+    "antwort": "Die Tomate"
+  },
+  {
+    "frage": "Welches Land der Welt hat die meisten aktiven Vulkane?",
+    "antwort": "Indonesien"
+  },
+  {
+    "frage": "Welche Stadt liegt gleichzeitig auf zwei Kontinenten?",
+    "antwort": "Istanbul"
+  },
+  {
+    "frage": "Welches Land liegt als einziges der Welt in allen vier Hemisphären gleichzeitig?",
+    "antwort": "Kiribati"
+  },
+  {
+    "frage": "Welche zwei Länder haben mit je 14 die meisten Nachbarstaaten der Welt?",
+    "antwort": "China und Russland"
+  },
+  {
+    "frage": "Welche Wüste der Welt ist tatsächlich die größte - obwohl sie eisig statt sandig ist?",
+    "antwort": "Die Antarktis"
+  },
+  {
+    "frage": "Welcher Fluss transportiert die größte Wassermenge aller Flüsse der Welt?",
+    "antwort": "Der Amazonas"
+  },
+  {
+    "frage": "Welches Land hat die längste Küstenlinie der Welt?",
+    "antwort": "Kanada"
+  },
+  {
+    "frage": "Wie viele Zeitzonen erstrecken sich über das Staatsgebiet Russlands?",
+    "antwort": "Elf"
+  },
+  {
+    "frage": "Aus welcher Weltregion stammt die Kartoffel ursprünglich?",
+    "antwort": "Aus den Anden in Südamerika"
+  },
+  {
+    "frage": "Welches Gewürz ist pro Gramm teurer als Gold?",
+    "antwort": "Safran"
+  },
+  {
+    "frage": "Welches Lebensmittel verdirbt bei richtiger Lagerung praktisch nie?",
+    "antwort": "Honig"
+  },
+  {
+    "frage": "Welche vermeintliche Nuss ist botanisch gesehen tatsächlich eine Hülsenfrucht?",
+    "antwort": "Die Erdnuss"
+  },
+  {
+    "frage": "Welche botanische Frucht wird weltweit am meisten gegessen, obwohl sie meist als Gemüse gilt?",
+    "antwort": "Die Tomate"
+  },
+  {
+    "frage": "Auf welchen beiden Planeten regnet es laut Forschern vermutlich Diamanten?",
+    "antwort": "Neptun und Uranus"
+  },
+  {
+    "frage": "Auf welchem Planeten dauert ein einzelner Tag länger als sein gesamtes Jahr?",
+    "antwort": "Auf der Venus"
+  },
+  {
+    "frage": "Wie lange braucht das Sonnenlicht ungefähr, um die Erde zu erreichen?",
+    "antwort": "Etwa acht Minuten"
+  },
+  {
+    "frage": "Welcher Planet dreht sich als einziger rückwärts um die eigene Achse?",
+    "antwort": "Die Venus"
+  },
+  {
+    "frage": "Welcher Planet hat aktuell die meisten bekannten Monde im Sonnensystem?",
+    "antwort": "Saturn"
+  },
+  {
+    "frage": "Wie nennt man eine Gruppe von Krokodilen - das offizielle Sammelwort im Englischen?",
+    "antwort": "A Bask"
+  },
+  {
+    "frage": "Wie nennt man eine Gruppe von Nashörnern - das offizielle Sammelwort im Englischen?",
+    "antwort": "A Crash"
+  },
+  {
+    "frage": "Wie nennt man eine Gruppe von Zebras - das offizielle Sammelwort im Englischen?",
+    "antwort": "A Dazzle"
+  },
+  {
+    "frage": "Welches Tier hat das größte Herz im gesamten Tierreich?",
+    "antwort": "Der Blauwal"
+  },
+  {
+    "frage": "Welche Qualle gilt als biologisch unsterblich, weil sie sich in ein früheres Stadium zurückverwandeln kann?",
+    "antwort": "Turritopsis dohrnii"
+  },
+  {
+    "frage": "Welcher Vogel legt im Verhältnis zu seiner Körpergröße das größte Ei der Welt?",
+    "antwort": "Der Kiwi"
+  },
+  {
+    "frage": "Welches Tier hat als eines der wenigen tatsächlich blaues Blut?",
+    "antwort": "Der Pfeilschwanzkrebs"
+  },
+  {
+    "frage": "Wie nennt man eine Gruppe von Delfinen - das offizielle Sammelwort im Englischen?",
+    "antwort": "A Pod"
+  },
+  {
+    "frage": "Wovon leitet sich das Wort 'OK' ursprünglich ab - einer scherzhaften Falschschreibung aus dem Boston der 1830er?",
+    "antwort": "Oll Korrect"
+  },
+  {
+    "frage": "Welches Land hat dem Weihnachtsmann offiziell eine eigene Postleitzahl zugeteilt?",
+    "antwort": "Kanada"
+  },
+  {
+    "frage": "Wie nennt man die Zahl, die aus einer 1 mit 100 Nullen besteht?",
+    "antwort": "Googol"
+  },
+  {
+    "frage": "Wie nennt man speziell die Angst vor einem Freitag, der auf den 13. fällt?",
+    "antwort": "Paraskavedekatriaphobie"
+  },
+  {
+    "frage": "Wie lautet der medizinische Fachbegriff für Schluckauf?",
+    "antwort": "Singultus"
+  },
+  {
+    "frage": "Welches Tier kann mit seiner Schere ein Geräusch erzeugen, das lauter ist als ein startendes Flugzeug?",
+    "antwort": "Der Pistolenkrebs"
+  },
+  {
+    "frage": "Wie nennt man eine Gruppe von Faultieren - das offizielle Sammelwort im Englischen?",
+    "antwort": "A Bed"
+  },
+  {
+    "frage": "Welches Tier hält mit bis zu acht Monaten den Rekord für den längsten Winterschlaf?",
+    "antwort": "Der Siebenschläfer"
+  },
+  {
+    "frage": "Welches ist das einzige Säugetier, das wirklich aktiv fliegen kann statt nur zu gleiten?",
+    "antwort": "Die Fledermaus"
+  },
+  {
+    "frage": "Welches ist das größte an Land lebende Tier der Welt?",
+    "antwort": "Der Afrikanische Elefant"
+  },
+  {
+    "frage": "Wie nennt man eine Gruppe von Igeln - das offizielle Sammelwort im Englischen?",
+    "antwort": "A Prickle"
+  },
+  {
+    "frage": "Welches Tier ist das einzige, dessen Kot fast würfelförmig ist?",
+    "antwort": "Der Wombat"
+  },
+  {
+    "frage": "Wie nennt man das Gefühl, an einem völlig fremden Ort schon einmal gewesen zu sein - das Gegenteil von Déjà-vu?",
+    "antwort": "Jamais-vu"
+  },
+  {
+    "frage": "Wie nennt man eine Gruppe von Raben - das offizielle Sammelwort im Englischen (anders als bei Krähen)?",
+    "antwort": "An Unkindness"
+  },
+  {
+    "frage": "Welches Metall ist bei Zimmertemperatur als einziges flüssig?",
+    "antwort": "Quecksilber"
+  },
+  {
+    "frage": "Wie nennt man das Gefühl, eine neue Situation schon einmal genauso erlebt zu haben?",
+    "antwort": "Déjà-vu"
+  }
 ]

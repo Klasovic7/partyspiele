@@ -1,14 +1,15 @@
 // ============================================================================
 //  Imposter
 // ----------------------------------------------------------------------------
-//  Alle außer einer Person (dem "Imposter") sehen dasselbe Geheimwort. Der
-//  Imposter bekommt kein Wort, sondern nur einen vagen Hinweis dazu, und muss
-//  unauffällig mitreden, ohne aufzufliegen. Jede*r deckt die eigene Karte
-//  privat auf dem eigenen Gerät auf - genau wie beim eigenen Profil sieht
-//  jedes Handy nur, was die eigene Person betrifft, ein Abgleich zwischen den
-//  Geräten ist nicht nötig. Wer der Imposter tatsächlich war, wird am Tisch
-//  erraten; das App-seitige Auflösen übernimmt der Spielleiter über einen
-//  Knopf, sobald genug diskutiert wurde.
+//  Alle außer einer (oder bei größeren Gruppen mehreren) Person(en), den
+//  "Impostern", sehen dasselbe Geheimwort. Die Imposter bekommen kein Wort,
+//  sondern nur einen vagen Hinweis dazu, und müssen unauffällig mitreden,
+//  ohne aufzufliegen. Jede*r deckt die eigene Karte privat auf dem eigenen
+//  Gerät auf - genau wie beim eigenen Profil sieht jedes Handy nur, was die
+//  eigene Person betrifft, ein Abgleich zwischen den Geräten ist nicht nötig.
+//  Wer die Imposter tatsächlich waren, wird am Tisch erraten; das App-seitige
+//  Auflösen übernimmt der Spielleiter über einen Knopf, sobald genug
+//  diskutiert wurde.
 //
 //  Die Karte zeigt den eigenen Namen; zieht man sie nach oben, kommt darunter
 //  der Begriff (oder eben "Imposter" + ein loser Hinweis dazu) zum Vorschein -
@@ -31,19 +32,29 @@ import { updateDoc } from "../../kern/firebase.js";
 import { escapeHtml, avatarHtml, zeigeDebug } from "../../kern/ui.js";
 
 const STANDARD_ANZAHL = 5;
+const STANDARD_ANZAHL_IMPOSTER = 1;
 
 const VORLAGE = `
   <div id="imp-setup" class="bildschirm-karte" hidden>
     <h1>🎭 Imposter</h1>
-    <p class="hinweis-text">Alle außer einer Person bekommen denselben Begriff zu sehen. Der Imposter
-      bekommt den Begriff nicht - nur einen vagen Hinweis dazu - und muss unauffällig mitreden, ohne
-      aufzufliegen. Zieht eure Karte privat auf und diskutiert danach gemeinsam, wer der Imposter war.</p>
+    <p class="hinweis-text">Alle außer den Impostern bekommen denselben Begriff zu sehen. Die Imposter
+      bekommen den Begriff nicht - nur einen vagen Hinweis dazu - und müssen unauffällig mitreden, ohne
+      aufzufliegen. Zieht eure Karte privat auf und diskutiert danach gemeinsam, wer die Imposter waren.</p>
 
     <div id="imp-anzahl-zeile" class="setup-anzahlblock" hidden>
       <div class="setup-anzahl-zeile">
         <span>Anzahl Runden</span>
         <span class="anzahl-picker">
           <input id="imp-anzahl" type="text" inputmode="numeric" pattern="[0-9]*" min="1" class="anzahl-eingabe">
+        </span>
+      </div>
+    </div>
+
+    <div id="imp-anzahl-imposter-zeile" class="setup-anzahlblock" hidden>
+      <div class="setup-anzahl-zeile">
+        <span>Anzahl Imposter</span>
+        <span class="anzahl-picker">
+          <input id="imp-anzahl-imposter" type="text" inputmode="numeric" pattern="[0-9]*" min="1" class="anzahl-eingabe">
         </span>
       </div>
     </div>
@@ -88,7 +99,7 @@ const VORLAGE = `
 
   <div id="imp-aufloesung-screen" class="bildschirm-karte" hidden>
     <p class="kategorie">Imposter</p>
-    <h2>🎭 Der Imposter war:</h2>
+    <h2 id="imp-aufloesung-titel">🎭 Der Imposter war:</h2>
     <div id="imp-aufloesung-karte"></div>
     <p class="hinweis-text">Der Begriff war "<strong id="imp-aufloesung-wort"></strong>".</p>
     <p><button id="imp-weiter" hidden></button></p>
@@ -111,7 +122,8 @@ let status = null;
 let anzahlRunden = 0;
 let rundenIndex = -1;
 let wortIndex = -1;
-let imposterId = null;
+let imposterIds = [];
+let anzahlImposter = 1;
 let starterId = null;
 
 const $ = (id) => el.wurzel.querySelector("#" + id);
@@ -132,20 +144,22 @@ export async function starten(uebergebeneApi) {
   if (api.istLeiter && !api.raum?.impStatus) {
     await updateDoc(api.raumRef(), {
       impStatus: "setup", impRundenIndex: 0, impAnzahlRunden: 0,
-      impWortIndex: -1, impImposterId: null, impStarterId: null
+      impWortIndex: -1, impImposterIds: [], impAnzahlImposter: 1, impStarterId: null
     });
   }
 }
 
 function verdrahteBedienelemente() {
-  $("imp-anzahl").addEventListener("input", () => {
-    const feld = $("imp-anzahl");
-    const bereinigt = feld.value.replace(/[^0-9]/g, "");
-    if (bereinigt !== feld.value) feld.value = bereinigt;
+  ["imp-anzahl", "imp-anzahl-imposter"].forEach((id) => {
+    $(id).addEventListener("input", () => {
+      const feld = $(id);
+      const bereinigt = feld.value.replace(/[^0-9]/g, "");
+      if (bereinigt !== feld.value) feld.value = bereinigt;
+    });
+    // Wie bei den anderen Spielen: type="number" ließ sich beim Fokussieren nicht
+    // markieren - deshalb ein Textfeld mit numerischer Tastatur.
+    $(id).addEventListener("focus", () => { $(id).select(); });
   });
-  // Wie bei den anderen Spielen: type="number" ließ sich beim Fokussieren nicht
-  // markieren - deshalb ein Textfeld mit numerischer Tastatur.
-  $("imp-anzahl").addEventListener("focus", () => { $("imp-anzahl").select(); });
   $("imp-starten").addEventListener("click", spielStarten);
   $("imp-aufloesen").addEventListener("click", () => { $("imp-aufloesen-dialog").hidden = false; });
   $("imp-aufloesen-abbrechen").addEventListener("click", () => { $("imp-aufloesen-dialog").hidden = true; });
@@ -164,7 +178,8 @@ export function beenden() {
   anzahlRunden = 0;
   rundenIndex = -1;
   wortIndex = -1;
-  imposterId = null;
+  imposterIds = [];
+  anzahlImposter = 1;
   starterId = null;
 }
 
@@ -185,7 +200,8 @@ export function raumDaten(daten) {
   anzahlRunden = daten.impAnzahlRunden ?? 0;
   rundenIndex = daten.impRundenIndex ?? 0;
   wortIndex = daten.impWortIndex ?? -1;
-  imposterId = daten.impImposterId ?? null;
+  imposterIds = daten.impImposterIds ?? [];
+  anzahlImposter = daten.impAnzahlImposter ?? 1;
   starterId = daten.impStarterId ?? null;
 
   api.fortschritt(status === "runde" || status === "aufgeloest" ? `${rundenIndex + 1}/${anzahlRunden}` : "");
@@ -219,6 +235,12 @@ function zeigeSetup() {
   if (!anzahlFeld.value) anzahlFeld.value = STANDARD_ANZAHL;
   $("imp-anzahl-zeile").hidden = false;
   anzahlFeld.disabled = !api.istLeiter;
+
+  const anzahlImposterFeld = $("imp-anzahl-imposter");
+  if (!anzahlImposterFeld.value) anzahlImposterFeld.value = STANDARD_ANZAHL_IMPOSTER;
+  $("imp-anzahl-imposter-zeile").hidden = false;
+  anzahlImposterFeld.disabled = !api.istLeiter;
+
   $("imp-starten").hidden = !api.istLeiter;
   $("imp-setup-warten").hidden = api.istLeiter;
 }
@@ -243,29 +265,43 @@ async function spielStarten() {
   let anzahl = parseInt($("imp-anzahl").value, 10);
   if (!Number.isFinite(anzahl) || anzahl < 1) anzahl = 1;
 
+  let anzahlImp = parseInt($("imp-anzahl-imposter").value, 10);
+  if (!Number.isFinite(anzahlImp) || anzahlImp < 1) anzahlImp = 1;
+  const maxImposter = spielerListe.length - 2;
+  if (anzahlImp > maxImposter) {
+    $("imp-setup-fehler").textContent =
+      `Bei ${spielerListe.length} Spielern bleiben bei so vielen Impostern zu wenige Mitwisser übrig - wählt höchstens ${maxImposter}.`;
+    return;
+  }
+
   $("imp-starten").disabled = true;
   try {
-    await naechsteRundeSchreiben(0, anzahl, -1, null);
+    await naechsteRundeSchreiben(0, anzahl, -1, [], anzahlImp);
   } catch (e) {
     zeigeDebug("Fehler beim Start: " + e.message);
   }
   $("imp-starten").disabled = false;
 }
 
-async function naechsteRundeSchreiben(neueRundenIndex, neueAnzahlRunden, letzterWortIndex, letzterImposterId) {
+async function naechsteRundeSchreiben(neueRundenIndex, neueAnzahlRunden, letzterWortIndex, letzteImposterIds, neueAnzahlImposter) {
   const neuerWortIndex = zufallsIndexOhneWiederholung(woerter.length, letzterWortIndex);
-  const kandidaten = spielerListe.filter((s) => s.id !== letzterImposterId);
-  const auswahlliste = kandidaten.length > 0 ? kandidaten : spielerListe;
-  const gewaehlt = auswahlliste[Math.floor(Math.random() * auswahlliste.length)];
-  // Wer beginnt, wird komplett unabhaengig vom Imposter gewuerfelt - das kann
-  // also durchaus dieselbe Person sein.
+  // Nie mehr Imposter als Spieler minus zwei - sonst blieben zu wenige (oder
+  // gar keine) Mitwisser uebrig, die den Begriff ueberhaupt kennen.
+  const anzahlImp = Math.max(1, Math.min(neueAnzahlImposter, spielerListe.length - 2));
+  const kandidaten = spielerListe.filter((s) => !letzteImposterIds.includes(s.id));
+  const auswahlliste = kandidaten.length >= anzahlImp ? kandidaten : spielerListe;
+  const gemischt = [...auswahlliste].sort(() => Math.random() - 0.5);
+  const gewaehlte = gemischt.slice(0, anzahlImp);
+  // Wer beginnt, wird komplett unabhaengig von den Impostern gewuerfelt - das
+  // kann also durchaus eine der Imposter-Personen sein.
   const startet = spielerListe[Math.floor(Math.random() * spielerListe.length)];
   await updateDoc(api.raumRef(), {
     impStatus: "runde",
     impRundenIndex: neueRundenIndex,
     impAnzahlRunden: neueAnzahlRunden,
     impWortIndex: neuerWortIndex,
-    impImposterId: gewaehlt.id,
+    impImposterIds: gewaehlte.map((s) => s.id),
+    impAnzahlImposter: anzahlImp,
     impStarterId: startet.id
   });
 }
@@ -274,7 +310,7 @@ export async function vorZurueck() {
   try {
     await updateDoc(api.raumRef(), {
       impStatus: null, impRundenIndex: 0, impAnzahlRunden: 0,
-      impWortIndex: -1, impImposterId: null, impStarterId: null
+      impWortIndex: -1, impImposterIds: [], impAnzahlImposter: 1, impStarterId: null
     });
     await api.zurueckZurAuswahl();
   } catch (e) {
@@ -303,7 +339,7 @@ function zeigeRunde() {
 }
 
 function aktualisiereKarteninhalt() {
-  const istImposter = api.spielerId === imposterId;
+  const istImposter = imposterIds.includes(api.spielerId);
   const eintrag = woerter[wortIndex];
   $("imp-karte-rueckseite").innerHTML = istImposter
     ? `<span class="imp-rueckseite-symbol">❌</span><strong>Imposter</strong>
@@ -381,15 +417,18 @@ async function aufloesen() {
 }
 
 function zeigeAufloesung() {
-  const imposter = spielerListe.find((s) => s.id === imposterId);
+  const imposter = spielerListe.filter((s) => imposterIds.includes(s.id));
   const eintrag = woerter[wortIndex];
+  $("imp-aufloesung-titel").textContent =
+    imposter.length > 1 ? "🎭 Die Imposter waren:" : "🎭 Der Imposter war:";
   $("imp-aufloesung-karte").innerHTML = imposter
-    ? `<div class="spieler-karte spieler-identitaet" style="--spieler-farbe:${imposter.farbe || "#7f8c8d"}">
-        <div class="spieler-info">${avatarHtml(imposter.icon, "spieler-icon")}
-          <div class="spieler-text"><span class="spieler-name">${escapeHtml(imposter.name)}</span></div>
+    .map((sp) => `
+      <div class="spieler-karte spieler-identitaet" style="--spieler-farbe:${sp.farbe || "#7f8c8d"}">
+        <div class="spieler-info">${avatarHtml(sp.icon, "spieler-icon")}
+          <div class="spieler-text"><span class="spieler-name">${escapeHtml(sp.name)}</span></div>
         </div>
-      </div>`
-    : "";
+      </div>`)
+    .join("");
   $("imp-aufloesung-wort").textContent = eintrag?.begriff ?? "";
   const weiterKnopf = $("imp-weiter");
   const letzteRunde = rundenIndex + 1 >= anzahlRunden;
@@ -405,7 +444,7 @@ async function weiter() {
     if (naechsterIndex >= anzahlRunden) {
       await updateDoc(api.raumRef(), { impStatus: "beendet" });
     } else {
-      await naechsteRundeSchreiben(naechsterIndex, anzahlRunden, wortIndex, imposterId);
+      await naechsteRundeSchreiben(naechsterIndex, anzahlRunden, wortIndex, imposterIds, anzahlImposter);
     }
   } catch (e) {
     zeigeDebug("Fehler beim Weiterschalten: " + e.message);
