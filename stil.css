@@ -1285,6 +1285,8 @@
     body[data-spiel="reih-dich-ein"] { --club-glow: linear-gradient(135deg, color-mix(in srgb, #2dd4bf 32%, #3d2544) 0%, #251728 32%, #18101d 62%, #120d17 100%); }
     body[data-spiel="wer-ist-es"]     { --club-glow: linear-gradient(135deg, color-mix(in srgb, #4ade80 32%, #3d2544) 0%, #251728 32%, #18101d 62%, #120d17 100%); }
     body[data-spiel="blitzquiz"]      { --club-glow: linear-gradient(135deg, color-mix(in srgb, #fbbf24 32%, #3d2544) 0%, #251728 32%, #18101d 62%, #120d17 100%); }
+    body[data-spiel="finto"]          { --club-glow: linear-gradient(135deg, color-mix(in srgb, #38bdf8 32%, #3d2544) 0%, #251728 32%, #18101d 62%, #120d17 100%); }
+    body[data-spiel="impostor"]       { --club-glow: linear-gradient(135deg, color-mix(in srgb, #fb7185 32%, #3d2544) 0%, #251728 32%, #18101d 62%, #120d17 100%); }
 
     html { background: var(--app-hintergrund); }
     body {
@@ -1908,3 +1910,64 @@
          durchgehende, gleichmäßige Bewegung statt als Sprünge. */
       transition: filter .3s linear;
     }
+
+    /* ======================================================================
+       v144 - Findet den Impostor: aufziehbare Karte (Name vorn, Wort/"Impostor"
+       auf der Rückseite). Ziehen per Pointer Events; ein einfaches Antippen
+       funktioniert als Fallback, falls das Ziehen auf einem Gerät nicht
+       zuverlässig erkannt wird.
+       ====================================================================== */
+    .imp-karten-buehne {
+      position: relative;
+      max-width: 280px;
+      height: 280px;
+      margin: 18px auto;
+    }
+    .imp-karte {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      touch-action: none;
+    }
+    .imp-karte-seite {
+      position: absolute;
+      inset: 0;
+      border-radius: 22px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 18px;
+      text-align: center;
+    }
+    .imp-karte-vorne {
+      z-index: 2;
+      color: #fff;
+      background: linear-gradient(160deg, color-mix(in srgb, var(--club-orange) 70%, #7c1d2e) 0%, #5c1524 100%);
+      border: 1.5px solid rgba(255,255,255,.25);
+      box-shadow: 0 14px 30px rgba(0,0,0,.4);
+      transform: translateY(var(--verschiebung, 0px));
+      transition: transform .28s ease, opacity .28s ease;
+      cursor: grab;
+    }
+    .imp-karte.wird-gezogen .imp-karte-vorne { transition: none; cursor: grabbing; }
+    .imp-karte.aufgedeckt .imp-karte-vorne { transform: translateY(-115%); opacity: 0; pointer-events: none; }
+    .imp-karte-hinten {
+      z-index: 1;
+      color: var(--text-dunkel);
+      background: var(--club-ivory);
+      box-shadow: inset 0 0 0 2px rgba(0,0,0,.06);
+    }
+    .imp-karte-name { font-size: 1.3rem; font-weight: 800; }
+    .imp-karte-figur { font-size: 3rem; }
+    .imp-karte-pfeil { font-size: 1.6rem; animation: imp-pfeil-schweben 1.4s ease-in-out infinite; }
+    @keyframes imp-pfeil-schweben {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+    .imp-karte-hinweis { font-weight: 700; letter-spacing: .02em; }
+    .imp-rueckseite-symbol { font-size: 2.4rem; }
+    .imp-karte-hinten strong { font-size: 1.5rem; }
+    .imp-rueckseite-zusatz { font-size: .85rem; color: var(--text-hell); max-width: 220px; }
+    .imp-runde-hinweis { text-align: center; }

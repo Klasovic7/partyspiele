@@ -63,6 +63,24 @@ export const SPIELE = [
     beschreibung: "Drei Frage-Typen auf Zeit: Schnelligkeit, Wortrate, Bild-Reveal",
     minSpieler: 1,
     laden: () => import("./blitzquiz/spiel.js")
+  },
+  {
+    id: "finto",
+    name: "Finto",
+    emoji: "🦉",
+    farbe: "#38bdf8",
+    beschreibung: "Eine Frage - jeder gibt seine eigene Antwort ab",
+    minSpieler: 2,
+    laden: () => import("./finto/spiel.js")
+  },
+  {
+    id: "impostor",
+    name: "Findet den Impostor",
+    emoji: "🎭",
+    farbe: "#fb7185",
+    beschreibung: "Einer kennt das Geheimwort nicht - deckt eure Karte auf und findet ihn",
+    minSpieler: 3,
+    laden: () => import("./impostor/spiel.js")
   }
 ];
 
