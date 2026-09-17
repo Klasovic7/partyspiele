@@ -1,5 +1,402 @@
 [
-  { "begriff": "Urlaub", "hinweis": "Strand" },
-  { "begriff": "Schule", "hinweis": "Tafel" },
-  { "begriff": "Geburtstag", "hinweis": "Kuchen" }
+  {
+    "begriff": "Urlaub",
+    "hinweis": "Strand"
+  },
+  {
+    "begriff": "Schule",
+    "hinweis": "Tafel"
+  },
+  {
+    "begriff": "Geburtstag",
+    "hinweis": "Kuchen"
+  },
+  {
+    "begriff": "Hochzeit",
+    "hinweis": "Ringe"
+  },
+  {
+    "begriff": "Weihnachten",
+    "hinweis": "Tannenbaum"
+  },
+  {
+    "begriff": "Silvester",
+    "hinweis": "Feuerwerk"
+  },
+  {
+    "begriff": "Ostern",
+    "hinweis": "Eier"
+  },
+  {
+    "begriff": "Karneval",
+    "hinweis": "Kostüm"
+  },
+  {
+    "begriff": "Halloween",
+    "hinweis": "Kürbis"
+  },
+  {
+    "begriff": "Beerdigung",
+    "hinweis": "Trauer"
+  },
+  {
+    "begriff": "Abschlussfeier",
+    "hinweis": "Zeugnis"
+  },
+  {
+    "begriff": "Junggesellenabschied",
+    "hinweis": "Sekt"
+  },
+  {
+    "begriff": "Fußballspiel",
+    "hinweis": "Tor"
+  },
+  {
+    "begriff": "Flughafen",
+    "hinweis": "Gepäck"
+  },
+  {
+    "begriff": "Krankenhaus",
+    "hinweis": "Arzt"
+  },
+  {
+    "begriff": "Bibliothek",
+    "hinweis": "Bücher"
+  },
+  {
+    "begriff": "Zoo",
+    "hinweis": "Käfig"
+  },
+  {
+    "begriff": "Friseursalon",
+    "hinweis": "Schere"
+  },
+  {
+    "begriff": "Supermarkt",
+    "hinweis": "Einkaufswagen"
+  },
+  {
+    "begriff": "Kino",
+    "hinweis": "Popcorn"
+  },
+  {
+    "begriff": "Konzert",
+    "hinweis": "Bühne"
+  },
+  {
+    "begriff": "Fitnessstudio",
+    "hinweis": "Hanteln"
+  },
+  {
+    "begriff": "Restaurant",
+    "hinweis": "Speisekarte"
+  },
+  {
+    "begriff": "Bäckerei",
+    "hinweis": "Brötchen"
+  },
+  {
+    "begriff": "Tankstelle",
+    "hinweis": "Zapfsäule"
+  },
+  {
+    "begriff": "Bahnhof",
+    "hinweis": "Gleis"
+  },
+  {
+    "begriff": "Kirche",
+    "hinweis": "Glocke"
+  },
+  {
+    "begriff": "Gefängnis",
+    "hinweis": "Gitter"
+  },
+  {
+    "begriff": "Museum",
+    "hinweis": "Ausstellung"
+  },
+  {
+    "begriff": "Schwimmbad",
+    "hinweis": "Sprungturm"
+  },
+  {
+    "begriff": "Casino",
+    "hinweis": "Roulette"
+  },
+  {
+    "begriff": "Büro",
+    "hinweis": "Schreibtisch"
+  },
+  {
+    "begriff": "Camping",
+    "hinweis": "Zelt"
+  },
+  {
+    "begriff": "Umzug",
+    "hinweis": "Kartons"
+  },
+  {
+    "begriff": "Vorstellungsgespräch",
+    "hinweis": "Anzug"
+  },
+  {
+    "begriff": "Prüfung",
+    "hinweis": "Nervosität"
+  },
+  {
+    "begriff": "Date",
+    "hinweis": "Kerzenschein"
+  },
+  {
+    "begriff": "Zahnarztbesuch",
+    "hinweis": "Bohrer"
+  },
+  {
+    "begriff": "Friseurbesuch",
+    "hinweis": "Kamm"
+  },
+  {
+    "begriff": "Picknick",
+    "hinweis": "Decke"
+  },
+  {
+    "begriff": "Grillfest",
+    "hinweis": "Kohle"
+  },
+  {
+    "begriff": "Frühstück",
+    "hinweis": "Kaffee"
+  },
+  {
+    "begriff": "Handy",
+    "hinweis": "Bildschirm"
+  },
+  {
+    "begriff": "Auto",
+    "hinweis": "Lenkrad"
+  },
+  {
+    "begriff": "Fahrrad",
+    "hinweis": "Pedale"
+  },
+  {
+    "begriff": "Regenschirm",
+    "hinweis": "Regen"
+  },
+  {
+    "begriff": "Koffer",
+    "hinweis": "Rollen"
+  },
+  {
+    "begriff": "Rucksack",
+    "hinweis": "Träger"
+  },
+  {
+    "begriff": "Uhr",
+    "hinweis": "Zeiger"
+  },
+  {
+    "begriff": "Brille",
+    "hinweis": "Gläser"
+  },
+  {
+    "begriff": "Zug",
+    "hinweis": "Schienen"
+  },
+  {
+    "begriff": "Flugzeug",
+    "hinweis": "Wolken"
+  },
+  {
+    "begriff": "Schiff",
+    "hinweis": "Anker"
+  },
+  {
+    "begriff": "U-Bahn",
+    "hinweis": "Tunnel"
+  },
+  {
+    "begriff": "Taxi",
+    "hinweis": "Fahrer"
+  },
+  {
+    "begriff": "Wald",
+    "hinweis": "Bäume"
+  },
+  {
+    "begriff": "Berg",
+    "hinweis": "Gipfel"
+  },
+  {
+    "begriff": "See",
+    "hinweis": "Ufer"
+  },
+  {
+    "begriff": "Ozean",
+    "hinweis": "Wellen"
+  },
+  {
+    "begriff": "Wüste",
+    "hinweis": "Sand"
+  },
+  {
+    "begriff": "Dschungel",
+    "hinweis": "Liane"
+  },
+  {
+    "begriff": "Schwimmen",
+    "hinweis": "Chlor"
+  },
+  {
+    "begriff": "Skifahren",
+    "hinweis": "Piste"
+  },
+  {
+    "begriff": "Tennis",
+    "hinweis": "Schläger"
+  },
+  {
+    "begriff": "Yoga",
+    "hinweis": "Matte"
+  },
+  {
+    "begriff": "Boxen",
+    "hinweis": "Handschuhe"
+  },
+  {
+    "begriff": "Pizza",
+    "hinweis": "Käse"
+  },
+  {
+    "begriff": "Sushi",
+    "hinweis": "Reis"
+  },
+  {
+    "begriff": "Feuerwehreinsatz",
+    "hinweis": "Schlauch"
+  },
+  {
+    "begriff": "Polizeikontrolle",
+    "hinweis": "Sirene"
+  },
+  {
+    "begriff": "Arztpraxis",
+    "hinweis": "Wartezimmer"
+  },
+  {
+    "begriff": "Baustelle",
+    "hinweis": "Helm"
+  },
+  {
+    "begriff": "Gerichtsverhandlung",
+    "hinweis": "Richter"
+  },
+  {
+    "begriff": "Zirkus",
+    "hinweis": "Clown"
+  },
+  {
+    "begriff": "Achterbahn",
+    "hinweis": "Looping"
+  },
+  {
+    "begriff": "Jahrmarkt",
+    "hinweis": "Losbude"
+  },
+  {
+    "begriff": "Disco",
+    "hinweis": "Discokugel"
+  },
+  {
+    "begriff": "Sauna",
+    "hinweis": "Aufguss"
+  },
+  {
+    "begriff": "Angeln",
+    "hinweis": "Köder"
+  },
+  {
+    "begriff": "Jagd",
+    "hinweis": "Gewehr"
+  },
+  {
+    "begriff": "Wandern",
+    "hinweis": "Wanderstiefel"
+  },
+  {
+    "begriff": "Segeln",
+    "hinweis": "Wind"
+  },
+  {
+    "begriff": "Klettern",
+    "hinweis": "Seil"
+  },
+  {
+    "begriff": "Golfen",
+    "hinweis": "Loch"
+  },
+  {
+    "begriff": "Reiten",
+    "hinweis": "Sattel"
+  },
+  {
+    "begriff": "Kegeln",
+    "hinweis": "Kugel"
+  },
+  {
+    "begriff": "Schach",
+    "hinweis": "Bauer"
+  },
+  {
+    "begriff": "Kartenspiel",
+    "hinweis": "Mischen"
+  },
+  {
+    "begriff": "Videospiel",
+    "hinweis": "Controller"
+  },
+  {
+    "begriff": "Fotografieren",
+    "hinweis": "Blitz"
+  },
+  {
+    "begriff": "Malen",
+    "hinweis": "Pinsel"
+  },
+  {
+    "begriff": "Singen",
+    "hinweis": "Mikrofon"
+  },
+  {
+    "begriff": "Tanzen",
+    "hinweis": "Rhythmus"
+  },
+  {
+    "begriff": "Kochen",
+    "hinweis": "Topf"
+  },
+  {
+    "begriff": "Backen",
+    "hinweis": "Ofen"
+  },
+  {
+    "begriff": "Nähen",
+    "hinweis": "Nadel"
+  },
+  {
+    "begriff": "Gärtnern",
+    "hinweis": "Erde"
+  },
+  {
+    "begriff": "Autowaschen",
+    "hinweis": "Schwamm"
+  },
+  {
+    "begriff": "Meditation",
+    "hinweis": "Stille"
+  },
+  {
+    "begriff": "Flohmarkt",
+    "hinweis": "Feilschen"
+  }
 ]
