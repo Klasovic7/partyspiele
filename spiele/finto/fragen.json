@@ -4,24 +4,8 @@
     "antwort": "Flamboyance"
   },
   {
-    "frage": "Welches Tier hat gleich drei Herzen?",
-    "antwort": "Der Oktopus"
-  },
-  {
     "frage": "Wie nennt man eine Gruppe von Krähen - das offizielle Sammelwort im Englischen?",
     "antwort": "A Murder"
-  },
-  {
-    "frage": "Wie heißt der Geruch von Regen auf trockener Erde offiziell?",
-    "antwort": "Petrichor"
-  },
-  {
-    "frage": "Wie heißt die kleine Furche zwischen Nase und Oberlippe medizinisch?",
-    "antwort": "Philtrum"
-  },
-  {
-    "frage": "Wie heißt der kleinste Knochen im menschlichen Körper?",
-    "antwort": "Der Steigbügel"
   },
   {
     "frage": "Wie nennt man eine Gruppe von Pandas - das offizielle Sammelwort im Englischen?",
@@ -56,28 +40,28 @@
     "antwort": "A Smack"
   },
   {
+    "frage": "Wie heißt der Geruch von Regen auf trockener Erde offiziell?",
+    "antwort": "Petrichor"
+  },
+  {
+    "frage": "Wie heißt die kleine Furche zwischen Nase und Oberlippe medizinisch?",
+    "antwort": "Philtrum"
+  },
+  {
+    "frage": "Wie heißt der kleinste Knochen im menschlichen Körper?",
+    "antwort": "Der Steigbügel"
+  },
+  {
+    "frage": "Welches Tier hat gleich drei Herzen?",
+    "antwort": "Der Oktopus"
+  },
+  {
     "frage": "Wie viele Herzen hat ein Regenwurm?",
     "antwort": "Fünf"
   },
   {
-    "frage": "Wie viele Zähne hat eine Schnecke ungefähr (verteilt auf ihre Raspelzunge)?",
+    "frage": "Wie viele Zähne hat eine Schnecke ungefähr, verteilt auf ihre Raspelzunge?",
     "antwort": "Etwa 14.000"
-  },
-  {
-    "frage": "Welches Säugetier legt Eier, anstatt lebende Junge zu gebären?",
-    "antwort": "Das Schnabeltier"
-  },
-  {
-    "frage": "Welches Säugetier kann als einziges nicht springen?",
-    "antwort": "Der Elefant"
-  },
-  {
-    "frage": "Wie viele Beine hat ein Hummer?",
-    "antwort": "Zehn"
-  },
-  {
-    "frage": "Wie heißt das Baby eines Kängurus?",
-    "antwort": "Joey"
   },
   {
     "frage": "Welches Tier hat das größte Auge im gesamten Tierreich?",
@@ -88,315 +72,331 @@
     "antwort": "270 Grad"
   },
   {
-    "frage": "Wie viele Mägen hat eine Kuh?",
-    "antwort": "Vier"
+    "frage": "Wie verteidigt sich eine Seegurke, wenn sie von einem Fressfeind bedroht wird?",
+    "antwort": "Sie stößt einen Teil ihrer inneren Organe aus"
   },
   {
-    "frage": "Welches Landtier gilt als das schnellste der Welt?",
-    "antwort": "Der Gepard"
+    "frage": "Warum können Papageien menschliche Wörter nachahmen, obwohl sie keine Stimmbänder besitzen?",
+    "antwort": "Sie nutzen ein Organ namens Syrinx"
   },
   {
-    "frage": "Wie viele Stunden schläft eine Giraffe im Schnitt pro Tag?",
-    "antwort": "Etwa zwei Stunden"
+    "frage": "Welche Flüssigkeit schwitzt ein Nilpferd, die früher fälschlich für Blut gehalten wurde?",
+    "antwort": "Ein rötliches, hautschützendes Sekret"
   },
   {
-    "frage": "Wie heißt das dritte, durchsichtige Augenlid, das Katzen besitzen?",
-    "antwort": "Nickhaut"
+    "frage": "Wozu wechselt ein Chamäleon hauptsächlich seine Farbe - nicht in erster Linie zur Tarnung?",
+    "antwort": "Zur Kommunikation und Temperaturregulation"
   },
   {
-    "frage": "Wie viele verschiedene Farbrezeptoren hat das Auge eines Fangschreckenkrebses?",
-    "antwort": "16"
+    "frage": "Wodurch überleben manche Frösche das komplette Durchfrieren im Winter?",
+    "antwort": "Ein natürliches Frostschutzmittel im Blut"
   },
   {
-    "frage": "Wie oft tauscht ein Hai im Laufe seines Lebens ungefähr seine Zähne aus (Gesamtzahl)?",
-    "antwort": "Mehrere Tausend"
+    "frage": "Woraus besteht ein Nashorn-Horn eigentlich, obwohl es wie Knochen aussieht?",
+    "antwort": "Verklebtes Keratin, wie Haare"
   },
   {
-    "frage": "Wie hieß das erste Säugetier, das jemals geklont wurde?",
-    "antwort": "Das Schaf Dolly"
+    "frage": "Warum können Sandtigerhai-Embryos schon vor der Geburt ihre eigenen Geschwister auffressen?",
+    "antwort": "Ein Überlebenskampf im Mutterleib"
   },
   {
-    "frage": "Welches Lebewesen war 1947 das allererste Tier im Weltall - noch vor Hunden oder Affen?",
-    "antwort": "Fruchtfliegen"
+    "frage": "Wodurch fällt ein Löwenzahn-Same beim Fliegen kaum zu Boden, obwohl er keine Flügel hat?",
+    "antwort": "Ein winziger Luftwirbel an seinen Härchen"
   },
   {
-    "frage": "Welcher Vogel kann als einziger rückwärts fliegen?",
-    "antwort": "Der Kolibri"
+    "frage": "Wodurch wächst einem Axolotl ein verlorenes Bein einfach wieder nach?",
+    "antwort": "Vollständige Gewebe-Regeneration"
   },
   {
-    "frage": "Welches Land besitzt die einzige Nationalflagge der Welt, die nicht rechteckig ist?",
-    "antwort": "Nepal"
+    "frage": "Wodurch überstehen manche Wüstenfrösche jahrelange Dürre unter der Erde?",
+    "antwort": "Ein selbst gebildeter, feuchter Kokon"
   },
   {
-    "frage": "Welcher Kontinent hat keine einzige wildlebende Reptilienart?",
-    "antwort": "Die Antarktis"
+    "frage": "Wodurch können Elefanten spüren, was Artgenossen kilometerweit entfernt tun?",
+    "antwort": "Tiefe Bodenvibrationen mit den Füßen"
   },
   {
-    "frage": "Wie viele Knochen hat ein neugeborenes Baby ungefähr - deutlich mehr als ein Erwachsener?",
-    "antwort": "Etwa 300"
+    "frage": "Warum stinkt die größte Blume der Welt, der Titan-Aronstab, bewusst nach Aas?",
+    "antwort": "Um aasfressende Insekten anzulocken"
   },
   {
-    "frage": "Wie nennt man die Angst vor der Zahl 13?",
-    "antwort": "Triskaidekaphobie"
+    "frage": "Wodurch kann ein Oktopus durch einen Ring passen, kaum größer als sein eigenes Auge?",
+    "antwort": "Er hat keine Knochen im Körper"
   },
   {
-    "frage": "Wie nennt man die Angst davor, sein Handy zu verlieren oder ohne es zu sein?",
-    "antwort": "Nomophobie"
+    "frage": "Wozu wechseln Polarfüchse im Sommer die Farbe ihres Fells?",
+    "antwort": "Zur Tarnung von Weiß zu Braun"
   },
   {
-    "frage": "Was ist das härteste natürlich vorkommende Material der Erde?",
-    "antwort": "Diamant"
+    "frage": "Wodurch orientieren sich Wüstenameisen ganz ohne Landmarken auf dem Rückweg?",
+    "antwort": "Sie zählen ihre eigenen Schritte"
   },
   {
-    "frage": "Welches Organ des menschlichen Körpers regeneriert sich am schnellsten?",
-    "antwort": "Die Leber"
+    "frage": "Warum lassen manche Eidechsenarten freiwillig ihren eigenen Schwanz zurück?",
+    "antwort": "Um einem Fressfeind zu entkommen"
   },
   {
-    "frage": "Wie viele Grundgeschmacksrichtungen kann die menschliche Zunge unterscheiden?",
-    "antwort": "Fünf"
+    "frage": "Wodurch wird ein Pinguin beim Schwimmen plötzlich doppelt so schnell?",
+    "antwort": "Er stößt Luftblasen aus seinem Gefieder"
   },
   {
-    "frage": "Wie heißt der wissenschaftliche Fachbegriff für das Geräusch beim Fingerknacken?",
-    "antwort": "Kavitation"
+    "frage": "Warum tropfen einem Albatros beim Fliegen ständig salzige Tränen?",
+    "antwort": "Eine Drüse scheidet überschüssiges Salz aus"
   },
   {
-    "frage": "Welches Organ verbraucht im Ruhezustand die meiste Energie des Körpers?",
-    "antwort": "Das Gehirn"
+    "frage": "Wodurch verändert ein Tintenfisch nicht nur seine Farbe, sondern auch seine Hautstruktur?",
+    "antwort": "Winzige Muskeln formen die Haut uneben"
   },
   {
-    "frage": "Welche Farbe kommt im sichtbaren Lichtspektrum eines Regenbogens gar nicht vor, obwohl wir sie kennen?",
-    "antwort": "Pink"
+    "frage": "Wodurch können Kamele tagelang ohne Wasser auskommen?",
+    "antwort": "Die Höcker speichern Fett statt Wasser"
   },
   {
-    "frage": "Wie heißt der längste Muskel im menschlichen Körper?",
-    "antwort": "Der Schneidermuskel"
+    "frage": "Wozu wechseln Clownfische im Laufe ihres Lebens tatsächlich das Geschlecht?",
+    "antwort": "Ein natürlicher Geschlechtswechsel"
   },
   {
-    "frage": "Wie heiß wird ein Blitz ungefähr - deutlich heißer als die Sonnenoberfläche?",
-    "antwort": "Etwa 30.000 Grad Celsius"
+    "frage": "Wodurch kann eine Basilisken-Echse buchstäblich über Wasser laufen?",
+    "antwort": "Spezielle Schuppen erzeugen Auftrieb"
   },
   {
-    "frage": "Wie nennt man die (ironisch selbst sehr lange) Angst vor langen Wörtern?",
-    "antwort": "Hippopotomonstrosesquipedaliophobie"
+    "frage": "Warum zeigen Termitenhügel oft exakt in eine Nord-Süd-Richtung?",
+    "antwort": "Zur optimalen Temperaturregulierung"
   },
   {
-    "frage": "Welche Blutgruppe ist weltweit am häufigsten vertreten?",
-    "antwort": "0 positiv"
+    "frage": "Wodurch kann ein Chamäleon gleichzeitig in zwei verschiedene Richtungen schauen?",
+    "antwort": "Seine Augen bewegen sich unabhängig"
   },
   {
-    "frage": "Wie viele Liter Blut pumpt das menschliche Herz durchschnittlich an einem Tag?",
-    "antwort": "Über 7.000 Liter"
+    "frage": "Warum explodiert die reife Frucht der Spritzgurke bei der kleinsten Berührung?",
+    "antwort": "Innerer Überdruck schleudert die Samen weg"
   },
   {
-    "frage": "Wie nennt man die Angst vor Clowns?",
-    "antwort": "Coulrophobie"
+    "frage": "Wodurch haben manche Spinnenarten blaues statt rotes Blut?",
+    "antwort": "Der Sauerstoffträger enthält Kupfer statt Eisen"
   },
   {
-    "frage": "Wie nennt man ein Wort, das vorwärts wie rückwärts gelesen gleich lautet?",
-    "antwort": "Palindrom"
+    "frage": "Wie nannte man den Beruf, morgens ohne Wecker Leute mit einer langen Stange am Fenster zu wecken?",
+    "antwort": "Knocker-upper"
   },
   {
-    "frage": "Welches deutsche Wort enthält als eines der wenigen drei gleiche Buchstaben direkt hintereinander?",
-    "antwort": "Schifffahrt"
+    "frage": "Wie nannte man im England vergangener Jahrhunderte den bezahlten Prügel-Ersatz für einen ungezogenen Prinzen?",
+    "antwort": "Whipping Boy"
   },
   {
-    "frage": "Welche Zahl ist im Deutschen die einzige, deren Wort genauso viele Buchstaben hat wie sie selbst wert ist?",
-    "antwort": "Vier"
+    "frage": "Wie nannte man im antiken Rom den offiziellen Vorkoster gegen Gift?",
+    "antwort": "Praegustator"
   },
   {
-    "frage": "Welches Alphabet der Welt gilt mit rund 74 Buchstaben als das längste?",
-    "antwort": "Das Khmer-Alphabet"
+    "frage": "Wie nannte man bezahlte Trauernde, die bei Beerdigungen laut weinten?",
+    "antwort": "Klageweiber"
   },
   {
-    "frage": "Wie hieß das jahrelang längste Wort im deutschen Gesetzestext, bevor das Gesetz dahinter abgeschafft wurde?",
-    "antwort": "Rindfleischetikettierungsüberwachungsaufgabenübertragungsgesetz"
+    "frage": "Wie nannte man bezahlte Zuschauer, die im Theater das Klatschen und Lachen anheizten?",
+    "antwort": "Claqueure"
   },
   {
-    "frage": "Wie lange dauerte der kürzeste Krieg der Geschichte zwischen Großbritannien und Sansibar?",
-    "antwort": "38 Minuten"
+    "frage": "Wie nannte man historisch die Arbeiter, die nachts Fäkalien aus den Latrinen der Stadt holten?",
+    "antwort": "Nachtkönige"
   },
   {
-    "frage": "Wie viele Jahre sollte der Eiffelturm ursprünglich nur stehen bleiben, bevor er abgerissen werden sollte?",
-    "antwort": "20 Jahre"
+    "frage": "Wie nannte man den falschen Bart, den auch weibliche Pharaonen wie Hatschepsut trugen?",
+    "antwort": "Zeremonialbart"
   },
   {
-    "frage": "Wie viele Jahre dauerte der sogenannte 'Hundertjährige Krieg' tatsächlich?",
-    "antwort": "116 Jahre"
+    "frage": "Wie nannte man den Zuschauerausgang eines römischen Amphitheaters, den viele fälschlich für einen Kotz-Raum halten?",
+    "antwort": "Vomitorium"
   },
   {
-    "frage": "Aus welchem Land stammt der Kaffee ursprünglich - der Legende nach entdeckt durch tanzende Ziegen?",
-    "antwort": "Äthiopien"
+    "frage": "Was ist Draculin, benannt nach seiner tierischen Quelle?",
+    "antwort": "Ein Gerinnungshemmer"
   },
   {
-    "frage": "Welches Lebensmittel wurde 1893 von einem US-Gericht offiziell zum Gemüse erklärt, obwohl es botanisch eine Frucht ist?",
-    "antwort": "Die Tomate"
+    "frage": "Wer erfand Cornflakes ursprünglich, um sexuelle Lust zu dämpfen?",
+    "antwort": "John Harvey Kellogg"
   },
   {
-    "frage": "Welches Land der Welt hat die meisten aktiven Vulkane?",
-    "antwort": "Indonesien"
+    "frage": "Wer komponierte die Melodie von 'Happy Birthday to You'?",
+    "antwort": "Die Schwestern Hill"
   },
   {
-    "frage": "Welche Stadt liegt gleichzeitig auf zwei Kontinenten?",
-    "antwort": "Istanbul"
+    "frage": "Wer entdeckte Penicillin eher zufällig?",
+    "antwort": "Alexander Fleming"
   },
   {
-    "frage": "Welches Land liegt als einziges der Welt in allen vier Hemisphären gleichzeitig?",
-    "antwort": "Kiribati"
+    "frage": "Wer erfand die Kettensäge ursprünglich für die Geburtshilfe?",
+    "antwort": "Zwei schottische Chirurgen"
   },
   {
-    "frage": "Welche zwei Länder haben mit je 14 die meisten Nachbarstaaten der Welt?",
-    "antwort": "China und Russland"
+    "frage": "Wer erhielt als einzige Person zwei Nobelpreise in zwei verschiedenen Wissenschaften?",
+    "antwort": "Marie Curie"
   },
   {
-    "frage": "Welche Wüste der Welt ist tatsächlich die größte - obwohl sie eisig statt sandig ist?",
-    "antwort": "Die Antarktis"
+    "frage": "Wer erfand ein funktionierendes Feuerzeug schon vor dem Streichholz?",
+    "antwort": "Johann Wolfgang Döbereiner"
   },
   {
-    "frage": "Welcher Fluss transportiert die größte Wassermenge aller Flüsse der Welt?",
-    "antwort": "Der Amazonas"
+    "frage": "Wer entwickelte das moderne Trampolin aus einer Zirkusnummer?",
+    "antwort": "George Nissen"
   },
   {
-    "frage": "Welches Land hat die längste Küstenlinie der Welt?",
-    "antwort": "Kanada"
+    "frage": "Wer entdeckte Röntgenstrahlen zufällig im eigenen Labor?",
+    "antwort": "Wilhelm Conrad Röntgen"
   },
   {
-    "frage": "Wie viele Zeitzonen erstrecken sich über das Staatsgebiet Russlands?",
-    "antwort": "Elf"
+    "frage": "Wer erfand Dynamit, obwohl er später den Friedensnobelpreis stiftete?",
+    "antwort": "Alfred Nobel"
   },
   {
-    "frage": "Aus welcher Weltregion stammt die Kartoffel ursprünglich?",
-    "antwort": "Aus den Anden in Südamerika"
+    "frage": "Wer erfand die Mikrowelle, weil ihm ein Schokoriegel in der Hosentasche schmolz?",
+    "antwort": "Percy Spencer"
   },
   {
-    "frage": "Welches Gewürz ist pro Gramm teurer als Gold?",
-    "antwort": "Safran"
+    "frage": "Wer erfand das Pflaster, weil seine Frau sich beim Kochen ständig schnitt?",
+    "antwort": "Earle Dickson"
   },
   {
-    "frage": "Welches Lebensmittel verdirbt bei richtiger Lagerung praktisch nie?",
-    "antwort": "Honig"
+    "frage": "Wie hieß Googles allererster Name kurz nach der Gründung?",
+    "antwort": "BackRub"
   },
   {
-    "frage": "Welche vermeintliche Nuss ist botanisch gesehen tatsächlich eine Hülsenfrucht?",
-    "antwort": "Die Erdnuss"
+    "frage": "Was ist ein Meteorit, bevor er auf der Erde einschlägt, eigentlich noch?",
+    "antwort": "Ein Meteoroid"
   },
   {
-    "frage": "Welche botanische Frucht wird weltweit am meisten gegessen, obwohl sie meist als Gemüse gilt?",
-    "antwort": "Die Tomate"
+    "frage": "Wer erfand das erste patentierte Kreuzworträtsel 1913?",
+    "antwort": "Arthur Wynne"
   },
   {
-    "frage": "Auf welchen beiden Planeten regnet es laut Forschern vermutlich Diamanten?",
-    "antwort": "Neptun und Uranus"
+    "frage": "Wie nannte man die Berliner Mauer in der offiziellen Sprache der DDR?",
+    "antwort": "Antifaschistischer Schutzwall"
   },
   {
-    "frage": "Auf welchem Planeten dauert ein einzelner Tag länger als sein gesamtes Jahr?",
-    "antwort": "Auf der Venus"
+    "frage": "Wer schrieb den weltweit meistverkauften Roman-Bestseller aller Zeiten - nach der Bibel?",
+    "antwort": "Agatha Christie"
   },
   {
-    "frage": "Wie lange braucht das Sonnenlicht ungefähr, um die Erde zu erreichen?",
-    "antwort": "Etwa acht Minuten"
+    "frage": "Wie hieß das erste künstliche Objekt, das jemals die Erde verließ?",
+    "antwort": "Sputnik 1"
   },
   {
-    "frage": "Welcher Planet dreht sich als einziger rückwärts um die eigene Achse?",
-    "antwort": "Die Venus"
+    "frage": "Wer lehnte als bislang einzige Person freiwillig einen Nobelpreis für Literatur ab?",
+    "antwort": "Jean-Paul Sartre"
   },
   {
-    "frage": "Welcher Planet hat aktuell die meisten bekannten Monde im Sonnensystem?",
-    "antwort": "Saturn"
+    "frage": "Wie hieß das erste öffentlich vorgeführte Computerspiel der Geschichte, 1958?",
+    "antwort": "Tennis for Two"
   },
   {
-    "frage": "Wie nennt man eine Gruppe von Krokodilen - das offizielle Sammelwort im Englischen?",
-    "antwort": "A Bask"
+    "frage": "Wer wurde 897 als bereits toter Papst nachträglich vor ein Kirchengericht gestellt?",
+    "antwort": "Formosus"
   },
   {
-    "frage": "Wie nennt man eine Gruppe von Nashörnern - das offizielle Sammelwort im Englischen?",
-    "antwort": "A Crash"
+    "frage": "Wessen Maschinengewehre versagten 1932 gegen rund 20.000 Emus in Australien?",
+    "antwort": "Die des australischen Militärs"
   },
   {
-    "frage": "Wie nennt man eine Gruppe von Zebras - das offizielle Sammelwort im Englischen?",
-    "antwort": "A Dazzle"
+    "frage": "Welches schwedische Kriegsschiff sank schon wenige Minuten nach seinem Stapellauf 1628?",
+    "antwort": "Die Vasa"
   },
   {
-    "frage": "Welches Tier hat das größte Herz im gesamten Tierreich?",
-    "antwort": "Der Blauwal"
+    "frage": "Wem gab Mozart 1787 eine aufwendige Trauerfeier mit selbst geschriebenem Gedicht, obwohl es kein Mensch war?",
+    "antwort": "Seinem Star (Vogel)"
   },
   {
-    "frage": "Welche Qualle gilt als biologisch unsterblich, weil sie sich in ein früheres Stadium zurückverwandeln kann?",
-    "antwort": "Turritopsis dohrnii"
+    "frage": "Was griff Napoleon 1807 bei einer eigens organisierten Jagd tatsächlich an, statt wegzulaufen?",
+    "antwort": "Hunderte Kaninchen"
   },
   {
-    "frage": "Welcher Vogel legt im Verhältnis zu seiner Körpergröße das größte Ei der Welt?",
-    "antwort": "Der Kiwi"
+    "frage": "Wie nannte sich ein Mann aus San Francisco, der sich 1859 selbst zum Kaiser der Vereinigten Staaten ernannte?",
+    "antwort": "Norton I."
   },
   {
-    "frage": "Welches Tier hat als eines der wenigen tatsächlich blaues Blut?",
-    "antwort": "Der Pfeilschwanzkrebs"
+    "frage": "In welcher Schlacht kämpfte man noch heftig weiter, obwohl der Friedensvertrag längst unterschrieben war?",
+    "antwort": "Schlacht von New Orleans"
   },
   {
-    "frage": "Wie nennt man eine Gruppe von Delfinen - das offizielle Sammelwort im Englischen?",
-    "antwort": "A Pod"
+    "frage": "Wer 'gewann' den olympischen Marathon 1904, indem er einen Teil der Strecke im Auto zurücklegte?",
+    "antwort": "Fred Lorz"
   },
   {
-    "frage": "Wovon leitet sich das Wort 'OK' ursprünglich ab - einer scherzhaften Falschschreibung aus dem Boston der 1830er?",
-    "antwort": "Oll Korrect"
+    "frage": "Welcher Marathonläufer wurde 1904 mit Rattengift-Bestandteilen und Brandy aufgeputscht, um weiterzulaufen?",
+    "antwort": "Thomas Hicks"
   },
   {
-    "frage": "Welches Land hat dem Weihnachtsmann offiziell eine eigene Postleitzahl zugeteilt?",
-    "antwort": "Kanada"
+    "frage": "Welche zwei italienischen Städte führten im 14. Jahrhundert jahrelang Krieg wegen eines gestohlenen Holzeimers?",
+    "antwort": "Modena und Bologna"
   },
   {
-    "frage": "Wie nennt man die Zahl, die aus einer 1 mit 100 Nullen besteht?",
-    "antwort": "Googol"
+    "frage": "Mit wie vielen Kaninchen begann 1859 die spätere Kaninchenplage in Australien mit hunderten Millionen Tieren?",
+    "antwort": "24"
   },
   {
-    "frage": "Wie nennt man speziell die Angst vor einem Freitag, der auf den 13. fällt?",
-    "antwort": "Paraskavedekatriaphobie"
+    "frage": "Welche Legende erzählt von einer Frau, die sich jahrelang unerkannt als Mann an die Spitze der katholischen Kirche mogelte?",
+    "antwort": "Die Päpstin Johanna"
   },
   {
-    "frage": "Wie lautet der medizinische Fachbegriff für Schluckauf?",
-    "antwort": "Singultus"
+    "frage": "Welcher als 'Kuchenkrieg' bekannte Konflikt begann 1838, weil ein französischer Bäcker in Mexiko sein Geschäft geplündert sah?",
+    "antwort": "Der Pastetenkrieg"
   },
   {
-    "frage": "Welches Tier kann mit seiner Schere ein Geräusch erzeugen, das lauter ist als ein startendes Flugzeug?",
-    "antwort": "Der Pistolenkrebs"
+    "frage": "Welcher britisch-spanische Krieg von 1739 wurde nach einem im Parlament vorgezeigten, abgeschnittenen Körperteil benannt?",
+    "antwort": "Der Krieg um Jenkins' Ohr"
   },
   {
-    "frage": "Wie nennt man eine Gruppe von Faultieren - das offizielle Sammelwort im Englischen?",
-    "antwort": "A Bed"
+    "frage": "Welcher Krieg 1969 zwischen El Salvador und Honduras eskalierte im Umfeld eines WM-Qualifikationsspiels?",
+    "antwort": "Der Fußballkrieg"
   },
   {
-    "frage": "Welches Tier hält mit bis zu acht Monaten den Rekord für den längsten Winterschlaf?",
-    "antwort": "Der Siebenschläfer"
+    "frage": "Welche Tiere wurden 1519 im südtiroler Glurns offiziell vor Gericht wegen Feldzerstörung angeklagt?",
+    "antwort": "Feld- und Wühlmäuse"
   },
   {
-    "frage": "Welches ist das einzige Säugetier, das wirklich aktiv fliegen kann statt nur zu gleiten?",
-    "antwort": "Die Fledermaus"
+    "frage": "Welche zähflüssige Substanz überflutete 1919 Boston nach dem Bruch eines riesigen Lagertanks?",
+    "antwort": "Melasse"
   },
   {
-    "frage": "Welches ist das größte an Land lebende Tier der Welt?",
-    "antwort": "Der Afrikanische Elefant"
+    "frage": "Welcher jahrhundertealte Gestank am Themse-Ufer zwang das britische Parlament 1858 zum sofortigen Handeln?",
+    "antwort": "Der Große Gestank"
   },
   {
-    "frage": "Wie nennt man eine Gruppe von Igeln - das offizielle Sammelwort im Englischen?",
-    "antwort": "A Prickle"
+    "frage": "Wofür bezahlten Menschen im Amsterdam des Jahres 1637 zeitweise mehr als für ein ganzes Haus?",
+    "antwort": "Für eine einzelne Tulpenzwiebel"
   },
   {
-    "frage": "Welches Tier ist das einzige, dessen Kot fast würfelförmig ist?",
-    "antwort": "Der Wombat"
+    "frage": "Wodurch löste ein Scherz in einer amerikanischen TV-Show 1973 eine echte, wochenlange Klopapier-Knappheit aus?",
+    "antwort": "Eine falsche Mangel-Warnung von Johnny Carson"
   },
   {
-    "frage": "Wie nennt man das Gefühl, an einem völlig fremden Ort schon einmal gewesen zu sein - das Gegenteil von Déjà-vu?",
-    "antwort": "Jamais-vu"
+    "frage": "Welcher französische König regierte offiziell nur rund zwanzig Minuten lang?",
+    "antwort": "Ludwig XIX."
   },
   {
-    "frage": "Wie nennt man eine Gruppe von Raben - das offizielle Sammelwort im Englischen (anders als bei Krähen)?",
-    "antwort": "An Unkindness"
+    "frage": "In welcher Straße Londons brach 1666 der Große Brand angeblich in einer Bäckerei aus?",
+    "antwort": "Pudding Lane"
   },
   {
-    "frage": "Welches Metall ist bei Zimmertemperatur als einziges flüssig?",
-    "antwort": "Quecksilber"
+    "frage": "An welchem einzigen Tag im Jahr 1967 wechselte ganz Schweden über Nacht die Straßenverkehrsseite?",
+    "antwort": "Dagen H"
   },
   {
-    "frage": "Wie nennt man das Gefühl, eine neue Situation schon einmal genauso erlebt zu haben?",
-    "antwort": "Déjà-vu"
+    "frage": "Wodurch kann ein Flamingo stundenlang auf einem Bein stehen, ohne dabei Kraft zu verlieren?",
+    "antwort": "Ein Gelenkmechanismus verriegelt das Bein passiv"
+  },
+  {
+    "frage": "Wodurch übersteht ein Bärtierchen extreme Kälte, Hitze und sogar das Vakuum des Weltalls?",
+    "antwort": "Es fährt seinen Stoffwechsel fast vollständig herunter"
+  },
+  {
+    "frage": "Warum kann eine Honigbiene ihren Stachel nach dem Stich nicht mehr herausziehen?",
+    "antwort": "Widerhaken bleiben in der Haut stecken"
+  },
+  {
+    "frage": "Wodurch verwandelt sich ein Papageifisch nachts in einen wortwörtlichen Schlafsack?",
+    "antwort": "Er hüllt sich in eine selbst produzierte Schleimblase"
+  },
+  {
+    "frage": "Wodurch kann ein Kolibri als eine der wenigen Vogelarten sogar rückwärts fliegen?",
+    "antwort": "Eine besonders bewegliche Flügelgelenk-Drehung"
   }
 ]
