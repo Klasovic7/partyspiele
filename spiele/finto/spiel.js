@@ -34,10 +34,9 @@ const RICHTIG_ID = "richtig";
 const VORLAGE = `
   <div id="fi-setup" class="bildschirm-karte" hidden>
     <h1>🦉 Finto</h1>
-    <p class="hinweis-text">Ihr bekommt eine Frage, die kaum jemand wirklich weiß. Denkt euch eine
-      möglichst glaubwürdige Antwort aus! Danach seht ihr alle Antworten (plus die echte) gemischt und
-      stimmt ab, welche die richtige ist: 2 Punkte fürs Erkennen, 1 Punkt für jede Person, die auf eure
-      erfundene Antwort hereingefallen ist.</p>
+    <p class="hinweis-text">Denkt euch zu einer Frage eine möglichst glaubwürdige Antwort aus. Danach
+      stimmt ihr ab, welche Antwort die echte ist: 2 Punkte fürs Erkennen, 1 Punkt für jede Person,
+      die auf eure Antwort hereinfällt.</p>
 
     <div id="fi-anzahl-zeile" class="setup-anzahlblock" hidden>
       <div class="setup-anzahl-zeile">
@@ -56,15 +55,12 @@ const VORLAGE = `
   <div id="fi-frage-screen" class="bildschirm-karte" hidden>
     <p class="kategorie">Finto</p>
     <h2 id="fi-frage-text"></h2>
-    <p class="hinweis-text">Kennst du die Antwort nicht (das ist Absicht!) - denk dir eine aus, die
-      möglichst echt klingt.</p>
     <p>
-      <input id="fi-antwort" type="text" maxlength="120" autocomplete="off" placeholder="Deine (erfundene) Antwort">
+      <input id="fi-antwort" type="text" maxlength="120" autocomplete="off" placeholder="Deine Antwort">
       <button id="fi-absenden" class="btn-primaer">Antwort absenden</button>
     </p>
     <p id="fi-frage-fehler" class="fehler-text"></p>
     <p id="fi-frage-status"></p>
-    <p><button id="fi-antworten-zeigen" class="btn-flach" hidden>Antworten jetzt zeigen</button></p>
   </div>
 
   <div id="fi-abstimmung-screen" class="bildschirm-karte" hidden>
@@ -159,7 +155,6 @@ function verdrahteBedienelemente() {
   $("fi-antwort").addEventListener("keydown", (e) => {
     if (e.key === "Enter") antwortAbsenden();
   });
-  $("fi-antworten-zeigen").addEventListener("click", () => zurAbstimmung(true));
   $("fi-auswertung-zeigen").addEventListener("click", () => auswerten(true));
   $("fi-weiter").addEventListener("click", weiter);
 }
@@ -319,7 +314,6 @@ function zeigeFrage(pos) {
   const frage = frageAn(pos);
   if (!frage) return;
   $("fi-frage-text").textContent = frage.frage;
-  $("fi-antworten-zeigen").hidden = !api.istLeiter;
 }
 
 async function antwortAbsenden() {

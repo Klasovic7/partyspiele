@@ -74,6 +74,18 @@ const VORLAGE = `
     <p id="imp-runde-warten" hidden><em>Der Spielleiter löst die Runde auf, sobald alle bereit sind …</em></p>
   </div>
 
+  <div id="imp-aufloesen-dialog" class="raum-verlassen-dialog" role="dialog" aria-modal="true"
+       aria-labelledby="imp-aufloesen-titel" hidden>
+    <div class="raum-verlassen-dialog-inhalt">
+      <h2 id="imp-aufloesen-titel">Wirklich auflösen?</h2>
+      <p class="hinweis-text">Der Imposter wird für alle aufgedeckt - das könnt ihr danach nicht mehr rückgängig machen.</p>
+      <div class="raum-verlassen-aktionen">
+        <button id="imp-aufloesen-abbrechen" class="btn-sekundaer" type="button">Abbrechen</button>
+        <button id="imp-aufloesen-bestaetigen" class="btn-gefahr" type="button">Ja, auflösen</button>
+      </div>
+    </div>
+  </div>
+
   <div id="imp-aufloesung-screen" class="bildschirm-karte" hidden>
     <p class="kategorie">Imposter</p>
     <h2>🎭 Der Imposter war:</h2>
@@ -135,7 +147,12 @@ function verdrahteBedienelemente() {
   // markieren - deshalb ein Textfeld mit numerischer Tastatur.
   $("imp-anzahl").addEventListener("focus", () => { $("imp-anzahl").select(); });
   $("imp-starten").addEventListener("click", spielStarten);
-  $("imp-aufloesen").addEventListener("click", aufloesen);
+  $("imp-aufloesen").addEventListener("click", () => { $("imp-aufloesen-dialog").hidden = false; });
+  $("imp-aufloesen-abbrechen").addEventListener("click", () => { $("imp-aufloesen-dialog").hidden = true; });
+  $("imp-aufloesen-bestaetigen").addEventListener("click", () => {
+    $("imp-aufloesen-dialog").hidden = true;
+    aufloesen();
+  });
   $("imp-weiter").addEventListener("click", weiter);
   verdrahteKarte();
 }
@@ -154,6 +171,10 @@ export function beenden() {
 export function spieler(liste) {
   spielerListe = liste;
   if (!el.wurzel) return;
+  // Der Spielername des Startspielers braucht die Spielerliste - die kommt
+  // ueber einen eigenen Firestore-Listener und kann nach den Raumdaten
+  // eintreffen. Deshalb hier erneut anzeigen, sobald die Liste (nach)kommt.
+  if (status === "runde") zeigeRundenStart();
   if (status === "aufgeloest") zeigeAufloesung();
   if (status === "beendet") zeigeEndstand();
 }
@@ -188,6 +209,9 @@ export function raumDaten(daten) {
 function alleVerstecken() {
   ["imp-setup", "imp-runde-screen", "imp-aufloesung-screen", "imp-endstand-screen"]
     .forEach((id) => { $(id).hidden = true; });
+  // Falls sich der Status waehrenddessen aendert (z. B. ein anderes Geraet loest
+  // parallel auf), soll die Bestaetigungsabfrage nicht offen haengen bleiben.
+  $("imp-aufloesen-dialog").hidden = true;
 }
 
 function zeigeSetup() {
@@ -258,10 +282,14 @@ export async function vorZurueck() {
   }
 }
 
-function zeigeRunde() {
-  $("imp-karte-name").textContent = api.spielerName;
+function zeigeRundenStart() {
   const startSpieler = spielerListe.find((s) => s.id === starterId);
   $("imp-runde-start").textContent = startSpieler ? `🎲 ${startSpieler.name} beginnt` : "";
+}
+
+function zeigeRunde() {
+  $("imp-karte-name").textContent = api.spielerName;
+  zeigeRundenStart();
   // Neue Runde: Karte immer verdeckt/an der Ausgangsposition zeigen - falls
   // noch eine alte Verschiebung vom vorherigen Zug in den Inline-Styles
   // hängt (sollte durch das Loslassen eigentlich nie passieren, aber sicher
