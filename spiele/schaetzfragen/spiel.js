@@ -191,7 +191,7 @@ export async function starten(uebergebeneApi) {
   // Fragen liegen als eigene Datei daneben - so bleibt die App klein und der
   // Katalog lässt sich bearbeiten, ohne Programmcode anzufassen.
   if (fragen.length === 0) {
-    const antwort = await fetch(new URL("fragen.json", import.meta.url));
+    const antwort = await fetch(new URL("fragen.json", import.meta.url), { cache: "no-store" });
     if (!antwort.ok) throw new Error("fragen.json konnte nicht geladen werden");
     fragen = await antwort.json();
   }

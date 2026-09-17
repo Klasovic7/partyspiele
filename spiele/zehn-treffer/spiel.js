@@ -267,7 +267,7 @@ export async function starten(uebergebeneApi) {
   el.wurzel.innerHTML = VORLAGE;
 
   if (karten.length === 0) {
-    const antwort = await fetch(new URL("fragen.json", import.meta.url));
+    const antwort = await fetch(new URL("fragen.json", import.meta.url), { cache: "no-store" });
     if (!antwort.ok) throw new Error("fragen.json konnte nicht geladen werden");
     karten = await antwort.json();
   }

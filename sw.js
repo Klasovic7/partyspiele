@@ -4,7 +4,7 @@
 // Nur dann wirft der Browser den alten Zwischenspeicher weg und alle Spieler
 // bekommen zuverlässig die neue Version. Das ist der einzige Handgriff, den man
 // nach dem Bearbeiten von Dateien nicht vergessen darf.
-const CACHE_NAME = "partyspiele-v146";
+const CACHE_NAME = "partyspiele-v147";
 
 const DATEIEN = [
   "./",
@@ -94,10 +94,10 @@ const DATEIEN = [
   "bilder/icon-raum-verlassen.svg",
   "bilder/avatar1-hd.jpg?v=38", "bilder/avatar2-hd.jpg?v=38", "bilder/avatar3-hd.jpg?v=38", "bilder/avatar4-hd.jpg?v=38",
   "bilder/avatar5-hd.jpg?v=38", "bilder/avatar6-hd.jpg?v=38", "bilder/avatar7-hd.jpg?v=38", "bilder/avatar8-hd.jpg?v=38",
-  "bilder/freund-rapper-kevin.jpg?v=146", "bilder/freund-zocker-luca.jpg?v=146", "bilder/freund-bettler-nader.jpg?v=146",
-  "bilder/freund-eintracht-sinan.jpg?v=146", "bilder/freund-boxer-kevin.jpg?v=146", "bilder/freund-gay-luca.jpg?v=146",
-  "bilder/freund-diktator-nader.jpg?v=146", "bilder/freund-rambo-sinan.jpg?v=146", "bilder/freund-meerjungfrau-kevin.jpg?v=146",
-  "bilder/freund-baywatch-luca.jpg?v=146", "bilder/freund-baby-nader.jpg?v=146", "bilder/freund-leoparden-sinan.jpg?v=146"
+  "bilder/freund-rapper-kevin.jpg?v=147", "bilder/freund-zocker-luca.jpg?v=147", "bilder/freund-bettler-nader.jpg?v=147",
+  "bilder/freund-eintracht-sinan.jpg?v=147", "bilder/freund-boxer-kevin.jpg?v=147", "bilder/freund-gay-luca.jpg?v=147",
+  "bilder/freund-diktator-nader.jpg?v=147", "bilder/freund-rambo-sinan.jpg?v=147", "bilder/freund-meerjungfrau-kevin.jpg?v=147",
+  "bilder/freund-baywatch-luca.jpg?v=147", "bilder/freund-baby-nader.jpg?v=147", "bilder/freund-leoparden-sinan.jpg?v=147"
 ];
 
 self.addEventListener("install", (event) => {

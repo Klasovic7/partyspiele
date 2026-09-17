@@ -1158,7 +1158,7 @@
     /* Ruhigere Spieloberflächen mit großen, plakativen Titeln. */
     #spiel-wurzel .bildschirm-karte { padding: 25px 21px; background: var(--flaeche); }
     #spiel-wurzel .bildschirm-karte > .kategorie,
-    #sf-setup > h1, #dg-setup > h1, #zt-setup > h1, #rd-setup > h1, #wi-setup > h1 { display: none; }
+    #sf-setup > h1, #dg-setup > h1, #zt-setup > h1, #rd-setup > h1, #wi-setup > h1, #fi-setup > h1, #imp-setup > h1 { display: none; }
     #spiel-wurzel .bildschirm-karte > h1,
     #spiel-wurzel .rd-kategorie-kopf h1 {
       font-family: "Barlow Condensed", sans-serif; font-size: clamp(2.15rem, 10vw, 3rem);
@@ -2018,5 +2018,5 @@
     .fi-kachel-richtig { border-color: #4ade80; background: color-mix(in srgb, #4ade80 20%, var(--club-ink-2)); }
     .fi-kachel-text { font-weight: 700; }
     .fi-kachel-waehler { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; min-height: 22px; }
-    .fi-erg-avatar { width: 22px; height: 22px; border-radius: 50%; object-fit: cover; border: 1.5px solid var(--club-ink); }
+    .fi-erg-avatar { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 2px solid var(--club-ink); }
     .fi-erg-keine-stimmen { font-size: .72rem; font-weight: 400; color: var(--club-muted); }

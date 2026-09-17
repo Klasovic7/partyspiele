@@ -110,7 +110,7 @@ export async function starten(uebergebeneApi) {
   el.wurzel.innerHTML = VORLAGE;
 
   if (woerter.length === 0) {
-    const antwort = await fetch(new URL("woerter.json", import.meta.url));
+    const antwort = await fetch(new URL("woerter.json", import.meta.url), { cache: "no-store" });
     if (!antwort.ok) throw new Error("woerter.json konnte nicht geladen werden");
     woerter = await antwort.json();
   }

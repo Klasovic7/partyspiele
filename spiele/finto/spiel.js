@@ -81,7 +81,7 @@ const VORLAGE = `
     <p class="kategorie">Finto</p>
     <h2 id="fi-erg-frage"></h2>
     <ul id="fi-erg-optionen" class="fi-kachel-raster"></ul>
-    <h3>Punkte diese Runde</h3>
+    <h3>Punktestand</h3>
     <ul id="fi-erg-punkte"></ul>
     <p><button id="fi-weiter" hidden></button></p>
     <p id="fi-erg-warten" hidden><em>Warte auf den Spielleiter …</em></p>
@@ -132,7 +132,7 @@ export async function starten(uebergebeneApi) {
   el.wurzel.innerHTML = VORLAGE;
 
   if (fragen.length === 0) {
-    const antwort = await fetch(new URL("fragen.json", import.meta.url));
+    const antwort = await fetch(new URL("fragen.json", import.meta.url), { cache: "no-store" });
     if (!antwort.ok) throw new Error("fragen.json konnte nicht geladen werden");
     fragen = await antwort.json();
   }
