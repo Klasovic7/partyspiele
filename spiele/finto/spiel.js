@@ -70,7 +70,6 @@ const VORLAGE = `
     <ul id="fi-abst-liste" class="fi-kachel-raster"></ul>
     <p id="fi-abst-fehler" class="fehler-text"></p>
     <div id="fi-abst-status" class="fi-warten-block"></div>
-    <p><button id="fi-auswertung-zeigen" class="btn-flach" hidden>Auswertung jetzt zeigen</button></p>
   </div>
 
   <div id="fi-ergebnis-screen" class="bildschirm-karte" hidden>
@@ -155,7 +154,6 @@ function verdrahteBedienelemente() {
   $("fi-antwort").addEventListener("keydown", (e) => {
     if (e.key === "Enter") antwortAbsenden();
   });
-  $("fi-auswertung-zeigen").addEventListener("click", () => auswerten(true));
   $("fi-weiter").addEventListener("click", weiter);
 }
 
@@ -440,7 +438,6 @@ function zeigeAbstimmung() {
     if (!eigeneStimme) li.querySelector("button").addEventListener("click", () => stimmeAbgeben(option.id));
     liste.appendChild(li);
   });
-  $("fi-auswertung-zeigen").hidden = !api.istLeiter;
 }
 
 async function stimmeAbgeben(gewaehlt) {
@@ -466,14 +463,13 @@ async function aktualisiereAbstimmungStatus() {
   zeigeWarteAvatare("fi-abst-status", spielerListe.filter((sp) => !abgestimmtIds.has(sp.id)));
 
   if (api.istLeiter && !auswertungAusgeloest && spielerListe.length >= 2 && stimmen.length >= spielerListe.length) {
-    await auswerten(false);
+    await auswerten();
   }
 }
 
-async function auswerten(manuell) {
+async function auswerten() {
   if (status !== "abstimmung" || auswertungAusgeloest) return;
   const stimmen = stimmenDieserRunde(index);
-  if (manuell && stimmen.length === 0) return;
   auswertungAusgeloest = true;
   try {
     const punkte = {};
