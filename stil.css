@@ -1286,7 +1286,7 @@
     body[data-spiel="wer-ist-es"]     { --club-glow: linear-gradient(135deg, color-mix(in srgb, #4ade80 32%, #3d2544) 0%, #251728 32%, #18101d 62%, #120d17 100%); }
     body[data-spiel="blitzquiz"]      { --club-glow: linear-gradient(135deg, color-mix(in srgb, #fbbf24 32%, #3d2544) 0%, #251728 32%, #18101d 62%, #120d17 100%); }
     body[data-spiel="finto"]          { --club-glow: linear-gradient(135deg, color-mix(in srgb, #38bdf8 32%, #3d2544) 0%, #251728 32%, #18101d 62%, #120d17 100%); }
-    body[data-spiel="impostor"]       { --club-glow: linear-gradient(135deg, color-mix(in srgb, #fb7185 32%, #3d2544) 0%, #251728 32%, #18101d 62%, #120d17 100%); }
+    body[data-spiel="imposter"]        { --club-glow: linear-gradient(135deg, color-mix(in srgb, #fb7185 32%, #3d2544) 0%, #251728 32%, #18101d 62%, #120d17 100%); }
 
     html { background: var(--app-hintergrund); }
     body {
@@ -1912,7 +1912,7 @@
     }
 
     /* ======================================================================
-       v144 - Findet den Impostor: aufziehbare Karte (Name vorn, Wort/"Impostor"
+       v144/v145 - Imposter: aufziehbare Karte (Name vorn, Wort/"Imposter"
        auf der Rückseite). Ziehen per Pointer Events; ein einfaches Antippen
        funktioniert als Fallback, falls das Ziehen auf einem Gerät nicht
        zuverlässig erkannt wird.
@@ -1952,7 +1952,12 @@
       cursor: grab;
     }
     .imp-karte.wird-gezogen .imp-karte-vorne { transition: none; cursor: grabbing; }
-    .imp-karte.aufgedeckt .imp-karte-vorne { transform: translateY(-115%); opacity: 0; pointer-events: none; }
+    /* v145: Karte faellt beim Loslassen IMMER zurueck (kein dauerhaftes
+       Aufdecken mehr) - ".faellt-zurueck" gibt der Rueckkehr auf 0 eine kurze,
+       leicht ueberschwingende Fall-Bewegung statt der linearen Zieh-Transition. */
+    .imp-karte.faellt-zurueck .imp-karte-vorne {
+      transition: transform .32s cubic-bezier(.34, 1.4, .64, 1);
+    }
     .imp-karte-hinten {
       z-index: 1;
       color: var(--text-dunkel);
@@ -1971,3 +1976,28 @@
     .imp-karte-hinten strong { font-size: 1.5rem; }
     .imp-rueckseite-zusatz { font-size: .85rem; color: var(--text-hell); max-width: 220px; }
     .imp-runde-hinweis { text-align: center; }
+
+    /* ======================================================================
+       v145 - Finto: Antwort-Optionen (Abstimmung) und Auflösung.
+       ====================================================================== */
+    .fi-optionen-liste { display: flex; flex-direction: column; gap: 8px; margin: 12px 0; }
+    .fi-option-knopf {
+      width: 100%; text-align: left; background: var(--club-ink-2); color: var(--club-text);
+      border: 1.5px solid rgba(255,255,255,.18); border-radius: 13px; padding: 12px 14px;
+      font-size: .98rem; font-weight: 600; cursor: pointer;
+    }
+    .fi-option-knopf:hover:not(:disabled) { border-color: var(--akzent); background: var(--club-ink-3); }
+    .fi-option-knopf:disabled { cursor: default; opacity: .7; }
+    .fi-option-knopf.ausgewaehlt { border-color: var(--akzent); background: color-mix(in srgb, var(--akzent) 24%, var(--club-ink-2)); opacity: 1; }
+    .fi-option {
+      display: block; background: rgba(255,255,255,.05); border: 1.5px dashed rgba(255,255,255,.25);
+      border-radius: 13px; padding: 12px 14px; font-size: .98rem;
+    }
+    .fi-option-eigene em { color: var(--club-muted); font-weight: 400; }
+    .fi-erg-option {
+      background: var(--club-ink-2); border: 1.5px solid rgba(255,255,255,.14); border-radius: 13px;
+      padding: 10px 14px; margin-bottom: 8px;
+    }
+    .fi-erg-option.fi-erg-richtig { border-color: #4ade80; background: color-mix(in srgb, #4ade80 18%, var(--club-ink-2)); }
+    .fi-erg-option-text { font-weight: 700; }
+    .fi-erg-option-zusatz { font-size: .85rem; color: var(--club-muted); margin-top: 2px; }

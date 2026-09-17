@@ -1,5 +1,5 @@
 [
-  { "frage": "Was wäre der peinlichste Klingelton für dein Handy?" },
-  { "frage": "Was ist die unnötigste Erfindung aller Zeiten?" },
-  { "frage": "Was würde auf deinem Grabstein stehen, wenn du ihn selbst schreiben müsstest?" }
+  { "frage": "In welcher deutschen Stadt wurde Albert Einstein geboren?", "antwort": "Ulm" },
+  { "frage": "Wie viele Herzen hat ein Regenwurm?", "antwort": "5" },
+  { "frage": "Wie viele Erdtage dauert eine Umdrehung der Venus um die eigene Achse (ein „Venus-Tag“)?", "antwort": "243" }
 ]

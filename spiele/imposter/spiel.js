@@ -1,22 +1,28 @@
 // ============================================================================
-//  Findet den Impostor
+//  Imposter
 // ----------------------------------------------------------------------------
-//  Alle außer einer Person (dem "Impostor") sehen dasselbe Geheimwort. Wer der
-//  Impostor ist, bekommt kein Wort und muss unauffällig mitreden, ohne
-//  aufzufliegen. Jede*r deckt die eigene Karte privat auf dem eigenen Gerät
-//  auf - genau wie beim eigenen Profil sieht jedes Handy nur, was die eigene
-//  Person betrifft, ein Abgleich zwischen den Geräten ist nicht nötig. Wer der
-//  Impostor tatsächlich war, wird am Tisch erraten; das App-seitige Auflösen
-//  übernimmt der Spielleiter über einen Knopf, sobald genug diskutiert wurde.
+//  Alle außer einer Person (dem "Imposter") sehen dasselbe Geheimwort. Der
+//  Imposter bekommt kein Wort, sondern nur einen vagen Hinweis dazu, und muss
+//  unauffällig mitreden, ohne aufzufliegen. Jede*r deckt die eigene Karte
+//  privat auf dem eigenen Gerät auf - genau wie beim eigenen Profil sieht
+//  jedes Handy nur, was die eigene Person betrifft, ein Abgleich zwischen den
+//  Geräten ist nicht nötig. Wer der Imposter tatsächlich war, wird am Tisch
+//  erraten; das App-seitige Auflösen übernimmt der Spielleiter über einen
+//  Knopf, sobald genug diskutiert wurde.
+//
+//  Die Karte zeigt den eigenen Namen; zieht man sie nach oben, kommt darunter
+//  das Wort (oder eben "Imposter" + Hinweis) zum Vorschein - lässt man los,
+//  fällt sie wieder runter und deckt alles wieder zu (kein dauerhaftes
+//  Aufdecken, damit niemand aus Versehen zu lange offen daliegt).
 //
 //  Status im Raum-Dokument (Präfix "imp"):
 //    setup       - Spielleiter stellt die Anzahl Runden ein
 //    runde       - aktuelle Runde läuft, jede*r kann die eigene Karte aufdecken
-//    aufgeloest  - wer der Impostor war, wird für alle angezeigt
+//    aufgeloest  - wer der Imposter war, wird für alle angezeigt
 //    beendet     - Abschlussbildschirm
 //
 //  Bewusst OHNE Punktesystem/Wertung: Das Spiel lebt vom Gespräch am Tisch -
-//  die App weiß nicht, wer im Gespräch den Impostor korrekt erraten hat, kann
+//  die App weiß nicht, wer im Gespräch den Imposter korrekt erraten hat, kann
 //  also auch keine sinnvollen Punkte vergeben.
 // ============================================================================
 import { updateDoc } from "../../kern/firebase.js";
@@ -26,10 +32,10 @@ const STANDARD_ANZAHL = 5;
 
 const VORLAGE = `
   <div id="imp-setup" class="bildschirm-karte" hidden>
-    <h1>🎭 Findet den Impostor!</h1>
-    <p class="hinweis-text">Alle außer einer Person bekommen dasselbe Geheimwort zu sehen. Der Impostor
-      bekommt kein Wort und muss unauffällig mitreden, ohne aufzufliegen. Deckt eure Karte privat auf
-      eurem eigenen Handy auf und diskutiert danach gemeinsam, wer der Impostor war.</p>
+    <h1>🎭 Imposter</h1>
+    <p class="hinweis-text">Alle außer einer Person bekommen dasselbe Geheimwort zu sehen. Der Imposter
+      bekommt kein Wort - nur einen vagen Hinweis - und muss unauffällig mitreden, ohne aufzufliegen.
+      Zieht eure Karte privat auf und diskutiert danach gemeinsam, wer der Imposter war.</p>
 
     <div id="imp-anzahl-zeile" class="setup-anzahlblock" hidden>
       <div class="setup-anzahl-zeile">
@@ -46,7 +52,7 @@ const VORLAGE = `
   </div>
 
   <div id="imp-runde-screen" class="bildschirm-karte" hidden>
-    <p class="kategorie">Findet den Impostor</p>
+    <p class="kategorie">Imposter</p>
     <div class="imp-karten-buehne">
       <div id="imp-karte" class="imp-karte">
         <div id="imp-karte-vorderseite" class="imp-karte-seite imp-karte-vorne">
@@ -58,15 +64,16 @@ const VORLAGE = `
         <div id="imp-karte-rueckseite" class="imp-karte-seite imp-karte-hinten"></div>
       </div>
     </div>
-    <p class="hinweis-text imp-runde-hinweis">Zieht die Karte nach oben (oder tippt sie an), um euer Wort
-      (oder "Impostor") zu sehen. Niemand sonst sieht, was auf eurem Handy steht.</p>
-    <p><button id="imp-aufloesen" class="btn-primaer" hidden>Auflösen: Wer war der Impostor?</button></p>
+    <p class="hinweis-text imp-runde-hinweis">Zieht die Karte nach oben (oder tippt sie kurz an), um euer
+      Wort zu sehen - beim Loslassen fällt sie automatisch wieder runter. Niemand sonst sieht, was auf
+      eurem Handy steht.</p>
+    <p><button id="imp-aufloesen" class="btn-primaer" hidden>Auflösen: Wer war der Imposter?</button></p>
     <p id="imp-runde-warten" hidden><em>Der Spielleiter löst die Runde auf, sobald alle bereit sind …</em></p>
   </div>
 
   <div id="imp-aufloesung-screen" class="bildschirm-karte" hidden>
-    <p class="kategorie">Findet den Impostor</p>
-    <h2>🎭 Der Impostor war:</h2>
+    <p class="kategorie">Imposter</p>
+    <h2>🎭 Der Imposter war:</h2>
     <div id="imp-aufloesung-karte"></div>
     <p class="hinweis-text">Das Geheimwort war "<strong id="imp-aufloesung-wort"></strong>"
       (<span id="imp-aufloesung-thema"></span>).</p>
@@ -76,7 +83,7 @@ const VORLAGE = `
 
   <div id="imp-endstand-screen" class="bildschirm-karte" hidden>
     <h1>🎉 Danke fürs Mitspielen!</h1>
-    <p class="hinweis-text">Findet den Impostor läuft ohne Punktestand - die Runden entscheidet ihr am Tisch.</p>
+    <p class="hinweis-text">Imposter läuft ohne Punktestand - die Runden entscheidet ihr am Tisch.</p>
     <p id="imp-endstand-warten" hidden><em>Der Spielleiter wählt gleich das nächste Spiel …</em></p>
   </div>
 `;
@@ -90,8 +97,7 @@ let status = null;
 let anzahlRunden = 0;
 let rundenIndex = -1;
 let wortIndex = -1;
-let impostorId = null;
-let karteAufgedeckt = false;
+let imposterId = null;
 
 const $ = (id) => el.wurzel.querySelector("#" + id);
 
@@ -111,7 +117,7 @@ export async function starten(uebergebeneApi) {
   if (api.istLeiter && !api.raum?.impStatus) {
     await updateDoc(api.raumRef(), {
       impStatus: "setup", impRundenIndex: 0, impAnzahlRunden: 0,
-      impWortIndex: -1, impImpostorId: null
+      impWortIndex: -1, impImposterId: null
     });
   }
 }
@@ -138,8 +144,7 @@ export function beenden() {
   anzahlRunden = 0;
   rundenIndex = -1;
   wortIndex = -1;
-  impostorId = null;
-  karteAufgedeckt = false;
+  imposterId = null;
 }
 
 export function spieler(liste) {
@@ -151,23 +156,11 @@ export function spieler(liste) {
 
 export function raumDaten(daten) {
   if (!daten || !el.wurzel) return;
-  const neuerStatus = daten.impStatus ?? null;
-  const neueAnzahlRunden = daten.impAnzahlRunden ?? 0;
-  const neueRundenIndex = daten.impRundenIndex ?? 0;
-  const neuerWortIndex = daten.impWortIndex ?? -1;
-
-  // Neue Runde (Status wechselt zu "runde" oder Runde/Wort ändert sich) -
-  // die Karte muss wieder verdeckt starten, damit niemand versehentlich das
-  // alte, schon aufgedeckte Wort weiterhin sieht.
-  if (neuerStatus === "runde" && (status !== "runde" || rundenIndex !== neueRundenIndex || wortIndex !== neuerWortIndex)) {
-    karteAufgedeckt = false;
-  }
-
-  status = neuerStatus;
-  anzahlRunden = neueAnzahlRunden;
-  rundenIndex = neueRundenIndex;
-  wortIndex = neuerWortIndex;
-  impostorId = daten.impImpostorId ?? null;
+  status = daten.impStatus ?? null;
+  anzahlRunden = daten.impAnzahlRunden ?? 0;
+  rundenIndex = daten.impRundenIndex ?? 0;
+  wortIndex = daten.impWortIndex ?? -1;
+  imposterId = daten.impImposterId ?? null;
 
   api.fortschritt(status === "runde" || status === "aufgeloest" ? `${rundenIndex + 1}/${anzahlRunden}` : "");
 
@@ -214,7 +207,7 @@ function zufallsIndexOhneWiederholung(anzahl, ausschluss) {
 async function spielStarten() {
   $("imp-setup-fehler").textContent = "";
   if (spielerListe.length < 3) {
-    $("imp-setup-fehler").textContent = "Für Findet den Impostor braucht ihr mindestens drei Spieler.";
+    $("imp-setup-fehler").textContent = "Für Imposter braucht ihr mindestens drei Spieler.";
     return;
   }
 
@@ -230,9 +223,9 @@ async function spielStarten() {
   $("imp-starten").disabled = false;
 }
 
-async function naechsteRundeSchreiben(neueRundenIndex, neueAnzahlRunden, letzterWortIndex, letzterImpostorId) {
+async function naechsteRundeSchreiben(neueRundenIndex, neueAnzahlRunden, letzterWortIndex, letzterImposterId) {
   const neuerWortIndex = zufallsIndexOhneWiederholung(woerter.length, letzterWortIndex);
-  const kandidaten = spielerListe.filter((s) => s.id !== letzterImpostorId);
+  const kandidaten = spielerListe.filter((s) => s.id !== letzterImposterId);
   const auswahlliste = kandidaten.length > 0 ? kandidaten : spielerListe;
   const gewaehlt = auswahlliste[Math.floor(Math.random() * auswahlliste.length)];
   await updateDoc(api.raumRef(), {
@@ -240,7 +233,7 @@ async function naechsteRundeSchreiben(neueRundenIndex, neueAnzahlRunden, letzter
     impRundenIndex: neueRundenIndex,
     impAnzahlRunden: neueAnzahlRunden,
     impWortIndex: neuerWortIndex,
-    impImpostorId: gewaehlt.id
+    impImposterId: gewaehlt.id
   });
 }
 
@@ -248,7 +241,7 @@ export async function vorZurueck() {
   try {
     await updateDoc(api.raumRef(), {
       impStatus: null, impRundenIndex: 0, impAnzahlRunden: 0,
-      impWortIndex: -1, impImpostorId: null
+      impWortIndex: -1, impImposterId: null
     });
     await api.zurueckZurAuswahl();
   } catch (e) {
@@ -258,60 +251,83 @@ export async function vorZurueck() {
 
 function zeigeRunde() {
   $("imp-karte-name").textContent = api.spielerName;
-  aktualisiereKarte();
+  // Neue Runde: Karte immer verdeckt/an der Ausgangsposition zeigen - falls
+  // noch eine alte Verschiebung vom vorherigen Zug in den Inline-Styles
+  // hängt (sollte durch das Loslassen eigentlich nie passieren, aber sicher
+  // ist sicher), wird sie hier zurückgesetzt.
+  const karte = $("imp-karte");
+  karte.classList.remove("wird-gezogen");
+  karte.style.removeProperty("--verschiebung");
+  aktualisiereKarteninhalt();
   $("imp-aufloesen").hidden = !api.istLeiter;
   $("imp-runde-warten").hidden = api.istLeiter;
 }
 
-function aktualisiereKarte() {
-  const karte = $("imp-karte");
-  karte.classList.toggle("aufgedeckt", karteAufgedeckt);
-  const istImpostor = api.spielerId === impostorId;
+function aktualisiereKarteninhalt() {
+  const istImposter = api.spielerId === imposterId;
   const wort = woerter[wortIndex];
-  $("imp-karte-rueckseite").innerHTML = istImpostor
-    ? `<span class="imp-rueckseite-symbol">❌</span><strong>Impostor</strong>
+  $("imp-karte-rueckseite").innerHTML = istImposter
+    ? `<span class="imp-rueckseite-symbol">❌</span><strong>Imposter</strong>
+       <span class="imp-rueckseite-zusatz">Hinweis: ${escapeHtml(wort?.hinweis ?? "")}</span>
        <span class="imp-rueckseite-zusatz">Du kennst das Wort nicht - hör gut zu und misch dich unauffällig ein!</span>`
     : `<span class="imp-rueckseite-symbol">✅</span><strong>${escapeHtml(wort?.wort ?? "")}</strong>
        <span class="imp-rueckseite-zusatz">Kategorie: ${escapeHtml(wort?.thema ?? "")}</span>`;
 }
 
-// Karte per Ziehen (Maus/Touch über Pointer Events) oder einfachem Antippen
-// aufdecken - Antippen als robuster Fallback, falls das Ziehen auf einem
-// Gerät nicht sauber erkannt wird.
+// Karte per Ziehen (Maus/Touch über Pointer Events) oder kurzem Antippen
+// aufdecken - beim Loslassen fällt sie immer wieder zurück (kein
+// dauerhaftes Aufdecken), damit niemand aus Versehen das Wort offen liegen
+// lässt. Antippen simuliert dafür ein kurzes automatisches Hochziehen und
+// Zurückfallen, als robuster Fallback für Geräte, bei denen das Ziehen nicht
+// sauber ankommt.
 function verdrahteKarte() {
   const karte = $("imp-karte");
   let start = null;
   let versatz = 0;
+  let getippt = false;
   const hoehe = () => karte.getBoundingClientRect().height || 1;
 
+  function faelltZurueck() {
+    karte.classList.remove("wird-gezogen");
+    karte.classList.add("faellt-zurueck");
+    karte.style.setProperty("--verschiebung", "0px");
+    setTimeout(() => karte.classList.remove("faellt-zurueck"), 320);
+  }
+
   function anfassen(e) {
-    if (status !== "runde" || karteAufgedeckt) return;
+    if (status !== "runde") return;
+    getippt = false;
     start = e.clientY;
+    karte.classList.remove("faellt-zurueck");
     karte.classList.add("wird-gezogen");
   }
   function bewegen(e) {
     if (start === null) return;
     versatz = Math.min(0, e.clientY - start);
+    if (-versatz > 6) getippt = false;
     karte.style.setProperty("--verschiebung", versatz + "px");
   }
   function loslassen() {
     if (start === null) return;
-    karte.classList.remove("wird-gezogen");
-    karte.style.removeProperty("--verschiebung");
-    if (versatz < -hoehe() * 0.28) {
-      karteAufgedeckt = true;
-      aktualisiereKarte();
-    }
+    faelltZurueck();
     start = null;
     versatz = 0;
   }
 
-  karte.addEventListener("pointerdown", anfassen);
+  karte.addEventListener("pointerdown", (e) => { getippt = true; anfassen(e); });
   karte.addEventListener("pointermove", bewegen);
   karte.addEventListener("pointerup", loslassen);
   karte.addEventListener("pointercancel", loslassen);
+
+  // Klick als Fallback (z. B. Tastatur/Screenreader oder falls Pointer Events
+  // aus irgendeinem Grund nicht greifen): kurz automatisch hochziehen, kurz
+  // halten, dann von selbst wieder runterfallen lassen.
   karte.addEventListener("click", () => {
-    if (status === "runde" && !karteAufgedeckt) { karteAufgedeckt = true; aktualisiereKarte(); }
+    if (status !== "runde" || getippt) { getippt = false; return; }
+    karte.classList.remove("faellt-zurueck");
+    karte.classList.add("wird-gezogen");
+    karte.style.setProperty("--verschiebung", (-hoehe() * 0.7) + "px");
+    setTimeout(() => faelltZurueck(), 1100);
   });
 }
 
@@ -327,12 +343,12 @@ async function aufloesen() {
 }
 
 function zeigeAufloesung() {
-  const impostor = spielerListe.find((s) => s.id === impostorId);
+  const imposter = spielerListe.find((s) => s.id === imposterId);
   const wort = woerter[wortIndex];
-  $("imp-aufloesung-karte").innerHTML = impostor
-    ? `<div class="spieler-karte spieler-identitaet" style="--spieler-farbe:${impostor.farbe || "#7f8c8d"}">
-        <div class="spieler-info">${avatarHtml(impostor.icon, "spieler-icon")}
-          <div class="spieler-text"><span class="spieler-name">${escapeHtml(impostor.name)}</span></div>
+  $("imp-aufloesung-karte").innerHTML = imposter
+    ? `<div class="spieler-karte spieler-identitaet" style="--spieler-farbe:${imposter.farbe || "#7f8c8d"}">
+        <div class="spieler-info">${avatarHtml(imposter.icon, "spieler-icon")}
+          <div class="spieler-text"><span class="spieler-name">${escapeHtml(imposter.name)}</span></div>
         </div>
       </div>`
     : "";
@@ -352,7 +368,7 @@ async function weiter() {
     if (naechsterIndex >= anzahlRunden) {
       await updateDoc(api.raumRef(), { impStatus: "beendet" });
     } else {
-      await naechsteRundeSchreiben(naechsterIndex, anzahlRunden, wortIndex, impostorId);
+      await naechsteRundeSchreiben(naechsterIndex, anzahlRunden, wortIndex, imposterId);
     }
   } catch (e) {
     zeigeDebug("Fehler beim Weiterschalten: " + e.message);

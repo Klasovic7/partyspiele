@@ -69,18 +69,18 @@ export const SPIELE = [
     name: "Finto",
     emoji: "🦉",
     farbe: "#38bdf8",
-    beschreibung: "Eine Frage - jeder gibt seine eigene Antwort ab",
-    minSpieler: 2,
+    beschreibung: "Bluffe mit einer erfundenen Antwort und errate die echte",
+    minSpieler: 3,
     laden: () => import("./finto/spiel.js")
   },
   {
-    id: "impostor",
-    name: "Findet den Impostor",
+    id: "imposter",
+    name: "Imposter",
     emoji: "🎭",
     farbe: "#fb7185",
     beschreibung: "Einer kennt das Geheimwort nicht - deckt eure Karte auf und findet ihn",
     minSpieler: 3,
-    laden: () => import("./impostor/spiel.js")
+    laden: () => import("./imposter/spiel.js")
   }
 ];
 
