@@ -11,9 +11,11 @@
 //  Knopf, sobald genug diskutiert wurde.
 //
 //  Die Karte zeigt den eigenen Namen; zieht man sie nach oben, kommt darunter
-//  das Wort (oder eben "Imposter" + Hinweis) zum Vorschein - lässt man los,
-//  fällt sie wieder runter und deckt alles wieder zu (kein dauerhaftes
-//  Aufdecken, damit niemand aus Versehen zu lange offen daliegt).
+//  der Begriff (oder eben "Imposter" + ein loser Hinweis dazu) zum Vorschein -
+//  lässt man los, fällt sie wieder runter und deckt alles wieder zu (kein
+//  dauerhaftes Aufdecken, damit niemand aus Versehen zu lange offen daliegt).
+//  Zusätzlich wird pro Runde eine rein zufällige Person als "beginnt"
+//  angezeigt (unabhängig vom Imposter - der Imposter kann das durchaus sein).
 //
 //  Status im Raum-Dokument (Präfix "imp"):
 //    setup       - Spielleiter stellt die Anzahl Runden ein
@@ -33,9 +35,9 @@ const STANDARD_ANZAHL = 5;
 const VORLAGE = `
   <div id="imp-setup" class="bildschirm-karte" hidden>
     <h1>🎭 Imposter</h1>
-    <p class="hinweis-text">Alle außer einer Person bekommen dasselbe Geheimwort zu sehen. Der Imposter
-      bekommt kein Wort - nur einen vagen Hinweis - und muss unauffällig mitreden, ohne aufzufliegen.
-      Zieht eure Karte privat auf und diskutiert danach gemeinsam, wer der Imposter war.</p>
+    <p class="hinweis-text">Alle außer einer Person bekommen denselben Begriff zu sehen. Der Imposter
+      bekommt den Begriff nicht - nur einen vagen Hinweis dazu - und muss unauffällig mitreden, ohne
+      aufzufliegen. Zieht eure Karte privat auf und diskutiert danach gemeinsam, wer der Imposter war.</p>
 
     <div id="imp-anzahl-zeile" class="setup-anzahlblock" hidden>
       <div class="setup-anzahl-zeile">
@@ -53,6 +55,7 @@ const VORLAGE = `
 
   <div id="imp-runde-screen" class="bildschirm-karte" hidden>
     <p class="kategorie">Imposter</p>
+    <p id="imp-runde-start" class="imp-start-anzeige"></p>
     <div class="imp-karten-buehne">
       <div id="imp-karte" class="imp-karte">
         <div id="imp-karte-vorderseite" class="imp-karte-seite imp-karte-vorne">
@@ -75,8 +78,7 @@ const VORLAGE = `
     <p class="kategorie">Imposter</p>
     <h2>🎭 Der Imposter war:</h2>
     <div id="imp-aufloesung-karte"></div>
-    <p class="hinweis-text">Das Geheimwort war "<strong id="imp-aufloesung-wort"></strong>"
-      (<span id="imp-aufloesung-thema"></span>).</p>
+    <p class="hinweis-text">Der Begriff war "<strong id="imp-aufloesung-wort"></strong>".</p>
     <p><button id="imp-weiter" hidden></button></p>
     <p id="imp-aufloesung-warten" hidden><em>Warte auf den Spielleiter …</em></p>
   </div>
@@ -98,6 +100,7 @@ let anzahlRunden = 0;
 let rundenIndex = -1;
 let wortIndex = -1;
 let imposterId = null;
+let starterId = null;
 
 const $ = (id) => el.wurzel.querySelector("#" + id);
 
@@ -117,7 +120,7 @@ export async function starten(uebergebeneApi) {
   if (api.istLeiter && !api.raum?.impStatus) {
     await updateDoc(api.raumRef(), {
       impStatus: "setup", impRundenIndex: 0, impAnzahlRunden: 0,
-      impWortIndex: -1, impImposterId: null
+      impWortIndex: -1, impImposterId: null, impStarterId: null
     });
   }
 }
@@ -145,6 +148,7 @@ export function beenden() {
   rundenIndex = -1;
   wortIndex = -1;
   imposterId = null;
+  starterId = null;
 }
 
 export function spieler(liste) {
@@ -161,6 +165,7 @@ export function raumDaten(daten) {
   rundenIndex = daten.impRundenIndex ?? 0;
   wortIndex = daten.impWortIndex ?? -1;
   imposterId = daten.impImposterId ?? null;
+  starterId = daten.impStarterId ?? null;
 
   api.fortschritt(status === "runde" || status === "aufgeloest" ? `${rundenIndex + 1}/${anzahlRunden}` : "");
 
@@ -228,12 +233,16 @@ async function naechsteRundeSchreiben(neueRundenIndex, neueAnzahlRunden, letzter
   const kandidaten = spielerListe.filter((s) => s.id !== letzterImposterId);
   const auswahlliste = kandidaten.length > 0 ? kandidaten : spielerListe;
   const gewaehlt = auswahlliste[Math.floor(Math.random() * auswahlliste.length)];
+  // Wer beginnt, wird komplett unabhaengig vom Imposter gewuerfelt - das kann
+  // also durchaus dieselbe Person sein.
+  const startet = spielerListe[Math.floor(Math.random() * spielerListe.length)];
   await updateDoc(api.raumRef(), {
     impStatus: "runde",
     impRundenIndex: neueRundenIndex,
     impAnzahlRunden: neueAnzahlRunden,
     impWortIndex: neuerWortIndex,
-    impImposterId: gewaehlt.id
+    impImposterId: gewaehlt.id,
+    impStarterId: startet.id
   });
 }
 
@@ -241,7 +250,7 @@ export async function vorZurueck() {
   try {
     await updateDoc(api.raumRef(), {
       impStatus: null, impRundenIndex: 0, impAnzahlRunden: 0,
-      impWortIndex: -1, impImposterId: null
+      impWortIndex: -1, impImposterId: null, impStarterId: null
     });
     await api.zurueckZurAuswahl();
   } catch (e) {
@@ -251,6 +260,8 @@ export async function vorZurueck() {
 
 function zeigeRunde() {
   $("imp-karte-name").textContent = api.spielerName;
+  const startSpieler = spielerListe.find((s) => s.id === starterId);
+  $("imp-runde-start").textContent = startSpieler ? `🎲 ${startSpieler.name} beginnt` : "";
   // Neue Runde: Karte immer verdeckt/an der Ausgangsposition zeigen - falls
   // noch eine alte Verschiebung vom vorherigen Zug in den Inline-Styles
   // hängt (sollte durch das Loslassen eigentlich nie passieren, aber sicher
@@ -265,13 +276,12 @@ function zeigeRunde() {
 
 function aktualisiereKarteninhalt() {
   const istImposter = api.spielerId === imposterId;
-  const wort = woerter[wortIndex];
+  const eintrag = woerter[wortIndex];
   $("imp-karte-rueckseite").innerHTML = istImposter
     ? `<span class="imp-rueckseite-symbol">❌</span><strong>Imposter</strong>
-       <span class="imp-rueckseite-zusatz">Hinweis: ${escapeHtml(wort?.hinweis ?? "")}</span>
-       <span class="imp-rueckseite-zusatz">Du kennst das Wort nicht - hör gut zu und misch dich unauffällig ein!</span>`
-    : `<span class="imp-rueckseite-symbol">✅</span><strong>${escapeHtml(wort?.wort ?? "")}</strong>
-       <span class="imp-rueckseite-zusatz">Kategorie: ${escapeHtml(wort?.thema ?? "")}</span>`;
+       <span class="imp-rueckseite-zusatz">Hinweis: ${escapeHtml(eintrag?.hinweis ?? "")}</span>
+       <span class="imp-rueckseite-zusatz">Du kennst den Begriff nicht - hör gut zu und misch dich unauffällig ein!</span>`
+    : `<span class="imp-rueckseite-symbol">✅</span><strong>${escapeHtml(eintrag?.begriff ?? "")}</strong>`;
 }
 
 // Karte per Ziehen (Maus/Touch über Pointer Events) oder kurzem Antippen
@@ -344,7 +354,7 @@ async function aufloesen() {
 
 function zeigeAufloesung() {
   const imposter = spielerListe.find((s) => s.id === imposterId);
-  const wort = woerter[wortIndex];
+  const eintrag = woerter[wortIndex];
   $("imp-aufloesung-karte").innerHTML = imposter
     ? `<div class="spieler-karte spieler-identitaet" style="--spieler-farbe:${imposter.farbe || "#7f8c8d"}">
         <div class="spieler-info">${avatarHtml(imposter.icon, "spieler-icon")}
@@ -352,8 +362,7 @@ function zeigeAufloesung() {
         </div>
       </div>`
     : "";
-  $("imp-aufloesung-wort").textContent = wort?.wort ?? "";
-  $("imp-aufloesung-thema").textContent = wort?.thema ?? "";
+  $("imp-aufloesung-wort").textContent = eintrag?.begriff ?? "";
   const weiterKnopf = $("imp-weiter");
   const letzteRunde = rundenIndex + 1 >= anzahlRunden;
   weiterKnopf.hidden = !api.istLeiter;

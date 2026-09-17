@@ -1976,28 +1976,47 @@
     .imp-karte-hinten strong { font-size: 1.5rem; }
     .imp-rueckseite-zusatz { font-size: .85rem; color: var(--text-hell); max-width: 220px; }
     .imp-runde-hinweis { text-align: center; }
+    .imp-start-anzeige {
+      text-align: center; font-weight: 700; color: var(--akzent); margin: 4px 0 0;
+    }
 
     /* ======================================================================
-       v145 - Finto: Antwort-Optionen (Abstimmung) und Auflösung.
+       v146 - Finto: Antwort-Kacheln (Abstimmung + Auflösung) als 2-spaltiges
+       Raster mit abgerundeten Kacheln, statt einer einfachen Liste - jede
+       Kachel traegt oben ein Namensschild ("Deine Finte" bei der eigenen
+       Antwort, sonst - erst in der Auflösung - der Name der Person, die sich
+       die Antwort ausgedacht hat, bzw. "Richtig" bei der echten Antwort).
+       In der Auflösung zeigen kleine Profilbild-Kreise, wer für diese Kachel
+       gestimmt hat, statt einer Namensliste.
        ====================================================================== */
-    .fi-optionen-liste { display: flex; flex-direction: column; gap: 8px; margin: 12px 0; }
-    .fi-option-knopf {
-      width: 100%; text-align: left; background: var(--club-ink-2); color: var(--club-text);
-      border: 1.5px solid rgba(255,255,255,.18); border-radius: 13px; padding: 12px 14px;
-      font-size: .98rem; font-weight: 600; cursor: pointer;
+    .fi-kachel-raster {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 14px 10px; margin: 16px 0;
     }
-    .fi-option-knopf:hover:not(:disabled) { border-color: var(--akzent); background: var(--club-ink-3); }
-    .fi-option-knopf:disabled { cursor: default; opacity: .7; }
-    .fi-option-knopf.ausgewaehlt { border-color: var(--akzent); background: color-mix(in srgb, var(--akzent) 24%, var(--club-ink-2)); opacity: 1; }
-    .fi-option {
-      display: block; background: rgba(255,255,255,.05); border: 1.5px dashed rgba(255,255,255,.25);
-      border-radius: 13px; padding: 12px 14px; font-size: .98rem;
+    .fi-kachel-wrapper { position: relative; }
+    .fi-kachel-pill {
+      position: absolute; top: -9px; left: 50%; transform: translateX(-50%);
+      background: var(--club-ink); color: var(--club-text); border: 1px solid rgba(255,255,255,.25);
+      font-size: .68rem; font-weight: 800; letter-spacing: .01em; white-space: nowrap;
+      padding: 3px 10px; border-radius: 999px; z-index: 1;
     }
-    .fi-option-eigene em { color: var(--club-muted); font-weight: 400; }
-    .fi-erg-option {
-      background: var(--club-ink-2); border: 1.5px solid rgba(255,255,255,.14); border-radius: 13px;
-      padding: 10px 14px; margin-bottom: 8px;
+    .fi-kachel-pill-eigene { background: var(--akzent); border-color: var(--akzent); color: #fff; }
+    .fi-kachel-pill-richtig { background: #4ade80; border-color: #4ade80; color: #123018; }
+    .fi-kachel {
+      width: 100%; min-height: 92px; box-sizing: border-box;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+      text-align: center; background: var(--club-ink-2); color: var(--club-text);
+      border: 1.5px solid rgba(255,255,255,.18); border-radius: 16px; padding: 16px 10px 10px;
+      font-size: .95rem; font-weight: 700;
     }
-    .fi-erg-option.fi-erg-richtig { border-color: #4ade80; background: color-mix(in srgb, #4ade80 18%, var(--club-ink-2)); }
-    .fi-erg-option-text { font-weight: 700; }
-    .fi-erg-option-zusatz { font-size: .85rem; color: var(--club-muted); margin-top: 2px; }
+    .fi-kachel-knopf { cursor: pointer; }
+    .fi-kachel-knopf:hover:not(:disabled) { border-color: var(--akzent); background: var(--club-ink-3); }
+    .fi-kachel-knopf:disabled { cursor: default; opacity: .75; }
+    .fi-kachel-knopf.ausgewaehlt {
+      border-color: var(--akzent); background: color-mix(in srgb, var(--akzent) 26%, var(--club-ink-2)); opacity: 1;
+    }
+    .fi-kachel-eigene { opacity: .8; border-style: dashed; }
+    .fi-kachel-richtig { border-color: #4ade80; background: color-mix(in srgb, #4ade80 20%, var(--club-ink-2)); }
+    .fi-kachel-text { font-weight: 700; }
+    .fi-kachel-waehler { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; min-height: 22px; }
+    .fi-erg-avatar { width: 22px; height: 22px; border-radius: 50%; object-fit: cover; border: 1.5px solid var(--club-ink); }
+    .fi-erg-keine-stimmen { font-size: .72rem; font-weight: 400; color: var(--club-muted); }

@@ -26,7 +26,7 @@
 import {
   doc, setDoc, deleteDoc, updateDoc, collection, getDocs, onSnapshot, serverTimestamp, writeBatch, increment
 } from "../../kern/firebase.js";
-import { spielerKarte, escapeHtml, zeigeDebug } from "../../kern/ui.js";
+import { spielerKarte, escapeHtml, avatarHtml, zeigeDebug } from "../../kern/ui.js";
 import { speichereWertung } from "../../kern/wertung.js";
 
 const RICHTIG_ID = "richtig";
@@ -70,8 +70,8 @@ const VORLAGE = `
   <div id="fi-abstimmung-screen" class="bildschirm-karte" hidden>
     <p class="kategorie">Finto</p>
     <h2 id="fi-abst-frage"></h2>
-    <p class="hinweis-text">Welche Antwort ist die echte?</p>
-    <ul id="fi-abst-liste" class="fi-optionen-liste"></ul>
+    <p class="hinweis-text">Welche Antwort ist die echte? (Deine eigene könnt ihr nicht wählen.)</p>
+    <ul id="fi-abst-liste" class="fi-kachel-raster"></ul>
     <p id="fi-abst-fehler" class="fehler-text"></p>
     <p id="fi-abst-status"></p>
     <p><button id="fi-auswertung-zeigen" class="btn-flach" hidden>Auswertung jetzt zeigen</button></p>
@@ -80,7 +80,7 @@ const VORLAGE = `
   <div id="fi-ergebnis-screen" class="bildschirm-karte" hidden>
     <p class="kategorie">Finto</p>
     <h2 id="fi-erg-frage"></h2>
-    <ul id="fi-erg-optionen" class="fi-optionen-liste fi-optionen-aufgeloest"></ul>
+    <ul id="fi-erg-optionen" class="fi-kachel-raster"></ul>
     <h3>Punkte diese Runde</h3>
     <ul id="fi-erg-punkte"></ul>
     <p><button id="fi-weiter" hidden></button></p>
@@ -399,28 +399,30 @@ async function zurAbstimmung(manuell) {
 function zeigeAbstimmung() {
   const frage = frageAn(index);
   $("fi-abst-frage").textContent = frage?.frage ?? "";
-  const eigeneAntwortId = api.spielerId;
   const eigeneStimme = stimmenDieserRunde(index).find((s) => s.spielerId === api.spielerId);
 
   const liste = $("fi-abst-liste");
   liste.innerHTML = "";
   optionen.forEach((option) => {
+    const eigene = option.id === api.spielerId;
     const li = document.createElement("li");
-    if (option.id === eigeneAntwortId) {
-      li.innerHTML = `<span class="fi-option fi-option-eigene">${escapeHtml(option.text)} <em>(deine Antwort)</em></span>`;
+    li.className = "fi-kachel-wrapper";
+
+    const pillText = eigene ? "Deine Finte" : "";
+    const pillHtml = pillText ? `<span class="fi-kachel-pill fi-kachel-pill-eigene">${escapeHtml(pillText)}</span>` : "";
+
+    if (eigene) {
+      li.innerHTML = `${pillHtml}<div class="fi-kachel fi-kachel-eigene">${escapeHtml(option.text)}</div>`;
       liste.appendChild(li);
       return;
     }
-    const knopf = document.createElement("button");
-    knopf.type = "button";
-    knopf.className = "fi-option-knopf";
-    knopf.textContent = option.text;
-    if (eigeneStimme) {
-      knopf.disabled = true;
-      if (eigeneStimme.gewaehlt === option.id) knopf.classList.add("ausgewaehlt");
-    }
-    knopf.addEventListener("click", () => stimmeAbgeben(option.id));
-    li.appendChild(knopf);
+
+    const ausgewaehlt = eigeneStimme?.gewaehlt === option.id;
+    li.innerHTML =
+      `<button type="button" class="fi-kachel fi-kachel-knopf${ausgewaehlt ? " ausgewaehlt" : ""}"${eigeneStimme ? " disabled" : ""}>` +
+        escapeHtml(option.text) +
+      `</button>`;
+    if (!eigeneStimme) li.querySelector("button").addEventListener("click", () => stimmeAbgeben(option.id));
     liste.appendChild(li);
   });
   $("fi-auswertung-zeigen").hidden = !api.istLeiter;
@@ -504,17 +506,33 @@ function zeigeErgebnis(pos) {
   const liste = $("fi-erg-optionen");
   liste.innerHTML = "";
   optionen.forEach((option) => {
-    const waehler = stimmen.filter((s) => s.gewaehlt === option.id)
-      .map((s) => spielerListe.find((sp) => sp.id === s.spielerId)?.name ?? "?");
-    const autor = option.id === RICHTIG_ID
-      ? null
-      : (spielerListe.find((sp) => sp.id === option.id)?.name ?? "jemand, der nicht mehr dabei ist");
+    const waehlerSpieler = stimmen.filter((s) => s.gewaehlt === option.id)
+      .map((s) => spielerListe.find((sp) => sp.id === s.spielerId))
+      .filter(Boolean);
+    const istRichtig = option.id === RICHTIG_ID;
+    const istEigene = option.id === api.spielerId;
+
+    let pillText;
+    let pillKlasse = "";
+    if (istRichtig) { pillText = "✅ Richtig"; pillKlasse = " fi-kachel-pill-richtig"; }
+    else if (istEigene) { pillText = "Deine Finte"; pillKlasse = " fi-kachel-pill-eigene"; }
+    else {
+      const autor = spielerListe.find((sp) => sp.id === option.id);
+      pillText = autor?.name ?? "jemand, der nicht mehr dabei ist";
+    }
+
+    const avatareHtml = waehlerSpieler.length
+      ? waehlerSpieler.map((sp) => avatarHtml(sp.icon, "fi-erg-avatar")).join("")
+      : `<span class="fi-erg-keine-stimmen">Von niemandem gewählt</span>`;
+
     const li = document.createElement("li");
-    li.className = "fi-erg-option" + (option.id === RICHTIG_ID ? " fi-erg-richtig" : "");
+    li.className = "fi-kachel-wrapper";
     li.innerHTML =
-      `<div class="fi-erg-option-text">${option.id === RICHTIG_ID ? "✅" : "✍️"} ${escapeHtml(option.text)}</div>` +
-      `<div class="fi-erg-option-zusatz">${option.id === RICHTIG_ID ? "Die richtige Antwort" : `Ausgedacht von ${escapeHtml(autor)}`}` +
-      ` · ${waehler.length ? "Gewählt von " + escapeHtml(waehler.join(", ")) : "Von niemandem gewählt"}</div>`;
+      `<span class="fi-kachel-pill${pillKlasse}">${escapeHtml(pillText)}</span>` +
+      `<div class="fi-kachel fi-kachel-ergebnis${istRichtig ? " fi-kachel-richtig" : ""}">` +
+        `<div class="fi-kachel-text">${escapeHtml(option.text)}</div>` +
+        `<div class="fi-kachel-waehler">${avatareHtml}</div>` +
+      `</div>`;
     liste.appendChild(li);
   });
 
