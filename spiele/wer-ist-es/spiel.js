@@ -112,7 +112,7 @@ const VORLAGE = `
     <p class="kategorie">Fußballer</p>
     <h2 id="wi-erg-status"></h2>
     <p>Gesucht war: <strong id="wi-erg-name"></strong></p>
-    <div id="wi-erg-liste"></div>
+    <ul id="wi-erg-liste"></ul>
     <p><button id="wi-weiter" hidden>Weiter</button></p>
   </div>
 

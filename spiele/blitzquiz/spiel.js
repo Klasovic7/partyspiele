@@ -142,7 +142,7 @@ const VORLAGE = `
     <h2 id="bz-erg-frage"></h2>
     <p id="bz-erg-antwort-zeile">Richtige Antwort: <strong id="bz-erg-antwort"></strong></p>
     <div id="bz-erg-bild" class="bz-bild-anzeige" hidden></div>
-    <div id="bz-erg-liste"></div>
+    <ul id="bz-erg-liste"></ul>
     <p><button id="bz-weiter" hidden>Weiter</button></p>
   </div>
 
