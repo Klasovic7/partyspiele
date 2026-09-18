@@ -889,32 +889,30 @@ function zeigeErgebnisListe(pos) {
   }
 }
 
-// Balken-Auswertung (v155): Statt einer Liste mit Gesamtpunktestand zeigt diese
-// Ansicht pro Person einen Balken von 0 bis zur eigenen Schätzung, plus eine
-// durchgehende, gestrichelte Ziellinie bei der richtigen Antwort. Die Skala
-// (und damit die Position der Ziellinie) passt sich jede Runde neu an - je
-// nachdem, ob alle unter der Antwort liegen, jemand drüber tippt oder es um
-// negative Werte geht (z. B. "wie kalt war es?"). Der Gesamtpunktestand steht
-// hier bewusst NICHT mehr - der ist erst wieder im Endstand zu sehen.
+// Balken-Auswertung (v156): Jeder Balken beginnt links und geht bis zur eigenen
+// Schätzung - die Skala zoomt dabei automatisch auf den Bereich zwischen der
+// kleinsten und größten vorkommenden Zahl (Schätzungen + richtige Antwort),
+// statt stur bei 0 zu starten. Dadurch sieht man auch bei großen Zahlen mit
+// eng beieinander liegenden Tipps (z. B. 38000/40000/42000) noch deutliche
+// Unterschiede zwischen den Balken. Eine durchgehende, gestrichelte Ziellinie
+// markiert die richtige Antwort quer über alle Zeilen - ihre Position wandert
+// je nach Runde. Der Gesamtpunktestand steht hier bewusst NICHT mehr - der ist
+// erst wieder im Endstand zu sehen.
 function renderBalkenErgebnis(container, richtig, sortiert, rundenpunkte, dummkoepfe, tipps) {
-  const werte = [richtig, 0, ...sortiert.map((a) => a.schaetzung)];
+  const werte = [richtig, ...sortiert.map((a) => a.schaetzung)];
   const minWert = Math.min(...werte);
   const maxWert = Math.max(...werte);
   const spanne = Math.max(maxWert - minWert, 1);
-  const minSkala = minWert - spanne * 0.06;
-  const maxSkala = maxWert + spanne * 0.06;
+  const minSkala = minWert - spanne * 0.1;
+  const maxSkala = maxWert + spanne * 0.1;
   const spanneSkala = Math.max(maxSkala - minSkala, 1);
   const prozent = (wert) => ((wert - minSkala) / spanneSkala) * 100;
-  const nullPos = prozent(0);
   const zielPos = prozent(richtig);
 
   const zeilenHtml = sortiert.map((antwort) => {
     const s = spielerListe.find((x) => x.id === antwort.spielerId);
     const farbe = s?.farbe || "#7f8c8d";
-    const wertPos = prozent(antwort.schaetzung);
-    const links = Math.min(nullPos, wertPos);
-    const breite = Math.max(Math.abs(wertPos - nullPos), 0.6);
-    const wertPositiv = wertPos >= nullPos;
+    const breite = Math.max(prozent(antwort.schaetzung), 1.5);
 
     let punkteHtml = `<span>${formatiertePunkte(rundenpunkte[antwort.spielerId] ?? 0)}</span>`;
     let lang = false;
@@ -923,10 +921,10 @@ function renderBalkenErgebnis(container, richtig, sortiert, rundenpunkte, dummko
       const tipp = tipps.find((t) => t.spielerId === antwort.spielerId);
       if (tipp && dummkoepfe.includes(tipp.zielSpielerId)) { punkteHtml += `<span class="sf-erg-punkte-dk">🎯+1</span>`; lang = true; }
     }
-    const kurz = breite < (lang ? 26 : 14);
+    const kurz = breite < (lang ? 30 : 16);
 
     const aussenHtml = kurz
-      ? `<span class="sf-erg-punkte-aussen${wertPositiv ? "" : " links"}" style="left:${wertPositiv ? links + breite : links}%;">${punkteHtml}</span>`
+      ? `<span class="sf-erg-punkte-aussen" style="left:${breite}%;">${punkteHtml}</span>`
       : "";
 
     return (
@@ -935,7 +933,7 @@ function renderBalkenErgebnis(container, richtig, sortiert, rundenpunkte, dummko
         `<span class="sf-erg-name">${escapeHtml(antwort.spielerName)}</span>` +
       `</div>` +
       `<div class="sf-erg-spur">` +
-        `<div class="sf-erg-balken" style="left:${links}%; width:${breite}%; background:${farbe};">` +
+        `<div class="sf-erg-balken" style="left:0%; width:${breite}%; background:${farbe};">` +
           (kurz ? "" : `<span class="sf-erg-balken-punkte">${punkteHtml}</span>`) +
         `</div>` +
         aussenHtml +

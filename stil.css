@@ -2081,7 +2081,6 @@
       gap: 4px; font-family: "Bungee", sans-serif; font-size: .8rem; color: var(--club-text);
       white-space: nowrap; transform: translateX(6px);
     }
-    .sf-erg-punkte-aussen.links { transform: translateX(calc(-100% - 6px)); }
     .sf-erg-ziel-ueberlagerung { grid-column: 2; grid-row: 1 / -1; position: relative; pointer-events: none; }
     .sf-erg-ziel-linie {
       position: absolute; top: -18px; bottom: 0; width: 2px;
