@@ -912,35 +912,28 @@ function renderBalkenErgebnis(container, richtig, sortiert, rundenpunkte, dummko
   const zeilenHtml = sortiert.map((antwort) => {
     const s = spielerListe.find((x) => x.id === antwort.spielerId);
     const farbe = s?.farbe || "#7f8c8d";
-    // Mindestbreite von 18%, damit die Farbe des Spielers immer gut zu erkennen
-    // ist - auch wenn die Schätzung sehr nah am Rand der Skala liegt.
-    const breite = Math.max(prozent(antwort.schaetzung), 18);
+    // Mindestbreite von 24%, damit der Balken immer bis unter das Profilbild
+    // reicht (das Profilbild liegt links auf dem Balken, nicht mehr daneben).
+    const breite = Math.max(prozent(antwort.schaetzung), 24);
 
-    let inhaltHtml =
-      `<span class="sf-erg-balken-wert">${escapeHtml(String(antwort.schaetzung))}</span>` +
+    let punkteHtml = `<span class="sf-erg-balken-wert">${escapeHtml(String(antwort.schaetzung))}</span>` +
       `<span class="sf-erg-balken-punkte">${formatiertePunkte(rundenpunkte[antwort.spielerId] ?? 0)}</span>`;
-    let lang = false;
     if (dummkopfModus) {
-      if (dummkoepfe.includes(antwort.spielerId)) { inhaltHtml += `<span class="sf-erg-punkte-dk">🤡</span>`; lang = true; }
+      if (dummkoepfe.includes(antwort.spielerId)) punkteHtml += `<span class="sf-erg-punkte-dk">🤡</span>`;
       const tipp = tipps.find((t) => t.spielerId === antwort.spielerId);
-      if (tipp && dummkoepfe.includes(tipp.zielSpielerId)) { inhaltHtml += `<span class="sf-erg-punkte-dk">🎯+1</span>`; lang = true; }
+      if (tipp && dummkoepfe.includes(tipp.zielSpielerId)) punkteHtml += `<span class="sf-erg-punkte-dk">🎯+1</span>`;
     }
-    const kurz = breite < (lang ? 46 : 34);
-
-    const aussenHtml = kurz
-      ? `<span class="sf-erg-punkte-aussen" style="left:${breite}%;">${inhaltHtml}</span>`
-      : "";
 
     return (
-      `<div class="sf-erg-spieler">` +
-        `${avatarHtml(s?.icon, "sf-erg-avatar")}` +
-        `<span class="sf-erg-name">${escapeHtml(antwort.spielerName)}</span>` +
-      `</div>` +
-      `<div class="sf-erg-spur">` +
-        `<div class="sf-erg-balken" style="left:0%; width:${breite}%; background:${farbe};">` +
-          (kurz ? "" : inhaltHtml) +
+      `<div class="sf-erg-zeile">` +
+        `<div class="sf-erg-spur">` +
+          `<div class="sf-erg-balken" style="width:${breite}%; background:${farbe};"></div>` +
         `</div>` +
-        aussenHtml +
+        `<div class="sf-erg-info">` +
+          `${avatarHtml(s?.icon, "sf-erg-avatar")}` +
+          `<span class="sf-erg-name">${escapeHtml(antwort.spielerName)}</span>` +
+        `</div>` +
+        `<div class="sf-erg-werte">${punkteHtml}</div>` +
       `</div>`
     );
   }).join("");

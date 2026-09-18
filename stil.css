@@ -2044,58 +2044,57 @@
     .warten-block.warten-einzeln .warten-avatar-text { width: 88px; height: 88px; font-size: 2.2rem; opacity: 1; }
     .warten-text { margin: 0; font-weight: 700; text-align: center; }
 
-    /* Schätzfragen-Auswertung als Balkendiagramm (v155, ueberarbeitet in v159:
-       groessere Balken/Avatare wie in den anderen Spielen, Schaetzwert direkt
-       sichtbar, Farbe schon am Anfang des Balkens gut erkennbar). Gemeinsames
-       Grid ueber alle Zeilen hinweg (Spieler-Spalte + Balkenspur-Spalte). */
+    /* Schätzfragen-Auswertung als Balkendiagramm (v155, in v159 groesser gemacht,
+       in v160 komplett auf ein einfaches Zeilen-Layout umgestellt: der Balken
+       faengt jetzt bei 0 an, das Profilbild liegt DARIN/DARAUF statt in einer
+       eigenen Spalte - dadurch braucht es kein Grid mit fester Spaltenbreite
+       mehr, und die Ziellinie kann einfach ueber die volle Zeilenbreite gelegt
+       werden. */
     .sf-erg-liste-balken {
-      display: grid; grid-template-columns: 124px 1fr; position: relative;
-      column-gap: 10px; row-gap: 14px; align-items: center; margin: 4px 0 6px;
+      display: flex; flex-direction: column; gap: 14px; position: relative; margin: 4px 0 6px;
     }
-    .sf-erg-spieler { display: flex; align-items: center; gap: 8px; overflow: hidden; min-width: 0; }
-    .sf-erg-avatar {
-      width: 48px; height: 48px; border-radius: 50%; object-fit: cover;
-      border: 3px solid var(--club-ink); flex-shrink: 0;
-      box-shadow: 0 0 0 2px rgba(255, 255, 255, .5);
-    }
-    .sf-erg-name {
-      font-family: "Barlow Condensed", sans-serif; font-weight: 800; font-style: italic;
-      font-size: .93rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-    }
+    .sf-erg-zeile { position: relative; height: 60px; }
     .sf-erg-spur {
-      position: relative; height: 58px; background: rgba(255, 255, 255, .07);
+      position: absolute; inset: 0; background: rgba(255, 255, 255, .07);
       border-radius: 16px; overflow: hidden;
     }
     .sf-erg-balken {
-      position: absolute; top: 0; bottom: 0; border-radius: 16px;
-      display: flex; align-items: center; justify-content: center; gap: 6px;
-      transition: left .2s ease, width .2s ease;
+      position: absolute; top: 0; bottom: 0; left: 0; border-radius: 16px;
+      transition: width .2s ease;
+    }
+    .sf-erg-info {
+      position: absolute; left: 6px; top: 0; bottom: 0; z-index: 2; max-width: 62%;
+      display: flex; align-items: center; gap: 8px; overflow: hidden; pointer-events: none;
+    }
+    .sf-erg-avatar {
+      width: 48px; height: 48px; border-radius: 50%; object-fit: cover;
+      border: 3px solid rgba(255, 255, 255, .85); flex-shrink: 0;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, .35);
+    }
+    .sf-erg-name {
+      font-family: "Barlow Condensed", sans-serif; font-weight: 800; font-style: italic;
+      font-size: .93rem; color: #fff; text-shadow: 0 1px 3px rgba(0, 0, 0, .55);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      background: rgba(0, 0, 0, .28); padding: 4px 9px; border-radius: 8px;
+    }
+    /* Wert/Punkte immer an derselben Stelle rechts, unabhaengig von der
+       Balkenlaenge - dadurch nie eine Kollision mit Avatar/Name, und die
+       dunkle Kapsel sorgt fuer Lesbarkeit egal ob dahinter Balkenfarbe oder
+       die leere Spur liegt. */
+    .sf-erg-werte {
+      position: absolute; right: 8px; top: 50%; transform: translateY(-50%); z-index: 2;
+      display: flex; align-items: center; gap: 6px; background: rgba(0, 0, 0, .32);
+      padding: 5px 10px; border-radius: 10px; pointer-events: none;
     }
     .sf-erg-balken-wert {
-      font-family: "Bungee", sans-serif; font-size: 1rem; color: #18101d; white-space: nowrap;
+      font-family: "Bungee", sans-serif; font-size: 1rem; color: #fff; white-space: nowrap;
     }
     .sf-erg-balken-punkte {
-      font-family: "Bungee", sans-serif; font-size: .74rem; color: #18101d;
-      display: flex; align-items: center; gap: 4px; white-space: nowrap; opacity: .82;
+      font-family: "Bungee", sans-serif; font-size: .74rem; color: #fff;
+      display: flex; align-items: center; gap: 4px; white-space: nowrap; opacity: .85;
     }
     .sf-erg-punkte-dk { font-size: .72rem; }
-    .sf-erg-punkte-aussen {
-      position: absolute; top: 0; bottom: 0; display: flex; align-items: center;
-      gap: 6px; font-family: "Bungee", sans-serif; font-size: .82rem; color: var(--club-text);
-      white-space: nowrap; transform: translateX(8px);
-    }
-    .sf-erg-punkte-aussen .sf-erg-balken-wert { color: var(--club-text); }
-    .sf-erg-punkte-aussen .sf-erg-balken-punkte { color: var(--club-text); opacity: .72; }
-    /* Bewusst NICHT als Grid-Item positioniert: 'grid-row: 1 / -1' spannt nur
-       ueber das EXPLIZITE Grid (das ohne grid-template-rows nur 1 Zeile hat),
-       nicht ueber die implizit durch die Spielerzeilen entstehenden Zeilen -
-       dadurch hat das Overlay vorher eine Grid-Zelle blockiert und die
-       Auto-Platzierung aller Zeilen darunter verschoben. Absolut positioniert
-       (ausserhalb des Grid-Placements) und exakt an der festen Breite der
-       ersten Spalte (124px) + Spaltenabstand (10px) ausgerichtet, spannt es
-       zuverlaessig ueber die komplette Hoehe von .sf-erg-liste-balken, egal
-       wie viele Spieler-Zeilen es sind. */
-    .sf-erg-ziel-ueberlagerung { position: absolute; top: 0; bottom: 0; left: 134px; right: 0; pointer-events: none; }
+    .sf-erg-ziel-ueberlagerung { position: absolute; top: 0; bottom: 0; left: 0; right: 0; pointer-events: none; }
     .sf-erg-ziel-linie {
       position: absolute; top: -18px; bottom: 0; width: 2px;
       background: repeating-linear-gradient(to bottom, var(--club-orange) 0 6px, transparent 6px 11px);
