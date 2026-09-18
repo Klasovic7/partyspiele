@@ -2081,7 +2081,16 @@
       gap: 4px; font-family: "Bungee", sans-serif; font-size: .8rem; color: var(--club-text);
       white-space: nowrap; transform: translateX(6px);
     }
-    .sf-erg-ziel-ueberlagerung { grid-column: 2; grid-row: 1 / -1; position: relative; pointer-events: none; }
+    /* Bewusst NICHT als Grid-Item positioniert: 'grid-row: 1 / -1' spannt nur
+       ueber das EXPLIZITE Grid (das ohne grid-template-rows nur 1 Zeile hat),
+       nicht ueber die implizit durch die Spielerzeilen entstehenden Zeilen -
+       dadurch hat das Overlay vorher eine Grid-Zelle blockiert und die
+       Auto-Platzierung aller Zeilen darunter verschoben. Absolut positioniert
+       (ausserhalb des Grid-Placements) und exakt an der festen Breite der
+       ersten Spalte (92px) + Spaltenabstand (10px) ausgerichtet, spannt es
+       zuverlaessig ueber die komplette Hoehe von .sf-erg-liste-balken, egal
+       wie viele Spieler-Zeilen es sind. */
+    .sf-erg-ziel-ueberlagerung { position: absolute; top: 0; bottom: 0; left: 102px; right: 0; pointer-events: none; }
     .sf-erg-ziel-linie {
       position: absolute; top: -18px; bottom: 0; width: 2px;
       background: repeating-linear-gradient(to bottom, var(--club-orange) 0 6px, transparent 6px 11px);
