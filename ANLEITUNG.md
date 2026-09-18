@@ -1,4 +1,4 @@
-# Partyspiele – Anleitung
+# Trollhouse – Anleitung
 
 ## 1. Was in diesem Ordner liegt
 

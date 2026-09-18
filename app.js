@@ -9,7 +9,7 @@ import {
 } from "./kern/ui.js";
 import { SPIELE, spielInfo } from "./spiele/register.js";
 
-export const APP_VERSION = "v152";
+export const APP_VERSION = "v153";
 const appVersion = document.getElementById("app-version");
 appVersion.textContent = "Version " + APP_VERSION;
 
@@ -630,7 +630,7 @@ function aktualisiereRaumNavigation(spielId) {
   } else {
     spielKopfIcon.innerHTML = '<span class="spiel-logo-badge"><img src="bilder/logo-fuchs-transparent.png" alt=""></span>';
   }
-  spielKopfName.textContent = info?.name ?? "Partyspiele";
+  spielKopfName.textContent = info?.name ?? "Trollhouse";
   // Das Zurückkehren aus einem Spiel ändert den gemeinsamen Raumzustand und
   // bleibt deshalb dem Spielleiter vorbehalten. Im Hauptmenü darf jeder den
   // Raum für sich verlassen.
