@@ -2044,53 +2044,58 @@
     .warten-block.warten-einzeln .warten-avatar-text { width: 88px; height: 88px; font-size: 2.2rem; opacity: 1; }
     .warten-text { margin: 0; font-weight: 700; text-align: center; }
 
-    /* Schätzfragen-Auswertung als Balkendiagramm (v155). Gemeinsames Grid ueber
-       alle Zeilen hinweg (Spieler-Spalte + Balkenspur-Spalte) - die Ziellinie
-       ist ein eigenes Grid-Feld, das sich ueber alle Zeilen der Balkenspur legt
-       (grid-row: 1 / -1), dadurch trifft sie bei jeder Zeile exakt an derselben
-       Stelle, unabhaengig von der tatsaechlichen Spaltenbreite. */
+    /* Schätzfragen-Auswertung als Balkendiagramm (v155, ueberarbeitet in v159:
+       groessere Balken/Avatare wie in den anderen Spielen, Schaetzwert direkt
+       sichtbar, Farbe schon am Anfang des Balkens gut erkennbar). Gemeinsames
+       Grid ueber alle Zeilen hinweg (Spieler-Spalte + Balkenspur-Spalte). */
     .sf-erg-liste-balken {
-      display: grid; grid-template-columns: 92px 1fr; position: relative;
+      display: grid; grid-template-columns: 124px 1fr; position: relative;
       column-gap: 10px; row-gap: 14px; align-items: center; margin: 4px 0 6px;
     }
-    .sf-erg-spieler { display: flex; align-items: center; gap: 7px; overflow: hidden; min-width: 0; }
+    .sf-erg-spieler { display: flex; align-items: center; gap: 8px; overflow: hidden; min-width: 0; }
     .sf-erg-avatar {
-      width: 30px; height: 30px; border-radius: 50%; object-fit: cover;
-      border: 2px solid var(--club-ink); flex-shrink: 0;
+      width: 48px; height: 48px; border-radius: 50%; object-fit: cover;
+      border: 3px solid var(--club-ink); flex-shrink: 0;
+      box-shadow: 0 0 0 2px rgba(255, 255, 255, .5);
     }
     .sf-erg-name {
       font-family: "Barlow Condensed", sans-serif; font-weight: 800; font-style: italic;
-      font-size: .86rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      font-size: .93rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
     .sf-erg-spur {
-      position: relative; height: 34px; background: rgba(255, 255, 255, .07);
-      border-radius: 9px; overflow: hidden;
+      position: relative; height: 58px; background: rgba(255, 255, 255, .07);
+      border-radius: 16px; overflow: hidden;
     }
     .sf-erg-balken {
-      position: absolute; top: 0; bottom: 0; border-radius: 9px;
-      display: flex; align-items: center; justify-content: center;
+      position: absolute; top: 0; bottom: 0; border-radius: 16px;
+      display: flex; align-items: center; justify-content: center; gap: 6px;
       transition: left .2s ease, width .2s ease;
     }
-    .sf-erg-balken-punkte {
-      font-family: "Bungee", sans-serif; font-size: .82rem; color: #18101d;
-      display: flex; align-items: center; gap: 4px; white-space: nowrap;
+    .sf-erg-balken-wert {
+      font-family: "Bungee", sans-serif; font-size: 1rem; color: #18101d; white-space: nowrap;
     }
-    .sf-erg-punkte-dk { font-size: .78rem; }
+    .sf-erg-balken-punkte {
+      font-family: "Bungee", sans-serif; font-size: .74rem; color: #18101d;
+      display: flex; align-items: center; gap: 4px; white-space: nowrap; opacity: .82;
+    }
+    .sf-erg-punkte-dk { font-size: .72rem; }
     .sf-erg-punkte-aussen {
       position: absolute; top: 0; bottom: 0; display: flex; align-items: center;
-      gap: 4px; font-family: "Bungee", sans-serif; font-size: .8rem; color: var(--club-text);
-      white-space: nowrap; transform: translateX(6px);
+      gap: 6px; font-family: "Bungee", sans-serif; font-size: .82rem; color: var(--club-text);
+      white-space: nowrap; transform: translateX(8px);
     }
+    .sf-erg-punkte-aussen .sf-erg-balken-wert { color: var(--club-text); }
+    .sf-erg-punkte-aussen .sf-erg-balken-punkte { color: var(--club-text); opacity: .72; }
     /* Bewusst NICHT als Grid-Item positioniert: 'grid-row: 1 / -1' spannt nur
        ueber das EXPLIZITE Grid (das ohne grid-template-rows nur 1 Zeile hat),
        nicht ueber die implizit durch die Spielerzeilen entstehenden Zeilen -
        dadurch hat das Overlay vorher eine Grid-Zelle blockiert und die
        Auto-Platzierung aller Zeilen darunter verschoben. Absolut positioniert
        (ausserhalb des Grid-Placements) und exakt an der festen Breite der
-       ersten Spalte (92px) + Spaltenabstand (10px) ausgerichtet, spannt es
+       ersten Spalte (124px) + Spaltenabstand (10px) ausgerichtet, spannt es
        zuverlaessig ueber die komplette Hoehe von .sf-erg-liste-balken, egal
        wie viele Spieler-Zeilen es sind. */
-    .sf-erg-ziel-ueberlagerung { position: absolute; top: 0; bottom: 0; left: 102px; right: 0; pointer-events: none; }
+    .sf-erg-ziel-ueberlagerung { position: absolute; top: 0; bottom: 0; left: 134px; right: 0; pointer-events: none; }
     .sf-erg-ziel-linie {
       position: absolute; top: -18px; bottom: 0; width: 2px;
       background: repeating-linear-gradient(to bottom, var(--club-orange) 0 6px, transparent 6px 11px);

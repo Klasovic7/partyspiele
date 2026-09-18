@@ -912,19 +912,23 @@ function renderBalkenErgebnis(container, richtig, sortiert, rundenpunkte, dummko
   const zeilenHtml = sortiert.map((antwort) => {
     const s = spielerListe.find((x) => x.id === antwort.spielerId);
     const farbe = s?.farbe || "#7f8c8d";
-    const breite = Math.max(prozent(antwort.schaetzung), 1.5);
+    // Mindestbreite von 18%, damit die Farbe des Spielers immer gut zu erkennen
+    // ist - auch wenn die Schätzung sehr nah am Rand der Skala liegt.
+    const breite = Math.max(prozent(antwort.schaetzung), 18);
 
-    let punkteHtml = `<span>${formatiertePunkte(rundenpunkte[antwort.spielerId] ?? 0)}</span>`;
+    let inhaltHtml =
+      `<span class="sf-erg-balken-wert">${escapeHtml(String(antwort.schaetzung))}</span>` +
+      `<span class="sf-erg-balken-punkte">${formatiertePunkte(rundenpunkte[antwort.spielerId] ?? 0)}</span>`;
     let lang = false;
     if (dummkopfModus) {
-      if (dummkoepfe.includes(antwort.spielerId)) { punkteHtml += `<span class="sf-erg-punkte-dk">🤡</span>`; lang = true; }
+      if (dummkoepfe.includes(antwort.spielerId)) { inhaltHtml += `<span class="sf-erg-punkte-dk">🤡</span>`; lang = true; }
       const tipp = tipps.find((t) => t.spielerId === antwort.spielerId);
-      if (tipp && dummkoepfe.includes(tipp.zielSpielerId)) { punkteHtml += `<span class="sf-erg-punkte-dk">🎯+1</span>`; lang = true; }
+      if (tipp && dummkoepfe.includes(tipp.zielSpielerId)) { inhaltHtml += `<span class="sf-erg-punkte-dk">🎯+1</span>`; lang = true; }
     }
-    const kurz = breite < (lang ? 30 : 16);
+    const kurz = breite < (lang ? 46 : 34);
 
     const aussenHtml = kurz
-      ? `<span class="sf-erg-punkte-aussen" style="left:${breite}%;">${punkteHtml}</span>`
+      ? `<span class="sf-erg-punkte-aussen" style="left:${breite}%;">${inhaltHtml}</span>`
       : "";
 
     return (
@@ -934,7 +938,7 @@ function renderBalkenErgebnis(container, richtig, sortiert, rundenpunkte, dummko
       `</div>` +
       `<div class="sf-erg-spur">` +
         `<div class="sf-erg-balken" style="left:0%; width:${breite}%; background:${farbe};">` +
-          (kurz ? "" : `<span class="sf-erg-balken-punkte">${punkteHtml}</span>`) +
+          (kurz ? "" : inhaltHtml) +
         `</div>` +
         aussenHtml +
       `</div>`
