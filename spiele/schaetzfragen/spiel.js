@@ -15,7 +15,7 @@ import {
   doc, setDoc, updateDoc, deleteDoc, collection, getDocs, onSnapshot,
   serverTimestamp, increment, arrayUnion, arrayRemove
 } from "../../kern/firebase.js";
-import { escapeHtml, textMitZusatz, spielerKarte, teamEndstandHtml, teamGruppeHtml, renderWarteAvatare, zeigeDebug } from "../../kern/ui.js";
+import { escapeHtml, textMitZusatz, spielerKarte, teamEndstandHtml, teamGruppeHtml, renderWarteAvatare, avatarHtml, zeigeDebug } from "../../kern/ui.js";
 import { erstelleTeams, ergaenzeFehlendeTeams } from "../../kern/teams.js";
 import { speichereWertung } from "../../kern/wertung.js";
 
@@ -872,6 +872,7 @@ function zeigeErgebnisListe(pos) {
   };
 
   const liste = $("sf-erg-liste");
+  liste.classList.toggle("sf-erg-liste-balken", !teammodus);
 
   // v110: Im Teammodus nach Team gruppiert (Kachel mit Gesamtpunktzahl oben,
   // einzelne Spieler mit eigener Schätzung/Punkten darunter) statt einer
@@ -884,13 +885,70 @@ function zeigeErgebnisListe(pos) {
         : spielerKarte(s.name, s.farbe, s.icon, formatiertePunkte(0), { punkteRechts: s.punkte ?? 0 });
     });
   } else {
-    liste.innerHTML = "";
-    sortiert.forEach((antwort) => {
-      const li = document.createElement("li");
-      li.innerHTML = kartenFuerAntwort(antwort);
-      liste.appendChild(li);
-    });
+    renderBalkenErgebnis(liste, richtig, sortiert, rundenpunkte, dummkoepfe, tipps);
   }
+}
+
+// Balken-Auswertung (v155): Statt einer Liste mit Gesamtpunktestand zeigt diese
+// Ansicht pro Person einen Balken von 0 bis zur eigenen Schätzung, plus eine
+// durchgehende, gestrichelte Ziellinie bei der richtigen Antwort. Die Skala
+// (und damit die Position der Ziellinie) passt sich jede Runde neu an - je
+// nachdem, ob alle unter der Antwort liegen, jemand drüber tippt oder es um
+// negative Werte geht (z. B. "wie kalt war es?"). Der Gesamtpunktestand steht
+// hier bewusst NICHT mehr - der ist erst wieder im Endstand zu sehen.
+function renderBalkenErgebnis(container, richtig, sortiert, rundenpunkte, dummkoepfe, tipps) {
+  const werte = [richtig, 0, ...sortiert.map((a) => a.schaetzung)];
+  const minWert = Math.min(...werte);
+  const maxWert = Math.max(...werte);
+  const spanne = Math.max(maxWert - minWert, 1);
+  const minSkala = minWert - spanne * 0.06;
+  const maxSkala = maxWert + spanne * 0.06;
+  const spanneSkala = Math.max(maxSkala - minSkala, 1);
+  const prozent = (wert) => ((wert - minSkala) / spanneSkala) * 100;
+  const nullPos = prozent(0);
+  const zielPos = prozent(richtig);
+
+  const zeilenHtml = sortiert.map((antwort) => {
+    const s = spielerListe.find((x) => x.id === antwort.spielerId);
+    const farbe = s?.farbe || "#7f8c8d";
+    const wertPos = prozent(antwort.schaetzung);
+    const links = Math.min(nullPos, wertPos);
+    const breite = Math.max(Math.abs(wertPos - nullPos), 0.6);
+    const wertPositiv = wertPos >= nullPos;
+
+    let punkteHtml = `<span>${formatiertePunkte(rundenpunkte[antwort.spielerId] ?? 0)}</span>`;
+    let lang = false;
+    if (dummkopfModus) {
+      if (dummkoepfe.includes(antwort.spielerId)) { punkteHtml += `<span class="sf-erg-punkte-dk">🤡</span>`; lang = true; }
+      const tipp = tipps.find((t) => t.spielerId === antwort.spielerId);
+      if (tipp && dummkoepfe.includes(tipp.zielSpielerId)) { punkteHtml += `<span class="sf-erg-punkte-dk">🎯+1</span>`; lang = true; }
+    }
+    const kurz = breite < (lang ? 26 : 14);
+
+    const aussenHtml = kurz
+      ? `<span class="sf-erg-punkte-aussen${wertPositiv ? "" : " links"}" style="left:${wertPositiv ? links + breite : links}%;">${punkteHtml}</span>`
+      : "";
+
+    return (
+      `<div class="sf-erg-spieler">` +
+        `${avatarHtml(s?.icon, "sf-erg-avatar")}` +
+        `<span class="sf-erg-name">${escapeHtml(antwort.spielerName)}</span>` +
+      `</div>` +
+      `<div class="sf-erg-spur">` +
+        `<div class="sf-erg-balken" style="left:${links}%; width:${breite}%; background:${farbe};">` +
+          (kurz ? "" : `<span class="sf-erg-balken-punkte">${punkteHtml}</span>`) +
+        `</div>` +
+        aussenHtml +
+      `</div>`
+    );
+  }).join("");
+
+  container.innerHTML =
+    zeilenHtml +
+    `<div class="sf-erg-ziel-ueberlagerung">` +
+      `<div class="sf-erg-ziel-linie" style="left:${zielPos}%;"></div>` +
+      `<span class="sf-erg-ziel-tag" style="left:${zielPos}%;">${escapeHtml(String(richtig))}</span>` +
+    `</div>`;
 }
 
 function zeigeErgebnis(pos) {

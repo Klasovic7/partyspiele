@@ -703,7 +703,16 @@ async function weiter() {
   try {
     if (naechsterIndex >= anzahlRunden) {
       await updateDoc(api.raumRef(), { ztStatus: "beendet" });
-      speichereWertung(api, "zehn-treffer", Object.fromEntries(spielerListe.map((s) => [s.id, s.punkte ?? 0])));
+      // Zehn Treffer! fuehrt seine Punkte selbst im Raum-Dokument (ztPunkte/ztTeamPunkte) -
+      // anders als die anderen Spiele schreibt es NICHT auf das gemeinsame Spieler-Feld
+      // "punkte". spielerListe[i].punkte war hier deshalb immer 0/undefined und die
+      // Wertung hat diese Punkte nie erfasst. Im Teammodus gibt es zudem keine Punkte
+      // pro Person, sondern nur pro Team - dafuer bekommt jede Person in der Wertung
+      // den Punktestand ihres Teams zugeschrieben.
+      const punkteProSpieler = Object.fromEntries(spielerListe.map((s) =>
+        [s.id, teammodus ? (teamPunkte[teams[s.id]] ?? 0) : (punkte[s.id] ?? 0)]
+      ));
+      speichereWertung(api, "zehn-treffer", punkteProSpieler);
     } else {
       const ids = spielerListe.map((spieler) => spieler.id);
       await updateDoc(api.raumRef(), {

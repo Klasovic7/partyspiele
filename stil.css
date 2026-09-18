@@ -2043,3 +2043,53 @@
     }
     .warten-block.warten-einzeln .warten-avatar-text { width: 88px; height: 88px; font-size: 2.2rem; opacity: 1; }
     .warten-text { margin: 0; font-weight: 700; text-align: center; }
+
+    /* Schätzfragen-Auswertung als Balkendiagramm (v155). Gemeinsames Grid ueber
+       alle Zeilen hinweg (Spieler-Spalte + Balkenspur-Spalte) - die Ziellinie
+       ist ein eigenes Grid-Feld, das sich ueber alle Zeilen der Balkenspur legt
+       (grid-row: 1 / -1), dadurch trifft sie bei jeder Zeile exakt an derselben
+       Stelle, unabhaengig von der tatsaechlichen Spaltenbreite. */
+    .sf-erg-liste-balken {
+      display: grid; grid-template-columns: 92px 1fr; position: relative;
+      column-gap: 10px; row-gap: 14px; align-items: center; margin: 4px 0 6px;
+    }
+    .sf-erg-spieler { display: flex; align-items: center; gap: 7px; overflow: hidden; min-width: 0; }
+    .sf-erg-avatar {
+      width: 30px; height: 30px; border-radius: 50%; object-fit: cover;
+      border: 2px solid var(--club-ink); flex-shrink: 0;
+    }
+    .sf-erg-name {
+      font-family: "Barlow Condensed", sans-serif; font-weight: 800; font-style: italic;
+      font-size: .86rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .sf-erg-spur {
+      position: relative; height: 34px; background: rgba(255, 255, 255, .07);
+      border-radius: 9px; overflow: hidden;
+    }
+    .sf-erg-balken {
+      position: absolute; top: 0; bottom: 0; border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+      transition: left .2s ease, width .2s ease;
+    }
+    .sf-erg-balken-punkte {
+      font-family: "Bungee", sans-serif; font-size: .82rem; color: #18101d;
+      display: flex; align-items: center; gap: 4px; white-space: nowrap;
+    }
+    .sf-erg-punkte-dk { font-size: .78rem; }
+    .sf-erg-punkte-aussen {
+      position: absolute; top: 0; bottom: 0; display: flex; align-items: center;
+      gap: 4px; font-family: "Bungee", sans-serif; font-size: .8rem; color: var(--club-text);
+      white-space: nowrap; transform: translateX(6px);
+    }
+    .sf-erg-punkte-aussen.links { transform: translateX(calc(-100% - 6px)); }
+    .sf-erg-ziel-ueberlagerung { grid-column: 2; grid-row: 1 / -1; position: relative; pointer-events: none; }
+    .sf-erg-ziel-linie {
+      position: absolute; top: -18px; bottom: 0; width: 2px;
+      background: repeating-linear-gradient(to bottom, var(--club-orange) 0 6px, transparent 6px 11px);
+      box-shadow: 0 0 6px rgba(255, 91, 54, .55); transform: translateX(-1px);
+    }
+    .sf-erg-ziel-tag {
+      position: absolute; top: -20px; transform: translateX(-50%);
+      background: var(--club-orange); color: #fff; font-family: "Bungee", sans-serif;
+      font-size: .66rem; padding: 2px 7px; border-radius: 6px; white-space: nowrap;
+    }
