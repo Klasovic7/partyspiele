@@ -15,7 +15,7 @@ import {
   doc, setDoc, updateDoc, deleteDoc, collection, getDocs, onSnapshot,
   serverTimestamp, increment, arrayUnion, arrayRemove
 } from "../../kern/firebase.js";
-import { escapeHtml, textMitZusatz, spielerKarte, teamEndstandHtml, teamGruppeHtml, zeigeDebug } from "../../kern/ui.js";
+import { escapeHtml, textMitZusatz, spielerKarte, teamEndstandHtml, teamGruppeHtml, renderWarteAvatare, zeigeDebug } from "../../kern/ui.js";
 import { erstelleTeams, ergaenzeFehlendeTeams } from "../../kern/teams.js";
 import { speichereWertung } from "../../kern/wertung.js";
 
@@ -124,7 +124,7 @@ const VORLAGE = `
       <button id="sf-absenden">Absenden</button>
     </p>
     <p id="sf-frage-fehler" class="fehler-text"></p>
-    <p id="sf-frage-status"></p>
+    <div id="sf-frage-status" class="warten-block"></div>
     <p><button id="sf-andere-frage" class="btn-flach" hidden>Andere Frage</button></p>
   </div>
 
@@ -820,7 +820,8 @@ function berechneRundenpunkte(pos) {
 async function aktualisiereAntworten() {
   if (!el.wurzel || index < 0) return;
   const dieserRunde = alleAntworten.filter((a) => a.fragenIndex === index);
-  $("sf-frage-status").textContent = `${dieserRunde.length} von ${spielerListe.length} haben geantwortet`;
+  const geantwortetIds = new Set(dieserRunde.map((a) => a.spielerId));
+  renderWarteAvatare($("sf-frage-status"), spielerListe.filter((sp) => !geantwortetIds.has(sp.id)));
   if (status === "ausgewertet") zeigeErgebnisListe(index);
 
   // Sobald alle geantwortet haben, wertet nur der Spielleiter aus, damit die

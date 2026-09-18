@@ -32,18 +32,18 @@ export const AVATARE = [
 // "nachname" trägt hier die Rolle (groß dargestellt), "vorname" den Namen
 // (klein dargestellt) - dieselbe Beschriftungslogik wie bei den Fußballern.
 export const FREUNDE = [
-  { id: "freund-rapper-kevin",       bild: "bilder/freund-rapper-kevin.jpg?v=153",       vorname: "Kevin", nachname: "Rapper" },
-  { id: "freund-zocker-luca",        bild: "bilder/freund-zocker-luca.jpg?v=153",        vorname: "Luca",  nachname: "Zocker" },
-  { id: "freund-bettler-nader",      bild: "bilder/freund-bettler-nader.jpg?v=153",      vorname: "Nader", nachname: "Bettler" },
-  { id: "freund-eintracht-sinan",    bild: "bilder/freund-eintracht-sinan.jpg?v=153",    vorname: "Sinan", nachname: "Eintracht" },
-  { id: "freund-boxer-kevin",        bild: "bilder/freund-boxer-kevin.jpg?v=153",        vorname: "Kevin", nachname: "Boxer" },
-  { id: "freund-gay-luca",           bild: "bilder/freund-gay-luca.jpg?v=153",           vorname: "Luca",  nachname: "Gay" },
-  { id: "freund-diktator-nader",     bild: "bilder/freund-diktator-nader.jpg?v=153",     vorname: "Nader", nachname: "Diktator" },
-  { id: "freund-rambo-sinan",        bild: "bilder/freund-rambo-sinan.jpg?v=153",        vorname: "Sinan", nachname: "Rambo" },
-  { id: "freund-meerjungfrau-kevin", bild: "bilder/freund-meerjungfrau-kevin.jpg?v=153", vorname: "Kevin", nachname: "Meerjungfrau" },
-  { id: "freund-baywatch-luca",      bild: "bilder/freund-baywatch-luca.jpg?v=153",      vorname: "Luca",  nachname: "Baywatch" },
-  { id: "freund-baby-nader",         bild: "bilder/freund-baby-nader.jpg?v=153",         vorname: "Nader", nachname: "Baby" },
-  { id: "freund-leoparden-sinan",    bild: "bilder/freund-leoparden-sinan.jpg?v=153",    vorname: "Sinan", nachname: "Leoparden" }
+  { id: "freund-rapper-kevin",       bild: "bilder/freund-rapper-kevin.jpg?v=154",       vorname: "Kevin", nachname: "Rapper" },
+  { id: "freund-zocker-luca",        bild: "bilder/freund-zocker-luca.jpg?v=154",        vorname: "Luca",  nachname: "Zocker" },
+  { id: "freund-bettler-nader",      bild: "bilder/freund-bettler-nader.jpg?v=154",      vorname: "Nader", nachname: "Bettler" },
+  { id: "freund-eintracht-sinan",    bild: "bilder/freund-eintracht-sinan.jpg?v=154",    vorname: "Sinan", nachname: "Eintracht" },
+  { id: "freund-boxer-kevin",        bild: "bilder/freund-boxer-kevin.jpg?v=154",        vorname: "Kevin", nachname: "Boxer" },
+  { id: "freund-gay-luca",           bild: "bilder/freund-gay-luca.jpg?v=154",           vorname: "Luca",  nachname: "Gay" },
+  { id: "freund-diktator-nader",     bild: "bilder/freund-diktator-nader.jpg?v=154",     vorname: "Nader", nachname: "Diktator" },
+  { id: "freund-rambo-sinan",        bild: "bilder/freund-rambo-sinan.jpg?v=154",        vorname: "Sinan", nachname: "Rambo" },
+  { id: "freund-meerjungfrau-kevin", bild: "bilder/freund-meerjungfrau-kevin.jpg?v=154", vorname: "Kevin", nachname: "Meerjungfrau" },
+  { id: "freund-baywatch-luca",      bild: "bilder/freund-baywatch-luca.jpg?v=154",      vorname: "Luca",  nachname: "Baywatch" },
+  { id: "freund-baby-nader",         bild: "bilder/freund-baby-nader.jpg?v=154",         vorname: "Nader", nachname: "Baby" },
+  { id: "freund-leoparden-sinan",    bild: "bilder/freund-leoparden-sinan.jpg?v=154",    vorname: "Sinan", nachname: "Leoparden" }
 ];
 
 // Kombinierte Liste für Nachschlagen (z. B. in der Lobby, im laufenden Spiel,
@@ -67,6 +67,28 @@ export function escapeHtml(text) {
   const el = document.createElement("div");
   el.textContent = text ?? "";
   return el.innerHTML;
+}
+
+// Gemeinsame Warteanzeige: zeigt die Profilbilder aller, die noch nicht
+// geantwortet/abgestimmt haben. Bei genau einer verbliebenen Person wird sie
+// groß mit "Alle warten auf …" hervorgehoben statt in der Reihe zu stehen.
+// container - das DOM-Element, in das gerendert wird (Klasse "warten-block")
+// wartende  - Array von Spielern ({ icon, name, ... }), die noch fehlen
+export function renderWarteAvatare(container, wartende) {
+  if (!container) return;
+  if (wartende.length === 0) {
+    container.classList.remove("warten-einzeln");
+    container.innerHTML = "";
+  } else if (wartende.length === 1) {
+    const sp = wartende[0];
+    container.classList.add("warten-einzeln");
+    container.innerHTML =
+      `${avatarHtml(sp.icon, "warten-avatar warten-avatar-gross")}` +
+      `<p class="warten-text">Alle warten auf <strong>${escapeHtml(sp.name)}</strong> …</p>`;
+  } else {
+    container.classList.remove("warten-einzeln");
+    container.innerHTML = wartende.map((sp) => avatarHtml(sp.icon, "warten-avatar")).join("");
+  }
 }
 
 // Zusatzinfos in Klammern - z. B. "(Stand: 07.09.2026)" - werden kleiner dargestellt.

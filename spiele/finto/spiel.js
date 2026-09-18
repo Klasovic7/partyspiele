@@ -26,7 +26,7 @@
 import {
   doc, setDoc, deleteDoc, updateDoc, collection, getDocs, onSnapshot, serverTimestamp, writeBatch, increment
 } from "../../kern/firebase.js";
-import { spielerKarte, escapeHtml, avatarHtml, zeigeDebug } from "../../kern/ui.js";
+import { spielerKarte, escapeHtml, avatarHtml, renderWarteAvatare, zeigeDebug } from "../../kern/ui.js";
 import { speichereWertung } from "../../kern/wertung.js";
 
 const RICHTIG_ID = "richtig";
@@ -60,7 +60,7 @@ const VORLAGE = `
       <button id="fi-absenden" class="btn-primaer">Antwort absenden</button>
     </p>
     <p id="fi-frage-fehler" class="fehler-text"></p>
-    <div id="fi-frage-status" class="fi-warten-block"></div>
+    <div id="fi-frage-status" class="warten-block"></div>
   </div>
 
   <div id="fi-abstimmung-screen" class="bildschirm-karte" hidden>
@@ -69,7 +69,7 @@ const VORLAGE = `
     <p class="hinweis-text">Welche Antwort ist die echte? (Deine eigene könnt ihr nicht wählen.)</p>
     <ul id="fi-abst-liste" class="fi-kachel-raster"></ul>
     <p id="fi-abst-fehler" class="fehler-text"></p>
-    <div id="fi-abst-status" class="fi-warten-block"></div>
+    <div id="fi-abst-status" class="warten-block"></div>
   </div>
 
   <div id="fi-ergebnis-screen" class="bildschirm-karte" hidden>
@@ -361,31 +361,10 @@ async function aktualisiereFrageStatus() {
     $("fi-absenden").disabled = true;
   }
   const geantwortetIds = new Set(antworten.map((a) => a.spielerId));
-  zeigeWarteAvatare("fi-frage-status", spielerListe.filter((sp) => !geantwortetIds.has(sp.id)));
+  renderWarteAvatare($("fi-frage-status"), spielerListe.filter((sp) => !geantwortetIds.has(sp.id)));
 
   if (api.istLeiter && !ergebnisAusgeloest && spielerListe.length >= 2 && antworten.length >= spielerListe.length) {
     await zurAbstimmung(false);
-  }
-}
-
-// Zeigt fuer alle noch nicht fertigen Spieler ihr Profilbild an - so sieht man auf
-// einen Blick, auf wen man noch wartet. Ist nur noch eine Person uebrig, wird ihr
-// Bild groesser dargestellt und namentlich benannt.
-function zeigeWarteAvatare(containerId, wartende) {
-  const container = $(containerId);
-  if (!container) return;
-  if (wartende.length === 0) {
-    container.classList.remove("fi-warten-einzeln");
-    container.innerHTML = "";
-  } else if (wartende.length === 1) {
-    const sp = wartende[0];
-    container.classList.add("fi-warten-einzeln");
-    container.innerHTML =
-      `${avatarHtml(sp.icon, "fi-warten-avatar fi-warten-avatar-gross")}` +
-      `<p class="fi-warten-text">Alle warten auf <strong>${escapeHtml(sp.name)}</strong> …</p>`;
-  } else {
-    container.classList.remove("fi-warten-einzeln");
-    container.innerHTML = wartende.map((sp) => avatarHtml(sp.icon, "fi-warten-avatar")).join("");
   }
 }
 
@@ -460,7 +439,7 @@ async function aktualisiereAbstimmungStatus() {
   zeigeAbstimmung();
   const stimmen = stimmenDieserRunde(index);
   const abgestimmtIds = new Set(stimmen.map((st) => st.spielerId));
-  zeigeWarteAvatare("fi-abst-status", spielerListe.filter((sp) => !abgestimmtIds.has(sp.id)));
+  renderWarteAvatare($("fi-abst-status"), spielerListe.filter((sp) => !abgestimmtIds.has(sp.id)));
 
   if (api.istLeiter && !auswertungAusgeloest && spielerListe.length >= 2 && stimmen.length >= spielerListe.length) {
     await auswerten();
