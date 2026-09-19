@@ -790,9 +790,10 @@ async function andereFrage() {
 // ============================================================================
 //  Auswertung
 // ============================================================================
-// Platzierung nach Nähe zur richtigen Antwort (Bester bekommt so viele Punkte wie
-// Spieler mitgemacht haben, jeder Platz danach einen weniger; gleich weit entfernte
-// Spieler teilen sich den Rang) plus 1 Bonuspunkt für exakt richtig.
+// Platzierung nach Nähe zur richtigen Antwort (v165: der letzte Platz bekommt
+// 0 Punkte, jeder Platz davor einen mehr, der beste Tipp also so viele Punkte
+// wie Mitspieler minus 1; gleich weit entfernte Spieler teilen sich den Rang)
+// plus 1 Bonuspunkt für exakt richtig.
 function berechneRundenpunkte(pos) {
   const richtig = frageAn(pos).antwort;
   const antworten = alleAntworten.filter((a) => a.fragenIndex === pos);
@@ -807,7 +808,7 @@ function berechneRundenpunkte(pos) {
     const abstand = Math.abs(antwort.schaetzung - richtig);
     const rangpunkte = (vorherigerAbstand !== null && abstand === vorherigerAbstand)
       ? vorherigeRangpunkte
-      : sortiert.length - i;
+      : sortiert.length - 1 - i;
     ergebnis[antwort.spielerId] = rangpunkte + (abstand === 0 ? 1 : 0);
     vorherigerAbstand = abstand;
     vorherigeRangpunkte = rangpunkte;
@@ -870,7 +871,7 @@ function zeigeErgebnisListe(pos) {
     const s = spielerListe.find((x) => x.id === antwort.spielerId);
     let extra = `Schätzung ${antwort.schaetzung}`;
     if (dummkopfModus) {
-      if (dummkoepfe.includes(antwort.spielerId)) extra += " · 🤡 Dummkopf";
+      if (dummkoepfe.includes(antwort.spielerId)) extra += " · Dummkopf";
       const tipp = tipps.find((t) => t.spielerId === antwort.spielerId);
       if (tipp && dummkoepfe.includes(tipp.zielSpielerId)) extra += " · Tipp richtig +1";
     }
@@ -956,7 +957,6 @@ function renderBalkenErgebnis(container, richtig, sortiert, rundenpunkte, dummko
     // hängen als kleine Zusatz-Icons daran.
     let tippHtml = `<span class="sf-erg-tipp-wert">${escapeHtml(String(antwort.schaetzung))}</span>`;
     if (dummkopfModus) {
-      if (dummkoepfe.includes(antwort.spielerId)) tippHtml += `<span class="sf-erg-punkte-dk">🤡</span>`;
       const tipp = tipps.find((t) => t.spielerId === antwort.spielerId);
       if (tipp && dummkoepfe.includes(tipp.zielSpielerId)) tippHtml += `<span class="sf-erg-punkte-dk">🎯+1</span>`;
     }
