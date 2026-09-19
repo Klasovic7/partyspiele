@@ -922,9 +922,10 @@ function renderBalkenErgebnis(container, richtig, sortiert, rundenpunkte, dummko
   const zeilenHtml = sortiert.map((antwort) => {
     const s = spielerListe.find((x) => x.id === antwort.spielerId);
     const farbe = s?.farbe || "#7f8c8d";
-    // Mindestbreite von 24%, damit der Balken immer bis unter das Profilbild
-    // reicht (das Profilbild liegt links auf dem Balken, nicht mehr daneben).
-    const breite = Math.max(prozent(antwort.schaetzung), 24);
+    // Mindestbreite, damit auch sehr kleine/niedrige Werte noch als
+    // sichtbarer Balken erkennbar sind (der Balken beginnt seit v161 erst
+    // nach einer kleinen Luecke rechts vom Profilbild, siehe .sf-erg-spur).
+    const breite = Math.max(prozent(antwort.schaetzung), 12);
 
     let punkteHtml = `<span class="sf-erg-balken-wert">${escapeHtml(String(antwort.schaetzung))}</span>` +
       `<span class="sf-erg-balken-punkte">${formatiertePunkte(rundenpunkte[antwort.spielerId] ?? 0)}</span>`;

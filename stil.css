@@ -2055,7 +2055,10 @@
     }
     .sf-erg-zeile { position: relative; height: 60px; }
     .sf-erg-spur {
-      position: absolute; inset: 0; background: rgba(255, 255, 255, .07);
+      /* Startet erst kurz nach dem Profilbild (v161), damit die gestrichelte
+         Ziellinie nie durch das Profilbild laeuft und der Wertungsbalken
+         sichtbar hinter einer kleinen Luecke beginnt. */
+      position: absolute; inset: 0 0 0 70px; background: rgba(255, 255, 255, .07);
       border-radius: 16px; overflow: hidden;
     }
     .sf-erg-balken {
@@ -2094,7 +2097,10 @@
       display: flex; align-items: center; gap: 4px; white-space: nowrap; opacity: .85;
     }
     .sf-erg-punkte-dk { font-size: .72rem; }
-    .sf-erg-ziel-ueberlagerung { position: absolute; top: 0; bottom: 0; left: 0; right: 0; pointer-events: none; }
+    /* Gleicher linker Versatz wie .sf-erg-spur (v161), damit die Ziellinie
+       exakt auf derselben Skala liegt wie die Balken und nicht durch die
+       Profilbilder laeuft. */
+    .sf-erg-ziel-ueberlagerung { position: absolute; top: 0; bottom: 0; left: 70px; right: 0; pointer-events: none; }
     .sf-erg-ziel-linie {
       position: absolute; top: -18px; bottom: 0; width: 2px;
       background: repeating-linear-gradient(to bottom, var(--club-orange) 0 6px, transparent 6px 11px);
