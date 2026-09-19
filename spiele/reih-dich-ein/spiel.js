@@ -7,6 +7,7 @@
 import { updateDoc, runTransaction } from "../../kern/firebase.js";
 import { escapeHtml, spielerKarte, zeigeDebug } from "../../kern/ui.js";
 import { speichereWertung } from "../../kern/wertung.js";
+import { pooleOhneWiederholung, aktualisierterVerlauf } from "../../kern/verlauf.js";
 import {
   mischeListe, begriffNachId, richtigerEinfuegeIndex, fuegeEin, aktiveSpielerId,
   punkteNachAntwort
@@ -105,6 +106,7 @@ let letzteRichtig = null;
 let letzterBegriffId = null;
 let letzterSpielerId = null;
 let verworfeneKategorien = [];
+let gespielt = []; // Indizes der zuletzt gespielten Kategorien/Karten (fuer Wiederholungsschutz)
 let aktionLaeuft = false;
 let anzahlManuellGesetzt = false;
 let spielerwechselLaeuft = false;
@@ -251,6 +253,7 @@ export function raumDaten(daten) {
   letzterBegriffId = daten.rdLetzterBegriffId ?? null;
   letzterSpielerId = daten.rdLetzterSpielerId ?? null;
   verworfeneKategorien = daten.rdVerworfeneKategorien ?? [];
+  gespielt = daten.rdGespielt ?? [];
   renderAktuellenStatus();
 }
 
@@ -303,7 +306,11 @@ async function spielStarten() {
   if (!Number.isFinite(anzahl) || anzahl < 1) anzahl = 1;
   if (anzahl > karten.length) anzahl = karten.length;
 
-  const kategorien = mischeListe(karten.map((_, index) => index)).slice(0, anzahl);
+  // Wiederholungsschutz: bevorzugt Karten ziehen, die in diesem Raum noch
+  // nicht drankamen (siehe kern/verlauf.js).
+  const { kandidaten, wurdeZurueckgesetzt } = pooleOhneWiederholung(karten.map((_, index) => index), gespielt, anzahl);
+  const kategorien = mischeListe(kandidaten).slice(0, anzahl);
+  const neuerGespielt = aktualisierterVerlauf(gespielt, kategorien, wurdeZurueckgesetzt);
   const reihenfolge = mischeListe(spielerListe.map((spieler) => spieler.id));
   const ersteKategorie = neueKategorieDaten(karten[kategorien[0]]);
   $("rd-starten").disabled = true;
@@ -318,7 +325,8 @@ async function spielStarten() {
       rdZugIndex: 0,
       rdAktiveId: aktiveSpielerId(reihenfolge, 0, spielerListe.map((spieler) => spieler.id)),
       rdPunkte: Object.fromEntries(spielerListe.map((spieler) => [spieler.id, 0])),
-      rdVerworfeneKategorien: []
+      rdVerworfeneKategorien: [],
+      rdGespielt: neuerGespielt
     });
   } catch (e) {
     zeigeDebug("Spiel konnte nicht gestartet werden: " + e.message);

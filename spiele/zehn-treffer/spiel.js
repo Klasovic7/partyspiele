@@ -8,6 +8,7 @@
 import { updateDoc, runTransaction, serverTimestamp } from "../../kern/firebase.js";
 import { escapeHtml, avatarHtml, spielerKarte, zeigeDebug } from "../../kern/ui.js";
 import { speichereWertung } from "../../kern/wertung.js";
+import { pooleOhneWiederholung, aktualisierterVerlauf } from "../../kern/verlauf.js";
 import {
   mischeListe, erstelleTeams, ergaenzeFehlendeTeams, bereinigeTreffer, aktiveSpielerId, aktivesTeam
 } from "./logik.js";
@@ -122,6 +123,7 @@ let status = null;
 let teammodus = false;
 let teams = {};
 let reihenfolge = [];
+let gespielt = []; // Indizes der zuletzt gespielten Karten (fuer Wiederholungsschutz)
 let spielerReihenfolge = [];
 let startTeam = "blau";
 let rundenIndex = 0;
@@ -353,6 +355,7 @@ export function raumDaten(daten) {
   teammodus = !!daten.ztTeammodus;
   teams = normalisiereTeams(daten.ztTeams);
   reihenfolge = daten.ztReihenfolge ?? [];
+  gespielt = daten.ztGespielt ?? [];
   spielerReihenfolge = daten.ztSpielerReihenfolge ?? [];
   startTeam = normalisiereTeam(daten.ztStartTeam) ?? "blau";
   rundenIndex = daten.ztRundenIndex ?? 0;
@@ -485,6 +488,12 @@ async function spielStarten() {
   if (!Number.isFinite(anzahl) || anzahl < 1) anzahl = 1;
   if (anzahl > karten.length) anzahl = karten.length;
 
+  // Wiederholungsschutz: bevorzugt Karten ziehen, die in diesem Raum noch
+  // nicht drankamen (siehe kern/verlauf.js).
+  const { kandidaten, wurdeZurueckgesetzt } = pooleOhneWiederholung(karten.map((_, index) => index), gespielt, anzahl);
+  const neueReihenfolge = mischeListe(kandidaten).slice(0, anzahl);
+  const neuerGespielt = aktualisierterVerlauf(gespielt, neueReihenfolge, wurdeZurueckgesetzt);
+
   const neueTeams = teammodus
     ? ergaenzeFehlendeTeams(teams, spielerListe.map((spieler) => spieler.id))
     : teams;
@@ -501,7 +510,8 @@ async function spielStarten() {
       ztStatus: "runde",
       ztTeammodus: teammodus,
       ztTeams: neueTeams,
-      ztReihenfolge: mischeListe(karten.map((_, index) => index)).slice(0, anzahl),
+      ztReihenfolge: neueReihenfolge,
+      ztGespielt: neuerGespielt,
       ztSpielerReihenfolge: neueSpielerReihenfolge,
       ztStartTeam: neuerStart,
       ztRundenIndex: 0,

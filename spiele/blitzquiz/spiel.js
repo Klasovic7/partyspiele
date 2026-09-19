@@ -45,6 +45,7 @@ import {
 import { escapeHtml, textMitZusatz, spielerKarte, teamEndstandHtml, teamGruppeHtml, zeigeDebug } from "../../kern/ui.js";
 import { erstelleTeams, ergaenzeFehlendeTeams } from "../../kern/teams.js";
 import { speichereWertung } from "../../kern/wertung.js";
+import { pooleOhneWiederholung, aktualisierterVerlauf } from "../../kern/verlauf.js";
 
 const AUFDECK_DAUER_MS = 10000;
 const STANDARD_ANZAHL = 10;
@@ -165,6 +166,7 @@ let antwortenUnsub = null;
 
 let index = -1;
 let reihenfolge = [];
+let gespielt = []; // Indizes der zuletzt gespielten Fragen (fuer Wiederholungsschutz)
 // Nur für Fragen vom Typ "wort" befüllt: parallel zu "reihenfolge" eine
 // Permutation der (nur Buchstaben-)Indizes der Lösung, in Aufdeck-Reihenfolge.
 let buchstabenReihenfolgen = [];
@@ -315,6 +317,7 @@ export function raumDaten(daten) {
   raum = daten;
   status = daten.bzStatus ?? null;
   reihenfolge = daten.bzReihenfolge ?? [];
+  gespielt = daten.bzGespielt ?? [];
   // Firestore erlaubt keine verschachtelten Arrays - pro Frage wird die
   // Buchstaben-Reihenfolge deshalb als kommagetrennte Zeichenkette abgelegt
   // und hier wieder in ein Zahlen-Array zurückverwandelt.
@@ -471,7 +474,11 @@ async function spielStarten() {
   try {
     await raeumeSpieldatenAuf();
     const anzahl = Math.min(gewuenschteAnzahl || fragen.length, fragen.length);
-    const neueReihenfolge = mischeIndizes(fragen.map((_, i) => i)).slice(0, anzahl);
+    // Wiederholungsschutz: bevorzugt Fragen ziehen, die in diesem Raum noch
+    // nicht drankamen (siehe kern/verlauf.js).
+    const { kandidaten, wurdeZurueckgesetzt } = pooleOhneWiederholung(fragen.map((_, i) => i), gespielt, anzahl);
+    const neueReihenfolge = mischeIndizes(kandidaten).slice(0, anzahl);
+    const neuerGespielt = aktualisierterVerlauf(gespielt, neueReihenfolge, wurdeZurueckgesetzt);
     // Als kommagetrennte Zeichenkette statt verschachteltem Array speichern -
     // Firestore-Dokumente dürfen kein Array-im-Array enthalten (siehe raumDaten()).
     const neueBuchstabenReihenfolgen = neueReihenfolge.map((frageIndex) => {
@@ -484,6 +491,7 @@ async function spielStarten() {
     await updateDoc(api.raumRef(), {
       bzStatus: "frage_aktiv", bzFragenIndex: 0, bzAnzahlFragen: anzahl,
       bzReihenfolge: neueReihenfolge, bzBuchstabenReihenfolgen: neueBuchstabenReihenfolgen,
+      bzGespielt: neuerGespielt,
       bzFrageSeit: Date.now(), bzAufdeckAnzahl: 0,
       bzTeammodus: teammodus, bzTeams: neueTeams
     });

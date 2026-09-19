@@ -30,6 +30,7 @@
 // ============================================================================
 import { updateDoc } from "../../kern/firebase.js";
 import { escapeHtml, avatarHtml, zeigeDebug } from "../../kern/ui.js";
+import { pooleOhneWiederholung, aktualisierterVerlauf } from "../../kern/verlauf.js";
 
 const STANDARD_ANZAHL = 5;
 const STANDARD_ANZAHL_IMPOSTER = 1;
@@ -125,6 +126,7 @@ let wortIndex = -1;
 let imposterIds = [];
 let anzahlImposter = 1;
 let starterId = null;
+let gespielt = []; // Indizes der zuletzt gespielten Woerter (fuer Wiederholungsschutz)
 
 const $ = (id) => el.wurzel.querySelector("#" + id);
 
@@ -203,6 +205,7 @@ export function raumDaten(daten) {
   imposterIds = daten.impImposterIds ?? [];
   anzahlImposter = daten.impAnzahlImposter ?? 1;
   starterId = daten.impStarterId ?? null;
+  gespielt = daten.impGespielt ?? [];
 
   api.fortschritt(status === "runde" || status === "aufgeloest" ? `${rundenIndex + 1}/${anzahlRunden}` : "");
 
@@ -245,16 +248,6 @@ function zeigeSetup() {
   $("imp-setup-warten").hidden = api.istLeiter;
 }
 
-// Zufälliger Index 0..anzahl-1, der (wenn möglich) vom zuletzt gezogenen
-// abweicht - so kommt nicht zweimal hintereinander dasselbe Wort/dieselbe
-// Person dran.
-function zufallsIndexOhneWiederholung(anzahl, ausschluss) {
-  if (anzahl <= 1) return 0;
-  let wahl;
-  do { wahl = Math.floor(Math.random() * anzahl); } while (wahl === ausschluss);
-  return wahl;
-}
-
 async function spielStarten() {
   $("imp-setup-fehler").textContent = "";
   if (spielerListe.length < 3) {
@@ -283,14 +276,29 @@ async function spielStarten() {
   $("imp-starten").disabled = false;
 }
 
+function mischeSpieler(liste) {
+  const gemischt = [...liste];
+  for (let i = gemischt.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [gemischt[i], gemischt[j]] = [gemischt[j], gemischt[i]];
+  }
+  return gemischt;
+}
+
 async function naechsteRundeSchreiben(neueRundenIndex, neueAnzahlRunden, letzterWortIndex, letzteImposterIds, neueAnzahlImposter) {
-  const neuerWortIndex = zufallsIndexOhneWiederholung(woerter.length, letzterWortIndex);
+  // Wiederholungsschutz: bevorzugt Wörter ziehen, die in diesem Raum noch
+  // nicht drankamen (siehe kern/verlauf.js) - vorher wurde nur die direkte
+  // Wiederholung des allerletzten Worts verhindert, wodurch dieselben Wörter
+  // sonst schon nach wenigen Runden wieder auftauchen konnten.
+  const { kandidaten, wurdeZurueckgesetzt } = pooleOhneWiederholung(woerter.map((_, i) => i), gespielt, 1);
+  const neuerWortIndex = kandidaten[Math.floor(Math.random() * kandidaten.length)];
+  const neuerGespielt = aktualisierterVerlauf(gespielt, [neuerWortIndex], wurdeZurueckgesetzt);
   // Nie mehr Imposter als Spieler minus zwei - sonst blieben zu wenige (oder
   // gar keine) Mitwisser uebrig, die den Begriff ueberhaupt kennen.
   const anzahlImp = Math.max(1, Math.min(neueAnzahlImposter, spielerListe.length - 2));
-  const kandidaten = spielerListe.filter((s) => !letzteImposterIds.includes(s.id));
-  const auswahlliste = kandidaten.length >= anzahlImp ? kandidaten : spielerListe;
-  const gemischt = [...auswahlliste].sort(() => Math.random() - 0.5);
+  const kandidatenSpieler = spielerListe.filter((s) => !letzteImposterIds.includes(s.id));
+  const auswahlliste = kandidatenSpieler.length >= anzahlImp ? kandidatenSpieler : spielerListe;
+  const gemischt = mischeSpieler(auswahlliste);
   const gewaehlte = gemischt.slice(0, anzahlImp);
   // Wer beginnt, wird komplett unabhaengig von den Impostern gewuerfelt - das
   // kann also durchaus eine der Imposter-Personen sein.
@@ -300,6 +308,7 @@ async function naechsteRundeSchreiben(neueRundenIndex, neueAnzahlRunden, letzter
     impRundenIndex: neueRundenIndex,
     impAnzahlRunden: neueAnzahlRunden,
     impWortIndex: neuerWortIndex,
+    impGespielt: neuerGespielt,
     impImposterIds: gewaehlte.map((s) => s.id),
     impAnzahlImposter: anzahlImp,
     impStarterId: startet.id

@@ -11,6 +11,7 @@ import {
 } from "../../kern/firebase.js";
 import { spielerKarte, zeigeDebug } from "../../kern/ui.js";
 import { speichereWertung } from "../../kern/wertung.js";
+import { pooleOhneWiederholung, aktualisierterVerlauf } from "../../kern/verlauf.js";
 
 const VORLAGE = `
   <div id="dg-setup" class="bildschirm-karte" hidden>
@@ -71,6 +72,7 @@ let status = null;
 let index = -1;
 let frageVersion = 0;
 let reihenfolge = [];
+let gespielt = []; // Indizes der zuletzt gespielten Fragen (fuer Wiederholungsschutz)
 let anzahlFragen = 0;
 let ausgewertetAusgeloest = false;
 
@@ -199,6 +201,7 @@ export function raumDaten(daten) {
   if (!daten || !el.wurzel) return;
   status = daten.dgStatus ?? null;
   reihenfolge = daten.dgReihenfolge ?? [];
+  gespielt = daten.dgGespielt ?? [];
   anzahlFragen = daten.dgAnzahlFragen ?? 0;
 
   const neuerIndex = daten.dgFragenIndex ?? 0;
@@ -265,7 +268,17 @@ async function spielStarten() {
   if (!Number.isFinite(anzahl) || anzahl < 1) anzahl = 1;
   if (anzahl > fragen.length) anzahl = fragen.length;
 
-  const gemischt = mischeFragenOhneAehnlicheNachbarn(fragen);
+  // Wiederholungsschutz: bevorzugt Fragen ziehen, die in diesem Raum noch
+  // nicht drankamen (siehe kern/verlauf.js). mischeFragenOhneAehnlicheNachbarn
+  // arbeitet mit den Indizes der ihr übergebenen Liste - deshalb erst auf die
+  // erlaubten Kandidaten einschränken und die zurückgegebenen Positionen
+  // danach wieder auf die echten Indizes in "fragen" zurückrechnen.
+  const alleIndizes = fragen.map((_, i) => i);
+  const { kandidaten, wurdeZurueckgesetzt } = pooleOhneWiederholung(alleIndizes, gespielt, anzahl);
+  const kandidatenFragen = kandidaten.map((i) => fragen[i]);
+  const gemischtePositionen = mischeFragenOhneAehnlicheNachbarn(kandidatenFragen);
+  const gemischt = gemischtePositionen.map((position) => kandidaten[position]).slice(0, anzahl);
+  const neuerGespielt = aktualisierterVerlauf(gespielt, gemischt, wurdeZurueckgesetzt);
 
   $("dg-starten").disabled = true;
   try {
@@ -274,7 +287,8 @@ async function spielStarten() {
       dgStatus: "frage_aktiv",
       dgFragenIndex: 0,
       dgFrageVersion: 0,
-      dgReihenfolge: gemischt.slice(0, anzahl),
+      dgReihenfolge: gemischt,
+      dgGespielt: neuerGespielt,
       dgAnzahlFragen: anzahl
     });
   } catch (e) {

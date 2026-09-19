@@ -27,6 +27,7 @@ import { updateDoc, increment, runTransaction, arrayUnion } from "../../kern/fir
 import { spielerKarte, teamEndstandHtml, teamGruppeHtml, zeigeDebug } from "../../kern/ui.js";
 import { erstelleTeams, ergaenzeFehlendeTeams } from "../../kern/teams.js";
 import { speichereWertung } from "../../kern/wertung.js";
+import { pooleOhneWiederholung, aktualisierterVerlauf } from "../../kern/verlauf.js";
 
 const HINWEIS_DAUER_MS = 10000;
 const STANDARD_ANZAHL = 8;
@@ -133,6 +134,7 @@ let spielerListe = [];
 
 let index = -1;
 let reihenfolge = [];
+let gespielt = []; // Indizes der zuletzt gespielten Fragen (fuer Wiederholungsschutz)
 // v117: pro Frage eine eigene, zufällige Hinweis-Reihenfolge (statt immer
 // fest vom schwersten zum leichtesten) - ein Array parallel zu "reihenfolge",
 // jeder Eintrag ist eine Permutation der Hinweis-Indizes dieser Frage.
@@ -314,6 +316,7 @@ export function raumDaten(daten) {
   raum = daten;
   status = daten.wiStatus ?? null;
   reihenfolge = daten.wiReihenfolge ?? [];
+  gespielt = daten.wiGespielt ?? [];
   // v124: Firestore erlaubt keine verschachtelten Arrays - pro Frage wird die
   // Hinweis-Reihenfolge deshalb als kommagetrennte Zeichenkette abgelegt und
   // hier wieder in ein Zahlen-Array zurückverwandelt.
@@ -481,7 +484,11 @@ async function spielStarten() {
   try {
     await raeumeSpieldatenAuf();
     const anzahl = Math.min(gewuenschteAnzahl || fragen.length, fragen.length);
-    const neueReihenfolge = mischeIndizes(fragen.map((_, i) => i)).slice(0, anzahl);
+    // Wiederholungsschutz: bevorzugt Fragen ziehen, die in diesem Raum noch
+    // nicht drankamen (siehe kern/verlauf.js).
+    const { kandidaten, wurdeZurueckgesetzt } = pooleOhneWiederholung(fragen.map((_, i) => i), gespielt, anzahl);
+    const neueReihenfolge = mischeIndizes(kandidaten).slice(0, anzahl);
+    const neuerGespielt = aktualisierterVerlauf(gespielt, neueReihenfolge, wurdeZurueckgesetzt);
     // v117: für jede Frage eine eigene, zufällige Hinweis-Reihenfolge - nicht
     // mehr immer die feste Autoren-Reihenfolge (schwer -> leicht).
     // Als kommagetrennte Zeichenkette statt verschachteltem Array speichern -
@@ -495,6 +502,7 @@ async function spielStarten() {
     await updateDoc(api.raumRef(), {
       wiStatus: "frage_aktiv", wiFragenIndex: 0, wiAnzahlFragen: anzahl,
       wiReihenfolge: neueReihenfolge, wiHinweisReihenfolgen: neueHinweisReihenfolgen,
+      wiGespielt: neuerGespielt,
       wiHinweisIndex: 1, wiHinweisSeit: Date.now(),
       wiGebuzzertVon: null, wiAntwortText: "", wiAntwortKorrekt: null, wiPunkteDieserRunde: 0,
       wiFalscheVersuche: [], wiTeammodus: teammodus, wiTeams: neueTeams, wiRundenDelta: {}

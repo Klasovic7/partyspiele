@@ -18,6 +18,7 @@ import {
 import { escapeHtml, textMitZusatz, spielerKarte, teamEndstandHtml, teamGruppeHtml, renderWarteAvatare, avatarHtml, zeigeDebug } from "../../kern/ui.js";
 import { erstelleTeams, ergaenzeFehlendeTeams } from "../../kern/teams.js";
 import { speichereWertung } from "../../kern/wertung.js";
+import { pooleOhneWiederholung, aktualisierterVerlauf } from "../../kern/verlauf.js";
 
 export const KATEGORIEN = [
   { id: "fussball",             name: "Fußball",                emoji: "⚽️" },
@@ -158,6 +159,7 @@ let dummkoepfeUnsub = null;
 let index = -1;                    // aktuelle Frageposition
 let frageVersion = 0;
 let reihenfolge = [];
+let gespielt = []; // Indizes der zuletzt gespielten Fragen (fuer Wiederholungsschutz)
 let anzahlFragen = 0;
 let kategorien = [];
 let dummkopfModus = false;
@@ -285,6 +287,7 @@ export function raumDaten(daten) {
   status = daten.sfStatus ?? null;
   anzahlFragen = daten.sfAnzahlFragen ?? 0;
   reihenfolge = daten.sfReihenfolge ?? [];
+  gespielt = daten.sfGespielt ?? [];
   dummkopfModus = !!daten.sfDummkopf;
   kategorien = daten.sfKategorien ?? [];
   teammodus = !!daten.sfTeammodus;
@@ -565,7 +568,13 @@ async function spielStarten() {
     if (!Number.isFinite(anzahl) || anzahl < 1) anzahl = 1;
     const maximalSpielbar = maximaleFragenOhneKategorieNachbarn(fragen, kategorien);
     if (anzahl > maximalSpielbar) anzahl = maximalSpielbar;
-    const gemischt = baueReihenfolgeOhneKategorieNachbarn(fragen, passende, anzahl);
+
+    // Wiederholungsschutz: bevorzugt Fragen ziehen, die in diesem Raum noch
+    // nicht drankamen - erst wenn der Vorrat dafür nicht mehr reicht, beginnt
+    // der Zyklus von vorne (siehe kern/verlauf.js).
+    const { kandidaten, wurdeZurueckgesetzt } = pooleOhneWiederholung(passende, gespielt, anzahl);
+    const gemischt = baueReihenfolgeOhneKategorieNachbarn(fragen, kandidaten, anzahl);
+    const neuerGespielt = aktualisierterVerlauf(gespielt, gemischt, wurdeZurueckgesetzt);
 
     // Reste einer vorherigen Runde entfernen und Punkte auf 0 setzen.
     await raeumeSpieldatenAuf();
@@ -579,6 +588,7 @@ async function spielStarten() {
       sfFragenIndex: 0,
       sfAnzahlFragen: anzahl,
       sfReihenfolge: gemischt,
+      sfGespielt: neuerGespielt,
       sfFrageVersion: 0,
       sfTeams: neueTeams
     });

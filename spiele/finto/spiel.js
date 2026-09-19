@@ -28,6 +28,7 @@ import {
 } from "../../kern/firebase.js";
 import { spielerKarte, escapeHtml, avatarHtml, renderWarteAvatare, zeigeDebug } from "../../kern/ui.js";
 import { speichereWertung } from "../../kern/wertung.js";
+import { pooleOhneWiederholung, aktualisierterVerlauf } from "../../kern/verlauf.js";
 
 const RICHTIG_ID = "richtig";
 
@@ -101,6 +102,7 @@ let stimmenUnsub = null;
 let status = null;
 let index = -1;
 let reihenfolge = [];
+let gespielt = []; // Indizes der zuletzt gespielten Fragen (fuer Wiederholungsschutz)
 let anzahlFragen = 0;
 let optionen = [];
 let ergebnisAusgeloest = false;
@@ -199,6 +201,7 @@ export function raumDaten(daten) {
   if (!daten || !el.wurzel) return;
   status = daten.fiStatus ?? null;
   reihenfolge = daten.fiReihenfolge ?? [];
+  gespielt = daten.fiGespielt ?? [];
   anzahlFragen = daten.fiAnzahlFragen ?? 0;
   optionen = daten.fiOptionen ?? [];
 
@@ -278,7 +281,11 @@ async function spielStarten() {
   if (!Number.isFinite(anzahl) || anzahl < 1) anzahl = 1;
   if (anzahl > fragen.length) anzahl = fragen.length;
 
-  const gemischt = mischeReihenfolge(fragen);
+  // Wiederholungsschutz: bevorzugt Fragen ziehen, die in diesem Raum noch
+  // nicht drankamen (siehe kern/verlauf.js).
+  const { kandidaten, wurdeZurueckgesetzt } = pooleOhneWiederholung(fragen.map((_, i) => i), gespielt, anzahl);
+  const gemischt = mischeReihenfolge(kandidaten.map((i) => fragen[i])).map((position) => kandidaten[position]).slice(0, anzahl);
+  const neuerGespielt = aktualisierterVerlauf(gespielt, gemischt, wurdeZurueckgesetzt);
 
   $("fi-starten").disabled = true;
   try {
@@ -286,7 +293,8 @@ async function spielStarten() {
     await updateDoc(api.raumRef(), {
       fiStatus: "antwort_aktiv",
       fiFragenIndex: 0,
-      fiReihenfolge: gemischt.slice(0, anzahl),
+      fiReihenfolge: gemischt,
+      fiGespielt: neuerGespielt,
       fiAnzahlFragen: anzahl,
       fiOptionen: []
     });
