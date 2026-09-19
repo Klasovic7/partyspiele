@@ -2044,30 +2044,35 @@
     .warten-block.warten-einzeln .warten-avatar-text { width: 88px; height: 88px; font-size: 2.2rem; opacity: 1; }
     .warten-text { margin: 0; font-weight: 700; text-align: center; }
 
-    /* Schätzfragen-Auswertung als Balkendiagramm (v155, in v159 groesser gemacht,
-       in v160 komplett auf ein einfaches Zeilen-Layout umgestellt: der Balken
-       faengt jetzt bei 0 an, das Profilbild liegt DARIN/DARAUF statt in einer
-       eigenen Spalte - dadurch braucht es kein Grid mit fester Spaltenbreite
-       mehr, und die Ziellinie kann einfach ueber die volle Zeilenbreite gelegt
-       werden. */
+    /* Schätzfragen-Auswertung als Balkendiagramm (v155, v159 groesser, v160 auf
+       Zeilen-Layout umgestellt, v161 Balken mit Luecke zum Profilbild - in v162
+       komplett auf ein CSS-Grid umgebaut: Spalte 1 = Punkte (wie in den anderen
+       Spielen links vor dem Profilbild), Spalte 2 = Profilbild+Name, Spalte 3 =
+       Balken. Weil alle Zeilen dasselbe Grid nutzen, hat Spalte 3 in jeder Zeile
+       exakt dieselbe Breite/Startposition - die uebergreifende Ziellinie (ein
+       einzelnes Element, das ueber alle Zeilen der Spalte 3 gespannt wird) liegt
+       dadurch garantiert auf derselben Skala wie jeder einzelne Balken, egal wie
+       lang Name oder Punktetext in einer Zeile sind. */
     .sf-erg-liste-balken {
-      display: flex; flex-direction: column; gap: 14px; position: relative; margin: 4px 0 6px;
+      display: grid; grid-template-columns: auto auto 1fr; align-items: stretch;
+      column-gap: 10px; row-gap: 14px; position: relative; margin: 4px 0 6px;
     }
-    .sf-erg-zeile { position: relative; height: 60px; }
-    .sf-erg-spur {
-      /* Startet erst kurz nach dem Profilbild (v161), damit die gestrichelte
-         Ziellinie nie durch das Profilbild laeuft und der Wertungsbalken
-         sichtbar hinter einer kleinen Luecke beginnt. */
-      position: absolute; inset: 0 0 0 70px; background: rgba(255, 255, 255, .07);
-      border-radius: 16px; overflow: hidden;
+    .sf-erg-werte {
+      grid-column: 1; display: flex; align-items: center; gap: 6px;
+      background: rgba(0, 0, 0, .32); padding: 5px 10px; border-radius: 10px;
+      white-space: nowrap;
     }
-    .sf-erg-balken {
-      position: absolute; top: 0; bottom: 0; left: 0; border-radius: 16px;
-      transition: width .2s ease;
+    .sf-erg-balken-wert {
+      font-family: "Bungee", sans-serif; font-size: 1rem; color: #fff; white-space: nowrap;
     }
+    .sf-erg-balken-punkte {
+      font-family: "Bungee", sans-serif; font-size: .74rem; color: #fff;
+      display: flex; align-items: center; gap: 4px; white-space: nowrap; opacity: .85;
+    }
+    .sf-erg-punkte-dk { font-size: .72rem; }
     .sf-erg-info {
-      position: absolute; left: 6px; top: 0; bottom: 0; z-index: 2; max-width: 62%;
-      display: flex; align-items: center; gap: 8px; overflow: hidden; pointer-events: none;
+      grid-column: 2; display: flex; align-items: center; gap: 8px;
+      min-width: 0; max-width: 132px; overflow: hidden;
     }
     .sf-erg-avatar {
       width: 48px; height: 48px; border-radius: 50%; object-fit: cover;
@@ -2078,29 +2083,19 @@
       font-family: "Barlow Condensed", sans-serif; font-weight: 800; font-style: italic;
       font-size: .93rem; color: #fff; text-shadow: 0 1px 3px rgba(0, 0, 0, .55);
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-      background: rgba(0, 0, 0, .28); padding: 4px 9px; border-radius: 8px;
     }
-    /* Wert/Punkte immer an derselben Stelle rechts, unabhaengig von der
-       Balkenlaenge - dadurch nie eine Kollision mit Avatar/Name, und die
-       dunkle Kapsel sorgt fuer Lesbarkeit egal ob dahinter Balkenfarbe oder
-       die leere Spur liegt. */
-    .sf-erg-werte {
-      position: absolute; right: 8px; top: 50%; transform: translateY(-50%); z-index: 2;
-      display: flex; align-items: center; gap: 6px; background: rgba(0, 0, 0, .32);
-      padding: 5px 10px; border-radius: 10px; pointer-events: none;
+    .sf-erg-spur {
+      grid-column: 3; position: relative; min-height: 60px;
+      background: rgba(255, 255, 255, .07); border-radius: 16px; overflow: hidden;
     }
-    .sf-erg-balken-wert {
-      font-family: "Bungee", sans-serif; font-size: 1rem; color: #fff; white-space: nowrap;
+    .sf-erg-balken {
+      position: absolute; top: 0; bottom: 0; left: 0; border-radius: 16px;
+      transition: width .2s ease;
     }
-    .sf-erg-balken-punkte {
-      font-family: "Bungee", sans-serif; font-size: .74rem; color: #fff;
-      display: flex; align-items: center; gap: 4px; white-space: nowrap; opacity: .85;
-    }
-    .sf-erg-punkte-dk { font-size: .72rem; }
-    /* Gleicher linker Versatz wie .sf-erg-spur (v161), damit die Ziellinie
-       exakt auf derselben Skala liegt wie die Balken und nicht durch die
-       Profilbilder laeuft. */
-    .sf-erg-ziel-ueberlagerung { position: absolute; top: 0; bottom: 0; left: 70px; right: 0; pointer-events: none; }
+    /* Ein einzelnes Element, das ueber die Balken-Spalte (3) aller Zeilen
+       gespannt wird (grid-row wird beim Rendern per Inline-Style gesetzt) -
+       dadurch automatisch dieselbe Breite/Skala wie jeder Balken. */
+    .sf-erg-ziel-ueberlagerung { grid-column: 3; position: relative; pointer-events: none; }
     .sf-erg-ziel-linie {
       position: absolute; top: -18px; bottom: 0; width: 2px;
       background: repeating-linear-gradient(to bottom, var(--club-orange) 0 6px, transparent 6px 11px);

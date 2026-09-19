@@ -899,33 +899,48 @@ function zeigeErgebnisListe(pos) {
   }
 }
 
-// Balken-Auswertung (v156): Jeder Balken beginnt links und geht bis zur eigenen
-// Schätzung - die Skala zoomt dabei automatisch auf den Bereich zwischen der
-// kleinsten und größten vorkommenden Zahl (Schätzungen + richtige Antwort),
-// statt stur bei 0 zu starten. Dadurch sieht man auch bei großen Zahlen mit
-// eng beieinander liegenden Tipps (z. B. 38000/40000/42000) noch deutliche
-// Unterschiede zwischen den Balken. Eine durchgehende, gestrichelte Ziellinie
-// markiert die richtige Antwort quer über alle Zeilen - ihre Position wandert
-// je nach Runde. Der Gesamtpunktestand steht hier bewusst NICHT mehr - der ist
-// erst wieder im Endstand zu sehen.
+// Balken-Auswertung (v156, in v162 Skala + Layout ueberarbeitet): Jeder Balken
+// beginnt links und geht bis zur eigenen Schätzung.
+//
+// Skala: standardmäßig eine echte 0-Skala, damit die Balkenlängen wirklich das
+// Zahlenverhältnis zeigen (Tipp 6 bei richtiger Antwort 9 → Balken geht genau
+// bis 6/9 der Ziellinie). Nur wenn alle vorkommenden Zahlen nicht-negativ UND
+// nah beieinander UND weit von 0 entfernt sind (z. B. 38000/40000/42000, wo
+// eine 0-Skala kaum noch Unterschiede zeigen würde), zoomen wir stattdessen auf
+// den tatsächlich vorkommenden Bereich - genau wie vorher.
+//
+// Layout: Punkte, Profilbild+Name und Balken liegen als drei Grid-Spalten vor
+// (Punkte links vor dem Profilbild, wie in den anderen Spielen). Die
+// durchgehende Ziellinie ist ein einzelnes Element, das über die Balken-Spalte
+// aller Zeilen gespannt wird - dadurch liegt sie garantiert auf derselben
+// Skala wie jeder einzelne Balken, unabhängig von der Breite von Name/Punkten.
 function renderBalkenErgebnis(container, richtig, sortiert, rundenpunkte, dummkoepfe, tipps) {
   const werte = [richtig, ...sortiert.map((a) => a.schaetzung)];
   const minWert = Math.min(...werte);
   const maxWert = Math.max(...werte);
-  const spanne = Math.max(maxWert - minWert, 1);
-  const minSkala = minWert - spanne * 0.1;
-  const maxSkala = maxWert + spanne * 0.1;
+  const spanneWerte = maxWert - minWert;
+  const nutzeNullskala = minWert >= 0 && maxWert > 0 && (spanneWerte / maxWert) >= 0.15;
+
+  let minSkala, maxSkala;
+  if (nutzeNullskala) {
+    minSkala = 0;
+    maxSkala = maxWert * 1.08;
+  } else {
+    const puffer = Math.max(spanneWerte, 1) * 0.1;
+    minSkala = minWert - puffer;
+    maxSkala = maxWert + puffer;
+  }
   const spanneSkala = Math.max(maxSkala - minSkala, 1);
   const prozent = (wert) => ((wert - minSkala) / spanneSkala) * 100;
   const zielPos = prozent(richtig);
 
-  const zeilenHtml = sortiert.map((antwort) => {
+  const zeilenHtml = sortiert.map((antwort, index) => {
     const s = spielerListe.find((x) => x.id === antwort.spielerId);
     const farbe = s?.farbe || "#7f8c8d";
-    // Mindestbreite, damit auch sehr kleine/niedrige Werte noch als
-    // sichtbarer Balken erkennbar sind (der Balken beginnt seit v161 erst
-    // nach einer kleinen Luecke rechts vom Profilbild, siehe .sf-erg-spur).
-    const breite = Math.max(prozent(antwort.schaetzung), 12);
+    const zeile = index + 1;
+    // Kleine Mindestbreite nur als Sicherheitsnetz, damit auch ein Tipp nahe 0
+    // noch als sichtbarer Farbstreifen erkennbar bleibt.
+    const breite = Math.min(100, Math.max(prozent(antwort.schaetzung), 4));
 
     let punkteHtml = `<span class="sf-erg-balken-wert">${escapeHtml(String(antwort.schaetzung))}</span>` +
       `<span class="sf-erg-balken-punkte">${formatiertePunkte(rundenpunkte[antwort.spielerId] ?? 0)}</span>`;
@@ -936,22 +951,20 @@ function renderBalkenErgebnis(container, richtig, sortiert, rundenpunkte, dummko
     }
 
     return (
-      `<div class="sf-erg-zeile">` +
-        `<div class="sf-erg-spur">` +
-          `<div class="sf-erg-balken" style="width:${breite}%; background:${farbe};"></div>` +
-        `</div>` +
-        `<div class="sf-erg-info">` +
-          `${avatarHtml(s?.icon, "sf-erg-avatar")}` +
-          `<span class="sf-erg-name">${escapeHtml(antwort.spielerName)}</span>` +
-        `</div>` +
-        `<div class="sf-erg-werte">${punkteHtml}</div>` +
+      `<div class="sf-erg-werte" style="grid-row:${zeile};">${punkteHtml}</div>` +
+      `<div class="sf-erg-info" style="grid-row:${zeile};">` +
+        `${avatarHtml(s?.icon, "sf-erg-avatar")}` +
+        `<span class="sf-erg-name">${escapeHtml(antwort.spielerName)}</span>` +
+      `</div>` +
+      `<div class="sf-erg-spur" style="grid-row:${zeile};">` +
+        `<div class="sf-erg-balken" style="width:${breite}%; background:${farbe};"></div>` +
       `</div>`
     );
   }).join("");
 
   container.innerHTML =
     zeilenHtml +
-    `<div class="sf-erg-ziel-ueberlagerung">` +
+    `<div class="sf-erg-ziel-ueberlagerung" style="grid-row:1 / span ${sortiert.length};">` +
       `<div class="sf-erg-ziel-linie" style="left:${zielPos}%;"></div>` +
       `<span class="sf-erg-ziel-tag" style="left:${zielPos}%;">${escapeHtml(String(richtig))}</span>` +
     `</div>`;

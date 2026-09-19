@@ -4,7 +4,7 @@
 // Nur dann wirft der Browser den alten Zwischenspeicher weg und alle Spieler
 // bekommen zuverlässig die neue Version. Das ist der einzige Handgriff, den man
 // nach dem Bearbeiten von Dateien nicht vergessen darf.
-const CACHE_NAME = "trollhouse-v162";
+const CACHE_NAME = "trollhouse-v163";
 
 const DATEIEN = [
   "./",
@@ -95,10 +95,10 @@ const DATEIEN = [
   "bilder/icon-raum-verlassen.svg",
   "bilder/avatar1-hd.jpg?v=38", "bilder/avatar2-hd.jpg?v=38", "bilder/avatar3-hd.jpg?v=38", "bilder/avatar4-hd.jpg?v=38",
   "bilder/avatar5-hd.jpg?v=38", "bilder/avatar6-hd.jpg?v=38", "bilder/avatar7-hd.jpg?v=38", "bilder/avatar8-hd.jpg?v=38",
-  "bilder/freund-rapper-kevin.jpg?v=162", "bilder/freund-zocker-luca.jpg?v=162", "bilder/freund-bettler-nader.jpg?v=162",
-  "bilder/freund-eintracht-sinan.jpg?v=162", "bilder/freund-boxer-kevin.jpg?v=162", "bilder/freund-gay-luca.jpg?v=162",
-  "bilder/freund-diktator-nader.jpg?v=162", "bilder/freund-rambo-sinan.jpg?v=162", "bilder/freund-meerjungfrau-kevin.jpg?v=162",
-  "bilder/freund-baywatch-luca.jpg?v=162", "bilder/freund-baby-nader.jpg?v=162", "bilder/freund-leoparden-sinan.jpg?v=162"
+  "bilder/freund-rapper-kevin.jpg?v=163", "bilder/freund-zocker-luca.jpg?v=163", "bilder/freund-bettler-nader.jpg?v=163",
+  "bilder/freund-eintracht-sinan.jpg?v=163", "bilder/freund-boxer-kevin.jpg?v=163", "bilder/freund-gay-luca.jpg?v=163",
+  "bilder/freund-diktator-nader.jpg?v=163", "bilder/freund-rambo-sinan.jpg?v=163", "bilder/freund-meerjungfrau-kevin.jpg?v=163",
+  "bilder/freund-baywatch-luca.jpg?v=163", "bilder/freund-baby-nader.jpg?v=163", "bilder/freund-leoparden-sinan.jpg?v=163"
 ];
 
 self.addEventListener("install", (event) => {
