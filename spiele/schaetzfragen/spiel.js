@@ -942,22 +942,34 @@ function renderBalkenErgebnis(container, richtig, sortiert, rundenpunkte, dummko
     // noch als sichtbarer Farbstreifen erkennbar bleibt.
     const breite = Math.min(100, Math.max(prozent(antwort.schaetzung), 4));
 
-    let punkteHtml = `<span class="sf-erg-balken-wert">${escapeHtml(String(antwort.schaetzung))}</span>` +
-      `<span class="sf-erg-balken-punkte">${formatiertePunkte(rundenpunkte[antwort.spielerId] ?? 0)}</span>`;
+    // Punkte links (wie in den anderen Spielen), nur die reine Zahl in der
+    // farbigen Kreis-Kapsel - dieselbe Klasse wie bei spielerKarte(), damit
+    // Grün/Rot überall im Spiel gleich aussehen.
+    const formatiert = formatiertePunkte(rundenpunkte[antwort.spielerId] ?? 0);
+    const punkteKlasse = formatiert.trim().startsWith("+")
+      ? " positiv"
+      : formatiert.trim().startsWith("-") || formatiert.trim().startsWith("−")
+        ? " negativ"
+        : "";
+
+    // Der Tipp (die Schätzung) steht rechts über der Spur - Dummkopf-Hinweise
+    // hängen als kleine Zusatz-Icons daran.
+    let tippHtml = `<span class="sf-erg-tipp-wert">${escapeHtml(String(antwort.schaetzung))}</span>`;
     if (dummkopfModus) {
-      if (dummkoepfe.includes(antwort.spielerId)) punkteHtml += `<span class="sf-erg-punkte-dk">🤡</span>`;
+      if (dummkoepfe.includes(antwort.spielerId)) tippHtml += `<span class="sf-erg-punkte-dk">🤡</span>`;
       const tipp = tipps.find((t) => t.spielerId === antwort.spielerId);
-      if (tipp && dummkoepfe.includes(tipp.zielSpielerId)) punkteHtml += `<span class="sf-erg-punkte-dk">🎯+1</span>`;
+      if (tipp && dummkoepfe.includes(tipp.zielSpielerId)) tippHtml += `<span class="sf-erg-punkte-dk">🎯+1</span>`;
     }
 
     return (
-      `<div class="sf-erg-werte" style="grid-row:${zeile};">${punkteHtml}</div>` +
+      `<div class="spieler-punkte sf-erg-punkte-links${punkteKlasse}" style="grid-row:${zeile};">${escapeHtml(formatiert)}</div>` +
       `<div class="sf-erg-info" style="grid-row:${zeile};">` +
         `${avatarHtml(s?.icon, "sf-erg-avatar")}` +
         `<span class="sf-erg-name">${escapeHtml(antwort.spielerName)}</span>` +
       `</div>` +
       `<div class="sf-erg-spur" style="grid-row:${zeile};">` +
         `<div class="sf-erg-balken" style="width:${breite}%; background:${farbe};"></div>` +
+        `<div class="sf-erg-tipp">${tippHtml}</div>` +
       `</div>`
     );
   }).join("");

@@ -2057,19 +2057,10 @@
       display: grid; grid-template-columns: auto auto 1fr; align-items: stretch;
       column-gap: 10px; row-gap: 14px; position: relative; margin: 4px 0 6px;
     }
-    .sf-erg-werte {
-      grid-column: 1; display: flex; align-items: center; gap: 6px;
-      background: rgba(0, 0, 0, .32); padding: 5px 10px; border-radius: 10px;
-      white-space: nowrap;
-    }
-    .sf-erg-balken-wert {
-      font-family: "Bungee", sans-serif; font-size: 1rem; color: #fff; white-space: nowrap;
-    }
-    .sf-erg-balken-punkte {
-      font-family: "Bungee", sans-serif; font-size: .74rem; color: #fff;
-      display: flex; align-items: center; gap: 4px; white-space: nowrap; opacity: .85;
-    }
-    .sf-erg-punkte-dk { font-size: .72rem; }
+    /* Punkte links vor dem Profilbild - wie in den anderen Spielen wird dafür
+       bewusst dieselbe Kreis-Komponente (spieler-punkte/positiv/negativ)
+       wiederverwendet, damit Farbe/Form überall identisch aussehen (v164). */
+    .sf-erg-punkte-links { grid-column: 1; align-self: center; justify-self: center; }
     .sf-erg-info {
       grid-column: 2; display: flex; align-items: center; gap: 8px;
       min-width: 0; max-width: 132px; overflow: hidden;
@@ -2092,6 +2083,17 @@
       position: absolute; top: 0; bottom: 0; left: 0; border-radius: 16px;
       transition: width .2s ease;
     }
+    /* Der Tipp (die Schätzung) steht rechts, als Kapsel über der Spur - so
+       bleibt er immer lesbar, egal wie lang der Balken darunter gerade ist. */
+    .sf-erg-tipp {
+      position: absolute; right: 8px; top: 50%; transform: translateY(-50%); z-index: 2;
+      display: flex; align-items: center; gap: 6px; background: rgba(0, 0, 0, .32);
+      padding: 5px 10px; border-radius: 10px; white-space: nowrap; pointer-events: none;
+    }
+    .sf-erg-tipp-wert {
+      font-family: "Bungee", sans-serif; font-size: 1rem; color: #fff; white-space: nowrap;
+    }
+    .sf-erg-punkte-dk { font-size: .72rem; }
     /* Ein einzelnes Element, das ueber die Balken-Spalte (3) aller Zeilen
        gespannt wird (grid-row wird beim Rendern per Inline-Style gesetzt) -
        dadurch automatisch dieselbe Breite/Skala wie jeder Balken. */
