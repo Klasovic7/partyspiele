@@ -38,6 +38,9 @@ import { speichereWertung } from "../../kern/wertung.js";
 import { pooleOhneWiederholung, aktualisierterVerlauf } from "../../kern/verlauf.js";
 
 const HINWEIS_DAUER_MS = 7000;
+// v173: Nach dem Buzzern hat die ratende Person 10 Sekunden Zeit zu antworten -
+// laeuft die Zeit ab, zaehlt das wie eine falsche Antwort (gestaffelter Abzug).
+const ANTWORT_ZEIT_MS = 10000;
 const STANDARD_ANZAHL = 8;
 
 const VORLAGE = `
@@ -157,6 +160,8 @@ let antwortKorrekt = null;
 let falscheVersuche = [];
 let gewuenschteAnzahl = 0;
 let hinweisFortschreibenLaeuft = false;
+let antwortZeitAblaufLaeuft = false;
+let gebuzzertSeit = 0;
 let timerId = null;
 let teammodus = false;
 let teams = {};
@@ -272,7 +277,7 @@ export async function starten(uebergebeneApi) {
     await setzeGrundzustand("setup");
   }
 
-  timerId = setInterval(() => { aktualisiereCountdown(); pruefeHinweisFortschritt(); }, 300);
+  timerId = setInterval(() => { aktualisiereCountdown(); pruefeHinweisFortschritt(); pruefeAntwortZeitAblauf(); }, 300);
 }
 
 function verdrahteBedienelemente() {
@@ -335,6 +340,7 @@ export function raumDaten(daten) {
   hinweisIndex = daten.wiHinweisIndex ?? 1;
   hinweisSeit = daten.wiHinweisSeit ?? 0;
   gebuzzertVon = daten.wiGebuzzertVon ?? null;
+  gebuzzertSeit = daten.wiGebuzzertSeit ?? 0;
   antwortText = daten.wiAntwortText ?? "";
   antwortKorrekt = daten.wiAntwortKorrekt ?? null;
   falscheVersuche = daten.wiFalscheVersuche ?? [];
@@ -471,7 +477,7 @@ function anzahlUebernehmen() {
 async function setzeGrundzustand(wiStatus) {
   await updateDoc(api.raumRef(), {
     wiStatus, wiReihenfolge: [], wiHinweisReihenfolgen: [], wiFragenIndex: 0, wiAnzahlFragen: 0,
-    wiHinweisIndex: 1, wiHinweisSeit: 0, wiGebuzzertVon: null,
+    wiHinweisIndex: 1, wiHinweisSeit: 0, wiGebuzzertVon: null, wiGebuzzertSeit: 0,
     wiAntwortText: "", wiAntwortKorrekt: null, wiPunkteDieserRunde: 0,
     wiFalscheVersuche: [], wiTeammodus: false, wiTeams: {}, wiRundenDelta: {}
   });
@@ -517,7 +523,7 @@ async function spielStarten() {
       wiReihenfolge: neueReihenfolge, wiHinweisReihenfolgen: neueHinweisReihenfolgen,
       wiGespielt: neuerGespielt,
       wiHinweisIndex: 1, wiHinweisSeit: Date.now(),
-      wiGebuzzertVon: null, wiAntwortText: "", wiAntwortKorrekt: null, wiPunkteDieserRunde: 0,
+      wiGebuzzertVon: null, wiGebuzzertSeit: 0, wiAntwortText: "", wiAntwortKorrekt: null, wiPunkteDieserRunde: 0,
       wiFalscheVersuche: [], wiTeammodus: teammodus, wiTeams: neueTeams, wiRundenDelta: {}
     });
   } catch (e) {
@@ -590,6 +596,16 @@ function zeigeFrage() {
 
 function aktualisiereCountdown() {
   if (!el.wurzel) return;
+  // v173: Solange jemand gebuzzert hat, zeigt der Countdown die verbleibende
+  // Antwortzeit statt des Hinweis-Countdowns (der pausiert ohnehin, solange
+  // niemand mehr raten kann).
+  if (status === "gebuzzert") {
+    const rest = Math.max(0, ANTWORT_ZEIT_MS - (Date.now() - gebuzzertSeit));
+    $("wi-countdown").textContent = gebuzzertVon === api.spielerId
+      ? `Noch ${Math.ceil(rest / 1000)}s zum Antworten`
+      : `Antwortzeit: ${Math.ceil(rest / 1000)}s`;
+    return;
+  }
   if (status !== "frage_aktiv") { $("wi-countdown").textContent = ""; return; }
   const frage = frageAn(index);
   if (!frage) return;
@@ -617,6 +633,42 @@ async function pruefeHinweisFortschritt() {
   hinweisFortschreibenLaeuft = false;
 }
 
+// v173: Wird nur vom Spielleiter-Client ausgewertet (analog zu
+// pruefeHinweisFortschritt), damit die Zeitstrafe nicht mehrfach vergeben
+// wird. Laeuft die Antwortzeit nach dem Buzzern ab, ohne dass eine Antwort
+// abgeschickt wurde, zaehlt das genauso wie eine falsche Antwort - inklusive
+// des gestaffelten Punktabzugs (1., 2., 3. Fehlversuch derselben Person bei
+// derselben Frage).
+async function pruefeAntwortZeitAblauf() {
+  if (!api?.istLeiter || status !== "gebuzzert" || !gebuzzertVon || antwortZeitAblaufLaeuft) return;
+  if (Date.now() - gebuzzertSeit < ANTWORT_ZEIT_MS) return;
+
+  antwortZeitAblaufLaeuft = true;
+  try {
+    const frage = frageAn(index);
+    if (!frage) { antwortZeitAblaufLaeuft = false; return; }
+    const spielerId = gebuzzertVon;
+    const spielerName = spielerListe.find((s) => s.id === spielerId)?.name ?? "?";
+    const naechsterHinweisIndex = Math.min(hinweisIndex + 1, frage.hinweise.length);
+    const vorherigeFalscheDerPerson = falscheVersuche.filter((v) => v.spielerId === spielerId).length;
+    const abzug = vorherigeFalscheDerPerson + 1;
+    const neuesRundenDelta = {
+      ...(raum.wiRundenDelta || {}),
+      [spielerId]: (raum.wiRundenDelta?.[spielerId] ?? 0) - abzug
+    };
+    await updateDoc(api.raumRef(), {
+      wiStatus: "frage_aktiv", wiAntwortText: "", wiAntwortKorrekt: null, wiPunkteDieserRunde: 0,
+      wiGebuzzertVon: null, wiGebuzzertSeit: 0, wiHinweisIndex: naechsterHinweisIndex, wiHinweisSeit: Date.now(),
+      wiFalscheVersuche: arrayUnion({ name: spielerName, text: "(keine Antwort)", spielerId, abzug }),
+      wiRundenDelta: neuesRundenDelta
+    });
+    await updateDoc(api.spielerRef(spielerId), { punkte: increment(-abzug) });
+  } catch (e) {
+    zeigeDebug("Fehler bei Zeitablauf: " + e.message);
+  }
+  antwortZeitAblaufLaeuft = false;
+}
+
 // Wer zuerst hier ankommt, gewinnt - die Transaktion sorgt dafür, dass bei
 // gleichzeitigem Buzzern trotzdem nur eine Person den Zuschlag bekommt.
 async function buzzern() {
@@ -629,7 +681,7 @@ async function buzzern() {
       if (!daten || daten.wiStatus !== "frage_aktiv" || daten.wiGebuzzertVon) {
         throw new Error("__ZU_SPAET__");
       }
-      tx.update(api.raumRef(), { wiStatus: "gebuzzert", wiGebuzzertVon: api.spielerId });
+      tx.update(api.raumRef(), { wiStatus: "gebuzzert", wiGebuzzertVon: api.spielerId, wiGebuzzertSeit: Date.now() });
     });
   } catch (e) {
     if (e.message !== "__ZU_SPAET__") {
@@ -688,7 +740,7 @@ async function antwortAbsenden() {
       $("wi-antwort-eingabe").value = "";
       await updateDoc(api.raumRef(), {
         wiStatus: "frage_aktiv", wiAntwortText: "", wiAntwortKorrekt: null, wiPunkteDieserRunde: 0,
-        wiGebuzzertVon: null, wiHinweisIndex: naechsterHinweisIndex, wiHinweisSeit: Date.now(),
+        wiGebuzzertVon: null, wiGebuzzertSeit: 0, wiHinweisIndex: naechsterHinweisIndex, wiHinweisSeit: Date.now(),
         wiFalscheVersuche: arrayUnion({ name: api.spielerName, text, spielerId: api.spielerId, abzug }),
         wiRundenDelta: neuesRundenDelta
       });
@@ -707,7 +759,7 @@ async function ueberspringen() {
   try {
     await updateDoc(api.raumRef(), {
       wiStatus: "aufgeloest", wiAntwortText: "", wiAntwortKorrekt: null,
-      wiPunkteDieserRunde: 0, wiGebuzzertVon: null
+      wiPunkteDieserRunde: 0, wiGebuzzertVon: null, wiGebuzzertSeit: 0
     });
   } catch (e) {
     zeigeDebug("Fehler beim Überspringen: " + e.message);
@@ -776,7 +828,7 @@ async function weiter() {
       await updateDoc(api.raumRef(), {
         wiStatus: "frage_aktiv", wiFragenIndex: naechster,
         wiHinweisIndex: 1, wiHinweisSeit: Date.now(),
-        wiGebuzzertVon: null, wiAntwortText: "", wiAntwortKorrekt: null, wiPunkteDieserRunde: 0,
+        wiGebuzzertVon: null, wiGebuzzertSeit: 0, wiAntwortText: "", wiAntwortKorrekt: null, wiPunkteDieserRunde: 0,
         wiFalscheVersuche: [], wiRundenDelta: {}
       });
     }

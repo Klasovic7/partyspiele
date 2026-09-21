@@ -2058,7 +2058,7 @@
        dadurch garantiert auf derselben Skala wie jeder einzelne Balken, egal wie
        lang Name oder Punktetext in einer Zeile sind. */
     .sf-erg-liste-balken {
-      display: grid; grid-template-columns: auto auto 1fr; align-items: stretch;
+      display: grid; grid-template-columns: auto auto 1fr auto; align-items: stretch;
       column-gap: 10px; row-gap: 14px; position: relative; margin: 4px 0 6px;
     }
     /* Punkte links vor dem Profilbild - wie in den anderen Spielen wird dafür
@@ -2098,6 +2098,14 @@
       font-family: "Bungee", sans-serif; font-size: 1rem; color: #fff; white-space: nowrap;
     }
     .sf-erg-punkte-dk { font-size: .72rem; }
+    /* Gesamtpunktstand ganz rechts (v173) - wie in den anderen Spielen soll
+       nach jeder Auswertung sofort sichtbar sein, wo jeder Spieler insgesamt
+       steht, nicht nur die Punkte dieser Runde. */
+    .sf-erg-punkte-gesamt {
+      grid-column: 4; align-self: center; justify-self: end; text-align: right;
+      font-family: "Bungee", sans-serif; font-size: 1.15rem; color: #fff;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, .55); min-width: 30px;
+    }
     /* Ein einzelnes Element, das ueber die Balken-Spalte (3) aller Zeilen
        gespannt wird (grid-row wird beim Rendern per Inline-Style gesetzt) -
        dadurch automatisch dieselbe Breite/Skala wie jeder Balken. */

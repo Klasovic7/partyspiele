@@ -974,7 +974,8 @@ function renderBalkenErgebnis(container, richtig, sortiert, rundenpunkte, dummko
       `<div class="sf-erg-spur" style="grid-row:${zeile};">` +
         `<div class="sf-erg-balken" style="width:${breite}%; background:${farbe};"></div>` +
         `<div class="sf-erg-tipp">${tippHtml}</div>` +
-      `</div>`
+      `</div>` +
+      `<div class="sf-erg-punkte-gesamt" style="grid-row:${zeile};">${escapeHtml(String(s ? (s.punkte ?? 0) : "?"))}</div>`
     );
   }).join("");
 

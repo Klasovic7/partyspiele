@@ -57,7 +57,7 @@ const FRAGE_TIMEOUT_MS = 90000;
 // "bild": die Unschärfe nimmt kontinuierlich ab (nicht in Stufen) und endet
 // nach BILD_SCHARF_DAUER_MS beim Originalbild in voller Schärfe.
 const BILD_BLUR_START_PX = 26;
-const BILD_SCHARF_DAUER_MS = 40000;
+const BILD_SCHARF_DAUER_MS = 32000;
 
 const TYP_LABEL = { speed: "Schnelligkeit", wort: "Wortrate", bild: "Bild-Reveal" };
 

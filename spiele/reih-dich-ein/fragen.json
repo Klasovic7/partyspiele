@@ -7,14 +7,14 @@
     "skala": ["NAH", "WEIT"],
     "startId": "mars",
     "begriffe": [
-      { "id": "merkur", "name": "Merkur", "wert": 1, "wertText": "1. Planet" },
-      { "id": "venus", "name": "Venus", "wert": 2, "wertText": "2. Planet" },
-      { "id": "erde", "name": "Erde", "wert": 3, "wertText": "3. Planet" },
-      { "id": "mars", "name": "Mars", "wert": 4, "wertText": "4. Planet" },
-      { "id": "jupiter", "name": "Jupiter", "wert": 5, "wertText": "5. Planet" },
-      { "id": "saturn", "name": "Saturn", "wert": 6, "wertText": "6. Planet" },
-      { "id": "uranus", "name": "Uranus", "wert": 7, "wertText": "7. Planet" },
-      { "id": "neptun", "name": "Neptun", "wert": 8, "wertText": "8. Planet" }
+      { "id": "merkur", "name": "Merkur", "wert": 1, "wertText": "57,9 Mio. km" },
+      { "id": "venus", "name": "Venus", "wert": 2, "wertText": "108,2 Mio. km" },
+      { "id": "erde", "name": "Erde", "wert": 3, "wertText": "149,6 Mio. km" },
+      { "id": "mars", "name": "Mars", "wert": 4, "wertText": "227,9 Mio. km" },
+      { "id": "jupiter", "name": "Jupiter", "wert": 5, "wertText": "778,5 Mio. km" },
+      { "id": "saturn", "name": "Saturn", "wert": 6, "wertText": "1.434 Mio. km" },
+      { "id": "uranus", "name": "Uranus", "wert": 7, "wertText": "2.871 Mio. km" },
+      { "id": "neptun", "name": "Neptun", "wert": 8, "wertText": "4.495 Mio. km" }
     ]
   },
   {
@@ -65,14 +65,14 @@
     "skala": ["FRÜH", "SPÄT"],
     "startId": "feuerkelch",
     "begriffe": [
-      { "id": "stein-der-weisen", "name": "Der Stein der Weisen", "wert": 1, "wertText": "Teil 1 · 2001" },
-      { "id": "kammer-des-schreckens", "name": "Die Kammer des Schreckens", "wert": 2, "wertText": "Teil 2 · 2002" },
-      { "id": "gefangene-von-askaban", "name": "Der Gefangene von Askaban", "wert": 3, "wertText": "Teil 3 · 2004" },
-      { "id": "feuerkelch", "name": "Der Feuerkelch", "wert": 4, "wertText": "Teil 4 · 2005" },
-      { "id": "orden-des-phoenix", "name": "Der Orden des Phönix", "wert": 5, "wertText": "Teil 5 · 2007" },
-      { "id": "halbblutprinz", "name": "Der Halbblutprinz", "wert": 6, "wertText": "Teil 6 · 2009" },
-      { "id": "heiligtuemer-1", "name": "Die Heiligtümer des Todes 1", "wert": 7, "wertText": "Teil 7 · 2010" },
-      { "id": "heiligtuemer-2", "name": "Die Heiligtümer des Todes 2", "wert": 8, "wertText": "Teil 8 · 2011" }
+      { "id": "stein-der-weisen", "name": "Der Stein der Weisen", "wert": 1, "wertText": "2001" },
+      { "id": "kammer-des-schreckens", "name": "Die Kammer des Schreckens", "wert": 2, "wertText": "2002" },
+      { "id": "gefangene-von-askaban", "name": "Der Gefangene von Askaban", "wert": 3, "wertText": "2004" },
+      { "id": "feuerkelch", "name": "Der Feuerkelch", "wert": 4, "wertText": "2005" },
+      { "id": "orden-des-phoenix", "name": "Der Orden des Phönix", "wert": 5, "wertText": "2007" },
+      { "id": "halbblutprinz", "name": "Der Halbblutprinz", "wert": 6, "wertText": "2009" },
+      { "id": "heiligtuemer-1", "name": "Die Heiligtümer des Todes 1", "wert": 7, "wertText": "2010" },
+      { "id": "heiligtuemer-2", "name": "Die Heiligtümer des Todes 2", "wert": 8, "wertText": "2011" }
     ]
   },
   {
@@ -196,21 +196,21 @@
   {
     "id": "monate-kalender", "titel": "Monate", "frage": "Reihenfolge im Kalender", "richtung": "Von Jahresanfang bis Jahresende", "skala": ["ANFANG", "ENDE"], "startId": "juni",
     "begriffe": [
-      { "id": "januar", "name": "Januar", "wert": 1, "wertText": "1. Monat" }, { "id": "februar", "name": "Februar", "wert": 2, "wertText": "2. Monat" },
-      { "id": "maerz", "name": "März", "wert": 3, "wertText": "3. Monat" }, { "id": "april", "name": "April", "wert": 4, "wertText": "4. Monat" },
-      { "id": "mai", "name": "Mai", "wert": 5, "wertText": "5. Monat" }, { "id": "juni", "name": "Juni", "wert": 6, "wertText": "6. Monat" },
-      { "id": "juli", "name": "Juli", "wert": 7, "wertText": "7. Monat" }, { "id": "august", "name": "August", "wert": 8, "wertText": "8. Monat" },
-      { "id": "september", "name": "September", "wert": 9, "wertText": "9. Monat" }, { "id": "oktober", "name": "Oktober", "wert": 10, "wertText": "10. Monat" },
-      { "id": "november", "name": "November", "wert": 11, "wertText": "11. Monat" }, { "id": "dezember", "name": "Dezember", "wert": 12, "wertText": "12. Monat" }
+      { "id": "januar", "name": "Januar", "wert": 1, "wertText": "31 Tage" }, { "id": "februar", "name": "Februar", "wert": 2, "wertText": "28/29 Tage" },
+      { "id": "maerz", "name": "März", "wert": 3, "wertText": "31 Tage" }, { "id": "april", "name": "April", "wert": 4, "wertText": "30 Tage" },
+      { "id": "mai", "name": "Mai", "wert": 5, "wertText": "31 Tage" }, { "id": "juni", "name": "Juni", "wert": 6, "wertText": "30 Tage" },
+      { "id": "juli", "name": "Juli", "wert": 7, "wertText": "31 Tage" }, { "id": "august", "name": "August", "wert": 8, "wertText": "31 Tage" },
+      { "id": "september", "name": "September", "wert": 9, "wertText": "30 Tage" }, { "id": "oktober", "name": "Oktober", "wert": 10, "wertText": "31 Tage" },
+      { "id": "november", "name": "November", "wert": 11, "wertText": "30 Tage" }, { "id": "dezember", "name": "Dezember", "wert": 12, "wertText": "31 Tage" }
     ]
   },
   {
     "id": "wochentage", "titel": "Wochentage", "frage": "Reihenfolge in der Woche", "richtung": "Von Montag bis Sonntag", "skala": ["MONTAG", "SONNTAG"], "startId": "donnerstag",
     "begriffe": [
-      { "id": "montag", "name": "Montag", "wert": 1, "wertText": "Tag 1" }, { "id": "dienstag", "name": "Dienstag", "wert": 2, "wertText": "Tag 2" },
-      { "id": "mittwoch", "name": "Mittwoch", "wert": 3, "wertText": "Tag 3" }, { "id": "donnerstag", "name": "Donnerstag", "wert": 4, "wertText": "Tag 4" },
-      { "id": "freitag", "name": "Freitag", "wert": 5, "wertText": "Tag 5" }, { "id": "samstag", "name": "Samstag", "wert": 6, "wertText": "Tag 6" },
-      { "id": "sonntag", "name": "Sonntag", "wert": 7, "wertText": "Tag 7" }
+      { "id": "montag", "name": "Montag", "wert": 1, "wertText": "Tag des Mondes" }, { "id": "dienstag", "name": "Dienstag", "wert": 2, "wertText": "Tag des Kriegsgottes Ziu" },
+      { "id": "mittwoch", "name": "Mittwoch", "wert": 3, "wertText": "Ursprünglich Wodans Tag" }, { "id": "donnerstag", "name": "Donnerstag", "wert": 4, "wertText": "Tag des Donnergottes Donar" },
+      { "id": "freitag", "name": "Freitag", "wert": 5, "wertText": "Tag der Göttin Freya" }, { "id": "samstag", "name": "Samstag", "wert": 6, "wertText": "Vom hebräischen Sabbat" },
+      { "id": "sonntag", "name": "Sonntag", "wert": 7, "wertText": "Tag der Sonne" }
     ]
   },
   {
@@ -227,12 +227,12 @@
   {
     "id": "chinesischer-tierkreis", "titel": "Chinesische Tierkreiszeichen", "frage": "Reihenfolge im zwölfjährigen Zyklus", "richtung": "Von Ratte bis Schwein", "skala": ["START", "ENDE"], "startId": "schlange",
     "begriffe": [
-      { "id": "ratte", "name": "Ratte", "wert": 1, "wertText": "Platz 1" }, { "id": "bueffel", "name": "Büffel", "wert": 2, "wertText": "Platz 2" },
-      { "id": "tiger", "name": "Tiger", "wert": 3, "wertText": "Platz 3" }, { "id": "hase", "name": "Hase", "wert": 4, "wertText": "Platz 4" },
-      { "id": "drache", "name": "Drache", "wert": 5, "wertText": "Platz 5" }, { "id": "schlange", "name": "Schlange", "wert": 6, "wertText": "Platz 6" },
-      { "id": "pferd", "name": "Pferd", "wert": 7, "wertText": "Platz 7" }, { "id": "ziege", "name": "Ziege", "wert": 8, "wertText": "Platz 8" },
-      { "id": "affe", "name": "Affe", "wert": 9, "wertText": "Platz 9" }, { "id": "hahn", "name": "Hahn", "wert": 10, "wertText": "Platz 10" },
-      { "id": "hund", "name": "Hund", "wert": 11, "wertText": "Platz 11" }, { "id": "schwein", "name": "Schwein", "wert": 12, "wertText": "Platz 12" }
+      { "id": "ratte", "name": "Ratte", "wert": 1, "wertText": "Gilt als klug und anpassungsfähig" }, { "id": "bueffel", "name": "Büffel", "wert": 2, "wertText": "Gilt als fleißig und zuverlässig" },
+      { "id": "tiger", "name": "Tiger", "wert": 3, "wertText": "Gilt als mutig und selbstbewusst" }, { "id": "hase", "name": "Hase", "wert": 4, "wertText": "Gilt als freundlich und vorsichtig" },
+      { "id": "drache", "name": "Drache", "wert": 5, "wertText": "Gilt als charismatisch und ehrgeizig" }, { "id": "schlange", "name": "Schlange", "wert": 6, "wertText": "Gilt als weise und geheimnisvoll" },
+      { "id": "pferd", "name": "Pferd", "wert": 7, "wertText": "Gilt als frei und energiegeladen" }, { "id": "ziege", "name": "Ziege", "wert": 8, "wertText": "Gilt als sanft und kreativ" },
+      { "id": "affe", "name": "Affe", "wert": 9, "wertText": "Gilt als klug und verspielt" }, { "id": "hahn", "name": "Hahn", "wert": 10, "wertText": "Gilt als stolz und ehrlich" },
+      { "id": "hund", "name": "Hund", "wert": 11, "wertText": "Gilt als loyal und gerecht" }, { "id": "schwein", "name": "Schwein", "wert": 12, "wertText": "Gilt als großzügig und optimistisch" }
     ]
   },
   {
@@ -609,11 +609,11 @@
   {
     "id": "pokerhaende", "titel": "Pokerhände", "frage": "Wertigkeit der Hand", "richtung": "Von schwach nach stark", "skala": ["SCHWACH", "STARK"], "startId": "strasse",
     "begriffe": [
-      { "id": "high-card", "name": "High Card", "wert": 1, "wertText": "Platz 1" }, { "id": "pair", "name": "Ein Paar", "wert": 2, "wertText": "Platz 2" },
-      { "id": "two-pair", "name": "Zwei Paare", "wert": 3, "wertText": "Platz 3" }, { "id": "three-kind", "name": "Drilling", "wert": 4, "wertText": "Platz 4" },
-      { "id": "strasse", "name": "Straße", "wert": 5, "wertText": "Platz 5" }, { "id": "flush", "name": "Flush", "wert": 6, "wertText": "Platz 6" },
-      { "id": "full-house", "name": "Full House", "wert": 7, "wertText": "Platz 7" }, { "id": "four-kind", "name": "Vierling", "wert": 8, "wertText": "Platz 8" },
-      { "id": "straight-flush", "name": "Straight Flush", "wert": 9, "wertText": "Platz 9" }, { "id": "royal-flush", "name": "Royal Flush", "wert": 10, "wertText": "Platz 10" }
+      { "id": "high-card", "name": "High Card", "wert": 1, "wertText": "50,1 % Wahrscheinlichkeit" }, { "id": "pair", "name": "Ein Paar", "wert": 2, "wertText": "42,3 % Wahrscheinlichkeit" },
+      { "id": "two-pair", "name": "Zwei Paare", "wert": 3, "wertText": "4,75 % Wahrscheinlichkeit" }, { "id": "three-kind", "name": "Drilling", "wert": 4, "wertText": "2,11 % Wahrscheinlichkeit" },
+      { "id": "strasse", "name": "Straße", "wert": 5, "wertText": "0,39 % Wahrscheinlichkeit" }, { "id": "flush", "name": "Flush", "wert": 6, "wertText": "0,197 % Wahrscheinlichkeit" },
+      { "id": "full-house", "name": "Full House", "wert": 7, "wertText": "0,144 % Wahrscheinlichkeit" }, { "id": "four-kind", "name": "Vierling", "wert": 8, "wertText": "0,024 % Wahrscheinlichkeit" },
+      { "id": "straight-flush", "name": "Straight Flush", "wert": 9, "wertText": "0,0014 % Wahrscheinlichkeit" }, { "id": "royal-flush", "name": "Royal Flush", "wert": 10, "wertText": "0,00015 % Wahrscheinlichkeit" }
     ]
   },
   {
