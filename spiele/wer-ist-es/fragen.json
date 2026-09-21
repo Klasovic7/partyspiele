@@ -550,7 +550,7 @@
       "Position: Stürmer",
       "Nationalität: Spanien",
       "Beendete seine Karriere 2019 in Japan",
-      "Ist Rechtsfuß",
+      "Ist beidfüßig",
       "Wurde für viele Jahre Rekordtorschütze seiner Nationalmannschaft",
       "Wechselte 2010 von Valencia nach Barcelona",
       "Wurde 2010 Weltmeister",
@@ -598,7 +598,7 @@
       "Position: Zentrales Mittelfeld",
       "Nationalität: Deutschland",
       "Beendete seine Karriere 2019 in den USA",
-      "Ist Rechtsfuß",
+      "Wurde in Kolbermoor bei Rosenheim geboren",
       "Spielte seine gesamte Bundesligakarriere nur für einen einzigen Verein",
       "Wurde 2014 Weltmeister",
       "War im WM-Finale 2014 einer der auffälligsten Spieler",
@@ -651,7 +651,7 @@
       "Begann seine Profikarriere in Hannover",
       "Wechselte 2011 nach England",
       "Wurde 2014 Weltmeister",
-      "Ist Rechtsfuß",
+      "Bestritt über 100 Länderspiele für Deutschland",
       "Arbeitete nach seiner Karriere lange in der Nachwuchsförderung seines englischen Vereins"
     ]
   },
@@ -678,7 +678,7 @@
       "Position: Flügelspieler",
       "Nationalität: Deutschland",
       "Beendete seine Karriere 2020",
-      "Ist Linksfuß",
+      "Spielte vor seinem Wechsel nach England zwei Jahre für Bayer Leverkusen",
       "Begann seine Profikarriere in Mainz",
       "Wechselte 2013 nach England",
       "Bereitete im WM-Finale 2014 das entscheidende Tor vor",
@@ -774,7 +774,7 @@
       "Position: Flügelspieler",
       "Nationalität: Deutschland",
       "Beendete seine Karriere 2023",
-      "Ist Rechtsfuß",
+      "Wechselte 2012 von Eintracht Braunschweig zu Bayer Leverkusen",
       "Begann seine Profikarriere nicht direkt in der Bundesliga, sondern niedrigerklassig",
       "Spielte fast seine gesamte Bundesligakarriere nur für einen einzigen Verein",
       "Wurde trotz seiner Qualität nur wenige Male für die Nationalmannschaft nominiert",
@@ -902,7 +902,7 @@
       "Position: Stürmer",
       "Nationalität: Österreich",
       "Ist aktuell noch als Profi aktiv",
-      "Ist Rechtsfuß",
+      "Ist beidfüßig",
       "Begann seine Profikarriere in den Niederlanden",
       "Wechselte 2010 nach Bremen",
       "Wechselte 2013 nach England",
@@ -1206,7 +1206,7 @@
       "Position: Zentrales Mittelfeld",
       "Nationalität: Italien",
       "Beendete seine Karriere 2017 in den USA",
-      "Ist Linksfuß",
+      "Ist beidfüßig",
       "Begann seine Profikarriere in Brescia",
       "Wechselte 1999 nach Mailand",
       "Wechselte 2011 ablösefrei zum Erzrivalen aus derselben Stadt",
@@ -1238,7 +1238,7 @@
       "Position: Offensives Mittelfeld",
       "Nationalität: Spanien",
       "Beendete seine Karriere 2023 in Japan",
-      "Ist Rechtsfuß",
+      "Ist beidfüßig",
       "Spielte seine gesamte spanische Karriere für nur einen Verein",
       "Erzielte 2010 das entscheidende Tor im WM-Finale",
       "Wurde 2010 Weltmeister",
@@ -1597,6 +1597,1606 @@
       "Wurde bei einem Verein aus Leverkusen zum verlässlichen Torschützen",
       "Ist ca. 191 cm groß",
       "Plagte sich über Jahre immer wieder mit Verletzungen"
+    ]
+  },
+  {
+    "name": "Franz Beckenbauer",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Innenverteidiger (spielte auch als Libero)",
+      "Nationalität: Deutschland",
+      "Spielte den Großteil seiner Karriere beim FC Bayern München",
+      "Wurde 1974 als Kapitän Weltmeister",
+      "Wurde 1972 Europameister",
+      "Gewann als Spieler und später auch als Trainer die Weltmeisterschaft",
+      "Ist mehrfacher Weltfußballer des Jahres",
+      "Spielte gegen Ende seiner Karriere auch in den USA",
+      "Wurde als Spieler und als Trainer Weltmeister mit Deutschland",
+      "Wird oft als 'Kaiser' bezeichnet"
+    ]
+  },
+  {
+    "name": "Gerd Müller",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Mittelstürmer",
+      "Nationalität: Deutschland",
+      "Spielte fast seine gesamte Karriere für den FC Bayern München",
+      "Wurde 1974 Weltmeister",
+      "Wurde 1972 Europameister",
+      "Ist bis heute Rekordtorschütze des FC Bayern München",
+      "War über Jahrzehnte Rekordtorschütze der Bundesliga",
+      "Beendete seine Karriere in den USA",
+      "Ist Rekordtorschütze der Bundesliga-Geschichte",
+      "Gilt als einer der besten Strafraumstürmer der Fußballgeschichte"
+    ]
+  },
+  {
+    "name": "Lothar Matthäus",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Zentrales Mittelfeld / Libero",
+      "Nationalität: Deutschland",
+      "Spielte für Borussia Mönchengladbach, Bayern München und Inter Mailand",
+      "Wurde 1990 als Kapitän Weltmeister",
+      "Wurde 1980 Europameister",
+      "Wurde 1990 zum Weltfußballer des Jahres gewählt",
+      "Hält den Rekord für die meisten WM-Einsätze eines Spielers",
+      "Beendete seine Karriere in den USA",
+      "Ist Rechtsfuß",
+      "War lange Kapitän der deutschen Nationalmannschaft"
+    ]
+  },
+  {
+    "name": "Jürgen Klinsmann",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Mittelstürmer",
+      "Nationalität: Deutschland",
+      "Spielte unter anderem für Stuttgart, Inter Mailand, Monaco und Tottenham",
+      "Wurde 1990 Weltmeister",
+      "Wurde 1996 als Kapitän Europameister",
+      "Spielte auch für den FC Bayern München",
+      "Wurde später Bundestrainer der deutschen Nationalmannschaft",
+      "Führte Deutschland als Trainer zum dritten Platz bei der WM 2006 im eigenen Land",
+      "Wurde 1990 Weltmeister und war später Bundestrainer",
+      "Bekannt für seine spektakulären Jubel-Grätschen nach Toren"
+    ]
+  },
+  {
+    "name": "Rudi Völler",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Mittelstürmer",
+      "Nationalität: Deutschland",
+      "Spielte unter anderem für Werder Bremen und AS Rom",
+      "Wurde 1990 Weltmeister",
+      "Erzielte bei der WM 1990 wichtige Tore",
+      "Wurde später Teamchef der deutschen Nationalmannschaft",
+      "Führte Deutschland 2002 als Teamchef ins WM-Finale",
+      "Ist bekannt für seine markante Frisur",
+      "Ist Rechtsfuß",
+      "Arbeitete später auch als Sportdirektor beim DFB"
+    ]
+  },
+  {
+    "name": "Oliver Kahn",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Torwart",
+      "Nationalität: Deutschland",
+      "Spielte den Großteil seiner Karriere beim FC Bayern München",
+      "Wurde bei der WM 2002 zum besten Spieler des Turniers gewählt",
+      "War lange Kapitän des FC Bayern München",
+      "Bekannt für seine emotionale und laute Spielweise im Tor",
+      "Trug den Spitznamen 'Titan'",
+      "Ist mindestens 8-facher deutscher Meister",
+      "Wurde bei der WM 2002 zum besten Spieler des Turniers gewählt",
+      "Arbeitete nach seiner Karriere auch in der Vereinsführung des FC Bayern München"
+    ]
+  },
+  {
+    "name": "Michael Ballack",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Offensives Mittelfeld",
+      "Nationalität: Deutschland",
+      "Spielte für Kaiserslautern, Bayer Leverkusen, Bayern München und Chelsea",
+      "Erreichte mit der Nationalmannschaft zweimal ein großes Finale, ohne es zu gewinnen",
+      "War lange Kapitän der deutschen Nationalmannschaft",
+      "Bekannt für seine Kopfballstärke und wichtige Tore in K.-o.-Spielen",
+      "Ist mehrfacher englischer Pokalsieger",
+      "Ist ca. 189 cm groß",
+      "Führte Deutschland 2002 ins WM-Finale",
+      "Verpasste das WM-Finale 2002 wegen einer Gelbsperre"
+    ]
+  },
+  {
+    "name": "Andreas Brehme",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Linker Verteidiger",
+      "Nationalität: Deutschland",
+      "Spielte unter anderem für Kaiserslautern, Bayern München und Inter Mailand",
+      "Verwandelte den entscheidenden Elfmeter im WM-Finale 1990",
+      "Wurde 1990 Weltmeister",
+      "Galt als einer der wenigen wirklich beidfüßigen Spieler seiner Zeit",
+      "Gewann mit Inter Mailand den UEFA-Pokal",
+      "Beendete seine Karriere wieder in Kaiserslautern",
+      "Ist beidfüßig",
+      "Bekannt für seine präzisen Flanken und Distanzschüsse"
+    ]
+  },
+  {
+    "name": "Karl-Heinz Rummenigge",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Mittelstürmer",
+      "Nationalität: Deutschland",
+      "Spielte den Großteil seiner Karriere beim FC Bayern München",
+      "Wurde zweimal zum Weltfußballer des Jahres gewählt",
+      "Stand mit der Nationalmannschaft in zwei WM-Finals",
+      "Wechselte später zu Inter Mailand",
+      "War lange Präsident des FC Bayern München",
+      "Ist ca. 181 cm groß",
+      "Ist Rechtsfuß",
+      "Bekannt für seine Schnelligkeit und Abschlussstärke"
+    ]
+  },
+  {
+    "name": "Uwe Seeler",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Mittelstürmer",
+      "Nationalität: Deutschland",
+      "Spielte seine gesamte Karriere nur für den Hamburger SV",
+      "Nahm an vier Weltmeisterschaften teil",
+      "War lange Kapitän der deutschen Nationalmannschaft",
+      "Lehnte trotz lukrativer Angebote einen Wechsel ins Ausland ab",
+      "Gilt als eine Symbolfigur des Hamburger SV",
+      "Bestritt vier Weltmeisterschaften für Deutschland",
+      "Ihm ist eine Statue vor dem Volksparkstadion gewidmet",
+      "Wurde nie deutscher Meister"
+    ]
+  },
+  {
+    "name": "Sepp Maier",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Torwart",
+      "Nationalität: Deutschland",
+      "Spielte seine gesamte Karriere nur für den FC Bayern München",
+      "Wurde 1974 Weltmeister",
+      "Wurde 1972 Europameister",
+      "Ist mindestens 4-facher deutscher Meister",
+      "Bekannt für seine markante große Torwart-Kappe",
+      "Arbeitete später lange als Torwarttrainer der Nationalmannschaft",
+      "Wurde zu Deutschlands Torhüter des Jahrhunderts gewählt",
+      "Bestritt über 400 Bundesligaspiele in Folge ohne Ausfall"
+    ]
+  },
+  {
+    "name": "Paul Breitner",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Linker Verteidiger",
+      "Nationalität: Deutschland",
+      "Spielte für Bayern München, Real Madrid und Eintracht Braunschweig",
+      "Wurde 1974 Weltmeister",
+      "Erzielte im WM-Finale 1974 ein Tor per Elfmeter",
+      "Ist einer von wenigen Spielern mit Toren in zwei verschiedenen WM-Finals",
+      "Bekannt für seinen markanten Vollbart und lange Haare",
+      "Vertrat oft unangepasste, politische Ansichten abseits des Platzes",
+      "Traf 1974 im WM-Finale per Elfmeter zum Ausgleich",
+      "Beendete seine Karriere wieder beim FC Bayern München"
+    ]
+  },
+  {
+    "name": "Jens Lehmann",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Torwart",
+      "Nationalität: Deutschland",
+      "Spielte unter anderem für Schalke, Milan, Dortmund und Arsenal",
+      "Blieb mit Arsenal 2003/04 eine ganze Saison ungeschlagen",
+      "Wurde bei der WM 2006 im eigenen Land Stammtorhüter",
+      "Bekannt für einen Spickzettel im Strumpf beim Elfmeterschießen 2006",
+      "Kehrte später noch einmal kurz zum VfB Stuttgart zurück",
+      "Ist ca. 190 cm groß",
+      "War Stammtorhüter bei der Heim-WM 2006 in Deutschland",
+      "War danach auch kurzzeitig als Co-Trainer aktiv"
+    ]
+  },
+  {
+    "name": "Jérôme Boateng",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Innenverteidiger",
+      "Nationalität: Deutschland",
+      "Spielte für Hamburg, Manchester City und Bayern München",
+      "Wurde 2014 Weltmeister",
+      "Ist mindestens 8-facher deutscher Meister",
+      "Gewann mit Bayern München das Triple 2013 und 2020",
+      "Sein Halbbruder Kevin-Prince Boateng ist ebenfalls Profifußballer",
+      "Spielte später noch in Frankreich und den USA",
+      "Ist Rechtsfuß",
+      "Bekannt für seine Robustheit und Zweikampfstärke"
+    ]
+  },
+  {
+    "name": "Mario Basler",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Offensives Mittelfeld",
+      "Nationalität: Deutschland",
+      "Spielte unter anderem für Kaiserslautern, Werder Bremen und Bayern München",
+      "Erzielte im Champions-League-Finale 1999 das schnelle 1:0 gegen Manchester United",
+      "Wurde 1996 Europameister",
+      "Bekannt für seine Freistöße mit dem linken Fuß",
+      "Führte abseits des Platzes oft ein unangepasstes Leben",
+      "Ist mindestens 2-facher deutscher Meister",
+      "Erzielte 1999 im Champions-League-Finale das frühe Führungstor für Bayern München",
+      "Arbeitet seit seinem Karriereende häufig als TV-Experte"
+    ]
+  },
+  {
+    "name": "Stefan Effenberg",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Zentrales Mittelfeld",
+      "Nationalität: Deutschland",
+      "Spielte unter anderem für Gladbach, Fiorentina und Bayern München",
+      "War lange Kapitän des FC Bayern München",
+      "Trug den Spitznamen 'Tiger'",
+      "Wurde nach einer Geste gegen eigene Fans vorzeitig von der WM 1994 heimgeschickt",
+      "Ist mindestens 4-facher deutscher Meister",
+      "Gewann mit Bayern München die Champions League 2001",
+      "Ist Rechtsfuß",
+      "Bekannt für seine Passstärke und sein Selbstbewusstsein"
+    ]
+  },
+  {
+    "name": "Dietmar Hamann",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Defensives Mittelfeld",
+      "Nationalität: Deutschland",
+      "Spielte unter anderem für Bayern München und den FC Liverpool",
+      "Gewann mit Liverpool 2005 die Champions League",
+      "Kam im legendären Finale von Istanbul zur Halbzeit ins Spiel",
+      "Wurde 1996 Europameister",
+      "Ist ca. 188 cm groß",
+      "Bekannt für seine Ruhe und seine starken Distanzschüsse",
+      "Gewann 2005 mit Liverpool die Champions League",
+      "Arbeitet seit seinem Karriereende als TV-Experte in England"
+    ]
+  },
+  {
+    "name": "Thomas Häßler",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Offensives Mittelfeld",
+      "Nationalität: Deutschland",
+      "Spielte unter anderem für Köln, Juventus und Real Madrid",
+      "Wurde 1990 Weltmeister",
+      "Wurde 1996 Europameister",
+      "Bekannt für seine präzisen Freistöße und Eckbälle",
+      "Ist deutlich kleiner als die meisten seiner Mitspieler",
+      "Beendete seine Karriere beim 1. FC Köln",
+      "Bestritt als Mittelfeldspieler 100 Länderspiele für Deutschland",
+      "Wird wegen seiner geringen Körpergröße 'Icke' genannt"
+    ]
+  },
+  {
+    "name": "Marc-André ter Stegen",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Torwart",
+      "Nationalität: Deutschland",
+      "Begann seine Profikarriere bei Borussia Mönchengladbach",
+      "Wechselte 2014 zum FC Barcelona",
+      "Gewann mit Barcelona mehrfach die spanische Meisterschaft",
+      "War lange Ersatz- und später Stammtorhüter der Nationalmannschaft hinter Manuel Neuer",
+      "Bekannt für seine starke Ballsicherheit am Fuß",
+      "Hatte in seiner Karriere mehrfach mit Rückenproblemen zu kämpfen",
+      "Ist Rechtsfuß",
+      "Gilt als einer der besten mitspielenden Torhüter seiner Generation"
+    ]
+  },
+  {
+    "name": "Kevin Trapp",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Torwart",
+      "Nationalität: Deutschland",
+      "Spielte lange für Eintracht Frankfurt",
+      "Wechselte auch nach Paris zu PSG",
+      "Kehrte später wieder zu Eintracht Frankfurt zurück",
+      "Gewann mit Frankfurt die Europa League 2022",
+      "War Ersatztorhüter im WM-Kader der Nationalmannschaft",
+      "Bekannt für starke Reflexe bei Eins-gegen-Eins-Situationen",
+      "Ist Rechtsfuß",
+      "Ist mit einem brasilianischen Model verheiratet"
+    ]
+  },
+  {
+    "name": "Robin Koch",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Innenverteidiger",
+      "Nationalität: Deutschland",
+      "Begann seine Profikarriere beim SC Freiburg",
+      "Wechselte nach England zu Leeds United",
+      "Kehrte später in die Bundesliga zurück zu Eintracht Frankfurt",
+      "Gehörte zum erweiterten Kader der Nationalmannschaft",
+      "Bekannt für seine Zweikampfstärke und Ruhe am Ball",
+      "Ist ca. 191 cm groß",
+      "Ist Rechtsfuß",
+      "Spielt meist in der Innenverteidigung einer Dreier- oder Viererkette"
+    ]
+  },
+  {
+    "name": "Deniz Undav",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Mittelstürmer",
+      "Nationalität: Deutschland",
+      "Wurde erst spät in seiner Karriere für die Nationalmannschaft nominiert",
+      "Spielte in den Niederlanden, unter anderem für Union Sint-Truiden",
+      "Wechselte zum VfB Stuttgart",
+      "Erzielte in seiner ersten Bundesliga-Saison für Stuttgart viele Tore",
+      "Bekannt für seine humorvolle und lockere Art",
+      "Ist türkischer Abstammung",
+      "Ist beidfüßig",
+      "Wurde mit Stuttgart DFB-Pokalsieger"
+    ]
+  },
+  {
+    "name": "Angelo Stiller",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Zentrales Mittelfeld",
+      "Nationalität: Deutschland",
+      "Ist der Sohn eines ehemaligen Bundesligaspielers",
+      "Begann seine Profikarriere beim FC Bayern München",
+      "Wechselte über Hoffenheim zum VfB Stuttgart",
+      "Bekannt für seine Passstärke und sein Spielverständnis",
+      "Wurde mit Stuttgart DFB-Pokalsieger",
+      "Gehörte zum Kader der Nationalmannschaft",
+      "Ist Linksfuß",
+      "Übernimmt bei seinem Verein oft ruhende Bälle"
+    ]
+  },
+  {
+    "name": "Karim Adeyemi",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Linksaußen",
+      "Nationalität: Deutschland",
+      "Begann seine Profikarriere bei RB Salzburg",
+      "Wechselte 2022 zu Borussia Dortmund",
+      "Bekannt für seine außergewöhnliche Sprintschnelligkeit",
+      "Gehört zum Kader der deutschen Nationalmannschaft",
+      "Hat nigerianische Wurzeln",
+      "Stand mit Dortmund im Champions-League-Finale",
+      "Ist Linksfuß",
+      "Spielt meist auf dem linken Flügel"
+    ]
+  },
+  {
+    "name": "Serhou Guirassy",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Mittelstürmer",
+      "Nationalität: Guinea",
+      "Wurde in Frankreich geboren",
+      "Spielte unter anderem für Stade Rennes und Amiens",
+      "Erzielte für den VfB Stuttgart in der Bundesliga außergewöhnlich viele Tore",
+      "Wechselte danach zu Borussia Dortmund",
+      "Stand mit Dortmund im Champions-League-Finale",
+      "Ist ca. 187 cm groß",
+      "Ist Rechtsfuß",
+      "Bekannt für seine Abschlussstärke im Strafraum"
+    ]
+  },
+  {
+    "name": "Nick Woltemade",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Mittelstürmer",
+      "Nationalität: Deutschland",
+      "Begann seine Profikarriere bei Werder Bremen",
+      "Wechselte zum VfB Stuttgart",
+      "Ist auffällig groß für einen technisch versierten Stürmer",
+      "Wurde in die deutsche Nationalmannschaft berufen",
+      "Wechselte später in die Premier League",
+      "Ist ca. 200 cm groß",
+      "Ist Rechtsfuß",
+      "Bekannt für seine Ballannahme und sein Kopfballspiel trotz seiner Größe"
+    ]
+  },
+  {
+    "name": "Pascal Groß",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Zentrales Mittelfeld",
+      "Nationalität: Deutschland",
+      "Spielte lange in England für Brighton & Hove Albion",
+      "Wechselte zu Borussia Dortmund",
+      "Bekannt für seine präzisen Ecken und Freistöße",
+      "Wurde erst relativ spät in seiner Karriere für die Nationalmannschaft nominiert",
+      "Begann seine Profikarriere beim Karlsruher SC",
+      "Spielte auch mehrere Jahre für Ingolstadt",
+      "Ist Rechtsfuß",
+      "Gilt als einer der besten Standardschützen der Bundesliga"
+    ]
+  },
+  {
+    "name": "Malick Thiaw",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Innenverteidiger",
+      "Nationalität: Deutschland",
+      "Hat ghanaische Wurzeln",
+      "Begann seine Profikarriere beim FC Schalke 04",
+      "Wechselte 2022 nach Italien zu AC Milan",
+      "Gewann mit Milan die italienische Meisterschaft",
+      "Gehörte zum Kader der deutschen Nationalmannschaft",
+      "Ist ca. 192 cm groß",
+      "Ist Rechtsfuß",
+      "Bekannt für seine Schnelligkeit für einen Innenverteidiger"
+    ]
+  },
+  {
+    "name": "Felix Nmecha",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Zentrales Mittelfeld",
+      "Nationalität: Deutschland",
+      "Hat nigerianische Wurzeln",
+      "Begann seine Profikarriere bei Manchester City",
+      "Wechselte 2023 zu Borussia Dortmund",
+      "Stand mit Dortmund im Champions-League-Finale",
+      "Sein Bruder Lukas Nmecha ist ebenfalls Profifußballer",
+      "Bekannt für seine Laufstärke und Torgefahr aus dem Mittelfeld",
+      "Ist Rechtsfuß",
+      "Gehört zum Kader der deutschen Nationalmannschaft"
+    ]
+  },
+  {
+    "name": "Kevin-Prince Boateng",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Offensives Mittelfeld",
+      "Nationalität: Ghana",
+      "Ist der Halbbruder von Jérôme Boateng",
+      "Spielte unter anderem für Tottenham, Milan und Barcelona",
+      "Entschied sich für die Nationalmannschaft von Ghana statt Deutschland",
+      "Spielte für sehr viele verschiedene Vereine in seiner Karriere",
+      "Verließ einmal ein Spiel wegen rassistischer Anfeindungen aus dem Publikum",
+      "Bekannt für sein Temperament auf und neben dem Platz",
+      "Traf bei der WM 2010 im Spiel gegen Deutschland auf seinen Halbbruder Jérôme Boateng",
+      "Spielte auch für Eintracht Frankfurt in der Bundesliga"
+    ]
+  },
+  {
+    "name": "Cristiano Ronaldo",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Linksaußen / Mittelstürmer",
+      "Nationalität: Portugal",
+      "Spielte unter anderem für Manchester United, Real Madrid und Juventus",
+      "Ist mehrfacher Champions-League-Sieger",
+      "Wurde mehrfach zum Weltfußballer des Jahres gewählt",
+      "Ist Rekordtorschütze der Fußball-Nationalmannschaften weltweit",
+      "Wurde 2016 mit Portugal Europameister",
+      "Wechselte später nach Saudi-Arabien",
+      "Ist Rechtsfuß",
+      "Bekannt für seinen markanten Jubel-Sprung mit Drehung"
+    ]
+  },
+  {
+    "name": "Lionel Messi",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Rechtsaußen / Offensives Mittelfeld",
+      "Nationalität: Argentinien",
+      "Spielte fast seine gesamte Vereinskarriere für den FC Barcelona",
+      "Wurde mehrfach zum Weltfußballer des Jahres gewählt",
+      "Wurde 2022 mit Argentinien Weltmeister",
+      "Wechselte danach zu Paris Saint-Germain",
+      "Spielt aktuell in der US-amerikanischen Liga",
+      "Ist deutlich kleiner als die meisten Profispieler",
+      "Ist Linksfuß",
+      "Gilt für viele als einer der besten Spieler der Fußballgeschichte"
+    ]
+  },
+  {
+    "name": "Ronaldinho",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Offensives Mittelfeld",
+      "Nationalität: Brasilien",
+      "Spielte unter anderem für Paris Saint-Germain, Barcelona und Milan",
+      "Wurde 2002 mit Brasilien Weltmeister",
+      "Wurde zum Weltfußballer des Jahres gewählt",
+      "Bekannt für außergewöhnliche Tricks und Kreativität am Ball",
+      "Trug bei seinen Toren oft ein breites Lächeln",
+      "Beendete seine Karriere in Brasilien und Mexiko",
+      "Ist Rechtsfuß",
+      "Gilt als einer der unterhaltsamsten Spieler seiner Generation"
+    ]
+  },
+  {
+    "name": "Ronaldo Nazário",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Mittelstürmer",
+      "Nationalität: Brasilien",
+      "Spielte unter anderem für PSV, Barcelona, Inter Mailand und Real Madrid",
+      "Wurde 1994 und 2002 Weltmeister",
+      "Wurde mehrfach zum Weltfußballer des Jahres gewählt",
+      "Erzielte im WM-Finale 2002 beide Tore beim 2:0 gegen Deutschland",
+      "Hatte in seiner Karriere mehrfach schwere Knieverletzungen",
+      "Wird oft 'Fenomeno' genannt",
+      "Ist beidfüßig",
+      "Beendete seine Karriere beim brasilianischen Verein Corinthians"
+    ]
+  },
+  {
+    "name": "Zinedine Zidane",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Offensives Mittelfeld",
+      "Nationalität: Frankreich",
+      "Spielte unter anderem für Juventus und Real Madrid",
+      "Wurde 1998 als Kapitän Weltmeister",
+      "Wurde 2000 Europameister",
+      "Erzielte im Champions-League-Finale 2002 ein spektakuläres Volley-Tor",
+      "Wurde im WM-Finale 2006 nach einem Kopfstoß vom Platz gestellt",
+      "Wurde später sehr erfolgreicher Trainer von Real Madrid",
+      "Ist beidfüßig",
+      "Hat algerische Wurzeln"
+    ]
+  },
+  {
+    "name": "Thierry Henry",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Mittelstürmer / Linksaußen",
+      "Nationalität: Frankreich",
+      "Spielte unter anderem für Monaco, Juventus, Arsenal und Barcelona",
+      "Wurde 1998 Weltmeister",
+      "Wurde 2000 Europameister",
+      "Ist bis heute Rekordtorschütze des FC Arsenal",
+      "War Teil der ungeschlagenen Arsenal-Meistersaison 2003/04",
+      "Beendete seine Karriere in den USA",
+      "Ist beidfüßig",
+      "Arbeitet seit seinem Karriereende auch als TV-Experte"
+    ]
+  },
+  {
+    "name": "David Beckham",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Rechtsaußen / Rechtes Mittelfeld",
+      "Nationalität: England",
+      "Spielte unter anderem für Manchester United, Real Madrid und die LA Galaxy",
+      "Bekannt für seine präzisen Flanken und Freistöße mit dem rechten Fuß",
+      "Gewann mit Manchester United die Champions League 1999",
+      "War lange Kapitän der englischen Nationalmannschaft",
+      "Wurde durch seine Ehe mit einer bekannten Sängerin auch außerhalb des Fußballs sehr bekannt",
+      "Beendete seine Karriere in Frankreich bei Paris Saint-Germain",
+      "Ist Rechtsfuß",
+      "Gründete später einen eigenen Verein in den USA"
+    ]
+  },
+  {
+    "name": "Paul Scholes",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Zentrales Mittelfeld",
+      "Nationalität: England",
+      "Spielte seine gesamte Karriere nur für Manchester United",
+      "Gewann mehrfach die Champions League",
+      "Bekannt für seine Passgenauigkeit über weite Distanzen",
+      "Zog sich früh aus der Nationalmannschaft zurück",
+      "Wird von vielen Kollegen als einer der unterschätztesten Spieler seiner Zeit genannt",
+      "Ist eher unauffällig und zurückhaltend außerhalb des Platzes",
+      "Ist Rechtsfuß",
+      "Beendete seine Karriere bei Manchester United"
+    ]
+  },
+  {
+    "name": "Ryan Giggs",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Linksaußen",
+      "Nationalität: Wales",
+      "Spielte seine gesamte Karriere nur für Manchester United",
+      "Ist Rekordspieler von Manchester United",
+      "Gewann mit United mehrfach die Champions League",
+      "Traf in jeder einzelnen Premier-League-Saison seiner langen Karriere mindestens einmal",
+      "Konnte mit Wales nie an einer großen Endrunde teilnehmen",
+      "Wurde später kurzzeitig Nationaltrainer von Wales",
+      "Ist Linksfuß",
+      "Spielte bis weit über 35 noch auf hohem Niveau"
+    ]
+  },
+  {
+    "name": "Roy Keane",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Zentrales Mittelfeld",
+      "Nationalität: Irland",
+      "Spielte unter anderem für Nottingham Forest und Manchester United",
+      "War lange Kapitän von Manchester United",
+      "Gewann mit United die Champions League 1999, verpasste das Finale aber gesperrt",
+      "Bekannt für seine kompromisslose und aggressive Spielweise",
+      "Verließ die WM 2002 vorzeitig nach einem Streit mit dem Trainer",
+      "Arbeitete danach auch als Trainer und TV-Experte",
+      "Ist Rechtsfuß",
+      "Gilt als einer der besten irischen Fußballer aller Zeiten"
+    ]
+  },
+  {
+    "name": "Eric Cantona",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Mittelstürmer / Offensives Mittelfeld",
+      "Nationalität: Frankreich",
+      "Spielte unter anderem für mehrere französische Vereine, Leeds United und Manchester United",
+      "Gewann mit Manchester United mehrfach die englische Meisterschaft",
+      "Wurde einmal wegen eines Tritts gegen einen Fan lange gesperrt",
+      "Bekannt für seinen erhobenen Kragen und sein selbstbewusstes Auftreten",
+      "Beendete seine Karriere überraschend früh mit Anfang 30",
+      "Versuchte sich danach auch als Schauspieler",
+      "Ist Rechtsfuß",
+      "Wird von Manchester-United-Fans bis heute als Kultfigur verehrt"
+    ]
+  },
+  {
+    "name": "Didier Drogba",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Mittelstürmer",
+      "Nationalität: Elfenbeinküste",
+      "Spielte unter anderem für Olympique Marseille und Chelsea",
+      "Ist Rekordtorschütze des FC Chelsea",
+      "Erzielte im Champions-League-Finale 2012 das entscheidende Ausgleichstor per Kopf",
+      "Setzte sich politisch für Frieden in seinem Heimatland ein",
+      "Bekannt für seine physische Präsenz und Kopfballstärke",
+      "Beendete seine Karriere in China und den USA",
+      "Ist beidfüßig",
+      "War lange Kapitän der ivorischen Nationalmannschaft"
+    ]
+  },
+  {
+    "name": "Samuel Eto'o",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Mittelstürmer",
+      "Nationalität: Kamerun",
+      "Spielte unter anderem für Real Madrid, Barcelona und Inter Mailand",
+      "Gewann dreimal in Folge die Champions League mit drei verschiedenen Vereinen",
+      "Ist Rekordtorschütze der kamerunischen Nationalmannschaft",
+      "Gewann mit Kamerun olympisches Gold im Jahr 2000",
+      "Spielte gegen Ende seiner Karriere auch in Russland und der Türkei",
+      "Wurde später Präsident des kamerunischen Fußballverbandes",
+      "Ist beidfüßig",
+      "Bekannt für seine Schnelligkeit und Torgefahr"
+    ]
+  },
+  {
+    "name": "Michael Owen",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Mittelstürmer",
+      "Nationalität: England",
+      "Wurde mit 18 Jahren bei der WM 1998 durch ein Solo-Tor gegen Argentinien bekannt",
+      "Spielte unter anderem für den FC Liverpool und Real Madrid",
+      "Wurde 2001 zum Weltfußballer des Jahres nominiert und gewann den Ballon d'Or",
+      "Wechselte später zu Newcastle und Manchester United",
+      "Hatte in seiner Karriere häufig mit Verletzungen zu kämpfen",
+      "Arbeitet seit seinem Karriereende als TV-Experte",
+      "Ist beidfüßig",
+      "Bekannt für seine explosive Schnelligkeit in jungen Jahren"
+    ]
+  },
+  {
+    "name": "Alan Shearer",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Mittelstürmer",
+      "Nationalität: England",
+      "Spielte unter anderem für Southampton, Blackburn Rovers und Newcastle United",
+      "Ist Rekordtorschütze der Premier League",
+      "Gewann mit Blackburn Rovers die englische Meisterschaft",
+      "Lehnte einen Wechsel zu mehreren Topvereinen ab, um bei Newcastle zu bleiben",
+      "War lange Kapitän der englischen Nationalmannschaft",
+      "Arbeitet seit seinem Karriereende als TV-Experte",
+      "Ist Rechtsfuß",
+      "Bekannt für seine kraftvollen Torabschlüsse"
+    ]
+  },
+  {
+    "name": "Peter Schmeichel",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Torwart",
+      "Nationalität: Dänemark",
+      "Spielte unter anderem für Manchester United",
+      "Gewann mit Dänemark überraschend die Europameisterschaft 1992",
+      "Gewann mit Manchester United das Triple 1999",
+      "Bekannt für seine markante 'Stern'-Sprungtechnik bei Paraden",
+      "Sein Sohn Kasper Schmeichel wurde ebenfalls Nationaltorhüter",
+      "Beendete seine Karriere unter anderem beim FC Aston Villa",
+      "Ist Rechtsfuß",
+      "Galt lange als einer der besten Torhüter der Welt"
+    ]
+  },
+  {
+    "name": "Ruud van Nistelrooy",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Mittelstürmer",
+      "Nationalität: Niederlande",
+      "Spielte unter anderem für PSV Eindhoven, Manchester United und Real Madrid",
+      "War über viele Jahre einer der treffsichersten Stürmer Europas",
+      "Gewann mit Manchester United mehrfach die englische Meisterschaft",
+      "Verpasste durch eine schwere Knieverletzung die EM 2000",
+      "Wurde später Trainer, unter anderem bei PSV und Manchester United",
+      "Bekannt für sein kaltschnäuziges Torabschlussverhalten",
+      "Ist Rechtsfuß",
+      "Beendete seine Spielerkarriere in Malaga"
+    ]
+  },
+  {
+    "name": "Dennis Bergkamp",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Offensives Mittelfeld / Mittelstürmer",
+      "Nationalität: Niederlande",
+      "Spielte unter anderem für Ajax, Inter Mailand und Arsenal",
+      "Hatte große Flugangst und reiste deshalb meist nicht zu Auswärtsspielen im Ausland",
+      "Bekannt für seine technische Klasse und sein Auge für den Mitspieler",
+      "War Teil der ungeschlagenen Arsenal-Meistersaison 2003/04",
+      "Erzielte einige der spektakulärsten Tore der Premier-League-Geschichte",
+      "Beendete seine Karriere bei Ajax Amsterdam",
+      "Ist Rechtsfuß",
+      "Wird wegen seiner Eleganz oft 'The Iceman' genannt"
+    ]
+  },
+  {
+    "name": "Johan Cruyff",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Mittelstürmer / Offensives Mittelfeld",
+      "Nationalität: Niederlande",
+      "Spielte unter anderem für Ajax Amsterdam und den FC Barcelona",
+      "Prägte mit den Niederlanden in den 1970ern den 'Totaalvoetbal'",
+      "Stand mit den Niederlanden im WM-Finale 1974",
+      "Eine bekannte Körpertäuschung ist als 'Cruyff-Turn' nach ihm benannt",
+      "Wurde mehrfach zum Weltfußballer des Jahres gewählt",
+      "Wurde später als Trainer beim FC Barcelona sehr erfolgreich",
+      "Ist Rechtsfuß",
+      "Prägte die spätere Spielphilosophie vieler niederländischer und spanischer Vereine"
+    ]
+  },
+  {
+    "name": "Ruud Gullit",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Offensives Mittelfeld / Mittelstürmer",
+      "Nationalität: Niederlande",
+      "Spielte unter anderem für PSV Eindhoven und den AC Mailand",
+      "Wurde 1988 mit den Niederlanden Europameister",
+      "Wurde zum Weltfußballer des Jahres gewählt",
+      "Bekannt für seine markanten Dreadlocks",
+      "Wurde später Trainer, unter anderem beim FC Chelsea",
+      "Konnte auf mehreren Positionen im Mittelfeld und Angriff spielen",
+      "Ist Rechtsfuß",
+      "Arbeitet seit seinem Karriereende auch als TV-Experte"
+    ]
+  },
+  {
+    "name": "Frank Rijkaard",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Defensives Mittelfeld / Innenverteidiger",
+      "Nationalität: Niederlande",
+      "Spielte unter anderem für Ajax Amsterdam und den AC Mailand",
+      "Wurde 1988 mit den Niederlanden Europameister",
+      "Gewann mit Milan mehrfach die Champions League",
+      "Wurde später sehr erfolgreicher Trainer beim FC Barcelona",
+      "War in ein bekanntes Spuck-Duell bei der WM 1990 verwickelt",
+      "Bekannt für seine Vielseitigkeit und Ruhe am Ball",
+      "Ist Rechtsfuß",
+      "Trainierte später auch die niederländische Nationalmannschaft"
+    ]
+  },
+  {
+    "name": "Patrick Kluivert",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Mittelstürmer",
+      "Nationalität: Niederlande",
+      "Spielte unter anderem für Ajax Amsterdam, Barcelona und den AC Mailand",
+      "Erzielte im Champions-League-Finale 1995 als 18-Jähriger das Siegtor für Ajax",
+      "War lange Rekordtorschütze der niederländischen Nationalmannschaft",
+      "Wurde später auch als Nationaltrainer verschiedener Länder aktiv",
+      "Bekannt für seine Kopfballstärke und Abschlusstechnik",
+      "Beendete seine Spielerkarriere in der Türkei",
+      "Ist Rechtsfuß",
+      "War später als Berater und Funktionär im Fußball tätig"
+    ]
+  },
+  {
+    "name": "Robin van Persie",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Mittelstürmer / Linksaußen",
+      "Nationalität: Niederlande",
+      "Spielte unter anderem für Feyenoord, Arsenal und Manchester United",
+      "Wurde mit Manchester United englischer Meister",
+      "Erzielte bei der WM 2014 ein spektakuläres Kopfballtor per Flugkopfball gegen Spanien",
+      "War lange Kapitän der niederländischen Nationalmannschaft",
+      "Hatte in seiner Zeit bei Arsenal häufig mit Verletzungen zu kämpfen",
+      "Beendete seine Karriere wieder bei Feyenoord Rotterdam",
+      "Ist Linksfuß",
+      "Wurde später Trainer bei Feyenoord"
+    ]
+  },
+  {
+    "name": "Arjen Robben",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Rechtsaußen",
+      "Nationalität: Niederlande",
+      "Spielte unter anderem für PSV Eindhoven, Chelsea, Real Madrid und Bayern München",
+      "Gewann mit Bayern München das Triple 2013",
+      "Erzielte im Champions-League-Finale 2013 das entscheidende Siegtor",
+      "Bekannt für sein Dribbling von rechts nach innen mit anschließendem Abschluss",
+      "Stand mit den Niederlanden im WM-Finale 2010",
+      "Beendete seine Karriere wieder bei seinem Jugendverein FC Groningen",
+      "Ist Linksfuß",
+      "Sein Spielzug wurde von Gegnern und Fans oft als 'Robben-Move' bezeichnet"
+    ]
+  },
+  {
+    "name": "Wesley Sneijder",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Offensives Mittelfeld",
+      "Nationalität: Niederlande",
+      "Spielte unter anderem für Ajax Amsterdam, Real Madrid, Inter Mailand und Galatasaray",
+      "Gewann mit Inter Mailand 2010 das Triple",
+      "Stand mit den Niederlanden im WM-Finale 2010",
+      "War maßgeblich am Erfolg der Niederlande bei der WM 2010 beteiligt",
+      "Bekannt für seine präzisen Distanzschüsse und Freistöße",
+      "Beendete seine Karriere in Katar",
+      "Ist beidfüßig",
+      "Wurde bei der WM 2010 zu einem der besten Spieler des Turniers gewählt"
+    ]
+  },
+  {
+    "name": "Clarence Seedorf",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Zentrales / Offensives Mittelfeld",
+      "Nationalität: Niederlande",
+      "Spielte unter anderem für Ajax, Real Madrid, Inter Mailand und den AC Mailand",
+      "Gewann die Champions League mit drei verschiedenen Vereinen",
+      "Ist der einzige Spieler, der die Champions League mit drei unterschiedlichen Klubs gewonnen hat",
+      "Beendete seine Karriere in Brasilien bei Botafogo",
+      "Wurde danach kurzzeitig Trainer beim AC Mailand",
+      "Bekannt für seine Vielseitigkeit im Mittelfeld",
+      "Ist Rechtsfuß",
+      "Setzte sich abseits des Platzes für soziale Projekte ein"
+    ]
+  },
+  {
+    "name": "Edgar Davids",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Defensives Mittelfeld",
+      "Nationalität: Niederlande",
+      "Spielte unter anderem für Ajax Amsterdam, Juventus, Barcelona und den FC Inter",
+      "Bekannt für seine markante Sportbrille auf dem Feld",
+      "Wurde 1995 mit Ajax Champions-League-Sieger",
+      "Trug den Spitznamen 'The Pitbull' wegen seiner aggressiven Zweikampfführung",
+      "Wurde einmal wegen Dopings gesperrt",
+      "Beendete seine Karriere in England bei Barnet",
+      "Ist Linksfuß",
+      "War danach kurzzeitig auch Spielertrainer"
+    ]
+  },
+  {
+    "name": "Paolo Maldini",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Linker Verteidiger / Innenverteidiger",
+      "Nationalität: Italien",
+      "Spielte seine gesamte Karriere nur für den AC Mailand",
+      "Gewann mehrfach die Champions League",
+      "War extrem lange auf höchstem Niveau aktiv, bis über 40",
+      "Ist der Sohn des ehemaligen Milan-Kapitäns Cesare Maldini",
+      "War lange Kapitän des AC Mailand",
+      "Sein Sohn Daniel Maldini ist ebenfalls Profifußballer",
+      "Ist beidfüßig",
+      "Gilt als einer der besten Verteidiger der Fußballgeschichte"
+    ]
+  },
+  {
+    "name": "Franco Baresi",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Innenverteidiger",
+      "Nationalität: Italien",
+      "Spielte seine gesamte Karriere nur für den AC Mailand",
+      "War lange Kapitän des AC Mailand",
+      "Gewann mehrfach die Champions League",
+      "Stand mit Italien im WM-Finale 1994",
+      "Bekannt für sein herausragendes Stellungsspiel als Libero",
+      "Seine Rückennummer 6 wurde bei Milan nach seiner Karriere nicht mehr vergeben",
+      "Ist Rechtsfuß",
+      "Gilt als einer der besten Liberos der Fußballgeschichte"
+    ]
+  },
+  {
+    "name": "Alessandro Del Piero",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Offensives Mittelfeld / Mittelstürmer",
+      "Nationalität: Italien",
+      "Spielte fast seine gesamte Karriere nur für Juventus Turin",
+      "Ist Rekordtorschütze von Juventus Turin",
+      "Wurde 2006 mit Italien Weltmeister",
+      "Bekannt für seine charakteristischen Tore aus dem 'Del-Piero-Winkel'",
+      "Beendete seine Karriere in Australien und Indien",
+      "War lange Kapitän von Juventus Turin",
+      "Ist beidfüßig",
+      "Gilt als einer der beliebtesten Spieler in der Geschichte von Juventus"
+    ]
+  },
+  {
+    "name": "Francesco Totti",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Offensives Mittelfeld / Mittelstürmer",
+      "Nationalität: Italien",
+      "Spielte seine gesamte Karriere nur für die AS Rom",
+      "Ist Rekordtorschütze der AS Rom",
+      "Wurde 2006 mit Italien Weltmeister",
+      "War über 20 Jahre lang Kapitän der AS Rom",
+      "Bekannt für seine 'Cucchiaio'-Lupfer bei Elfmetern",
+      "Wurde nach seiner Karriere kurzzeitig Funktionär bei seinem Verein",
+      "Ist beidfüßig",
+      "Gilt als Symbolfigur und Identifikationsfigur der AS Rom"
+    ]
+  },
+  {
+    "name": "Roberto Baggio",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Offensives Mittelfeld / Mittelstürmer",
+      "Nationalität: Italien",
+      "Spielte unter anderem für Fiorentina, Juventus, Milan und Inter Mailand",
+      "Wurde 1993 zum Weltfußballer des Jahres gewählt",
+      "Vergab den entscheidenden Elfmeter im WM-Finale 1994",
+      "Bekannt für sein markantes Pferdeschwanz-Haar in den 90ern",
+      "Nahm an vier Weltmeisterschaften mit Italien teil",
+      "Beendete seine Karriere bei Brescia Calcio",
+      "Ist Rechtsfuß",
+      "Gilt als einer der elegantesten Techniker seiner Generation"
+    ]
+  },
+  {
+    "name": "Fabio Cannavaro",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Innenverteidiger",
+      "Nationalität: Italien",
+      "Spielte unter anderem für den FC Parma, Inter Mailand, Juventus und Real Madrid",
+      "War Kapitän der italienischen Nationalmannschaft bei der WM 2006",
+      "Wurde 2006 Weltmeister",
+      "Wurde als bisher einziger reiner Verteidiger zum Weltfußballer des Jahres gewählt",
+      "Ist trotz seiner geringen Körpergröße für einen Verteidiger extrem kopfballstark",
+      "Beendete seine Karriere in Katar bei Al-Ahli",
+      "Ist Rechtsfuß",
+      "Gilt als einer der besten Innenverteidiger der Fußballgeschichte"
+    ]
+  },
+  {
+    "name": "Gianluigi Buffon",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Torwart",
+      "Nationalität: Italien",
+      "Spielte unter anderem für den FC Parma, Juventus und Paris Saint-Germain",
+      "Wurde 2006 Weltmeister",
+      "War über zwei Jahrzehnte Stammtorhüter von Juventus Turin",
+      "Ist Rekordspieler der italienischen Nationalmannschaft",
+      "Beendete seine aktive Karriere erst mit über 45 Jahren",
+      "Wurde mehrfach zum besten Torhüter der Welt gewählt",
+      "Ist Rechtsfuß",
+      "Kehrte gegen Ende seiner Karriere noch einmal zu seinem Ex-Verein Parma zurück"
+    ]
+  },
+  {
+    "name": "Christian Vieri",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Mittelstürmer",
+      "Nationalität: Italien",
+      "Spielte für sehr viele verschiedene italienische Topvereine, unter anderem Inter Mailand",
+      "War zeitweise der teuerste Transfer der Fußballgeschichte",
+      "Bekannt für seine physische Präsenz und Kopfballstärke",
+      "Erzielte bei der WM 2002 mehrere wichtige Tore für Italien",
+      "Beendete seine Karriere unter anderem in Frankreich",
+      "Wechselte in seiner Karriere ungewöhnlich oft den Verein",
+      "Ist Linksfuß",
+      "Arbeitet seit seinem Karriereende auch als TV-Experte"
+    ]
+  },
+  {
+    "name": "Filippo Inzaghi",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Mittelstürmer",
+      "Nationalität: Italien",
+      "Spielte unter anderem für Juventus und den AC Mailand",
+      "Gewann mehrfach die Champions League mit dem AC Mailand",
+      "Bekannt für seinen exzellenten Torinstinkt und seine Laufwege",
+      "Wurde nach seiner Spielerkarriere selbst Trainer des AC Mailand",
+      "Sein Bruder Simone Inzaghi ist ebenfalls ein bekannter Fußballtrainer",
+      "Wurde wegen seines Torriechers oft mit Abseitsdiskussionen in Verbindung gebracht",
+      "Ist Rechtsfuß",
+      "Trainierte später auch mehrere andere italienische Vereine"
+    ]
+  },
+  {
+    "name": "Alessandro Nesta",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Innenverteidiger",
+      "Nationalität: Italien",
+      "Spielte unter anderem für Lazio Rom und den AC Mailand",
+      "Wurde 2006 Weltmeister",
+      "Gewann mehrfach die Champions League mit dem AC Mailand",
+      "Bekannt für sein elegantes Stellungsspiel und seine Zweikampftechnik",
+      "Hatte in seiner Karriere immer wieder mit Verletzungen zu kämpfen",
+      "Beendete seine Karriere in den USA bei Montreal Impact",
+      "Ist Rechtsfuß",
+      "Gilt als einer der stilistisch elegantesten Verteidiger seiner Generation"
+    ]
+  },
+  {
+    "name": "Gennaro Gattuso",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Defensives Mittelfeld",
+      "Nationalität: Italien",
+      "Spielte unter anderem für Rangers und den AC Mailand",
+      "Wurde 2006 Weltmeister",
+      "Gewann mehrfach die Champions League mit dem AC Mailand",
+      "Bekannt für seine kämpferische und energiegeladene Spielweise",
+      "Wurde nach seiner Spielerkarriere Trainer, unter anderem beim AC Mailand",
+      "Trug den Spitznamen 'Ringhio' wegen seines Kampfgeistes",
+      "Ist Rechtsfuß",
+      "Trainierte auch Vereine wie Neapel und Valencia"
+    ]
+  },
+  {
+    "name": "Kaká",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Offensives Mittelfeld",
+      "Nationalität: Brasilien",
+      "Spielte unter anderem für den AC Mailand und Real Madrid",
+      "Wurde 2007 zum Weltfußballer des Jahres gewählt",
+      "Gewann mit dem AC Mailand die Champions League 2007",
+      "Erlitt als Jugendlicher einen schweren Unfall in einem Schwimmbecken",
+      "Ist bekannt für seine tiefe religiöse Überzeugung",
+      "Beendete seine Karriere in den USA bei Orlando City",
+      "Ist beidfüßig",
+      "Bekannt für seine Läufe aus dem Mittelfeld und Distanzschüsse"
+    ]
+  },
+  {
+    "name": "Rivaldo",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Offensives Mittelfeld",
+      "Nationalität: Brasilien",
+      "Spielte unter anderem für Deportivo La Coruña, Barcelona und den AC Mailand",
+      "Wurde 1999 zum Weltfußballer des Jahres gewählt",
+      "Wurde 2002 mit Brasilien Weltmeister",
+      "Bekannt für spektakuläre Fallrückzieher-Tore",
+      "Wuchs in sehr ärmlichen Verhältnissen auf und verlor früh mehrere Zähne bei einem Unfall",
+      "Beendete seine Karriere unter anderem in Usbekistan",
+      "Ist Linksfuß",
+      "Bildete beim WM-Titel 2002 mit Ronaldo und Ronaldinho den 'Dreizack' im Angriff"
+    ]
+  },
+  {
+    "name": "Cafu",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Rechter Verteidiger",
+      "Nationalität: Brasilien",
+      "Spielte unter anderem für den FC São Paulo, die AS Rom und den AC Mailand",
+      "Ist der einzige Spieler, der drei WM-Finals bestritten hat",
+      "Wurde 1994 und 2002 Weltmeister",
+      "War Kapitän der brasilianischen Nationalmannschaft beim WM-Titel 2002",
+      "Bekannt für seine enorme Laufkraft auf der rechten Außenbahn",
+      "Beendete seine Karriere im brasilianischen Verein São Paulo",
+      "Ist Rechtsfuß",
+      "Gilt als einer der besten Rechtsverteidiger der Fußballgeschichte"
+    ]
+  },
+  {
+    "name": "Roberto Carlos",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Linker Verteidiger",
+      "Nationalität: Brasilien",
+      "Spielte unter anderem für Inter Mailand und Real Madrid",
+      "Wurde 2002 mit Brasilien Weltmeister",
+      "Bekannt für einen legendären Freistoß mit extremer Flugkurve gegen Frankreich 1997",
+      "Gewann mit Real Madrid mehrfach die Champions League",
+      "Bekannt für seine enorme Schusskraft mit dem linken Fuß",
+      "Beendete seine Karriere unter anderem in der Türkei und Russland",
+      "Ist Linksfuß",
+      "Gilt als einer der besten Linksverteidiger der Fußballgeschichte"
+    ]
+  },
+  {
+    "name": "Romário",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Mittelstürmer",
+      "Nationalität: Brasilien",
+      "Spielte unter anderem für PSV Eindhoven, den FC Barcelona und den FC Valencia",
+      "Wurde 1994 Weltmeister",
+      "Wurde 1994 zum Weltfußballer des Jahres gewählt",
+      "Erzielte in seiner Karriere weit über 700 Tore",
+      "Bekannt für seinen kaltschnäuzigen Abschluss im Strafraum",
+      "Beendete seine Karriere in mehreren brasilianischen Vereinen",
+      "Ist beidfüßig",
+      "Wurde nach seiner Karriere auch als Politiker in Brasilien aktiv"
+    ]
+  },
+  {
+    "name": "Zico",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Offensives Mittelfeld",
+      "Nationalität: Brasilien",
+      "Spielte den Großteil seiner Karriere für Flamengo",
+      "Wurde nie Weltmeister, obwohl er zu den besten Spielern seiner Generation zählte",
+      "Trug den Spitznamen 'Weißer Pelé'",
+      "Spielte auch einige Jahre in Italien für Udinese",
+      "Wurde später Sportminister in Brasilien",
+      "Arbeitete danach auch als Trainer, unter anderem in Japan",
+      "Ist Rechtsfuß",
+      "Bekannt für seine präzisen Freistöße und Pässe"
+    ]
+  },
+  {
+    "name": "Diego Maradona",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Offensives Mittelfeld",
+      "Nationalität: Argentinien",
+      "Spielte unter anderem für den FC Barcelona und den SSC Neapel",
+      "Wurde 1986 als Kapitän Weltmeister",
+      "Erzielte bei der WM 1986 das legendäre 'Jahrhunderttor' im Alleingang",
+      "Führte den SSC Neapel zu dessen bis dahin einzigen Meistertiteln",
+      "Wurde mehrfach wegen Dopings gesperrt",
+      "Wurde später auch als Trainer, unter anderem der argentinischen Nationalmannschaft, aktiv",
+      "Ist Linksfuß",
+      "Gilt für viele als einer der besten Spieler der Fußballgeschichte"
+    ]
+  },
+  {
+    "name": "Gabriel Batistuta",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Mittelstürmer",
+      "Nationalität: Argentinien",
+      "Spielte den Großteil seiner Karriere für den AC Florenz",
+      "War lange Rekordtorschütze der argentinischen Nationalmannschaft",
+      "Bekannt für seine enorme Schusskraft",
+      "Wechselte gegen Ende seiner Karriere zu Inter Mailand und der AS Rom",
+      "Beendete seine Karriere in Katar",
+      "Trug den Spitznamen 'Batigol'",
+      "Ist Rechtsfuß",
+      "Gilt als einer der besten Mittelstürmer der 1990er Jahre"
+    ]
+  },
+  {
+    "name": "Juan Román Riquelme",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Offensives Mittelfeld",
+      "Nationalität: Argentinien",
+      "Spielte den Großteil seiner Karriere für die Boca Juniors",
+      "Spielte auch mehrere Jahre für Villarreal und den FC Barcelona",
+      "Bekannt für seine ruhige, kontrollierte Spielweise mit viel Ballbesitz",
+      "Gewann mit den Boca Juniors mehrfach die Copa Libertadores",
+      "Wurde später auch Funktionär bei den Boca Juniors",
+      "Wurde von seinem Nationaltrainer bei der WM 2006 überraschend nicht mehr eingesetzt",
+      "Ist Rechtsfuß",
+      "Gilt als einer der besten südamerikanischen Spielmacher seiner Generation"
+    ]
+  },
+  {
+    "name": "Javier Zanetti",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Rechter Verteidiger / Rechtes Mittelfeld",
+      "Nationalität: Argentinien",
+      "Spielte seine gesamte europäische Karriere nur für Inter Mailand",
+      "Ist Rekordspieler von Inter Mailand",
+      "War über ein Jahrzehnt Kapitän von Inter Mailand",
+      "Gewann mit Inter 2010 das Triple",
+      "Bekannt für seine enorme Vielseitigkeit auf mehreren Positionen",
+      "Arbeitete nach seiner Karriere als Funktionär bei Inter Mailand",
+      "Ist Rechtsfuß",
+      "Gilt als eine Symbolfigur von Inter Mailand"
+    ]
+  },
+  {
+    "name": "Sergio Agüero",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Mittelstürmer",
+      "Nationalität: Argentinien",
+      "Spielte unter anderem für Atlético Madrid und Manchester City",
+      "Ist Rekordtorschütze von Manchester City",
+      "Erzielte in der letzten Minute der Saison 2011/12 das entscheidende Meistertor",
+      "War lange mit einer Tochter von Diego Maradona verheiratet",
+      "Musste seine Karriere wegen Herzproblemen früh beenden",
+      "Beendete seine Karriere beim FC Barcelona",
+      "Ist Rechtsfuß",
+      "Gilt als einer der besten Stürmer der Premier-League-Geschichte"
+    ]
+  },
+  {
+    "name": "Ángel Di María",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Rechtsaußen / Offensives Mittelfeld",
+      "Nationalität: Argentinien",
+      "Spielte unter anderem für Real Madrid, Manchester United und Paris Saint-Germain",
+      "Bereitete das entscheidende Tor im Champions-League-Finale 2014 vor",
+      "Erzielte das entscheidende Tor im Finale der Copa América 2021",
+      "Wurde 2022 mit Argentinien Weltmeister",
+      "Erzielte im WM-Finale 2022 ein wichtiges Tor gegen Frankreich",
+      "Kehrte gegen Ende seiner Karriere nach Argentinien zurück",
+      "Ist Linksfuß",
+      "Bekannt für seine Schnelligkeit und präzisen Flanken"
+    ]
+  },
+  {
+    "name": "Raúl González",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Mittelstürmer",
+      "Nationalität: Spanien",
+      "Spielte den Großteil seiner Karriere für Real Madrid",
+      "War lange Rekordtorschütze von Real Madrid",
+      "War lange Kapitän von Real Madrid",
+      "Gewann mehrfach die Champions League mit Real Madrid",
+      "Wechselte gegen Ende seiner Karriere nach Deutschland zu Schalke 04",
+      "Beendete seine aktive Karriere in Katar",
+      "War über viele Jahre Rekordtorschütze der Champions-League-Geschichte",
+      "Gilt als eine der prägendsten Figuren der Real-Madrid-Geschichte"
+    ]
+  },
+  {
+    "name": "Fernando Torres",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Mittelstürmer",
+      "Nationalität: Spanien",
+      "Spielte unter anderem für Atlético Madrid, den FC Liverpool und Chelsea",
+      "Erzielte das entscheidende Tor im EM-Finale 2008",
+      "Wurde 2010 mit Spanien Weltmeister",
+      "Wurde 2012 mit Spanien erneut Europameister",
+      "Spielte gegen Ende seiner Karriere auch in China und Japan",
+      "Beendete seine Karriere wieder bei seinem Jugendverein Atlético Madrid",
+      "Ist Rechtsfuß",
+      "Bekannt für seine blonden Haare und seine Schnelligkeit in jungen Jahren"
+    ]
+  },
+  {
+    "name": "Iker Casillas",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Torwart",
+      "Nationalität: Spanien",
+      "Spielte den Großteil seiner Karriere für Real Madrid",
+      "War über viele Jahre Kapitän von Real Madrid und der spanischen Nationalmannschaft",
+      "Wurde 2010 Weltmeister",
+      "Wurde 2008 und 2012 Europameister",
+      "Beendete seine Karriere beim FC Porto",
+      "Erlitt während seiner Zeit bei Porto einen Herzinfarkt beim Training",
+      "Ist Linksfuß",
+      "Gilt als einer der besten Torhüter der Fußballgeschichte"
+    ]
+  },
+  {
+    "name": "Carles Puyol",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Innenverteidiger",
+      "Nationalität: Spanien",
+      "Spielte seine gesamte Karriere nur für den FC Barcelona",
+      "War lange Kapitän des FC Barcelona",
+      "Wurde 2010 Weltmeister",
+      "Wurde 2008 und 2012 Europameister",
+      "Bekannt für seine langen Haare und seine kompromisslose Zweikampfführung",
+      "Erzielte im WM-Halbfinale 2010 das entscheidende Tor per Kopf",
+      "Ist Rechtsfuß",
+      "Beendete seine Karriere beim FC Barcelona"
+    ]
+  },
+  {
+    "name": "Santi Cazorla",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Offensives Mittelfeld",
+      "Nationalität: Spanien",
+      "Spielte unter anderem für Villarreal, Malaga und den FC Arsenal",
+      "Wurde 2010 mit Spanien Weltmeister",
+      "Wurde 2012 mit Spanien Europameister",
+      "Hatte gegen Ende seiner Karriere schwere Fußverletzungen mit mehreren Operationen",
+      "Kehrte trotz der Verletzungen noch einmal auf hohem Niveau zurück",
+      "Beendete seine Karriere wieder bei seinem Jugendverein Real Oviedo",
+      "Ist beidfüßig",
+      "Bekannt für seine Technik und Übersicht trotz geringer Körpergröße"
+    ]
+  },
+  {
+    "name": "Isco",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Offensives Mittelfeld",
+      "Nationalität: Spanien",
+      "Spielte unter anderem für Malaga und Real Madrid",
+      "Gewann mehrfach die Champions League mit Real Madrid",
+      "Wurde bei Real Madrid oft von Verletzungen zurückgeworfen",
+      "Wechselte später zu Sevilla",
+      "Bekannt für seine Technik und Kreativität im Zentrum",
+      "Wechselte gegen Ende seiner Karriere nach Saudi-Arabien",
+      "Ist Rechtsfuß",
+      "Trug bei Real Madrid oft eine kreative Rolle im Mittelfeld"
+    ]
+  },
+  {
+    "name": "Marco Asensio",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Rechtsaußen / Offensives Mittelfeld",
+      "Nationalität: Spanien",
+      "Begann seine Profikarriere bei Real Mallorca",
+      "Wechselte zu Real Madrid",
+      "Gewann mehrfach die Champions League mit Real Madrid",
+      "Wechselte später nach Frankreich zu Paris Saint-Germain",
+      "Bekannt für seine Distanzschüsse und Torgefahr von der zweiten Reihe",
+      "Gehörte zum Kader der spanischen Nationalmannschaft",
+      "Ist Linksfuß",
+      "Wechselte danach in die US-amerikanische Liga"
+    ]
+  },
+  {
+    "name": "Luís Figo",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Rechtsaußen",
+      "Nationalität: Portugal",
+      "Spielte unter anderem für den FC Barcelona, Real Madrid und Inter Mailand",
+      "Wurde 2000 zum Weltfußballer des Jahres gewählt",
+      "Sorgte 2000 mit seinem Wechsel von Barcelona zu Real Madrid für einen Skandal",
+      "Wurde bei seiner Rückkehr nach Barcelona mit Gegenständen beworfen",
+      "War lange Kapitän der portugiesischen Nationalmannschaft",
+      "Beendete seine Karriere bei Inter Mailand",
+      "Ist Rechtsfuß",
+      "Bekannt für seine Dribblings und Flanken von der rechten Außenbahn"
+    ]
+  },
+  {
+    "name": "Rui Costa",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Offensives Mittelfeld",
+      "Nationalität: Portugal",
+      "Spielte unter anderem für Benfica Lissabon, Fiorentina und den AC Mailand",
+      "Gewann mit dem AC Mailand die Champions League 2003",
+      "Bekannt für seine präzisen langen Pässe und sein Spielverständnis",
+      "War lange einer der wichtigsten Spielmacher der portugiesischen Nationalmannschaft",
+      "Beendete seine Karriere wieder bei Benfica Lissabon",
+      "Wurde nach seiner Karriere Funktionär bei Benfica",
+      "Ist Rechtsfuß",
+      "Wurde oft als Nachfolger großer portugiesischer Spielmacher gefeiert"
+    ]
+  },
+  {
+    "name": "Deco",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Offensives Mittelfeld",
+      "Nationalität: Portugal",
+      "Wurde in Brasilien geboren, spielte aber für die portugiesische Nationalmannschaft",
+      "Spielte unter anderem für den FC Porto, den FC Barcelona und Chelsea",
+      "Gewann mit Porto 2004 die Champions League",
+      "Gewann mit Barcelona 2006 erneut die Champions League",
+      "Stand mit Portugal im EM-Finale 2004 im eigenen Land",
+      "Bekannt für seine Technik und Übersicht im offensiven Mittelfeld",
+      "Ist Rechtsfuß",
+      "Beendete seine Karriere in Brasilien"
+    ]
+  },
+  {
+    "name": "Jamie Vardy",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Mittelstürmer",
+      "Nationalität: England",
+      "Spielte lange in unterklassigen englischen Ligen, bevor er zu Leicester City wechselte",
+      "Wurde mit Leicester City 2016 überraschend englischer Meister",
+      "Stellte in derselben Saison einen Rekord für Tore in aufeinanderfolgenden Premier-League-Spielen auf",
+      "Blieb seinem Verein Leicester City über viele Jahre treu",
+      "Bekannt für seine enorme Schnelligkeit und seine Laufwege in die Tiefe",
+      "Wurde erst relativ spät für die englische Nationalmannschaft nominiert",
+      "Ist Rechtsfuß",
+      "Wechselte gegen Ende seiner Karriere ins Ausland"
+    ]
+  },
+  {
+    "name": "John Terry",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Innenverteidiger",
+      "Nationalität: England",
+      "Spielte seine gesamte Karriere fast nur für den FC Chelsea",
+      "War über viele Jahre Kapitän des FC Chelsea",
+      "Vergab im Champions-League-Finale 2008 einen entscheidenden Elfmeter",
+      "Gewann später mit Chelsea 2012 doch noch die Champions League",
+      "War lange Kapitän der englischen Nationalmannschaft",
+      "Wurde nach seiner Karriere Co-Trainer bei Aston Villa",
+      "Ist Rechtsfuß",
+      "Bekannt für seine Zweikampfstärke und Führungsqualität"
+    ]
+  },
+  {
+    "name": "Rio Ferdinand",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Innenverteidiger",
+      "Nationalität: England",
+      "Spielte unter anderem für West Ham United, Leeds United und Manchester United",
+      "War beim Wechsel zu Leeds der teuerste britische Verteidiger seiner Zeit",
+      "Gewann mit Manchester United mehrfach die englische Meisterschaft",
+      "Gewann mit United auch die Champions League",
+      "Wurde einmal wegen eines verpassten Dopingtests gesperrt",
+      "Arbeitet seit seinem Karriereende als TV-Experte",
+      "Ist Rechtsfuß",
+      "Bildete bei Manchester United lange eine starke Innenverteidigung"
+    ]
+  },
+  {
+    "name": "Ashley Cole",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Linker Verteidiger",
+      "Nationalität: England",
+      "Spielte unter anderem für den FC Arsenal und den FC Chelsea",
+      "War Teil der ungeschlagenen Arsenal-Meistersaison 2003/04",
+      "Gewann mit Chelsea 2012 die Champions League",
+      "Sorgte mit seinem Wechsel von Arsenal zu Chelsea für viel Aufsehen bei den Fans",
+      "Gilt als einer der besten Linksverteidiger der Premier-League-Geschichte",
+      "War lange Teil der englischen Nationalmannschaft",
+      "Ist Linksfuß",
+      "Beendete seine Karriere in den USA"
+    ]
+  },
+  {
+    "name": "Jack Grealish",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Linksaußen / Offensives Mittelfeld",
+      "Nationalität: England",
+      "Begann seine Profikarriere bei Aston Villa",
+      "Führte Aston Villa als Kapitän zurück in die Premier League",
+      "Wechselte 2021 für eine hohe Ablösesumme zu Manchester City",
+      "Gewann mit Manchester City die Champions League",
+      "Bekannt für sein Dribbling und seine hochgezogenen Stutzen",
+      "Wechselte später auf Leihbasis nach Italien",
+      "Ist Rechtsfuß",
+      "Gehört zum erweiterten Kader der englischen Nationalmannschaft"
+    ]
+  },
+  {
+    "name": "Raheem Sterling",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Linksaußen / Rechtsaußen",
+      "Nationalität: England",
+      "Begann seine Profikarriere beim FC Liverpool",
+      "Wechselte 2015 zu Manchester City",
+      "Gewann mit Manchester City mehrfach die englische Meisterschaft",
+      "Wechselte später zum FC Chelsea",
+      "Bekannt für seine Schnelligkeit und sein Dribbling",
+      "Gehörte über viele Jahre zum Kader der englischen Nationalmannschaft",
+      "Ist Rechtsfuß",
+      "Wechselte gegen Ende seiner Karriere auf Leihbasis ins Ausland"
+    ]
+  },
+  {
+    "name": "Marcus Rashford",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Linksaußen / Mittelstürmer",
+      "Nationalität: England",
+      "Spielte seit seiner Jugend für Manchester United",
+      "Gab sein Profidebüt bereits als 18-Jähriger mit einem Doppelpack",
+      "Engagierte sich abseits des Platzes stark für kostenlose Schulmahlzeiten für Kinder",
+      "Wurde dafür mit einer hohen britischen Auszeichnung geehrt",
+      "Gehört seit Jahren zum Kader der englischen Nationalmannschaft",
+      "Wechselte später auf Leihbasis nach Spanien",
+      "Ist Rechtsfuß",
+      "Bekannt für seine Schnelligkeit und Torgefahr von den Flügeln"
+    ]
+  },
+  {
+    "name": "Trent Alexander-Arnold",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Rechter Verteidiger",
+      "Nationalität: England",
+      "Spielte seit seiner Jugend für den FC Liverpool",
+      "Gewann mit Liverpool die Champions League 2019",
+      "Gewann mit Liverpool die englische Meisterschaft 2020",
+      "Bekannt für seine präzisen Flanken und Freistöße mit dem rechten Fuß",
+      "Gehört seit Jahren zum Kader der englischen Nationalmannschaft",
+      "Wechselte später ins Ausland zu Real Madrid",
+      "Ist Rechtsfuß",
+      "Gilt als einer der offensivsten Rechtsverteidiger seiner Generation"
+    ]
+  },
+  {
+    "name": "Kylian Mbappé",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Mittelstürmer / Linksaußen",
+      "Nationalität: Frankreich",
+      "Begann seine Profikarriere bei der AS Monaco",
+      "Wechselte 2017 zu Paris Saint-Germain",
+      "Wurde 2018 im Alter von 19 Jahren mit Frankreich Weltmeister",
+      "Erzielte im WM-Finale 2022 einen Hattrick gegen Argentinien",
+      "Wechselte 2024 zu Real Madrid",
+      "Ist einer der teuersten Spieler der Fußballgeschichte",
+      "Ist Rechtsfuß",
+      "Bekannt für seine außergewöhnliche Sprintschnelligkeit"
+    ]
+  },
+  {
+    "name": "Antoine Griezmann",
+    "kategorie": "fussballer",
+    "hinweise": [
+      "Position: Mittelstürmer / Offensives Mittelfeld",
+      "Nationalität: Frankreich",
+      "Begann seine Profikarriere in Spanien bei Real Sociedad",
+      "Wechselte zu Atlético Madrid",
+      "Wurde 2018 mit Frankreich Weltmeister",
+      "Wechselte 2019 zum FC Barcelona",
+      "Kehrte später wieder zu Atlético Madrid zurück",
+      "Wurde bei der WM 2022 zu einem der wichtigsten Spieler Frankreichs im Mittelfeld",
+      "Ist Linksfuß",
+      "Bekannt für seine Vielseitigkeit zwischen Mittelfeld und Angriff"
     ]
   }
 ]
