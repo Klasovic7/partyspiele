@@ -9,7 +9,7 @@
 //  richtige Antwort.
 //
 //  Ablauf pro Runde (Felder im Raum-Dokument, alle mit Präfix "ww"):
-//    frage_aktiv - Hinweise werden alle 10 Sekunden nachgelegt, jeder kann buzzern
+//    frage_aktiv - Hinweise werden alle 7 Sekunden nachgelegt, jeder kann buzzern
 //    gebuzzert   - jemand hat zuerst gebuzzert und darf jetzt raten
 //    aufgeloest  - Antwort (oder "niemand wusste es") wird gezeigt
 //    beendet     - Endstand
@@ -37,7 +37,7 @@ import { erstelleTeams, ergaenzeFehlendeTeams } from "../../kern/teams.js";
 import { speichereWertung } from "../../kern/wertung.js";
 import { pooleOhneWiederholung, aktualisierterVerlauf } from "../../kern/verlauf.js";
 
-const HINWEIS_DAUER_MS = 10000;
+const HINWEIS_DAUER_MS = 7000;
 const STANDARD_ANZAHL = 8;
 
 const VORLAGE = `
