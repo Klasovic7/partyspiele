@@ -489,12 +489,17 @@ async function spielStarten() {
     const { kandidaten, wurdeZurueckgesetzt } = pooleOhneWiederholung(fragen.map((_, i) => i), gespielt, anzahl);
     const neueReihenfolge = mischeIndizes(kandidaten).slice(0, anzahl);
     const neuerGespielt = aktualisierterVerlauf(gespielt, neueReihenfolge, wurdeZurueckgesetzt);
-    // v117: für jede Frage eine eigene, zufällige Hinweis-Reihenfolge - nicht
-    // mehr immer die feste Autoren-Reihenfolge (schwer -> leicht).
+    // v117 hatte hier pro Frage eine zufällige Hinweis-Reihenfolge erzeugt -
+    // in v168 wieder zurückgestellt auf die feste Autoren-Reihenfolge: viele
+    // Hinweise bauen bewusst aufeinander auf (z. B. "Wechselte danach nach
+    // München" -> "Wurde DORT Rekordtorschütze") oder sind absichtlich von
+    // vage/schwer zu konkret/leicht sortiert - eine zufällige Reihenfolge
+    // konnte diese Bezüge zerstören (ein Hinweis erschien, bevor der Hinweis
+    // kam, auf den er sich bezieht).
     // Als kommagetrennte Zeichenkette statt verschachteltem Array speichern -
     // Firestore-Dokumente dürfen kein Array-im-Array enthalten (siehe raumDaten()).
     const neueHinweisReihenfolgen = neueReihenfolge.map((frageIndex) =>
-      mischeIndizes(fragen[frageIndex].hinweise.map((_, i) => i)).join(",")
+      fragen[frageIndex].hinweise.map((_, i) => i).join(",")
     );
     const neueTeams = teammodus
       ? ergaenzeFehlendeTeams(teams, spielerListe.map((spieler) => spieler.id))
