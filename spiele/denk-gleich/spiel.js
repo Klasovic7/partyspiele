@@ -9,7 +9,7 @@ import {
   doc, setDoc, updateDoc, deleteDoc, collection, getDocs, onSnapshot,
   serverTimestamp, increment, writeBatch
 } from "../../kern/firebase.js";
-import { spielerKarte, zeigeDebug } from "../../kern/ui.js";
+import { spielerKarte, renderWarteAvatare, zeigeDebug } from "../../kern/ui.js";
 import { speichereWertung } from "../../kern/wertung.js";
 import { pooleOhneWiederholung, aktualisierterVerlauf } from "../../kern/verlauf.js";
 
@@ -43,7 +43,8 @@ const VORLAGE = `
       <button id="dg-absenden" class="btn-primaer">Antwort absenden</button>
     </p>
     <p id="dg-frage-fehler" class="fehler-text"></p>
-    <p id="dg-frage-status"></p>
+    <p id="dg-eigene-antwort-status" class="hinweis-text" hidden>Deine Antwort ist gespeichert.</p>
+    <div id="dg-frage-status" class="warten-block"></div>
     <p><button id="dg-andere-frage" class="btn-flach" hidden>Andere Frage</button></p>
   </div>
 
@@ -522,8 +523,9 @@ async function aktualisiereAntworten() {
     $("dg-antwort").disabled = true;
     $("dg-absenden").disabled = true;
   }
-  $("dg-frage-status").textContent =
-    `${eigeneAntwort ? "Deine Antwort ist gespeichert. " : ""}${antworten.length} von ${spielerListe.length} haben geantwortet`;
+  $("dg-eigene-antwort-status").hidden = !eigeneAntwort;
+  const beantwortetIds = new Set(antworten.map((a) => a.spielerId));
+  renderWarteAvatare($("dg-frage-status"), spielerListe.filter((sp) => !beantwortetIds.has(sp.id)));
   if (status === "ausgewertet") zeigeErgebnisListe(index);
 
   if (api.istLeiter && status === "frage_aktiv" && !ausgewertetAusgeloest &&

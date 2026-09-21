@@ -42,7 +42,7 @@ import {
   doc, setDoc, updateDoc, deleteDoc, collection, getDocs, onSnapshot,
   serverTimestamp, increment
 } from "../../kern/firebase.js";
-import { escapeHtml, textMitZusatz, spielerKarte, teamEndstandHtml, teamGruppeHtml, zeigeDebug } from "../../kern/ui.js";
+import { escapeHtml, textMitZusatz, spielerKarte, teamEndstandHtml, teamGruppeHtml, renderWarteAvatare, zeigeDebug } from "../../kern/ui.js";
 import { erstelleTeams, ergaenzeFehlendeTeams } from "../../kern/teams.js";
 import { speichereWertung } from "../../kern/wertung.js";
 import { pooleOhneWiederholung, aktualisierterVerlauf } from "../../kern/verlauf.js";
@@ -135,7 +135,7 @@ const VORLAGE = `
       <p id="bz-wort-status-falsch" class="hinweis-text" hidden>❌ Leider falsch - du bist für diese Runde raus. Warte auf die anderen.</p>
     </div>
 
-    <p id="bz-frage-status" class="hinweis-text"></p>
+    <div id="bz-frage-status" class="warten-block"></div>
   </div>
 
   <div id="bz-ergebnis-screen" class="bildschirm-karte" hidden>
@@ -742,12 +742,11 @@ async function aktualisiereAntworten() {
   if (!frage) return;
   const dieserRunde = alleAntworten.filter((a) => a.fragenIndex === index);
   if (status === "frage_aktiv") {
-    if (frage.typ === "wort" || frage.typ === "bild") {
-      const geloest = dieserRunde.filter((a) => a.richtig).length;
-      $("bz-frage-status").textContent = `${geloest} von ${spielerListe.length} haben es schon gelöst`;
-    } else {
-      $("bz-frage-status").textContent = `${dieserRunde.length} von ${spielerListe.length} haben geantwortet`;
-    }
+    // Profilbilder statt Text: zeigt, wer für diese Runde noch gar nichts
+    // abgeschickt hat (ob richtig oder falsch beantwortet spielt für "fertig
+    // oder nicht" keine Rolle - siehe wortAbsenden()/antworteMC()).
+    const beantwortetIds = new Set(dieserRunde.map((a) => a.spielerId));
+    renderWarteAvatare($("bz-frage-status"), spielerListe.filter((sp) => !beantwortetIds.has(sp.id)));
 
     // Jeder Eintrag zählt hier mit, ob richtig oder falsch (bei "wort"/"bild"
     // ist ein falscher Versuch der einzige, den man je bekommt - siehe

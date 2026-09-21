@@ -114,7 +114,7 @@ const VORLAGE = `
     <p class="hinweis-text">Tippe auf einen Mitspieler. Liegt er bei dieser Frage am weitesten
       daneben, bekommst du einen Extrapunkt.</p>
     <ul id="sf-dk-liste"></ul>
-    <p id="sf-dk-status"></p>
+    <div id="sf-dk-status" class="warten-block"></div>
   </div>
 
   <div id="sf-frage-screen" class="bildschirm-karte" hidden>
@@ -672,9 +672,13 @@ function zeigeDummkopfWahl(pos) {
   });
 
   const benoetigt = benoetigteDummkopfTipps();
-  $("sf-dk-status").textContent = benoetigt === 0
-    ? "Zu wenige Mitspieler für den Dummkopf-Modus - es geht gleich weiter."
-    : `${dummkopfTippsDieserRunde(pos).length} von ${benoetigt} haben getippt`;
+  if (benoetigt === 0) {
+    $("sf-dk-status").classList.remove("warten-einzeln");
+    $("sf-dk-status").innerHTML = "<em>Zu wenige Mitspieler für den Dummkopf-Modus - es geht gleich weiter.</em>";
+  } else {
+    const eingetipptIds = new Set(dummkopfTippsDieserRunde(pos).map((t) => t.spielerId));
+    renderWarteAvatare($("sf-dk-status"), spielerListe.filter((sp) => !eingetipptIds.has(sp.id)));
+  }
 }
 
 // Sobald alle getippt haben, schaltet der Spielleiter auf die Frage um.
