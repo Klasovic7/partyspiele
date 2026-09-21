@@ -1162,7 +1162,7 @@
        ohnehin schon dasteht und das kleine Kategorie-Label nur Ballast wäre). */
     #spiel-wurzel .bildschirm-karte { padding: 25px 21px; background: var(--flaeche); }
     #spiel-wurzel .bildschirm-karte > .kategorie:not(#sf-dk-kategorie),
-    #sf-setup > h1, #dg-setup > h1, #zt-setup > h1, #rd-setup > h1, #wi-setup > h1, #fi-setup > h1, #imp-setup > h1 { display: none; }
+    #sf-setup > h1, #dg-setup > h1, #zt-setup > h1, #rd-setup > h1, #wi-setup > h1, #ww-setup > h1, #fi-setup > h1, #imp-setup > h1 { display: none; }
     #spiel-wurzel .bildschirm-karte > h1,
     #spiel-wurzel .rd-kategorie-kopf h1 {
       font-family: "Barlow Condensed", sans-serif; font-size: clamp(2.15rem, 10vw, 3rem);

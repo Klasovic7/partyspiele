@@ -56,6 +56,15 @@ export const SPIELE = [
     laden: () => import("./wer-ist-es/spiel.js")
   },
   {
+    id: "wann-war-es",
+    name: "Wann war es?",
+    emoji: "📅",
+    farbe: "#c084fc",
+    beschreibung: "Buzzere zuerst und errate das gesuchte Jahr",
+    minSpieler: 2,
+    laden: () => import("./wann-war-es/spiel.js")
+  },
+  {
     id: "blitzquiz",
     name: "Blitzquiz",
     emoji: "⚡",

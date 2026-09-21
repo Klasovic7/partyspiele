@@ -14,11 +14,19 @@
 //    beendet     - Endstand
 //
 //  v95: Eine FALSCHE Antwort beendet die Runde NICHT mehr - sie kostet der
-//  ratenden Person einen Punkt, alle sehen den geratenen Namen in der Liste
-//  der bisherigen Fehlversuche, der nächste Hinweis wird sofort aufgedeckt und
-//  jeder (auch die Person, die falsch lag) kann direkt weiter buzzern. Nur eine
-//  RICHTIGE Antwort oder das manuelle Auflösen durch den Spielleiter beendet
-//  die Runde (Status "aufgeloest").
+//  ratenden Person mindestens einen Punkt, alle sehen den geratenen Namen in
+//  der Liste der bisherigen Fehlversuche, der nächste Hinweis wird sofort
+//  aufgedeckt und jeder (auch die Person, die falsch lag) kann direkt weiter
+//  buzzern. Nur eine RICHTIGE Antwort oder das manuelle Auflösen durch den
+//  Spielleiter beendet die Runde (Status "aufgeloest").
+//
+//  v171: Der Punktabzug für falsche Antworten steigt jetzt pro Person UND pro
+//  Frage an - der erste Fehlversuch kostet 1 Punkt, tippt dieselbe Person bei
+//  DERSELBEN Frage danach nochmal falsch, kostet das 2 Punkte, beim dritten
+//  Fehlversuch 3 usw. (siehe "vorherigeFalscheDerPerson" in antwortAbsenden()).
+//  Andere Personen, die bei dieser Frage noch nicht falsch lagen, starten
+//  weiterhin bei 1 Punkt Abzug - der Zähler ist also nicht global, sondern je
+//  Frage und Person.
 //
 //  Wie bei Schätzfragen meldet sich dieses Modul über starten/raumDaten/spieler/
 //  beenden zurück (siehe Kommentar in spiele/schaetzfragen/spiel.js).
@@ -555,7 +563,8 @@ function zeigeFrage() {
   falschListe.innerHTML = "";
   falscheVersuche.forEach((v) => {
     const li = document.createElement("li");
-    li.textContent = `${v.name}: „${v.text}“ - falsch (-1 Punkt)`;
+    const abzug = v.abzug ?? 1;
+    li.textContent = `${v.name}: „${v.text}“ - falsch (-${abzug} ${abzug === 1 ? "Punkt" : "Punkte"})`;
     falschListe.appendChild(li);
   });
   falschListe.hidden = falscheVersuche.length === 0;
@@ -668,17 +677,22 @@ async function antwortAbsenden() {
       // der Buzzer wird für alle wieder freigegeben und der nächste Hinweis
       // kommt sofort (ohne auf die volle 10-Sekunden-Wartezeit zu warten).
       const naechsterHinweisIndex = Math.min(hinweisIndex + 1, frage.hinweise.length);
+      // v171: gestaffelter Abzug - wie oft hat GENAU DIESE Person bei GENAU
+      // DIESER Frage schon falsch getippt? 1. Fehlversuch = -1, 2. = -2, usw.
+      const vorherigeFalscheDerPerson = falscheVersuche.filter((v) => v.spielerId === api.spielerId).length;
+      const abzug = vorherigeFalscheDerPerson + 1;
       const neuesRundenDelta = {
         ...(raum.wiRundenDelta || {}),
-        [api.spielerId]: (raum.wiRundenDelta?.[api.spielerId] ?? 0) - 1
+        [api.spielerId]: (raum.wiRundenDelta?.[api.spielerId] ?? 0) - abzug
       };
       $("wi-antwort-eingabe").value = "";
       await updateDoc(api.raumRef(), {
         wiStatus: "frage_aktiv", wiAntwortText: "", wiAntwortKorrekt: null, wiPunkteDieserRunde: 0,
         wiGebuzzertVon: null, wiHinweisIndex: naechsterHinweisIndex, wiHinweisSeit: Date.now(),
-        wiFalscheVersuche: arrayUnion({ name: api.spielerName, text }), wiRundenDelta: neuesRundenDelta
+        wiFalscheVersuche: arrayUnion({ name: api.spielerName, text, spielerId: api.spielerId, abzug }),
+        wiRundenDelta: neuesRundenDelta
       });
-      await updateDoc(api.spielerRef(), { punkte: increment(-1) });
+      await updateDoc(api.spielerRef(), { punkte: increment(-abzug) });
     }
   } catch (e) {
     zeigeDebug("Fehler beim Absenden der Antwort: " + e.message);
