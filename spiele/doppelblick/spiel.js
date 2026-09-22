@@ -97,20 +97,24 @@ const FRAGE_TIMEOUT_MS = 90000;
 // auch wenn die tatsächliche Größe (siehe ZUFALLSGROESSE_BEREICH unten)
 // pro Symbol nochmal zufällig nach oben abweicht.
 const SLOT_POSITIONEN = [
-  { links: 50, oben: 18, groesse: 14 },
-  { links: 76, oben: 28, groesse: 12 },
-  { links: 82, oben: 54, groesse: 13 },
-  { links: 68, oben: 78, groesse: 11 },
-  { links: 35, oben: 80, groesse: 12 },
-  { links: 17, oben: 60, groesse: 12 },
-  { links: 21, oben: 32, groesse: 12 },
-  { links: 50, oben: 50, groesse: 18 }
+  { links: 50, oben: 18, groesse: 12 },
+  { links: 76, oben: 28, groesse: 10 },
+  { links: 82, oben: 54, groesse: 11 },
+  { links: 68, oben: 78, groesse: 9 },
+  { links: 35, oben: 80, groesse: 10 },
+  { links: 17, oben: 60, groesse: 10 },
+  { links: 21, oben: 32, groesse: 10 },
+  { links: 50, oben: 50, groesse: 15 }
 ];
-// v175: wie beim echten Vorbild ist dasselbe Symbol auf den beiden Karten
+// v176: wie beim echten Vorbild ist dasselbe Symbol auf den beiden Karten
 // unterschiedlich groß und unterschiedlich gedreht (auch mal auf dem Kopf) -
 // jeder Steckplatz-Auftritt bekommt unabhängig einen eigenen Zufallsfaktor
-// zwischen 0.7 (kleiner) und 1.35 (größer) auf seine Grundgröße oben.
-const ZUFALLSGROESSE_BEREICH = [0.7, 1.35];
+// zwischen 1.0 (Grundgröße oben) und 1.6 (deutlich größer). Die Grundgrößen
+// selbst wurden gegenüber v175 nach unten angepasst, damit auch das größte
+// mögliche Symbol (Faktor 1.6) noch sicher innerhalb der Karte bleibt - per
+// Skript gegen alle Steckplätze (Kartenrand UND gegenseitige Überlappung im
+// ungünstigsten Fall) gegengerechnet.
+const ZUFALLSGROESSE_BEREICH = [1.0, 1.6];
 
 const VORLAGE = `
   <div id="db-setup" class="bildschirm-karte" hidden>
