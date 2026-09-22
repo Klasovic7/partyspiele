@@ -71,6 +71,27 @@
       });
     }
 
+    // v184: die Einheit der "Anzahl" ist je Spiel unterschiedlich - passend zu
+    // SPIEL_ANZAHL_FELD in app.js (das Feld, das die Zahl im Raum-Dokument
+    // liefert). Ein Spiel, das hier fehlt (z. B. neu hinzugefügt), fällt auf
+    // "Runden/Fragen" zurück (siehe einheitFuer() unten) statt falsch angezeigt
+    // zu werden.
+    const SPIEL_EINHEIT = {
+      schaetzfragen: "Fragen",
+      "denk-gleich": "Fragen",
+      "zehn-treffer": "Runden",
+      "reih-dich-ein": "Kategorien",
+      "wer-ist-es": "Fragen",
+      "wann-war-es": "Fragen",
+      blitzquiz: "Fragen",
+      finto: "Fragen",
+      imposter: "Runden",
+      doppelblick: "Runden"
+    };
+    function einheitFuer(spielId) {
+      return SPIEL_EINHEIT[spielId] || "Runden/Fragen";
+    }
+
     function ereignisHtml(eintrag) {
       if (eintrag.typ === "raum_eroeffnet") {
         return `<span class="statistik-typ-badge statistik-typ-eroeffnet">Raum eröffnet</span>`;
@@ -89,12 +110,12 @@
         // vorhanden) direkt an den spiel_gestartet-Eintrag - dann in einer
         // einzigen Zeile statt zwei separaten anzeigen.
         return eintrag.anzahl != null
-          ? `<span class="statistik-typ-badge statistik-typ-spiel">${escapeHtml(name)} (${escapeHtml(String(eintrag.anzahl))} Runden/Fragen) gestartet</span>`
+          ? `<span class="statistik-typ-badge statistik-typ-spiel">${escapeHtml(name)} (${escapeHtml(String(eintrag.anzahl))} ${escapeHtml(einheitFuer(eintrag.spielId))}) gestartet</span>`
           : `<span class="statistik-typ-badge statistik-typ-spiel">${escapeHtml(name)} gestartet</span>`;
       }
       if (eintrag.typ === "runden_gewaehlt") {
         const name = eintrag.spielName || spielInfo(eintrag.spielId)?.name || eintrag.spielId || "Spiel";
-        return `<span class="statistik-typ-badge statistik-typ-runden">${escapeHtml(name)}: ${escapeHtml(String(eintrag.anzahl ?? "-"))} Runden/Fragen</span>`;
+        return `<span class="statistik-typ-badge statistik-typ-runden">${escapeHtml(name)}: ${escapeHtml(String(eintrag.anzahl ?? "-"))} ${escapeHtml(einheitFuer(eintrag.spielId))}</span>`;
       }
       return escapeHtml(eintrag.typ || "-");
     }
