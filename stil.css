@@ -2120,3 +2120,41 @@
       background: var(--club-orange); color: #fff; font-family: "Bungee", sans-serif;
       font-size: .66rem; padding: 2px 7px; border-radius: 6px; white-space: nowrap;
     }
+
+    /* ======================================================================
+       Doppelblick! - zwei runde Symbolkarten, Auswertung wie bei Blitzquiz'
+       Schnelligkeits-Fragen (siehe .bz-antwort-btn) mit eigener Optik.
+       ====================================================================== */
+    .db-anleitung { text-align: center; }
+    .db-karten-bereich {
+      display: flex; flex-direction: column; align-items: center; gap: 18px;
+      margin: 10px 0 14px;
+    }
+    .db-karten-bereich-klein { gap: 12px; margin: 8px 0 12px; }
+    .db-karte {
+      position: relative; width: min(78vw, 300px); aspect-ratio: 1 / 1;
+      border-radius: 50%; flex-shrink: 0;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, .28);
+    }
+    .db-karten-bereich-klein .db-karte { width: min(58vw, 220px); }
+    .db-karte-a { background: radial-gradient(circle at 30% 26%, #eaf3ff, #bcdcff 62%, #7fb8f2); border: 4px solid #4a8dea; }
+    .db-karte-b { background: radial-gradient(circle at 30% 26%, #fff0ee, #ffc9c2 62%, #f28a7f); border: 4px solid #e96368; }
+    .db-symbol {
+      position: absolute; margin: 0; padding: 0; border: none; background: transparent;
+      display: flex; align-items: center; justify-content: center;
+      font-size: clamp(20px, 7vw, 34px); line-height: 1;
+      filter: drop-shadow(0 2px 3px rgba(0, 0, 0, .28));
+      transition: transform .1s ease, filter .15s ease;
+    }
+    .db-karten-bereich-klein .db-symbol { font-size: clamp(15px, 5vw, 24px); }
+    button.db-symbol:not(:disabled):active { filter: brightness(.92); }
+    button.db-symbol:disabled { opacity: .55; }
+    .db-symbol.db-symbol-richtig {
+      filter: drop-shadow(0 0 0 transparent);
+      outline: 3px solid #22c55e; outline-offset: 3px; border-radius: 50%;
+      background: rgba(34, 197, 94, .22);
+    }
+    .db-symbol.db-symbol-falsch {
+      outline: 3px solid #ef4444; outline-offset: 3px; border-radius: 50%;
+      background: rgba(239, 68, 68, .22);
+    }
