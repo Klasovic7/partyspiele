@@ -28,7 +28,7 @@
 // ============================================================================
 import {
   doc, setDoc, updateDoc, deleteDoc, collection, getDocs, onSnapshot,
-  serverTimestamp, increment
+  serverTimestamp, increment, runTransaction
 } from "../../kern/firebase.js";
 import { spielerKarte, teamEndstandHtml, teamGruppeHtml, renderWarteAvatare, zeigeDebug } from "../../kern/ui.js";
 import { erstelleTeams, ergaenzeFehlendeTeams } from "../../kern/teams.js";
@@ -97,24 +97,24 @@ const FRAGE_TIMEOUT_MS = 90000;
 // auch wenn die tatsächliche Größe (siehe ZUFALLSGROESSE_BEREICH unten)
 // pro Symbol nochmal zufällig nach oben abweicht.
 const SLOT_POSITIONEN = [
-  { links: 50, oben: 18, groesse: 12 },
-  { links: 76, oben: 28, groesse: 10 },
-  { links: 82, oben: 54, groesse: 11 },
-  { links: 68, oben: 78, groesse: 9 },
-  { links: 35, oben: 80, groesse: 10 },
-  { links: 17, oben: 60, groesse: 10 },
-  { links: 21, oben: 32, groesse: 10 },
-  { links: 50, oben: 50, groesse: 15 }
+  { links: 50, oben: 18, groesse: 10 },
+  { links: 76, oben: 28, groesse: 8 },
+  { links: 82, oben: 54, groesse: 9 },
+  { links: 68, oben: 78, groesse: 7 },
+  { links: 35, oben: 80, groesse: 8 },
+  { links: 17, oben: 60, groesse: 8 },
+  { links: 21, oben: 32, groesse: 8 },
+  { links: 50, oben: 50, groesse: 12 }
 ];
-// v176: wie beim echten Vorbild ist dasselbe Symbol auf den beiden Karten
+// v178: wie beim echten Vorbild ist dasselbe Symbol auf den beiden Karten
 // unterschiedlich groß und unterschiedlich gedreht (auch mal auf dem Kopf) -
 // jeder Steckplatz-Auftritt bekommt unabhängig einen eigenen Zufallsfaktor
-// zwischen 1.0 (Grundgröße oben) und 1.6 (deutlich größer). Die Grundgrößen
-// selbst wurden gegenüber v175 nach unten angepasst, damit auch das größte
-// mögliche Symbol (Faktor 1.6) noch sicher innerhalb der Karte bleibt - per
-// Skript gegen alle Steckplätze (Kartenrand UND gegenseitige Überlappung im
-// ungünstigsten Fall) gegengerechnet.
-const ZUFALLSGROESSE_BEREICH = [1.0, 1.6];
+// zwischen 1.3 und 2.0 auf seine Grundgröße oben. Die Grundgrößen selbst
+// wurden gegenüber v176 nochmal nach unten angepasst, damit auch das
+// größte mögliche Symbol (Faktor 2.0) noch sicher innerhalb der Karte
+// bleibt und sich Symbole im ungünstigsten Fall nicht überlappen (per
+// Skript gegengerechnet).
+const ZUFALLSGROESSE_BEREICH = [1.3, 2.0];
 
 const VORLAGE = `
   <div id="db-setup" class="bildschirm-karte" hidden>
@@ -123,6 +123,22 @@ const VORLAGE = `
       ist auf beiden zu finden. Wer es zuerst antippt, bekommt die meisten
       Punkte. Liegt man falsch, ist man für den Rest der Runde raus.</p>
 
+    <div id="db-modus-zeile" class="setup-modusblock" hidden>
+      <div class="setup-moduszeile">
+        <span class="modus-text-zeile">
+          <span class="schalter-text">Spielmodus</span>
+          <details class="modus-info">
+            <summary aria-label="Erklärung zu den Modi">i</summary>
+            <div>Schnelligkeit: alle sehen dieselben zwei Karten und tippen um die Wette. Turm: jede*r hat einen eigenen Kartenstapel und muss ihn als Erstes loswerden.</div>
+          </details>
+        </span>
+        <span class="db-modus-wahl">
+          <button type="button" id="db-modus-schnelligkeit" class="btn-flach db-modus-btn">⚡ Schnelligkeit</button>
+          <button type="button" id="db-modus-turm" class="btn-flach db-modus-btn">🗼 Turm</button>
+        </span>
+      </div>
+    </div>
+
     <div id="db-anzahl-zeile" class="setup-anzahlblock" hidden>
       <div class="setup-anzahl-zeile">
         <span>Anzahl Runden</span>
@@ -130,6 +146,16 @@ const VORLAGE = `
           <input id="db-anzahl" type="text" inputmode="numeric" pattern="[0-9]*" min="1" value="10" class="anzahl-eingabe">
         </span>
       </div>
+    </div>
+
+    <div id="db-kpsp-zeile" class="setup-anzahlblock" hidden>
+      <div class="setup-anzahl-zeile">
+        <span>Karten pro Spieler</span>
+        <span class="anzahl-picker">
+          <input id="db-kpsp" type="text" inputmode="numeric" pattern="[0-9]*" min="1" value="5" class="anzahl-eingabe">
+        </span>
+      </div>
+      <p class="hinweis-text db-turm-hinweis">Jede*r bekommt so viele Karten als verdeckten Stapel. Wer seinen Stapel zuerst los ist, gewinnt.</p>
     </div>
 
     <div id="db-teammodus-zeile" class="setup-modusblock" hidden>
@@ -174,6 +200,22 @@ const VORLAGE = `
     <div id="db-karten-bereich" class="db-karten-bereich"></div>
     <p id="db-eigenes-status" class="hinweis-text" hidden></p>
     <div id="db-frage-status" class="warten-block"></div>
+  </div>
+
+  <div id="db-turm-screen" class="bildschirm-karte" hidden>
+    <p class="hinweis-text db-anleitung">Welches Symbol ist auf DEINER obersten Karte UND der Karte in der Mitte zu sehen?</p>
+    <div class="db-turm-bereich">
+      <div class="db-turm-spalte">
+        <p class="db-turm-label">Deine Karte</p>
+        <div id="db-turm-eigene" class="db-karten-bereich db-karten-bereich-einzeln"></div>
+      </div>
+      <div class="db-turm-spalte">
+        <p class="db-turm-label">Mitte</p>
+        <div id="db-turm-mitte" class="db-karten-bereich db-karten-bereich-einzeln"></div>
+      </div>
+    </div>
+    <p id="db-turm-status" class="hinweis-text" hidden></p>
+    <div id="db-turm-staende" class="db-turm-staende"></div>
   </div>
 
   <div id="db-ergebnis-screen" class="bildschirm-karte" hidden>
@@ -226,7 +268,35 @@ let rotationenB = [];
 let groessenA = [];
 let groessenB = [];
 
+// ---------- Turm-Modus: eigener Zustand ----------
+// Anders als beim Schnelligkeits-Modus hat hier jede*r einen eigenen,
+// privaten Kartenstapel (dtStapel[spielerId], oberste Karte = erster
+// Eintrag) und alle teilen sich EINE "Mitte"-Karte (dtMitte). Wer zuerst das
+// Symbol findet, das auf der eigenen obersten Karte UND der Mitte-Karte
+// vorkommt, legt seine Karte als neue Mitte ab - das ist per Firestore-
+// Transaktion abgesichert, damit bei einem Beinahe-Gleichstand nur eine
+// Person tatsächlich gewinnt (siehe tippeSymbolTurm()).
+let spielModus = "schnelligkeit"; // "schnelligkeit" | "turm"
+let gewuenschteKartenProSpieler = 0;
+let dtMitte = null; // DECK-Index der aktuellen Mitte-Karte
+let dtStapel = {}; // spielerId -> Kommagetrennte DECK-Indizes, oberste zuerst
+let dtKartenProSpieler = 0;
+let dtSiegerId = null;
+let turmGesperrtBis = 0; // Date.now()-Zeitstempel: bis dahin nach Falsch-Tipp lokal gesperrt
+let turmSperreTimer = null;
+let turmRotationSchluessel = null;
+let turmRotationenEigene = [];
+let turmGroessenEigene = [];
+let turmRotationenMitte = [];
+let turmGroessenMitte = [];
+let turmWertungGespeichert = false;
+
 const $ = (id) => el.wurzel.querySelector("#" + id);
+
+function eigenerStapel() {
+  const text = dtStapel?.[api.spielerId];
+  return text ? text.split(",").map(Number) : [];
+}
 
 function kartenAn(pos, seite) {
   const text = (seite === "a" ? rundenKartenA : rundenKartenB)[pos];
@@ -303,6 +373,15 @@ function verdrahteBedienelemente() {
   });
   $("db-anzahl").addEventListener("change", () => anzahlUebernehmen());
   $("db-anzahl").addEventListener("focus", () => { $("db-anzahl").select(); });
+  $("db-kpsp").addEventListener("input", () => {
+    const feld = $("db-kpsp");
+    const bereinigt = feld.value.replace(/[^0-9]/g, "");
+    if (bereinigt !== feld.value) feld.value = bereinigt;
+  });
+  $("db-kpsp").addEventListener("change", () => kartenProSpielerUebernehmen());
+  $("db-kpsp").addEventListener("focus", () => { $("db-kpsp").select(); });
+  $("db-modus-schnelligkeit").addEventListener("click", () => modusUmschalten("schnelligkeit"));
+  $("db-modus-turm").addEventListener("click", () => modusUmschalten("turm"));
   $("db-teammodus").addEventListener("change", teammodusUmschalten);
   $("db-team-wahl-blau").addEventListener("click", () => waehleEigenesTeam("blau"));
   $("db-team-wahl-rot").addEventListener("click", () => waehleEigenesTeam("rot"));
@@ -321,6 +400,7 @@ function starteListener() {
 
 export function beenden() {
   if (timerId) { clearInterval(timerId); timerId = null; }
+  if (turmSperreTimer) { clearTimeout(turmSperreTimer); turmSperreTimer = null; }
   if (antwortenUnsub) { antwortenUnsub(); antwortenUnsub = null; }
   el = {}; raum = {}; spielerListe = []; alleAntworten = [];
   index = -1; anzahlRunden = 0; status = null;
@@ -328,16 +408,22 @@ export function beenden() {
   gewuenschteAnzahl = 0; teammodus = false; teams = {};
   ausgewertetAusgeloest = false; eigeneAntwortenLokal = {};
   rotationRunde = -1; rotationenA = []; rotationenB = []; groessenA = []; groessenB = [];
+  spielModus = "schnelligkeit"; gewuenschteKartenProSpieler = 0;
+  dtMitte = null; dtStapel = {}; dtKartenProSpieler = 0; dtSiegerId = null;
+  turmGesperrtBis = 0; turmRotationSchluessel = null;
+  turmRotationenEigene = []; turmGroessenEigene = []; turmRotationenMitte = []; turmGroessenMitte = [];
+  turmWertungGespeichert = false;
 }
 
 export function spieler(liste) {
   spielerListe = liste;
   if (!el.wurzel) return;
   if (status === "setup" || !status) zeigeSetup();
+  else if (status === "frage_aktiv" && spielModus === "turm") zeigeTurm();
   else if (status === "frage_aktiv") zeigeFrage();
   else if (status === "ausgewertet") zeigeErgebnis();
   else if (status === "beendet") zeigeEndstand();
-  aktualisiereAntworten();
+  if (spielModus !== "turm") aktualisiereAntworten();
 }
 
 // ============================================================================
@@ -347,6 +433,7 @@ export function raumDaten(daten) {
   if (!daten || !el.wurzel) return;
   raum = daten;
   status = daten.dbStatus ?? null;
+  spielModus = daten.dbModus === "turm" ? "turm" : "schnelligkeit";
   anzahlRunden = daten.dbAnzahlRunden ?? 0;
   rundenKartenA = daten.dbKartenA ?? [];
   rundenKartenB = daten.dbKartenB ?? [];
@@ -354,6 +441,10 @@ export function raumDaten(daten) {
   rundeSeit = daten.dbRundeSeit ?? 0;
   teammodus = !!daten.dbTeammodus;
   teams = daten.dbTeams ?? {};
+  dtMitte = daten.dtMitte ?? null;
+  dtStapel = daten.dtStapel ?? {};
+  dtKartenProSpieler = daten.dtKartenProSpieler ?? 0;
+  dtSiegerId = daten.dtSiegerId ?? null;
 
   if ($("db-teammodus").checked !== teammodus) $("db-teammodus").checked = teammodus;
 
@@ -367,13 +458,17 @@ export function raumDaten(daten) {
   }
 
   api.fortschritt(
-    status === "frage_aktiv" || status === "ausgewertet" ? `${index + 1}/${anzahlRunden}` : ""
+    spielModus !== "turm" && (status === "frage_aktiv" || status === "ausgewertet")
+      ? `${index + 1}/${anzahlRunden}` : ""
   );
 
   alleVerstecken();
   if (status === "setup" || !status) {
     zeigeSetup();
     $("db-setup").hidden = false;
+  } else if (status === "frage_aktiv" && spielModus === "turm") {
+    zeigeTurm();
+    $("db-turm-screen").hidden = false;
   } else if (status === "frage_aktiv") {
     zeigeFrage();
     $("db-frage-screen").hidden = false;
@@ -387,31 +482,78 @@ export function raumDaten(daten) {
 }
 
 function alleVerstecken() {
-  ["db-setup", "db-frage-screen", "db-ergebnis-screen", "db-endstand-screen"]
+  ["db-setup", "db-frage-screen", "db-turm-screen", "db-ergebnis-screen", "db-endstand-screen"]
     .forEach((id) => { $(id).hidden = true; });
 }
 
 // ============================================================================
 //  Setup
 // ============================================================================
+function maxKartenProSpieler() {
+  const anzahlSpieler = Math.max(spielerListe.length, 1);
+  // +1, weil zu Beginn zusätzlich noch eine Karte als erste Mitte-Karte
+  // gezogen wird (siehe spielStartenTurm()).
+  return Math.max(1, Math.floor((DECK.length - 1) / anzahlSpieler));
+}
+
 function zeigeSetup() {
+  $("db-modus-zeile").hidden = false;
+  $("db-modus-schnelligkeit").classList.toggle("db-modus-aktiv", spielModus === "schnelligkeit");
+  $("db-modus-turm").classList.toggle("db-modus-aktiv", spielModus === "turm");
+  $("db-modus-schnelligkeit").disabled = !api.istLeiter;
+  $("db-modus-turm").disabled = !api.istLeiter;
+
+  const istTurm = spielModus === "turm";
+
   if (gewuenschteAnzahl === 0) gewuenschteAnzahl = Math.min(STANDARD_ANZAHL, MAX_RUNDEN);
   $("db-anzahl").max = String(MAX_RUNDEN);
   $("db-anzahl").value = String(gewuenschteAnzahl);
-  $("db-anzahl-zeile").hidden = false;
+  $("db-anzahl-zeile").hidden = istTurm;
   $("db-anzahl").disabled = !api.istLeiter;
-  $("db-teammodus-zeile").hidden = false;
+
+  const maxKpsp = maxKartenProSpieler();
+  if (gewuenschteKartenProSpieler === 0) gewuenschteKartenProSpieler = Math.min(5, maxKpsp);
+  if (gewuenschteKartenProSpieler > maxKpsp) gewuenschteKartenProSpieler = maxKpsp;
+  $("db-kpsp").max = String(maxKpsp);
+  $("db-kpsp").value = String(gewuenschteKartenProSpieler);
+  $("db-kpsp-zeile").hidden = !istTurm;
+  $("db-kpsp").disabled = !api.istLeiter;
+
+  $("db-teammodus-zeile").hidden = istTurm;
   const teamSchalter = $("db-teammodus");
   teamSchalter.checked = teammodus;
   teamSchalter.disabled = !api.istLeiter;
-  $("db-teams").hidden = !teammodus;
+  $("db-teams").hidden = istTurm || !teammodus;
   $("db-teams-zufall").hidden = !api.istLeiter;
-  if (teammodus) {
+  if (!istTurm && teammodus) {
     rendereTeamListe("blau");
     rendereTeamListe("rot");
   }
+  $("db-setup-fehler").textContent = istTurm && spielerListe.length < 2
+    ? "Für den Turm-Modus werden mindestens 2 Mitspieler*innen benötigt."
+    : "";
   $("db-starten").hidden = !api.istLeiter;
+  $("db-starten").disabled = istTurm && spielerListe.length < 2;
   $("db-setup-warten").hidden = api.istLeiter;
+}
+
+async function modusUmschalten(neuerModus) {
+  if (!api.istLeiter || neuerModus === spielModus) return;
+  try {
+    await updateDoc(api.raumRef(), { dbModus: neuerModus });
+  } catch (e) {
+    zeigeDebug("Modus konnte nicht geändert werden: " + e.message);
+  }
+}
+
+function kartenProSpielerUebernehmen() {
+  if (!api.istLeiter) return;
+  const maxKpsp = maxKartenProSpieler();
+  let wert = parseInt($("db-kpsp").value, 10);
+  if (!Number.isFinite(wert) || wert < 1) wert = 1;
+  if (wert > maxKpsp) wert = maxKpsp;
+  gewuenschteKartenProSpieler = wert;
+  $("db-kpsp").value = String(wert);
 }
 
 async function teammodusUmschalten() {
@@ -475,9 +617,10 @@ function anzahlUebernehmen() {
 
 async function setzeGrundzustand(dbStatus) {
   await updateDoc(api.raumRef(), {
-    dbStatus, dbRundenIndex: 0, dbAnzahlRunden: 0,
+    dbStatus, dbModus: spielModus, dbRundenIndex: 0, dbAnzahlRunden: 0,
     dbKartenA: [], dbKartenB: [], dbGemeinsam: [], dbRundeSeit: 0,
-    dbTeammodus: false, dbTeams: {}
+    dbTeammodus: false, dbTeams: {},
+    dtMitte: null, dtStapel: {}, dtKartenProSpieler: 0, dtSiegerId: null
   });
 }
 
@@ -508,6 +651,11 @@ function neueRunden(anzahl) {
 }
 
 async function spielStarten() {
+  if (spielModus === "turm") await spielStartenTurm();
+  else await spielStartenSchnelligkeit();
+}
+
+async function spielStartenSchnelligkeit() {
   $("db-setup-fehler").textContent = "";
   anzahlUebernehmen();
   $("db-starten").disabled = true;
@@ -519,9 +667,44 @@ async function spielStarten() {
       ? ergaenzeFehlendeTeams(teams, spielerListe.map((spieler) => spieler.id))
       : teams;
     await updateDoc(api.raumRef(), {
-      dbStatus: "frage_aktiv", dbRundenIndex: 0, dbAnzahlRunden: anzahl,
+      dbStatus: "frage_aktiv", dbModus: "schnelligkeit", dbRundenIndex: 0, dbAnzahlRunden: anzahl,
       dbKartenA: kartenA, dbKartenB: kartenB, dbGemeinsam: gemeinsam,
       dbRundeSeit: Date.now(), dbTeammodus: teammodus, dbTeams: neueTeams
+    });
+  } catch (e) {
+    zeigeDebug("Fehler beim Start: " + e.message);
+  }
+  $("db-starten").disabled = false;
+}
+
+// Turm-Modus: jede*r bekommt "gewuenschteKartenProSpieler" Karten als
+// eigenen, verdeckten Stapel (oberste zuerst) - dazu wird eine weitere Karte
+// als erste "Mitte"-Karte gezogen. Alle Karten stammen aus demselben Deck
+// ohne Zurücklegen, damit jede Karte im Spiel höchstens einmal vorkommt und
+// die projektive-Ebene-Garantie (irgendzwei Karten teilen genau ein Symbol)
+// weiterhin für JEDES Paar aus (eigene oberste Karte, Mitte-Karte) gilt.
+async function spielStartenTurm() {
+  $("db-setup-fehler").textContent = "";
+  kartenProSpielerUebernehmen();
+  if (spielerListe.length < 2) {
+    $("db-setup-fehler").textContent = "Für den Turm-Modus werden mindestens 2 Mitspieler*innen benötigt.";
+    return;
+  }
+  $("db-starten").disabled = true;
+  try {
+    await raeumeSpieldatenAuf();
+    const anzahlKarten = Math.min(gewuenschteKartenProSpieler || 1, maxKartenProSpieler());
+    const reihenfolge = mischeIndizes(DECK.map((_, i) => i));
+    let cursor = 0;
+    const mitteIdx = reihenfolge[cursor++];
+    const neuerDtStapel = {};
+    spielerListe.forEach((spieler) => {
+      neuerDtStapel[spieler.id] = reihenfolge.slice(cursor, cursor + anzahlKarten).join(",");
+      cursor += anzahlKarten;
+    });
+    await updateDoc(api.raumRef(), {
+      dbStatus: "frage_aktiv", dbModus: "turm", dbRundeSeit: Date.now(),
+      dtMitte: mitteIdx, dtStapel: neuerDtStapel, dtKartenProSpieler: anzahlKarten, dtSiegerId: null
     });
   } catch (e) {
     zeigeDebug("Fehler beim Start: " + e.message);
@@ -558,6 +741,27 @@ function zeigeFrage() {
 // interaktiv  - true im Frage-Screen (antippbar), false im Ergebnis-Screen
 //               (dort ist ohnehin niemand mehr dran, stattdessen wird das
 //               richtige Symbol auf beiden Karten golden hervorgehoben)
+// Baut die Kachel-HTML für EIN Symbol an Steckplatz "i" - gemeinsam genutzt
+// von rendereKarten() (Kartenpaar im Schnelligkeits-Modus) und
+// rendereEinzelKarte() (einzelne Karte im Turm-Modus), damit Größen-/
+// Drehwinkel-Logik und Geometrie nur an einer Stelle gepflegt werden müssen.
+function kachelHtml(symbolId, i, rotation, groessenFaktor, extraKlasse, interaktiv, gesperrt) {
+  const platz = SLOT_POSITIONEN[i % SLOT_POSITIONEN.length];
+  const faktor = Number(groessenFaktor ?? 1);
+  const groesse = (platz.groesse * faktor).toFixed(2);
+  const tag = interaktiv ? "button" : "div";
+  const typAttr = interaktiv ? ' type="button"' : "";
+  const disabledAttr = interaktiv && gesperrt ? " disabled" : "";
+  // font-size in "cqw" (% der eigenen Kartenbreite, siehe .db-karte
+  // { container-type: inline-size } in stil.css) statt fester px/vw-Werte -
+  // so wächst/schrumpft das Emoji-Zeichen selbst exakt mit der ebenfalls
+  // in % gesetzten Kachelgröße mit, statt nur die (unsichtbare) Fläche
+  // drumherum zu ändern.
+  const stil = `left:${platz.links}%;top:${platz.oben}%;width:${groesse}%;height:${groesse}%;` +
+    `transform:translate(-50%,-50%) rotate(${rotation ?? 0}deg);font-size:${(groesse * 0.82).toFixed(2)}cqw;`;
+  return `<${tag}${typAttr} class="db-symbol${extraKlasse || ""}" style="${stil}"${disabledAttr} data-symbol="${symbolId}">${SYMBOLE[symbolId] ?? "❔"}</${tag}>`;
+}
+
 function rendereKarten(container, symboleA, symboleB, eigene, interaktiv) {
   if (rotationRunde !== index) {
     rotationRunde = index;
@@ -579,21 +783,7 @@ function rendereKarten(container, symboleA, symboleB, eigene, interaktiv) {
       else if (eigene && symbolId === eigene.symbolId) {
         extraKlasse = eigene.richtig ? " db-symbol-richtig" : " db-symbol-falsch";
       }
-      const rotation = rotationen[i] ?? 0;
-      const platz = SLOT_POSITIONEN[i % SLOT_POSITIONEN.length];
-      const faktor = Number(groessenFaktoren[i] ?? 1);
-      const groesse = (platz.groesse * faktor).toFixed(2);
-      const tag = interaktiv ? "button" : "div";
-      const typAttr = interaktiv ? ' type="button"' : "";
-      const disabledAttr = interaktiv && gesperrt ? " disabled" : "";
-      // font-size in "cqw" (% der eigenen Kartenbreite, siehe .db-karte
-      // { container-type: inline-size } in stil.css) statt fester px/vw-Werte -
-      // so wächst/schrumpft das Emoji-Zeichen selbst exakt mit der ebenfalls
-      // in % gesetzten Kachelgröße mit, statt nur die (unsichtbare) Fläche
-      // drumherum zu ändern.
-      const stil = `left:${platz.links}%;top:${platz.oben}%;width:${groesse}%;height:${groesse}%;` +
-        `transform:translate(-50%,-50%) rotate(${rotation}deg);font-size:${(groesse * 0.82).toFixed(2)}cqw;`;
-      return `<${tag}${typAttr} class="db-symbol${extraKlasse}" style="${stil}"${disabledAttr} data-symbol="${symbolId}">${SYMBOLE[symbolId] ?? "❔"}</${tag}>`;
+      return kachelHtml(symbolId, i, rotationen[i], groessenFaktoren[i], extraKlasse, interaktiv, gesperrt);
     }).join("");
     return `<div class="db-karte ${klasse}">${kacheln}</div>`;
   };
@@ -603,6 +793,20 @@ function rendereKarten(container, symboleA, symboleB, eigene, interaktiv) {
   if (interaktiv) {
     container.querySelectorAll(".db-symbol").forEach((el) => {
       el.addEventListener("click", () => antworteSymbol(Number(el.dataset.symbol)));
+    });
+  }
+}
+
+// Rendert EINE einzelne runde Karte (Turm-Modus: entweder die eigene
+// oberste Stapelkarte oder die gemeinsame Mitte-Karte).
+function rendereEinzelKarte(container, symbole, rotationen, groessenFaktoren, klasse, interaktiv, aufKlick) {
+  const kacheln = symbole.map((symbolId, i) =>
+    kachelHtml(symbolId, i, rotationen[i], groessenFaktoren[i], "", interaktiv, !interaktiv)
+  ).join("");
+  container.innerHTML = `<div class="db-karte ${klasse}">${kacheln}</div>`;
+  if (interaktiv) {
+    container.querySelectorAll(".db-symbol").forEach((el) => {
+      el.addEventListener("click", () => aufKlick(Number(el.dataset.symbol)));
     });
   }
 }
@@ -626,6 +830,116 @@ async function antworteSymbol(symbolId) {
     delete eigeneAntwortenLokal[index];
     zeigeFrage();
     zeigeDebug("Fehler beim Absenden der Antwort: " + e.message);
+  }
+}
+
+// ============================================================================
+//  Turm-Modus: Anzeige & Ablegen
+// ============================================================================
+function zeigeTurm() {
+  const meinStapel = eigenerStapel();
+  const mitteKarte = dtMitte !== null && dtMitte !== undefined ? DECK[dtMitte] : [];
+  const fertig = meinStapel.length === 0;
+  const eigeneKarte = fertig ? [] : DECK[meinStapel[0]];
+
+  // Wie bei rotationRunde (Schnelligkeits-Modus): Drehwinkel/Größen nur neu
+  // auswürfeln, wenn sich die Mitte-Karte oder die eigene oberste Karte
+  // tatsächlich geändert hat - nicht bei jedem Re-Render (z. B. weil ein
+  // anderer Spielerstand sich ändert).
+  const schluessel = `${dtMitte}_${meinStapel[0] ?? "leer"}`;
+  if (turmRotationSchluessel !== schluessel) {
+    turmRotationSchluessel = schluessel;
+    turmRotationenMitte = zufallsRotationen(mitteKarte.length);
+    turmGroessenMitte = zufallsGroessen(mitteKarte.length);
+    turmRotationenEigene = zufallsRotationen(eigeneKarte.length);
+    turmGroessenEigene = zufallsGroessen(eigeneKarte.length);
+  }
+
+  const gesperrt = fertig || Date.now() < turmGesperrtBis;
+  rendereEinzelKarte($("db-turm-eigene"), eigeneKarte, turmRotationenEigene, turmGroessenEigene, "db-karte-turm-eigene", !gesperrt, tippeSymbolTurm);
+  rendereEinzelKarte($("db-turm-mitte"), mitteKarte, turmRotationenMitte, turmGroessenMitte, "db-karte-turm-mitte", false);
+
+  const statusEl = $("db-turm-status");
+  if (fertig) {
+    statusEl.hidden = false;
+    statusEl.textContent = "🎉 Dein Stapel ist leer - warte, bis das Spiel endet.";
+  } else if (Date.now() < turmGesperrtBis) {
+    statusEl.hidden = false;
+    statusEl.textContent = "❌ Falsch bzw. schon vergeben - versuch's nochmal.";
+  } else {
+    statusEl.hidden = true;
+  }
+
+  rendereTurmStaende();
+}
+
+function rendereTurmStaende() {
+  const container = $("db-turm-staende");
+  if (!container) return;
+  const anzahlVon = (s) => (dtStapel[s.id] || "").split(",").filter(Boolean).length;
+  const sortiert = [...spielerListe].sort((a, b) => anzahlVon(a) - anzahlVon(b));
+  container.innerHTML = "";
+  sortiert.forEach((s) => {
+    const div = document.createElement("div");
+    div.innerHTML = spielerKarte(s.name, s.farbe, s.icon, `${anzahlVon(s)} 🂠`, {});
+    container.appendChild(div);
+  });
+}
+
+// Prüft und beansprucht per Firestore-Transaktion einen Treffer: nur wenn
+// das Symbol WIRKLICH sowohl auf der (serverseitig) eigenen obersten Karte
+// als auch auf der aktuellen Mitte-Karte liegt, gewinnt diese Person die
+// Runde - bei einem Beinahe-Gleichstand entscheidet die Transaktion atomar,
+// wer zuerst dran war, alle anderen scheitern einfach und bekommen die neue
+// Mitte-Karte über den nächsten raumDaten()-Push.
+async function tippeSymbolTurm(symbolId) {
+  if (status !== "frage_aktiv" || spielModus !== "turm") return;
+  const meinStapel = eigenerStapel();
+  if (meinStapel.length === 0 || Date.now() < turmGesperrtBis) return;
+  const meineKarteLokal = DECK[meinStapel[0]] ?? [];
+  const mitteKarteLokal = dtMitte !== null && dtMitte !== undefined ? DECK[dtMitte] : [];
+  if (!meineKarteLokal.includes(symbolId) || !mitteKarteLokal.includes(symbolId)) {
+    turmGesperrtBis = Date.now() + 1000;
+    zeigeTurm();
+    if (turmSperreTimer) clearTimeout(turmSperreTimer);
+    turmSperreTimer = setTimeout(() => zeigeTurm(), 1050);
+    return;
+  }
+  try {
+    await runTransaction(api.db, async (tx) => {
+      const raumSnap = await tx.get(api.raumRef());
+      const daten = raumSnap.data();
+      if (!daten || daten.dbStatus !== "frage_aktiv" || daten.dbModus !== "turm") {
+        throw new Error("ueberholt");
+      }
+      const serverMitteKarte = DECK[daten.dtMitte] ?? [];
+      const serverStapelText = daten.dtStapel?.[api.spielerId] || "";
+      const serverStapel = serverStapelText ? serverStapelText.split(",").map(Number) : [];
+      if (serverStapel.length === 0) throw new Error("ueberholt");
+      const obersteIdx = serverStapel[0];
+      const obersteKarte = DECK[obersteIdx] ?? [];
+      if (!obersteKarte.includes(symbolId) || !serverMitteKarte.includes(symbolId)) {
+        throw new Error("ueberholt");
+      }
+      const neuerStapel = serverStapel.slice(1);
+      const aktualisierung = {
+        dtMitte: obersteIdx,
+        dtStapel: { ...daten.dtStapel, [api.spielerId]: neuerStapel.join(",") }
+      };
+      if (neuerStapel.length === 0) {
+        aktualisierung.dbStatus = "beendet";
+        aktualisierung.dtSiegerId = api.spielerId;
+      }
+      tx.update(api.raumRef(), aktualisierung);
+      tx.update(api.spielerRef(api.spielerId), { punkte: increment(1) });
+    });
+  } catch (e) {
+    if (e.message === "ueberholt") {
+      turmGesperrtBis = Date.now() + 400;
+      zeigeTurm();
+    } else {
+      zeigeDebug("Fehler beim Ablegen: " + e.message);
+    }
   }
 }
 
@@ -742,18 +1056,35 @@ async function weiter() {
 
 function zeigeEndstand() {
   if (!el.wurzel) return;
+  if (spielModus === "turm") {
+    speichereEndstandTurm();
+  }
   const sortiert = [...spielerListe].sort((a, b) => (b.punkte ?? 0) - (a.punkte ?? 0));
   const liste = $("db-endstand-liste");
   liste.innerHTML = "";
   sortiert.forEach((s, i) => {
+    const zusatz = spielModus === "turm" && s.id === dtSiegerId ? " 🏆 Stapel zuerst leer!" : "";
     const li = document.createElement("li");
     li.innerHTML = spielerKarte(s.name, s.farbe, s.icon, s.punkte ?? 0, { rang: i + 1 });
+    if (zusatz) li.innerHTML += `<p class="hinweis-text db-turm-sieger-hinweis">${s.name}${zusatz}</p>`;
     liste.appendChild(li);
   });
   const teamsEl = $("db-endstand-teams");
-  teamsEl.hidden = !teammodus;
-  if (teammodus) teamsEl.innerHTML = teamEndstandHtml(spielerListe, teams);
+  teamsEl.hidden = !teammodus || spielModus === "turm";
+  if (teammodus && spielModus !== "turm") teamsEl.innerHTML = teamEndstandHtml(spielerListe, teams);
   $("db-endstand-warten").hidden = api.istLeiter;
+}
+
+// Anders als im Schnelligkeits-Modus gibt es im Turm-Modus keinen "weiter()"-
+// Knopf, der beim letzten Runden-Übergang die Wertung speichert - das Spiel
+// endet ja mitten in einer Transaktion, sobald jemand seinen Stapel leert
+// (siehe tippeSymbolTurm()). Die Wertung wird daher hier einmalig beim
+// ersten Anzeigen des Endstands gespeichert, abgesichert durch dieselbe
+// ausgewertetAusgeloest-Sperre wie bei den anderen Spielen.
+function speichereEndstandTurm() {
+  if (turmWertungGespeichert || !api.istLeiter) return;
+  turmWertungGespeichert = true;
+  speichereWertung(api, "doppelblick", Object.fromEntries(spielerListe.map((s) => [s.id, s.punkte ?? 0])));
 }
 
 // Für lokale Logiktests exportiert; das Spiel selbst verwendet dieselben Funktionen.
