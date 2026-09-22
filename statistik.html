@@ -16,14 +16,16 @@
   .statistik-leer { text-align: center; color: var(--text-hell); padding: 30px 0; }
   .statistik-typ-badge { padding: 2px 9px; border-radius: 999px; font-size: .74rem; font-weight: 700; white-space: nowrap; }
   .statistik-typ-beitritt { background: #e0edff; color: #2563eb; }
+  .statistik-typ-eroeffnet { background: #dcfce7; color: #15803d; }
   .statistik-typ-spiel { background: #ffe4d1; color: #c2410c; }
+  .statistik-typ-runden { background: #f3e8ff; color: #7e22ce; }
   .statistik-hinweis { font-size: .82rem; }
 </style>
 </head>
 <body>
   <div class="bildschirm-karte">
     <h1>📊 Nutzungsstatistik</h1>
-    <p class="hinweis-text statistik-hinweis">Wer hat die App wann geöffnet und welches Spiel gestartet.
+    <p class="hinweis-text statistik-hinweis">Wer hat wann einen Raum eröffnet oder ist beigetreten, welches Spiel wurde gestartet und mit wie vielen Runden/Fragen.
       Diese Seite ist nirgends in der App verlinkt und nicht wirklich abgesichert
       (nur ein einfaches Passwort) - also kein Ersatz für echten Zugriffsschutz,
       falls hier mal sensiblere Daten reinkommen sollten.</p>
@@ -70,12 +72,24 @@
     }
 
     function ereignisHtml(eintrag) {
+      if (eintrag.typ === "raum_eroeffnet") {
+        return `<span class="statistik-typ-badge statistik-typ-eroeffnet">Raum eröffnet</span>`;
+      }
+      if (eintrag.typ === "raum_beigetreten") {
+        return `<span class="statistik-typ-badge statistik-typ-beitritt">Raum beigetreten</span>`;
+      }
+      // Ältere Einträge (vor dem Aufteilen in eroeffnet/beigetreten) tragen noch
+      // den alten Typnamen - bleiben hier weiterhin lesbar.
       if (eintrag.typ === "raum_betreten") {
         return `<span class="statistik-typ-badge statistik-typ-beitritt">App geöffnet</span>`;
       }
       if (eintrag.typ === "spiel_gestartet") {
         const name = eintrag.spielName || spielInfo(eintrag.spielId)?.name || eintrag.spielId || "Spiel";
         return `<span class="statistik-typ-badge statistik-typ-spiel">${escapeHtml(name)} gestartet</span>`;
+      }
+      if (eintrag.typ === "runden_gewaehlt") {
+        const name = eintrag.spielName || spielInfo(eintrag.spielId)?.name || eintrag.spielId || "Spiel";
+        return `<span class="statistik-typ-badge statistik-typ-runden">${escapeHtml(name)}: ${escapeHtml(String(eintrag.anzahl ?? "-"))} Runden/Fragen</span>`;
       }
       return escapeHtml(eintrag.typ || "-");
     }

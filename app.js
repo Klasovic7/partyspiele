@@ -9,7 +9,7 @@ import {
 } from "./kern/ui.js";
 import { SPIELE, spielInfo } from "./spiele/register.js";
 
-export const APP_VERSION = "v181";
+export const APP_VERSION = "v182";
 const appVersion = document.getElementById("app-version");
 appVersion.textContent = "Version " + APP_VERSION;
 
@@ -132,7 +132,7 @@ let letzteRaumSignatur = null;
 function raumRef() { return doc(db, RAEUME, zustand.code); }
 function spielerRef(id = spielerId) { return doc(db, RAEUME, zustand.code, "spieler", id); }
 
-// ---------- Nutzungsprotokoll (v181) ----------
+// ---------- Nutzungsprotokoll (v181, erweitert v182) ----------
 // Damit sich später ohne Konsolenzugriff nachvollziehen lässt, wer die App
 // wann nutzt und welches Spiel läuft, wird jeder Raumeintritt und jeder
 // Spielstart als kleiner Eintrag mitgeschrieben - in eine Unter-Sammlung
@@ -155,6 +155,28 @@ function protokolliere(typ, zusatz = {}) {
     ...zusatz
   }).catch(() => { /* rein informativ, absichtlich stumm */ });
 }
+
+// v182: Welches Feld im Raum-Dokument pro Spiel die vom Spielleiter gewählte
+// Runden-/Fragenanzahl enthält - fürs Nutzungsprotokoll (siehe reagiereAufRaum
+// weiter unten). Ein neues Spiel taucht hier einfach nicht auf, bis jemand
+// die Zeile ergänzt - dann wird für dieses Spiel keine Anzahl protokolliert,
+// alles andere läuft trotzdem normal weiter.
+const SPIEL_ANZAHL_FELD = {
+  schaetzfragen: "sfAnzahlFragen",
+  "denk-gleich": "dgAnzahlFragen",
+  "zehn-treffer": "ztAnzahlRunden",
+  "reih-dich-ein": "rdAnzahlKategorien",
+  "wer-ist-es": "wiAnzahlFragen",
+  "wann-war-es": "wwAnzahlFragen",
+  blitzquiz: "bzAnzahlFragen",
+  finto: "fiAnzahlFragen",
+  imposter: "impAnzahlRunden",
+  doppelblick: "dbAnzahlRunden"
+};
+// Merkt sich, für welche Kombination aus Raum+Spiel+Anzahl schon protokolliert
+// wurde, damit nicht bei jeder Raum-Aktualisierung (onSnapshot feuert oft)
+// derselbe Eintrag erneut geschrieben wird.
+let protokolliertesRundenSchluessel = null;
 
 function stabilerSignaturWert(wert) {
   if (Array.isArray(wert)) return wert.map(stabilerSignaturWert);
@@ -678,6 +700,21 @@ function reagiereAufRaum(daten) {
   const spielId = daten.aktuellesSpiel ?? null;
   aktualisiereRaumNavigation(spielId);
 
+  // v182: Sobald der Spielleiter eine Runden-/Fragenanzahl wählt, landet das
+  // im Nutzungsprotokoll - nur beim Leiter selbst (sonst käme der Eintrag
+  // einmal pro Person im Raum, weil dieser Listener bei allen feuert).
+  if (zustand.istLeiter && spielId) {
+    const feld = SPIEL_ANZAHL_FELD[spielId];
+    const anzahl = feld ? daten[feld] : null;
+    if (anzahl) {
+      const schluessel = `${zustand.code}:${spielId}:${anzahl}`;
+      if (schluessel !== protokolliertesRundenSchluessel) {
+        protokolliertesRundenSchluessel = schluessel;
+        protokolliere("runden_gewaehlt", { spielId, spielName: spielInfo(spielId)?.name, anzahl });
+      }
+    }
+  }
+
   if (spielId !== aktivesSpielId) {
     entladeSpiel();
     if (spielId) ladeSpiel(spielId);
@@ -749,10 +786,18 @@ function starteListener(code) {
   }, 1000);
 }
 
+// v182: betreteRaum() wird von drei Stellen aus aufgerufen - Raum erstellen,
+// Raum beitreten UND beim automatischen Fortsetzen einer gespeicherten
+// Sitzung nach jedem Neuladen der Seite. Würde hier protokolliert, gäbe es
+// bei jedem Tab-Refresh im Raum einen neuen Eintrag im Nutzungsprotokoll
+// (das war der Grund für die mehrfachen "App geöffnet"-Einträge). Protokolliert
+// wird deshalb NICHT hier, sondern gezielt an den beiden echten Ereignissen:
+// btnErstellen-Handler ("raum_eroeffnet") und beitretenForm-Handler
+// ("raum_beigetreten"). Das Fortsetzen einer Sitzung protokolliert bewusst
+// nichts.
 function betreteRaum(code, name) {
   zustand.code = code;
   zustand.name = name;
-  protokolliere("raum_betreten");
   anzeigeCode.textContent = code;
   startScreen.hidden = true;
   if (zustand.profilBestaetigt) {
@@ -924,6 +969,7 @@ btnErstellen.addEventListener("click", async () => {
 
     zustand.code = code;
     sitzungSpeichern();
+    protokolliere("raum_eroeffnet");
     betreteRaum(code, name);
   } catch (e) {
     zeigeDebug("Fehler beim Erstellen: " + e.message);
@@ -1001,6 +1047,7 @@ beitretenForm.addEventListener("submit", async (event) => {
     await setDoc(doc(db, RAEUME, code, "spieler", spielerId), startWerte(vorhandene), { merge: true });
 
     sitzungSpeichern();
+    protokolliere("raum_beigetreten");
     schliesseBeitretenDialog(false);
     betreteRaum(code, name);
   } catch (e) {
