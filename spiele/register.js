@@ -74,6 +74,15 @@ export const SPIELE = [
     laden: () => import("./blitzquiz/spiel.js")
   },
   {
+    id: "doppelblick",
+    name: "Doppelblick!",
+    emoji: "🔍",
+    farbe: "#f472b6",
+    beschreibung: "Zwei Karten, ein gemeinsames Symbol - wer tippt es zuerst?",
+    minSpieler: 2,
+    laden: () => import("./doppelblick/spiel.js")
+  },
+  {
     id: "finto",
     name: "Finto",
     emoji: "🦉",
@@ -90,15 +99,6 @@ export const SPIELE = [
     beschreibung: "Einer kennt das Geheimwort nicht - deckt eure Karte auf und findet ihn",
     minSpieler: 3,
     laden: () => import("./imposter/spiel.js")
-  },
-  {
-    id: "doppelblick",
-    name: "Doppelblick!",
-    emoji: "🔍",
-    farbe: "#f472b6",
-    beschreibung: "Zwei Karten, ein gemeinsames Symbol - wer tippt es zuerst?",
-    minSpieler: 2,
-    laden: () => import("./doppelblick/spiel.js")
   }
 ];
 

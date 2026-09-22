@@ -85,13 +85,64 @@
       }
       if (eintrag.typ === "spiel_gestartet") {
         const name = eintrag.spielName || spielInfo(eintrag.spielId)?.name || eintrag.spielId || "Spiel";
-        return `<span class="statistik-typ-badge statistik-typ-spiel">${escapeHtml(name)} gestartet</span>`;
+        // v183: verschmelzeSpielstarts() hängt die passende Rundenanzahl (falls
+        // vorhanden) direkt an den spiel_gestartet-Eintrag - dann in einer
+        // einzigen Zeile statt zwei separaten anzeigen.
+        return eintrag.anzahl != null
+          ? `<span class="statistik-typ-badge statistik-typ-spiel">${escapeHtml(name)} (${escapeHtml(String(eintrag.anzahl))} Runden/Fragen) gestartet</span>`
+          : `<span class="statistik-typ-badge statistik-typ-spiel">${escapeHtml(name)} gestartet</span>`;
       }
       if (eintrag.typ === "runden_gewaehlt") {
         const name = eintrag.spielName || spielInfo(eintrag.spielId)?.name || eintrag.spielId || "Spiel";
         return `<span class="statistik-typ-badge statistik-typ-runden">${escapeHtml(name)}: ${escapeHtml(String(eintrag.anzahl ?? "-"))} Runden/Fragen</span>`;
       }
       return escapeHtml(eintrag.typ || "-");
+    }
+
+    function millis(eintrag) {
+      return eintrag.zeitpunkt?.toMillis ? eintrag.zeitpunkt.toMillis() : 0;
+    }
+
+    // v183: fügt jedem "spiel_gestartet"-Eintrag die zeitlich dazugehörige
+    // "runden_gewaehlt"-Rundenanzahl an (gleicher Raum-Code + gleiche Spiel-Id,
+    // die Rundenanzahl kommt IMMER etwas später, weil sie erst im Spiel selbst
+    // gewählt wird - siehe SPIEL_ANZAHL_FELD in app.js) - beide werden dann in
+    // ereignisHtml() als eine einzige Zeile dargestellt statt zwei getrennten.
+    // Wird ein Spiel mehrfach im selben Raum gestartet, bekommt jeder Start die
+    // zeitlich nächste, noch nicht verwendete Rundenanzahl zugeordnet.
+    function verschmelzeSpielstarts(eintraege) {
+      const rundenProSchluessel = new Map();
+      eintraege.forEach((e) => {
+        if (e.typ !== "runden_gewaehlt") return;
+        const schluessel = `${e.code}:${e.spielId}`;
+        if (!rundenProSchluessel.has(schluessel)) rundenProSchluessel.set(schluessel, []);
+        rundenProSchluessel.get(schluessel).push(e);
+      });
+      rundenProSchluessel.forEach((liste) => liste.sort((a, b) => millis(a) - millis(b)));
+
+      const verwendet = new Set();
+      const ergebnis = [];
+      [...eintraege].sort((a, b) => millis(a) - millis(b)).forEach((e) => {
+        if (e.typ === "spiel_gestartet") {
+          const kandidaten = rundenProSchluessel.get(`${e.code}:${e.spielId}`) || [];
+          const treffer = kandidaten.find((r) => !verwendet.has(r) && millis(r) >= millis(e));
+          if (treffer) {
+            verwendet.add(treffer);
+            ergebnis.push({ ...e, anzahl: treffer.anzahl });
+            return;
+          }
+          ergebnis.push(e);
+          return;
+        }
+        if (e.typ === "runden_gewaehlt") {
+          if (verwendet.has(e)) return; // in einer spiel_gestartet-Zeile aufgegangen
+          ergebnis.push(e); // kein passender Start gefunden - eigenständig zeigen
+          return;
+        }
+        ergebnis.push(e);
+      });
+      ergebnis.sort((a, b) => millis(b) - millis(a));
+      return ergebnis;
     }
 
     function zeileHtml(eintrag) {
@@ -108,9 +159,9 @@
       try {
         await authBereit;
         const snap = await getDocs(collection(db, "raeume", "0000", "protokoll"));
-        const eintraege = [];
+        let eintraege = [];
         snap.forEach((d) => eintraege.push(d.data()));
-        eintraege.sort((a, b) => (b.zeitpunkt?.toMillis?.() ?? 0) - (a.zeitpunkt?.toMillis?.() ?? 0));
+        eintraege = verschmelzeSpielstarts(eintraege);
         if (eintraege.length === 0) {
           status.textContent = "";
           inhalt.hidden = true;
