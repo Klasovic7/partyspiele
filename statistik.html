@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Nutzungsstatistik</title>
+<link rel="stylesheet" href="stil.css">
+<style>
+  .statistik-tabelle-wrapper { overflow-x: auto; margin-top: 14px; }
+  .statistik-tabelle { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+  .statistik-tabelle th, .statistik-tabelle td {
+    padding: 8px 10px; text-align: left; white-space: nowrap;
+    border-bottom: 1px solid #e6e0da;
+  }
+  .statistik-tabelle th { font-size: .72rem; text-transform: uppercase; letter-spacing: .04em; color: #6f6672; }
+  .statistik-leer { text-align: center; color: var(--text-hell); padding: 30px 0; }
+  .statistik-typ-badge { padding: 2px 9px; border-radius: 999px; font-size: .74rem; font-weight: 700; white-space: nowrap; }
+  .statistik-typ-beitritt { background: #e0edff; color: #2563eb; }
+  .statistik-typ-spiel { background: #ffe4d1; color: #c2410c; }
+  .statistik-hinweis { font-size: .82rem; }
+</style>
+</head>
+<body>
+  <div class="bildschirm-karte">
+    <h1>📊 Nutzungsstatistik</h1>
+    <p class="hinweis-text statistik-hinweis">Wer hat die App wann geöffnet und welches Spiel gestartet.
+      Diese Seite ist nirgends in der App verlinkt und nicht wirklich abgesichert
+      (nur ein einfaches Passwort) - also kein Ersatz für echten Zugriffsschutz,
+      falls hier mal sensiblere Daten reinkommen sollten.</p>
+    <p id="statistik-status" class="hinweis-text"></p>
+    <div id="statistik-inhalt" class="statistik-tabelle-wrapper" hidden>
+      <table class="statistik-tabelle">
+        <thead><tr><th>Wann</th><th>Wer</th><th>Ereignis</th><th>Raum</th></tr></thead>
+        <tbody id="statistik-koerper"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <script type="module">
+    import { db, authBereit, collection, getDocs } from "./kern/firebase.js";
+    import { escapeHtml } from "./kern/ui.js";
+    import { spielInfo } from "./spiele/register.js";
+
+    const status = document.getElementById("statistik-status");
+    const inhalt = document.getElementById("statistik-inhalt");
+    const koerper = document.getElementById("statistik-koerper");
+
+    // Einfache Hürde, damit die Seite nicht durch bloßes Erraten der URL
+    // sofort alles preisgibt - KEINE echte Absicherung: der Code liegt offen
+    // im Browser, wer die Seitenquelle liest, kennt das Passwort. Der
+    // eigentliche "Schutz" ist, dass diese Seite nirgends in der App
+    // verlinkt ist und nicht im Service-Worker-Cache liegt (siehe sw.js).
+    const PASSWORT = "trollhouse2026";
+    function pruefePasswort() {
+      if (sessionStorage.getItem("statistik-frei") === "1") return true;
+      const eingabe = prompt("Passwort für die Nutzungsstatistik:");
+      if (eingabe === PASSWORT) {
+        sessionStorage.setItem("statistik-frei", "1");
+        return true;
+      }
+      return false;
+    }
+
+    function formatiereZeit(zeitpunkt) {
+      const datum = zeitpunkt?.toDate ? zeitpunkt.toDate() : null;
+      if (!datum) return "gerade eben";
+      return datum.toLocaleString("de-DE", {
+        day: "2-digit", month: "2-digit", year: "2-digit", hour: "2-digit", minute: "2-digit"
+      });
+    }
+
+    function ereignisHtml(eintrag) {
+      if (eintrag.typ === "raum_betreten") {
+        return `<span class="statistik-typ-badge statistik-typ-beitritt">App geöffnet</span>`;
+      }
+      if (eintrag.typ === "spiel_gestartet") {
+        const name = eintrag.spielName || spielInfo(eintrag.spielId)?.name || eintrag.spielId || "Spiel";
+        return `<span class="statistik-typ-badge statistik-typ-spiel">${escapeHtml(name)} gestartet</span>`;
+      }
+      return escapeHtml(eintrag.typ || "-");
+    }
+
+    function zeileHtml(eintrag) {
+      return `<tr>
+        <td>${formatiereZeit(eintrag.zeitpunkt)}</td>
+        <td>${escapeHtml(eintrag.spielerName || "-")}</td>
+        <td>${ereignisHtml(eintrag)}</td>
+        <td>${escapeHtml(eintrag.code || "-")}</td>
+      </tr>`;
+    }
+
+    async function ladeStatistik() {
+      status.textContent = "Lade …";
+      try {
+        await authBereit;
+        const snap = await getDocs(collection(db, "raeume", "0000", "protokoll"));
+        const eintraege = [];
+        snap.forEach((d) => eintraege.push(d.data()));
+        eintraege.sort((a, b) => (b.zeitpunkt?.toMillis?.() ?? 0) - (a.zeitpunkt?.toMillis?.() ?? 0));
+        if (eintraege.length === 0) {
+          status.textContent = "";
+          inhalt.hidden = true;
+          const leer = document.createElement("p");
+          leer.className = "statistik-leer";
+          leer.textContent = "Noch keine Einträge.";
+          inhalt.after(leer);
+          return;
+        }
+        status.textContent = "";
+        koerper.innerHTML = eintraege.map(zeileHtml).join("");
+        inhalt.hidden = false;
+      } catch (e) {
+        status.textContent = "Fehler beim Laden: " + e.message;
+      }
+    }
+
+    if (pruefePasswort()) {
+      ladeStatistik();
+    } else {
+      status.textContent = "Falsches Passwort.";
+    }
+  </script>
+</body>
+</html>

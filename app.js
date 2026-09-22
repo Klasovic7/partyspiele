@@ -9,7 +9,7 @@ import {
 } from "./kern/ui.js";
 import { SPIELE, spielInfo } from "./spiele/register.js";
 
-export const APP_VERSION = "v180";
+export const APP_VERSION = "v181";
 const appVersion = document.getElementById("app-version");
 appVersion.textContent = "Version " + APP_VERSION;
 
@@ -131,6 +131,30 @@ let letzteRaumSignatur = null;
 
 function raumRef() { return doc(db, RAEUME, zustand.code); }
 function spielerRef(id = spielerId) { return doc(db, RAEUME, zustand.code, "spieler", id); }
+
+// ---------- Nutzungsprotokoll (v181) ----------
+// Damit sich später ohne Konsolenzugriff nachvollziehen lässt, wer die App
+// wann nutzt und welches Spiel läuft, wird jeder Raumeintritt und jeder
+// Spielstart als kleiner Eintrag mitgeschrieben - in eine Unter-Sammlung
+// eines eigens dafür reservierten "Raums" mit dem Code "0000". Der Code wird
+// von generiereCode() (siehe unten, Bereich 1000-9999) nie vergeben, es
+// entsteht also nie eine Kollision mit einem echten Spieleabend. Wichtig:
+// diese Unter-Sammlung liegt bewusst UNTER raeume/{code}/... - nur so
+// erlauben es die bestehenden Firestore-Regeln (siehe ANLEITUNG.md, Abschnitt
+// 5) ohne dass an den Regeln in der Firebase-Konsole irgendetwas geändert
+// werden müsste. Schlägt das Schreiben fehl (z. B. offline), wird das
+// bewusst nur verschluckt - das Protokoll darf das eigentliche Spiel nie
+// stören oder verzögern.
+const NUTZUNG_RAUM = "0000";
+function protokolliere(typ, zusatz = {}) {
+  setDoc(doc(collection(db, RAEUME, NUTZUNG_RAUM, "protokoll")), {
+    typ,
+    zeitpunkt: serverTimestamp(),
+    spielerName: zustand.name || null,
+    code: zustand.code || null,
+    ...zusatz
+  }).catch(() => { /* rein informativ, absichtlich stumm */ });
+}
 
 function stabilerSignaturWert(wert) {
   if (Array.isArray(wert)) return wert.map(stabilerSignaturWert);
@@ -444,6 +468,7 @@ async function waehleSpiel(id) {
   lobbyFehler.textContent = "";
   try {
     await updateDoc(raumRef(), { aktuellesSpiel: id, phase: "spiel" });
+    protokolliere("spiel_gestartet", { spielId: id, spielName: info.name });
   } catch (e) {
     zeigeDebug("Fehler bei der Spielauswahl: " + e.message);
   }
@@ -727,6 +752,7 @@ function starteListener(code) {
 function betreteRaum(code, name) {
   zustand.code = code;
   zustand.name = name;
+  protokolliere("raum_betreten");
   anzeigeCode.textContent = code;
   startScreen.hidden = true;
   if (zustand.profilBestaetigt) {
