@@ -30,7 +30,7 @@ import {
   doc, setDoc, updateDoc, deleteDoc, collection, getDocs, onSnapshot,
   serverTimestamp, increment, runTransaction
 } from "../../kern/firebase.js";
-import { spielerKarte, teamEndstandHtml, teamGruppeHtml, renderWarteAvatare, zeigeDebug } from "../../kern/ui.js";
+import { spielerKarte, teamEndstandHtml, teamGruppeHtml, renderWarteAvatare, avatarHtml, zeigeDebug } from "../../kern/ui.js";
 import { erstelleTeams, ergaenzeFehlendeTeams } from "../../kern/teams.js";
 import { speichereWertung } from "../../kern/wertung.js";
 
@@ -118,13 +118,11 @@ const ZUFALLSGROESSE_BEREICH = [1.3, 2.0];
 
 const VORLAGE = `
   <div id="db-setup" class="bildschirm-karte" hidden>
-    <h1>🔍 Doppelblick!</h1>
     <p class="hinweis-text">Zwei Karten, viele Symbole - aber immer genau eines
-      ist auf beiden zu finden. Wer es zuerst antippt, bekommt die meisten
-      Punkte. Liegt man falsch, ist man für den Rest der Runde raus.</p>
+      ist auf beiden zu finden. Sei der schnellste!</p>
 
     <div id="db-modus-zeile" class="setup-modusblock" hidden>
-      <div class="setup-moduszeile">
+      <div class="setup-moduszeile db-modus-zeile-kopf">
         <span class="modus-text-zeile">
           <span class="schalter-text">Spielmodus</span>
           <details class="modus-info">
@@ -132,10 +130,10 @@ const VORLAGE = `
             <div>Schnelligkeit: alle sehen dieselben zwei Karten und tippen um die Wette. Turm: jede*r hat einen eigenen Kartenstapel und muss ihn als Erstes loswerden.</div>
           </details>
         </span>
-        <span class="db-modus-wahl">
-          <button type="button" id="db-modus-schnelligkeit" class="btn-flach db-modus-btn">⚡ Schnelligkeit</button>
-          <button type="button" id="db-modus-turm" class="btn-flach db-modus-btn">🗼 Turm</button>
-        </span>
+      </div>
+      <div class="db-modus-wahl">
+        <button type="button" id="db-modus-schnelligkeit" class="db-modus-btn">⚡ Schnelligkeit</button>
+        <button type="button" id="db-modus-turm" class="db-modus-btn">🗼 Turm</button>
       </div>
     </div>
 
@@ -196,22 +194,20 @@ const VORLAGE = `
   </div>
 
   <div id="db-frage-screen" class="bildschirm-karte" hidden>
-    <p class="hinweis-text db-anleitung">Welches Symbol ist auf BEIDEN Karten zu sehen?</p>
     <div id="db-karten-bereich" class="db-karten-bereich"></div>
     <p id="db-eigenes-status" class="hinweis-text" hidden></p>
     <div id="db-frage-status" class="warten-block"></div>
   </div>
 
   <div id="db-turm-screen" class="bildschirm-karte" hidden>
-    <p class="hinweis-text db-anleitung">Welches Symbol ist auf DEINER obersten Karte UND der Karte in der Mitte zu sehen?</p>
     <div class="db-turm-bereich">
       <div class="db-turm-spalte">
         <p class="db-turm-label">Deine Karte</p>
-        <div id="db-turm-eigene" class="db-karten-bereich db-karten-bereich-einzeln"></div>
+        <div id="db-turm-eigene" class="db-karten-bereich"></div>
       </div>
       <div class="db-turm-spalte">
         <p class="db-turm-label">Mitte</p>
-        <div id="db-turm-mitte" class="db-karten-bereich db-karten-bereich-einzeln"></div>
+        <div id="db-turm-mitte" class="db-karten-bereich"></div>
       </div>
     </div>
     <p id="db-turm-status" class="hinweis-text" hidden></p>
@@ -873,6 +869,10 @@ function zeigeTurm() {
   rendereTurmStaende();
 }
 
+// Kompakte Anzeige (Profilbild + Kartenanzahl daneben) statt der großen
+// spielerKarte()-Zeilen - dieselbe Optik wie die Warteavatare der anderen
+// Spiele (siehe renderWarteAvatare in kern/ui.js), nur mit Zahl statt
+// Ausgegraut/Nicht-Ausgegraut.
 function rendereTurmStaende() {
   const container = $("db-turm-staende");
   if (!container) return;
@@ -881,7 +881,9 @@ function rendereTurmStaende() {
   container.innerHTML = "";
   sortiert.forEach((s) => {
     const div = document.createElement("div");
-    div.innerHTML = spielerKarte(s.name, s.farbe, s.icon, `${anzahlVon(s)} 🂠`, {});
+    div.className = "db-turm-stapel-item";
+    div.innerHTML = avatarHtml(s.icon, "db-turm-stapel-avatar") +
+      `<span class="db-turm-stapel-anzahl">${anzahlVon(s)}</span>`;
     container.appendChild(div);
   });
 }
