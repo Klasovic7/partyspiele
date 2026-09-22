@@ -2135,6 +2135,12 @@
       position: relative; width: min(78vw, 300px); aspect-ratio: 1 / 1;
       border-radius: 50%; flex-shrink: 0;
       box-shadow: 0 10px 24px rgba(0, 0, 0, .28);
+      /* v175: erlaubt "cqw"-Einheiten (% der eigenen Kartenbreite) fuer die
+         Emoji-Schriftgroesse - so laesst sich die inline pro Symbol gesetzte
+         font-size (siehe rendereKarten() in spiel.js) exakt an die ebenfalls
+         individuelle Kachelgroesse koppeln, ohne fuer jede Groesse eine
+         eigene CSS-Klasse zu brauchen. */
+      container-type: inline-size;
     }
     .db-karten-bereich-klein .db-karte { width: min(58vw, 220px); }
     .db-karte-a { background: radial-gradient(circle at 30% 26%, #eaf3ff, #bcdcff 62%, #7fb8f2); border: 4px solid #4a8dea; }

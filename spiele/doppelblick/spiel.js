@@ -88,22 +88,29 @@ const STANDARD_ANZAHL = 10;
 const FRAGE_TIMEOUT_MS = 90000;
 
 // Acht feste "Steckplätze" (Mittelpunkt links/oben in % des quadratischen
-// Kartenbereichs, dazu die Kantenlänge der Kachel in %) für die 8 Symbole
-// einer Karte - ein lockerer Kranz plus ein etwas größeres Symbol in der
-// Mitte, angelehnt an die Optik echter Symbol-Suchkarten. Welches Symbol in
+// Kartenbereichs, dazu eine GRUND-Kantenlänge der Kachel in %) für die 8
+// Symbole einer Karte - ein lockerer Kranz plus ein Platz in der Mitte,
+// angelehnt an die Optik echter Symbol-Suchkarten. Welches Symbol in
 // welchem Steckplatz landet, ist schon beim Mischen der Kartenreihenfolge
 // zufällig (siehe neueRunden()) - die Plätze selbst bleiben immer gleich,
-// nur so bleibt garantiert genug Abstand zum Kartenrand und zueinander.
+// nur so bleibt garantiert genug Abstand zum Kartenrand und zueinander,
+// auch wenn die tatsächliche Größe (siehe ZUFALLSGROESSE_BEREICH unten)
+// pro Symbol nochmal zufällig nach oben abweicht.
 const SLOT_POSITIONEN = [
-  { links: 50, oben: 18, groesse: 18 },
-  { links: 76, oben: 28, groesse: 15 },
-  { links: 82, oben: 54, groesse: 17 },
-  { links: 68, oben: 78, groesse: 14 },
-  { links: 35, oben: 80, groesse: 16 },
-  { links: 17, oben: 60, groesse: 15 },
-  { links: 21, oben: 32, groesse: 15 },
-  { links: 50, oben: 50, groesse: 23 }
+  { links: 50, oben: 18, groesse: 14 },
+  { links: 76, oben: 28, groesse: 12 },
+  { links: 82, oben: 54, groesse: 13 },
+  { links: 68, oben: 78, groesse: 11 },
+  { links: 35, oben: 80, groesse: 12 },
+  { links: 17, oben: 60, groesse: 12 },
+  { links: 21, oben: 32, groesse: 12 },
+  { links: 50, oben: 50, groesse: 18 }
 ];
+// v175: wie beim echten Vorbild ist dasselbe Symbol auf den beiden Karten
+// unterschiedlich groß und unterschiedlich gedreht (auch mal auf dem Kopf) -
+// jeder Steckplatz-Auftritt bekommt unabhängig einen eigenen Zufallsfaktor
+// zwischen 0.7 (kleiner) und 1.35 (größer) auf seine Grundgröße oben.
+const ZUFALLSGROESSE_BEREICH = [0.7, 1.35];
 
 const VORLAGE = `
   <div id="db-setup" class="bildschirm-karte" hidden>
@@ -212,6 +219,8 @@ let eigeneAntwortenLokal = {};
 let rotationRunde = -1;
 let rotationenA = [];
 let rotationenB = [];
+let groessenA = [];
+let groessenB = [];
 
 const $ = (id) => el.wurzel.querySelector("#" + id);
 
@@ -248,8 +257,16 @@ function eigeneAntwortAnzeige(pos) {
   return eigeneAntwortenLokal[pos] ?? eigeneAntwort(pos);
 }
 
+// Voller Drehwinkelbereich (-180..180 Grad) - anders als beim vorherigen,
+// nur leicht schiefen ±12°-Bereich kann ein Symbol jetzt auch quer oder
+// komplett auf dem Kopf stehen, wie bei den echten Karten.
 function zufallsRotationen(anzahl) {
-  return Array.from({ length: anzahl }, () => (Math.random() * 24 - 12).toFixed(1));
+  return Array.from({ length: anzahl }, () => (Math.random() * 360 - 180).toFixed(1));
+}
+
+function zufallsGroessen(anzahl) {
+  const [min, max] = ZUFALLSGROESSE_BEREICH;
+  return Array.from({ length: anzahl }, () => (min + Math.random() * (max - min)).toFixed(2));
 }
 
 function zeitText(millisekunden) {
@@ -306,7 +323,7 @@ export function beenden() {
   rundenKartenA = []; rundenKartenB = []; rundenGemeinsam = []; rundeSeit = 0;
   gewuenschteAnzahl = 0; teammodus = false; teams = {};
   ausgewertetAusgeloest = false; eigeneAntwortenLokal = {};
-  rotationRunde = -1; rotationenA = []; rotationenB = [];
+  rotationRunde = -1; rotationenA = []; rotationenB = []; groessenA = []; groessenB = [];
 }
 
 export function spieler(liste) {
@@ -542,11 +559,16 @@ function rendereKarten(container, symboleA, symboleB, eigene, interaktiv) {
     rotationRunde = index;
     rotationenA = zufallsRotationen(symboleA.length);
     rotationenB = zufallsRotationen(symboleB.length);
+    // Unabhängig von der Karte A/B nochmal eigene Zufallsgrößen je Steckplatz -
+    // dasselbe Symbol kann dadurch auf der einen Karte größer sein als auf
+    // der anderen (siehe ZUFALLSGROESSE_BEREICH oben).
+    groessenA = zufallsGroessen(symboleA.length);
+    groessenB = zufallsGroessen(symboleB.length);
   }
   const gemeinsam = gemeinsamAn(index);
   const gesperrt = !interaktiv || !!eigene;
 
-  const karteHtml = (symbole, rotationen, klasse) => {
+  const karteHtml = (symbole, rotationen, groessenFaktoren, klasse) => {
     const kacheln = symbole.map((symbolId, i) => {
       let extraKlasse = "";
       if (!interaktiv && symbolId === gemeinsam) extraKlasse = " db-symbol-richtig";
@@ -555,16 +577,24 @@ function rendereKarten(container, symboleA, symboleB, eigene, interaktiv) {
       }
       const rotation = rotationen[i] ?? 0;
       const platz = SLOT_POSITIONEN[i % SLOT_POSITIONEN.length];
+      const faktor = Number(groessenFaktoren[i] ?? 1);
+      const groesse = (platz.groesse * faktor).toFixed(2);
       const tag = interaktiv ? "button" : "div";
       const typAttr = interaktiv ? ' type="button"' : "";
       const disabledAttr = interaktiv && gesperrt ? " disabled" : "";
-      const stil = `left:${platz.links}%;top:${platz.oben}%;width:${platz.groesse}%;height:${platz.groesse}%;transform:translate(-50%,-50%) rotate(${rotation}deg);`;
+      // font-size in "cqw" (% der eigenen Kartenbreite, siehe .db-karte
+      // { container-type: inline-size } in stil.css) statt fester px/vw-Werte -
+      // so wächst/schrumpft das Emoji-Zeichen selbst exakt mit der ebenfalls
+      // in % gesetzten Kachelgröße mit, statt nur die (unsichtbare) Fläche
+      // drumherum zu ändern.
+      const stil = `left:${platz.links}%;top:${platz.oben}%;width:${groesse}%;height:${groesse}%;` +
+        `transform:translate(-50%,-50%) rotate(${rotation}deg);font-size:${(groesse * 0.82).toFixed(2)}cqw;`;
       return `<${tag}${typAttr} class="db-symbol${extraKlasse}" style="${stil}"${disabledAttr} data-symbol="${symbolId}">${SYMBOLE[symbolId] ?? "❔"}</${tag}>`;
     }).join("");
     return `<div class="db-karte ${klasse}">${kacheln}</div>`;
   };
 
-  container.innerHTML = karteHtml(symboleA, rotationenA, "db-karte-a") + karteHtml(symboleB, rotationenB, "db-karte-b");
+  container.innerHTML = karteHtml(symboleA, rotationenA, groessenA, "db-karte-a") + karteHtml(symboleB, rotationenB, groessenB, "db-karte-b");
 
   if (interaktiv) {
     container.querySelectorAll(".db-symbol").forEach((el) => {
