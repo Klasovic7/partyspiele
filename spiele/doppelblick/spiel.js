@@ -202,12 +202,12 @@ const VORLAGE = `
   <div id="db-turm-screen" class="bildschirm-karte" hidden>
     <div class="db-turm-bereich">
       <div class="db-turm-spalte">
-        <p class="db-turm-label">Deine Karte</p>
-        <div id="db-turm-eigene" class="db-karten-bereich"></div>
-      </div>
-      <div class="db-turm-spalte">
         <p class="db-turm-label">Mitte</p>
         <div id="db-turm-mitte" class="db-karten-bereich"></div>
+      </div>
+      <div class="db-turm-spalte">
+        <p class="db-turm-label">Deine Karte</p>
+        <div id="db-turm-eigene" class="db-karten-bereich"></div>
       </div>
     </div>
     <p id="db-turm-status" class="hinweis-text" hidden></p>
@@ -279,6 +279,7 @@ let dtStapel = {}; // spielerId -> Kommagetrennte DECK-Indizes, oberste zuerst
 let dtKartenProSpieler = 0;
 let dtSiegerId = null;
 let turmGesperrtBis = 0; // Date.now()-Zeitstempel: bis dahin nach Falsch-Tipp lokal gesperrt
+let turmLetzteMeldung = null; // "falsch" während der kurzen Sperre nach einem Falsch-Tipp, sonst null
 let turmSperreTimer = null;
 let turmRotationSchluessel = null;
 let turmRotationenEigene = [];
@@ -406,7 +407,7 @@ export function beenden() {
   rotationRunde = -1; rotationenA = []; rotationenB = []; groessenA = []; groessenB = [];
   spielModus = "schnelligkeit"; gewuenschteKartenProSpieler = 0;
   dtMitte = null; dtStapel = {}; dtKartenProSpieler = 0; dtSiegerId = null;
-  turmGesperrtBis = 0; turmRotationSchluessel = null;
+  turmGesperrtBis = 0; turmLetzteMeldung = null; turmRotationSchluessel = null;
   turmRotationenEigene = []; turmGroessenEigene = []; turmRotationenMitte = []; turmGroessenMitte = [];
   turmWertungGespeichert = false;
 }
@@ -795,12 +796,18 @@ function rendereKarten(container, symboleA, symboleB, eigene, interaktiv) {
 
 // Rendert EINE einzelne runde Karte (Turm-Modus: entweder die eigene
 // oberste Stapelkarte oder die gemeinsame Mitte-Karte).
-function rendereEinzelKarte(container, symbole, rotationen, groessenFaktoren, klasse, interaktiv, aufKlick) {
+// interaktiv - true, wenn diese Karte grundsätzlich antippbar ist (nur die
+//              eigene Karte, nie die Mitte-Karte)
+// gesperrt   - true, wenn gerade NICHT angetippt werden darf (z. B. während
+//              der kurzen Sperre nach einem Tipp) - wird dann als "disabled"
+//              gerendert (button bleibt ein <button>, nur ausgegraut), statt
+//              gar keinen Klick-Handler zu bekommen
+function rendereEinzelKarte(container, symbole, rotationen, groessenFaktoren, klasse, interaktiv, gesperrt, aufKlick) {
   const kacheln = symbole.map((symbolId, i) =>
-    kachelHtml(symbolId, i, rotationen[i], groessenFaktoren[i], "", interaktiv, !interaktiv)
+    kachelHtml(symbolId, i, rotationen[i], groessenFaktoren[i], "", interaktiv, gesperrt)
   ).join("");
   container.innerHTML = `<div class="db-karte ${klasse}">${kacheln}</div>`;
-  if (interaktiv) {
+  if (interaktiv && !gesperrt) {
     container.querySelectorAll(".db-symbol").forEach((el) => {
       el.addEventListener("click", () => aufKlick(Number(el.dataset.symbol)));
     });
@@ -852,16 +859,19 @@ function zeigeTurm() {
   }
 
   const gesperrt = fertig || Date.now() < turmGesperrtBis;
-  rendereEinzelKarte($("db-turm-eigene"), eigeneKarte, turmRotationenEigene, turmGroessenEigene, "db-karte-turm-eigene", !gesperrt, tippeSymbolTurm);
-  rendereEinzelKarte($("db-turm-mitte"), mitteKarte, turmRotationenMitte, turmGroessenMitte, "db-karte-turm-mitte", false);
+  rendereEinzelKarte($("db-turm-eigene"), eigeneKarte, turmRotationenEigene, turmGroessenEigene, "db-karte-turm-eigene", !fertig, gesperrt, tippeSymbolTurm);
+  rendereEinzelKarte($("db-turm-mitte"), mitteKarte, turmRotationenMitte, turmGroessenMitte, "db-karte-turm-mitte", false, true);
 
   const statusEl = $("db-turm-status");
   if (fertig) {
     statusEl.hidden = false;
     statusEl.textContent = "🎉 Dein Stapel ist leer - warte, bis das Spiel endet.";
+  } else if (turmLetzteMeldung === "falsch") {
+    statusEl.hidden = false;
+    statusEl.textContent = "❌ Falsch! Du bekommst von allen Mitspieler*innen die unterste Karte.";
   } else if (Date.now() < turmGesperrtBis) {
     statusEl.hidden = false;
-    statusEl.textContent = "❌ Falsch bzw. schon vergeben - versuch's nochmal.";
+    statusEl.textContent = "⏳ Einen Moment …";
   } else {
     statusEl.hidden = true;
   }
@@ -894,19 +904,22 @@ function rendereTurmStaende() {
 // Runde - bei einem Beinahe-Gleichstand entscheidet die Transaktion atomar,
 // wer zuerst dran war, alle anderen scheitern einfach und bekommen die neue
 // Mitte-Karte über den nächsten raumDaten()-Push.
+// Jeder Tipp läuft über eine Transaktion (auch ein falscher!), weil ein
+// falscher Tipp jetzt eine echte Strafe auslöst, die den Zustand ALLER
+// Spieler*innen verändert (siehe unten) - anders als vorher reicht dafür
+// kein rein lokaler Check mehr. Richtig oder falsch entscheidet dabei immer
+// der serverseitige Stand, nicht der lokale Cache - bei einem
+// Beinahe-Gleichstand gewinnt so nur eine Person wirklich.
 async function tippeSymbolTurm(symbolId) {
   if (status !== "frage_aktiv" || spielModus !== "turm") return;
-  const meinStapel = eigenerStapel();
-  if (meinStapel.length === 0 || Date.now() < turmGesperrtBis) return;
-  const meineKarteLokal = DECK[meinStapel[0]] ?? [];
-  const mitteKarteLokal = dtMitte !== null && dtMitte !== undefined ? DECK[dtMitte] : [];
-  if (!meineKarteLokal.includes(symbolId) || !mitteKarteLokal.includes(symbolId)) {
-    turmGesperrtBis = Date.now() + 1000;
-    zeigeTurm();
-    if (turmSperreTimer) clearTimeout(turmSperreTimer);
-    turmSperreTimer = setTimeout(() => zeigeTurm(), 1050);
-    return;
-  }
+  if (Date.now() < turmGesperrtBis) return;
+  const meinStapelLokal = eigenerStapel();
+  if (meinStapelLokal.length === 0) return;
+  if (turmSperreTimer) { clearTimeout(turmSperreTimer); turmSperreTimer = null; }
+  // Kurze Sperre schon vor der Transaktion, damit ein zweiter Klick während
+  // der Netzwerk-Laufzeit nicht nochmal auslöst.
+  turmGesperrtBis = Date.now() + 250;
+  let ergebnis = null;
   try {
     await runTransaction(api.db, async (tx) => {
       const raumSnap = await tx.get(api.raumRef());
@@ -914,33 +927,66 @@ async function tippeSymbolTurm(symbolId) {
       if (!daten || daten.dbStatus !== "frage_aktiv" || daten.dbModus !== "turm") {
         throw new Error("ueberholt");
       }
+      const serverDtStapel = daten.dtStapel || {};
       const serverMitteKarte = DECK[daten.dtMitte] ?? [];
-      const serverStapelText = daten.dtStapel?.[api.spielerId] || "";
+      const serverStapelText = serverDtStapel[api.spielerId] || "";
       const serverStapel = serverStapelText ? serverStapelText.split(",").map(Number) : [];
       if (serverStapel.length === 0) throw new Error("ueberholt");
       const obersteIdx = serverStapel[0];
       const obersteKarte = DECK[obersteIdx] ?? [];
-      if (!obersteKarte.includes(symbolId) || !serverMitteKarte.includes(symbolId)) {
-        throw new Error("ueberholt");
+      const richtig = obersteKarte.includes(symbolId) && serverMitteKarte.includes(symbolId);
+
+      if (richtig) {
+        const neuerStapel = serverStapel.slice(1);
+        const neuesDtStapel = { ...serverDtStapel, [api.spielerId]: neuerStapel.join(",") };
+        const aktualisierung = { dtMitte: obersteIdx, dtStapel: neuesDtStapel };
+        if (neuerStapel.length === 0) {
+          aktualisierung.dbStatus = "beendet";
+          aktualisierung.dtSiegerId = api.spielerId;
+        }
+        tx.update(api.raumRef(), aktualisierung);
+        tx.update(api.spielerRef(api.spielerId), { punkte: increment(1) });
+        ergebnis = { richtig: true, dtMitte: obersteIdx, dtStapel: neuesDtStapel };
+      } else {
+        // Strafe: von JEDER anderen Person die unterste Karte ihres Stapels
+        // klauen und unten an den eigenen Stapel anhängen (siehe Erklärung
+        // im Commit) - wer schon leer ist, wird dabei übersprungen.
+        const neuesDtStapel = { ...serverDtStapel };
+        const eigenerNeuerStapel = [...serverStapel];
+        Object.keys(serverDtStapel).forEach((spielerId) => {
+          if (spielerId === api.spielerId) return;
+          const text = serverDtStapel[spielerId] || "";
+          const arr = text ? text.split(",").map(Number) : [];
+          if (arr.length === 0) return;
+          const unterste = arr.pop();
+          neuesDtStapel[spielerId] = arr.join(",");
+          eigenerNeuerStapel.push(unterste);
+        });
+        neuesDtStapel[api.spielerId] = eigenerNeuerStapel.join(",");
+        tx.update(api.raumRef(), { dtStapel: neuesDtStapel });
+        ergebnis = { richtig: false, dtStapel: neuesDtStapel };
       }
-      const neuerStapel = serverStapel.slice(1);
-      const aktualisierung = {
-        dtMitte: obersteIdx,
-        dtStapel: { ...daten.dtStapel, [api.spielerId]: neuerStapel.join(",") }
-      };
-      if (neuerStapel.length === 0) {
-        aktualisierung.dbStatus = "beendet";
-        aktualisierung.dtSiegerId = api.spielerId;
-      }
-      tx.update(api.raumRef(), aktualisierung);
-      tx.update(api.spielerRef(api.spielerId), { punkte: increment(1) });
     });
+    // Lokal sofort übernehmen statt auf den nächsten Firestore-Push zu
+    // warten - sonst könnte kurz noch die alte Karte/der alte Stapelstand zu
+    // sehen sein, bevor die eigene Änderung über den Listener zurückkommt.
+    if (ergebnis) {
+      dtStapel = ergebnis.dtStapel;
+      if (ergebnis.dtMitte !== undefined) dtMitte = ergebnis.dtMitte;
+      turmGesperrtBis = ergebnis.richtig ? 0 : Date.now() + 1200;
+      turmLetzteMeldung = ergebnis.richtig ? null : "falsch";
+      zeigeTurm();
+      if (!ergebnis.richtig) {
+        turmSperreTimer = setTimeout(() => { turmLetzteMeldung = null; zeigeTurm(); }, 1250);
+      }
+    }
   } catch (e) {
     if (e.message === "ueberholt") {
-      turmGesperrtBis = Date.now() + 400;
+      turmGesperrtBis = Date.now() + 300;
       zeigeTurm();
     } else {
-      zeigeDebug("Fehler beim Ablegen: " + e.message);
+      turmGesperrtBis = 0;
+      zeigeDebug("Fehler beim Tippen: " + e.message);
     }
   }
 }
