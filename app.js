@@ -9,7 +9,7 @@ import {
 } from "./kern/ui.js";
 import { SPIELE, spielInfo } from "./spiele/register.js";
 
-export const APP_VERSION = "v184";
+export const APP_VERSION = "v185";
 const appVersion = document.getElementById("app-version");
 appVersion.textContent = "Version " + APP_VERSION;
 
@@ -525,16 +525,39 @@ function renderLobby() {
     li.className = "lobby-spieler";
     li.style.setProperty("--spieler-farbe", s.farbe || "#7f8c8d");
     const istSpielleiter = zustand.raum?.leiterId === s.id;
+    // v185: der Spielleiter kann Mitspieler*innen aus dem Raum werfen (nicht
+    // sich selbst) - dafuer erscheint auf jeder anderen Kachel ein kleiner
+    // "Rauswerfen"-Knopf, nur sichtbar fuer den Leiter selbst.
+    const kannKicken = zustand.istLeiter && s.id !== spielerId;
     li.innerHTML =
       `<span class="lobby-avatar-rahmen">${avatarHtml(s.icon, "lobby-avatar")}` +
         (istSpielleiter ? `<span class="lobby-krone" aria-label="Spielleiter">♛</span>` : "") +
+        (kannKicken ? `<button type="button" class="lobby-kick" aria-label="${escapeHtml(s.name)} aus dem Raum entfernen" title="Aus dem Raum entfernen">✕</button>` : "") +
       `</span>` +
       `<strong>${escapeHtml(s.name)}</strong>` +
       (istSpielleiter ? `<small>Spielleiter</small>` : "");
+    if (kannKicken) {
+      li.querySelector(".lobby-kick").addEventListener("click", (ev) => {
+        ev.stopPropagation();
+        kickeSpieler(s.id, s.name);
+      });
+    }
     spielerliste.appendChild(li);
   });
   aktualisiereWertungsKachel();
   renderSpieleAuswahl();
+}
+
+// ---------- Spieler rauswerfen (nur Spielleiter) ----------
+async function kickeSpieler(zielId, zielName) {
+  if (!zustand.istLeiter || zielId === spielerId) return;
+  const bestaetigt = window.confirm(`${zielName} wirklich aus dem Raum entfernen?`);
+  if (!bestaetigt) return;
+  try {
+    await deleteDoc(spielerRef(zielId));
+  } catch (e) {
+    zeigeDebug("Spieler konnte nicht entfernt werden: " + e.message);
+  }
 }
 
 // ---------- Wertung (Punkte aus allen bisher gespielten Spielen) ----------
@@ -664,9 +687,17 @@ function aktualisiereRaumNavigation(spielId) {
   if (imSpiel) document.body.dataset.spiel = spielId;
   else delete document.body.dataset.spiel;
   topBar.classList.toggle("im-spiel", imSpiel);
-  btnVerlassen.textContent = imSpiel ? "←  Spielauswahl" : "Raum verlassen";
+  // v185: der Verlassen-Button ist jetzt für ALLE Spieler*innen sichtbar,
+  // nicht mehr nur für den Spielleiter. Vorher konnten Mitspieler*innen
+  // weder das Spiel noch den Raum verlassen, wenn der Spielleiter einfach
+  // offline/inaktiv war. Der Leiter behält seine bisherige Funktion (Klick
+  // beendet das Spiel für ALLE und geht zurück zur Spielauswahl); bei
+  // Mitspieler*innen verlässt derselbe Button stattdessen nur sie selbst den
+  // Raum, ohne das laufende Spiel für die anderen zu beenden (siehe
+  // raumNavigationAusfuehren()).
+  btnVerlassen.textContent = imSpiel && zustand.istLeiter ? "←  Spielauswahl" : "Raum verlassen";
   btnVerlassen.disabled = false;
-  btnVerlassen.hidden = imSpiel && !zustand.istLeiter;
+  btnVerlassen.hidden = false;
   spielKopfTitel.hidden = !imSpiel;
   // v113: bei jedem Spielwechsel (oder Rückkehr zur Auswahl) erstmal ausblenden -
   // das aktive Spiel setzt den Text direkt danach über api.fortschritt() wieder.
@@ -743,6 +774,14 @@ function starteListener(code) {
     if (zustand.profilBestaetigt && eigenerEintrag && (!eigenerEintrag.farbe || !eigenerEintrag.icon)) {
       zustand.profilBestaetigt = false;
       zeigeProfilAuswahl();
+      return;
+    }
+    // v185: Fehlt der eigene Eintrag komplett, obwohl das eigene Profil schon
+    // bestätigt war, wurde man vom Spielleiter aus dem Raum geworfen (siehe
+    // kickeSpieler()) - dann automatisch und mit Hinweis zurück zum Startbildschirm,
+    // statt in einer Lobby/einem Spiel ohne eigenen Spieler-Eintrag hängen zu bleiben.
+    if (zustand.profilBestaetigt && !eigenerEintrag && zustand.code) {
+      wurdeAusRaumGeworfen();
       return;
     }
     if (!profilScreen.hidden) renderProfilAuswahl();
@@ -863,13 +902,31 @@ async function verlasseRaum() {
   btnProfilVerlassen.disabled = false;
 }
 
+// v185: wird aufgerufen, wenn der eigene Spieler-Eintrag plötzlich aus dem
+// Raum verschwunden ist, weil der Spielleiter einen aus dem Raum geworfen
+// hat (siehe kickeSpieler()). Nutzt dieselbe Aufräum-Logik wie verlasseRaum()
+// (der eigene Eintrag ist ja schon weg, das deleteDoc dort ist dann einfach
+// ein No-op), zeigt danach aber zusätzlich einen erklärenden Hinweis auf dem
+// Startbildschirm an.
+async function wurdeAusRaumGeworfen() {
+  await verlasseRaum();
+  startError.textContent = "Du wurdest vom Spielleiter aus dem Raum entfernt.";
+}
+
 async function raumNavigationAusfuehren() {
   const spielId = zustand.raum?.aktuellesSpiel ?? null;
   if (!spielId) {
     await verlasseRaum();
     return;
   }
-  if (!zustand.istLeiter) return;
+  // v185: Mitspieler*innen können ein laufendes Spiel nicht für alle
+  // beenden (das darf weiterhin nur der Leiter) - für sie verlässt der
+  // Button stattdessen einfach den Raum, damit sie nicht mehr blockiert
+  // sind, wenn der Spielleiter inaktiv ist.
+  if (!zustand.istLeiter) {
+    await verlasseRaum();
+    return;
+  }
 
   btnVerlassen.disabled = true;
   try {

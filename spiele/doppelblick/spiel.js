@@ -943,9 +943,30 @@ async function tippeSymbolTurm(symbolId) {
         if (neuerStapel.length === 0) {
           aktualisierung.dbStatus = "beendet";
           aktualisierung.dtSiegerId = api.spielerId;
+          // v185: Punkte gibt es jetzt nicht mehr pro einzelnem Treffer
+          // während des laufenden Spiels (das ergab bei ungleich schnellen
+          // Spieler*innen einen irreführenden Zwischenstand und stimmte am
+          // Ende nicht mit "wer ist zuerst fertig" überein). Stattdessen wird
+          // erst genau jetzt - sobald jemand seinen kompletten Stapel los ist
+          // und die Runde damit sofort endet - für ALLE Spieler*innen einmalig
+          // nach Rang gepunktet: letzter Platz (die meisten verbleibenden
+          // Karten) bekommt 0 Punkte, der/die Vorletzte 1, usw. aufsteigend
+          // bis zum ersten Platz, der zusätzlich zu seinen Rang-Punkten einen
+          // Bonuspunkt für den Sieg bekommt. Bei gleich vielen verbleibenden
+          // Karten (Gleichstand) entscheidet die Reihenfolge der Spieler-IDs
+          // im Raum-Dokument - ein "echtes" Tiebreak gibt es hier nicht, da
+          // beide zu diesem Zeitpunkt schlicht exakt gleich weit waren.
+          const rangfolge = Object.keys(neuesDtStapel)
+            .map((id) => ({ id, anzahl: (neuesDtStapel[id] || "").split(",").filter(Boolean).length }))
+            .sort((a, b) => a.anzahl - b.anzahl);
+          const anzahlSpieler = rangfolge.length;
+          rangfolge.forEach((eintrag, i) => {
+            const rang = i + 1; // 1 = Sieger*in (leerer Stapel)
+            const punkte = (anzahlSpieler - rang) + (rang === 1 ? 1 : 0);
+            tx.update(api.spielerRef(eintrag.id), { punkte });
+          });
         }
         tx.update(api.raumRef(), aktualisierung);
-        tx.update(api.spielerRef(api.spielerId), { punkte: increment(1) });
         ergebnis = { richtig: true, dtMitte: obersteIdx, dtStapel: neuesDtStapel };
       } else {
         // Strafe: von JEDER anderen Person die unterste Karte ihres Stapels

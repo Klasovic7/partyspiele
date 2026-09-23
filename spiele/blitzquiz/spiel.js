@@ -60,6 +60,12 @@ const BILD_BLUR_START_PX = 26;
 const BILD_SCHARF_DAUER_MS = 32000;
 
 const TYP_LABEL = { speed: "Schnelligkeit", wort: "Wortrate", bild: "Bild-Reveal" };
+// v185: Reihenfolge der Frage-Typen innerhalb einer Runde ist jetzt fest
+// (nicht mehr rein zufällig) - erst das Buchstaben-Rätsel, dann die
+// Mehrfachauswahl, dann das Bild-Reveal, dann wieder von vorn. Vorher konnte
+// es durch reinen Zufall zu langen Serien desselben Typs kommen (z. B. 9x
+// Bild-Reveal hintereinander). Siehe geplanteTypen()/spielStarten() unten.
+const TYP_ZYKLUS = ["wort", "speed", "bild"];
 
 const VORLAGE = `
   <div id="bz-setup" class="bildschirm-karte" hidden>
@@ -166,7 +172,11 @@ let antwortenUnsub = null;
 
 let index = -1;
 let reihenfolge = [];
-let gespielt = []; // Indizes der zuletzt gespielten Fragen (fuer Wiederholungsschutz)
+// v185: pro Frage-Typ ein eigener Wiederholungsschutz-Verlauf (statt einem
+// gemeinsamen für alle Typen) - so kann jeder Typ unabhängig durch seinen
+// eigenen 50er-Pool zyklen (siehe pooleOhneWiederholung in kern/verlauf.js),
+// ohne dass sich die Typen gegenseitig beim Zurücksetzen stören.
+let gespielt = { wort: [], speed: [], bild: [] };
 // Nur für Fragen vom Typ "wort" befüllt: parallel zu "reihenfolge" eine
 // Permutation der (nur Buchstaben-)Indizes der Lösung, in Aufdeck-Reihenfolge.
 let buchstabenReihenfolgen = [];
@@ -223,6 +233,24 @@ function normalisiere(text) {
     .normalize("NFD").replace(/[̀-ͯ]/g, "")
     .replace(/[^a-z0-9]/g, "")
     .trim();
+}
+
+// v185: Plural-Antworten sollen ebenfalls als richtig zählen (z. B. "Muscheln"
+// auf einem Bild mit mehreren Muscheln, obwohl die hinterlegte Lösung nur
+// "Muschel" ist). Da wir keine echte Grammatikprüfung machen, reicht ein
+// einfacher Heuristik-Vergleich: stimmen die normalisierten Texte nicht exakt
+// überein, aber ist der eine Text der andere plus eine typische deutsche
+// Pluralendung (Muschel/Muscheln, Bild/Bilder, Auto/Autos, Katze/Katzen,
+// Tisch/Tische), zählt die Antwort trotzdem als richtig - in beide
+// Richtungen, falls jemand versehentlich den Singular erwartet, aber den
+// Plural eingegeben hat (oder umgekehrt).
+const BZ_PLURAL_ENDUNGEN = ["en", "er", "e", "n", "s"];
+function stimmenUeberein(a, b) {
+  if (a === b) return true;
+  const [kurz, lang] = a.length <= b.length ? [a, b] : [b, a];
+  if (!kurz || !lang.startsWith(kurz)) return false;
+  const rest = lang.slice(kurz.length);
+  return BZ_PLURAL_ENDUNGEN.includes(rest);
 }
 
 function formatiertePunkte(p) {
@@ -293,7 +321,8 @@ export function beenden() {
   if (timerId) { clearInterval(timerId); timerId = null; }
   if (antwortenUnsub) { antwortenUnsub(); antwortenUnsub = null; }
   el = {}; raum = {}; spielerListe = []; alleAntworten = [];
-  index = -1; reihenfolge = []; buchstabenReihenfolgen = []; anzahlFragen = 0; status = null;
+  index = -1; reihenfolge = []; gespielt = { wort: [], speed: [], bild: [] };
+  buchstabenReihenfolgen = []; anzahlFragen = 0; status = null;
   frageSeit = 0; aufdeckAnzahl = 0; gewuenschteAnzahl = 0;
   teammodus = false; teams = {};
   ausgewertetAusgeloest = false; aufdeckFortschreibenLaeuft = false;
@@ -317,7 +346,13 @@ export function raumDaten(daten) {
   raum = daten;
   status = daten.bzStatus ?? null;
   reihenfolge = daten.bzReihenfolge ?? [];
-  gespielt = daten.bzGespielt ?? [];
+  // Abwärtskompatibel zu Räumen, die noch das alte flache Verlauf-Array
+  // (vor v185) gespeichert haben - dann einfach frisch mit leerem Verlauf
+  // pro Typ starten, statt an der falschen Form zu scheitern.
+  const gespieltRoh = daten.bzGespielt;
+  gespielt = (gespieltRoh && !Array.isArray(gespieltRoh))
+    ? { wort: gespieltRoh.wort ?? [], speed: gespieltRoh.speed ?? [], bild: gespieltRoh.bild ?? [] }
+    : { wort: [], speed: [], bild: [] };
   // Firestore erlaubt keine verschachtelten Arrays - pro Frage wird die
   // Buchstaben-Reihenfolge deshalb als kommagetrennte Zeichenkette abgelegt
   // und hier wieder in ein Zahlen-Array zurückverwandelt.
@@ -474,11 +509,32 @@ async function spielStarten() {
   try {
     await raeumeSpieldatenAuf();
     const anzahl = Math.min(gewuenschteAnzahl || fragen.length, fragen.length);
-    // Wiederholungsschutz: bevorzugt Fragen ziehen, die in diesem Raum noch
-    // nicht drankamen (siehe kern/verlauf.js).
-    const { kandidaten, wurdeZurueckgesetzt } = pooleOhneWiederholung(fragen.map((_, i) => i), gespielt, anzahl);
-    const neueReihenfolge = mischeIndizes(kandidaten).slice(0, anzahl);
-    const neuerGespielt = aktualisierterVerlauf(gespielt, neueReihenfolge, wurdeZurueckgesetzt);
+    // v185: feste Typ-Reihenfolge (siehe TYP_ZYKLUS oben) statt rein
+    // zufälliger Mischung über alle Typen hinweg. Für jeden Typ einzeln wird
+    // per pooleOhneWiederholung() (kern/verlauf.js) bevorzugt aus den in
+    // diesem Raum noch nicht gespielten Fragen dieses Typs gezogen; die drei
+    // Ergebnislisten werden anschließend gemäß dem Zyklus ineinander
+    // verschränkt.
+    const geplanteTypen = Array.from({ length: anzahl }, (_, i) => TYP_ZYKLUS[i % TYP_ZYKLUS.length]);
+    const anzahlProTyp = { wort: 0, speed: 0, bild: 0 };
+    geplanteTypen.forEach((typ) => { anzahlProTyp[typ]++; });
+
+    const indizesProTyp = { wort: [], speed: [], bild: [] };
+    fragen.forEach((f, i) => { indizesProTyp[f.typ]?.push(i); });
+
+    const neuerGespielt = { wort: [], speed: [], bild: [] };
+    const gezogenProTyp = { wort: [], speed: [], bild: [] };
+    for (const typ of TYP_ZYKLUS) {
+      const benoetigt = anzahlProTyp[typ];
+      const verlaufTyp = gespielt[typ] ?? [];
+      if (benoetigt === 0) { neuerGespielt[typ] = verlaufTyp; continue; }
+      const { kandidaten, wurdeZurueckgesetzt } = pooleOhneWiederholung(indizesProTyp[typ], verlaufTyp, benoetigt);
+      const gezogen = mischeIndizes(kandidaten).slice(0, benoetigt);
+      gezogenProTyp[typ] = gezogen;
+      neuerGespielt[typ] = aktualisierterVerlauf(verlaufTyp, gezogen, wurdeZurueckgesetzt);
+    }
+    const cursorProTyp = { wort: 0, speed: 0, bild: 0 };
+    const neueReihenfolge = geplanteTypen.map((typ) => gezogenProTyp[typ][cursorProTyp[typ]++]);
     // Als kommagetrennte Zeichenkette statt verschachteltem Array speichern -
     // Firestore-Dokumente dürfen kein Array-im-Array enthalten (siehe raumDaten()).
     const neueBuchstabenReihenfolgen = neueReihenfolge.map((frageIndex) => {
@@ -711,7 +767,7 @@ async function wortAbsenden() {
   }
   const frage = frageAn(index);
   if (!frage) return;
-  const richtig = normalisiere(eingabe) === normalisiere(frage.loesung);
+  const richtig = stimmenUeberein(normalisiere(eingabe), normalisiere(frage.loesung));
   $("bz-wort-fehler").textContent = "";
   $("bz-wort-eingabe").disabled = true;
   $("bz-wort-absenden").disabled = true;
