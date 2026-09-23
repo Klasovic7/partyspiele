@@ -5,7 +5,7 @@
 //  Alle Felder dieses Spiels im Raum-Dokument beginnen mit "rd".
 // ============================================================================
 import { updateDoc, runTransaction } from "../../kern/firebase.js";
-import { escapeHtml, spielerKarte, zeigeDebug } from "../../kern/ui.js";
+import { escapeHtml, spielerKarte, zeigeDebug, initBereitSystem } from "../../kern/ui.js";
 import { speichereWertung } from "../../kern/wertung.js";
 import { pooleOhneWiederholung, aktualisierterVerlauf } from "../../kern/verlauf.js";
 import {
@@ -32,6 +32,7 @@ const VORLAGE = `
     <p id="rd-setup-fehler" class="fehler-text"></p>
     <p><button id="rd-starten" class="btn-primaer" hidden>Spiel starten</button></p>
     <p id="rd-setup-warten" hidden><em>Warte, bis der Spielleiter das Spiel startet …</em></p>
+    <div id="rd-bereit-bereich" class="bereit-bereich" hidden></div>
   </div>
 
   <div id="rd-runde" class="bildschirm-karte" hidden>
@@ -152,10 +153,14 @@ function neueKategorieDaten(karte) {
   };
 }
 
+// Bereit-System (v190) - siehe kern/ui.js
+let bereitSystem = null;
+
 export async function starten(uebergebeneApi) {
   api = uebergebeneApi;
   el.wurzel = api.wurzel;
   el.wurzel.innerHTML = VORLAGE;
+  bereitSystem = initBereitSystem(api, "rd");
 
   if (!karten.length) {
     const antwort = await fetch(new URL("fragen.json", import.meta.url), { cache: "no-store" });
@@ -193,6 +198,7 @@ function verdrahteBedienelemente() {
 }
 
 export function beenden() {
+  bereitSystem = null;
   api = null;
   el = {};
   karten = [];
@@ -293,6 +299,7 @@ function zeigeSetup() {
   anzahlFeld.disabled = !api.istLeiter;
   $("rd-starten").hidden = !api.istLeiter;
   $("rd-setup-warten").hidden = api.istLeiter;
+  bereitSystem?.render();
 }
 
 async function spielStarten() {

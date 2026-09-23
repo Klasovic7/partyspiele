@@ -42,7 +42,7 @@ import {
   doc, setDoc, updateDoc, deleteDoc, collection, getDocs, onSnapshot,
   serverTimestamp, increment
 } from "../../kern/firebase.js";
-import { escapeHtml, textMitZusatz, spielerKarte, teamEndstandHtml, teamGruppeHtml, renderWarteAvatare, zeigeDebug } from "../../kern/ui.js";
+import { escapeHtml, textMitZusatz, spielerKarte, teamEndstandHtml, teamGruppeHtml, renderWarteAvatare, zeigeDebug, initBereitSystem } from "../../kern/ui.js";
 import { erstelleTeams, ergaenzeFehlendeTeams } from "../../kern/teams.js";
 import { speichereWertung } from "../../kern/wertung.js";
 import { pooleOhneWiederholung, aktualisierterVerlauf } from "../../kern/verlauf.js";
@@ -118,6 +118,7 @@ const VORLAGE = `
     <p id="bz-setup-fehler" class="fehler-text"></p>
     <p><button id="bz-starten" class="btn-primaer" hidden>Spiel starten</button></p>
     <p id="bz-setup-warten" hidden><em>Warte, bis der Spielleiter das Spiel startet …</em></p>
+    <div id="bz-bereit-bereich" class="bereit-bereich" hidden></div>
   </div>
 
   <div id="bz-frage-screen" class="bildschirm-karte" hidden>
@@ -270,10 +271,14 @@ function eigeneAntwortAnzeige(pos) {
 // ============================================================================
 //  Start
 // ============================================================================
+// Bereit-System (v190) - siehe kern/ui.js
+let bereitSystem = null;
+
 export async function starten(uebergebeneApi) {
   api = uebergebeneApi;
   el.wurzel = api.wurzel;
   el.wurzel.innerHTML = VORLAGE;
+  bereitSystem = initBereitSystem(api, "bz");
 
   if (fragen.length === 0) {
     const antwort = await fetch(new URL("fragen.json", import.meta.url), { cache: "no-store" });
@@ -318,6 +323,7 @@ function starteListener() {
 }
 
 export function beenden() {
+  bereitSystem = null;
   if (timerId) { clearInterval(timerId); timerId = null; }
   if (antwortenUnsub) { antwortenUnsub(); antwortenUnsub = null; }
   el = {}; raum = {}; spielerListe = []; alleAntworten = [];
@@ -424,6 +430,7 @@ function zeigeSetup() {
   }
   $("bz-starten").hidden = !api.istLeiter;
   $("bz-setup-warten").hidden = api.istLeiter;
+  bereitSystem?.render();
 }
 
 async function teammodusUmschalten() {

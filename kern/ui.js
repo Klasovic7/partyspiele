@@ -1,4 +1,5 @@
 // Bausteine, die jedes Spiel gebrauchen kann: Spieler-Kachel, Avatare, Textausgabe.
+import { updateDoc } from "./firebase.js";
 
 export const FARBEN = [
   { name: "Schwarz",  hex: "#222222" },
@@ -234,4 +235,95 @@ export function erzeugeZufallsId() {
     try { return crypto.randomUUID(); } catch { /* Ersatz unten */ }
   }
   return "id-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 10);
+}
+
+// ============================================================================
+//  Bereit-System (v190): Mitspieler*innen bestätigen im Setup-Bildschirm eines
+//  Spiels, dass sie startklar sind - erst wenn alle "Bereit" geklickt haben,
+//  kann der Spielleiter auf "Spiel starten" klicken. Einmal pro Spiel beim
+//  Start aufrufen (in starten(api)), das Ergebnis besitzt eine render()-
+//  Methode, die die eigene zeigeSetup()-Funktion bei jeder Aktualisierung
+//  aufruft (z. B. am Ende von zeigeSetup()).
+// praefix - Kürzel des Spiels, z. B. "db" (Doppelblick). Erwartet im HTML:
+//   #{praefix}-bereit-bereich (Container für die Profilbilder, für den
+//   Spielleiter) direkt nach #{praefix}-setup-warten, dessen Inhalt hier für
+//   Mitspieler*innen mit dem Bereit-Button befüllt wird.
+export function initBereitSystem(api, praefix) {
+  const feld = (id) => api.wurzel.querySelector("#" + id);
+  const starten = feld(`${praefix}-starten`);
+  const warten = feld(`${praefix}-setup-warten`);
+  const bereich = feld(`${praefix}-bereit-bereich`);
+  const fehler = feld(`${praefix}-setup-fehler`);
+
+  function mitspieler() {
+    const leiterId = api.raum?.leiterId;
+    return (api.spieler || []).filter((s) => s.id !== leiterId);
+  }
+  function bereitMap() {
+    return api.raum?.bereitSpieler || {};
+  }
+  function alleBereit() {
+    const andere = mitspieler();
+    if (andere.length === 0) return true;
+    const bereit = bereitMap();
+    return andere.every((s) => bereit[s.id]);
+  }
+
+  async function setzeBereit() {
+    try {
+      await updateDoc(api.raumRef(), { [`bereitSpieler.${api.spielerId}`]: true });
+    } catch (e) {
+      api.fehler?.("Bereit-Status konnte nicht gespeichert werden: " + e.message);
+    }
+  }
+
+  // Blockiert den Klick auf "Spiel starten", solange nicht alle bereit sind -
+  // unabhängig davon, wie/wann das jeweilige Spiel den Button selbst aktiviert.
+  if (starten) {
+    starten.addEventListener("click", (ev) => {
+      if (api.istLeiter && !alleBereit()) {
+        ev.preventDefault();
+        ev.stopImmediatePropagation();
+        if (fehler) fehler.textContent = "Noch nicht alle Mitspieler*innen sind bereit.";
+      }
+    }, true);
+  }
+
+  // Ein Klick-Handler auf dem (sich neu befüllenden) Warte-Absatz reicht -
+  // Delegation statt bei jedem render() einen neuen Listener anzuhängen.
+  if (warten) {
+    warten.addEventListener("click", (ev) => {
+      if (ev.target.closest(".bereit-btn")) setzeBereit();
+    });
+  }
+
+  function render() {
+    if (api.istLeiter) {
+      if (bereich) {
+        bereich.hidden = false;
+        const bereit = bereitMap();
+        const andere = mitspieler();
+        bereich.innerHTML = andere.length === 0
+          ? ""
+          : andere.map((s) => {
+              const istBereit = !!bereit[s.id];
+              return `<div class="bereit-avatar-wrapper${istBereit ? " bereit" : ""}">` +
+                avatarHtml(s.icon, "bereit-avatar") +
+                (istBereit ? '<span class="bereit-haken" aria-hidden="true">✓</span>' : "") +
+                `</div>`;
+            }).join("");
+      }
+    } else {
+      if (bereich) bereich.hidden = true;
+      if (warten) {
+        const ichBereit = !!bereitMap()[api.spielerId];
+        warten.innerHTML = ichBereit
+          ? "<em>✅ Du bist bereit. Warte, bis der Spielleiter das Spiel startet …</em>"
+          : '<button type="button" class="btn-primaer bereit-btn">Bereit</button>';
+      }
+    }
+  }
+
+  render();
+  return { render, alleBereit };
 }

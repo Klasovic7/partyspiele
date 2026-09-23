@@ -32,7 +32,7 @@
 //  beenden zurück (siehe Kommentar in spiele/schaetzfragen/spiel.js).
 // ============================================================================
 import { updateDoc, increment, runTransaction, arrayUnion } from "../../kern/firebase.js";
-import { spielerKarte, teamEndstandHtml, teamGruppeHtml, zeigeDebug } from "../../kern/ui.js";
+import { spielerKarte, teamEndstandHtml, teamGruppeHtml, zeigeDebug, initBereitSystem } from "../../kern/ui.js";
 import { erstelleTeams, ergaenzeFehlendeTeams } from "../../kern/teams.js";
 import { speichereWertung } from "../../kern/wertung.js";
 import { pooleOhneWiederholung, aktualisierterVerlauf } from "../../kern/verlauf.js";
@@ -94,6 +94,7 @@ const VORLAGE = `
     <p id="ww-setup-fehler" class="fehler-text"></p>
     <p><button id="ww-starten" class="btn-primaer" hidden>Spiel starten</button></p>
     <p id="ww-setup-warten" hidden><em>Warte, bis der Spielleiter das Spiel startet …</em></p>
+    <div id="ww-bereit-bereich" class="bereit-bereich" hidden></div>
   </div>
 
   <div id="ww-frage-screen" class="bildschirm-karte" hidden>
@@ -196,10 +197,14 @@ function formatiertePunkte(p) {
 // ============================================================================
 //  Start
 // ============================================================================
+// Bereit-System (v190) - siehe kern/ui.js
+let bereitSystem = null;
+
 export async function starten(uebergebeneApi) {
   api = uebergebeneApi;
   el.wurzel = api.wurzel;
   el.wurzel.innerHTML = VORLAGE;
+  bereitSystem = initBereitSystem(api, "ww");
 
   if (fragen.length === 0) {
     const antwort = await fetch(new URL("jahre.json", import.meta.url), { cache: "no-store" });
@@ -237,6 +242,7 @@ function verdrahteBedienelemente() {
 }
 
 export function beenden() {
+  bereitSystem = null;
   if (timerId) { clearInterval(timerId); timerId = null; }
   el = {}; raum = {}; spielerListe = [];
   index = -1; reihenfolge = []; anzahlFragen = 0; status = null;
@@ -332,6 +338,7 @@ function zeigeSetup() {
   }
   $("ww-starten").hidden = !api.istLeiter;
   $("ww-setup-warten").hidden = api.istLeiter;
+  bereitSystem?.render();
 }
 
 async function teammodusUmschalten() {

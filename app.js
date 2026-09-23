@@ -9,7 +9,7 @@ import {
 } from "./kern/ui.js";
 import { SPIELE, spielInfo } from "./spiele/register.js";
 
-export const APP_VERSION = "v189";
+export const APP_VERSION = "v190";
 const appVersion = document.getElementById("app-version");
 appVersion.textContent = "Version " + APP_VERSION;
 
@@ -506,7 +506,7 @@ async function waehleSpiel(id) {
   }
   lobbyFehler.textContent = "";
   try {
-    await updateDoc(raumRef(), { aktuellesSpiel: id, phase: "spiel" });
+    await updateDoc(raumRef(), { aktuellesSpiel: id, phase: "spiel", bereitSpieler: {} });
     protokolliere("spiel_gestartet", { spielId: id, spielName: info.name });
   } catch (e) {
     zeigeDebug("Fehler bei der Spielauswahl: " + e.message);

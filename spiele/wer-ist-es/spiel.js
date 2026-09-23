@@ -32,7 +32,7 @@
 //  beenden zurück (siehe Kommentar in spiele/schaetzfragen/spiel.js).
 // ============================================================================
 import { updateDoc, increment, runTransaction, arrayUnion } from "../../kern/firebase.js";
-import { spielerKarte, teamEndstandHtml, teamGruppeHtml, zeigeDebug } from "../../kern/ui.js";
+import { spielerKarte, teamEndstandHtml, teamGruppeHtml, zeigeDebug, initBereitSystem } from "../../kern/ui.js";
 import { erstelleTeams, ergaenzeFehlendeTeams } from "../../kern/teams.js";
 import { speichereWertung } from "../../kern/wertung.js";
 import { pooleOhneWiederholung, aktualisierterVerlauf } from "../../kern/verlauf.js";
@@ -94,6 +94,7 @@ const VORLAGE = `
     <p id="wi-setup-fehler" class="fehler-text"></p>
     <p><button id="wi-starten" class="btn-primaer" hidden>Spiel starten</button></p>
     <p id="wi-setup-warten" hidden><em>Warte, bis der Spielleiter das Spiel startet …</em></p>
+    <div id="wi-bereit-bereich" class="bereit-bereich" hidden></div>
   </div>
 
   <div id="wi-frage-screen" class="bildschirm-karte" hidden>
@@ -260,10 +261,14 @@ function formatiertePunkte(p) {
 // ============================================================================
 //  Start
 // ============================================================================
+// Bereit-System (v190) - siehe kern/ui.js
+let bereitSystem = null;
+
 export async function starten(uebergebeneApi) {
   api = uebergebeneApi;
   el.wurzel = api.wurzel;
   el.wurzel.innerHTML = VORLAGE;
+  bereitSystem = initBereitSystem(api, "wi");
 
   if (fragen.length === 0) {
     const antwort = await fetch(new URL("fragen.json", import.meta.url), { cache: "no-store" });
@@ -303,6 +308,7 @@ function verdrahteBedienelemente() {
 }
 
 export function beenden() {
+  bereitSystem = null;
   if (timerId) { clearInterval(timerId); timerId = null; }
   el = {}; raum = {}; spielerListe = [];
   index = -1; reihenfolge = []; hinweisReihenfolgen = []; anzahlFragen = 0; status = null;
@@ -408,6 +414,7 @@ function zeigeSetup() {
   }
   $("wi-starten").hidden = !api.istLeiter;
   $("wi-setup-warten").hidden = api.istLeiter;
+  bereitSystem?.render();
 }
 
 // v109: Teammodus - alle dürfen buzzern, gewinnt aber das ganze Team die Punkte

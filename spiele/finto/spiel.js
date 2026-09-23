@@ -26,7 +26,7 @@
 import {
   doc, setDoc, deleteDoc, updateDoc, collection, getDocs, onSnapshot, serverTimestamp, writeBatch, increment
 } from "../../kern/firebase.js";
-import { spielerKarte, escapeHtml, avatarHtml, renderWarteAvatare, zeigeDebug } from "../../kern/ui.js";
+import { spielerKarte, escapeHtml, avatarHtml, renderWarteAvatare, zeigeDebug, initBereitSystem } from "../../kern/ui.js";
 import { speichereWertung } from "../../kern/wertung.js";
 import { pooleOhneWiederholung, aktualisierterVerlauf } from "../../kern/verlauf.js";
 
@@ -51,6 +51,7 @@ const VORLAGE = `
     <p id="fi-setup-fehler" class="fehler-text"></p>
     <p><button id="fi-starten" class="btn-primaer" hidden>Spiel starten</button></p>
     <p id="fi-setup-warten" hidden><em>Warte, bis der Spielleiter das Spiel startet …</em></p>
+    <div id="fi-bereit-bereich" class="bereit-bereich" hidden></div>
   </div>
 
   <div id="fi-frage-screen" class="bildschirm-karte" hidden>
@@ -123,10 +124,14 @@ function mischeReihenfolge(liste) {
   return indizes;
 }
 
+// Bereit-System (v190) - siehe kern/ui.js
+let bereitSystem = null;
+
 export async function starten(uebergebeneApi) {
   api = uebergebeneApi;
   el.wurzel = api.wurzel;
   el.wurzel.innerHTML = VORLAGE;
+  bereitSystem = initBereitSystem(api, "fi");
 
   if (fragen.length === 0) {
     const antwort = await fetch(new URL("fragen.json", import.meta.url), { cache: "no-store" });
@@ -173,6 +178,7 @@ function starteListener() {
 }
 
 export function beenden() {
+  bereitSystem = null;
   if (antwortenUnsub) { antwortenUnsub(); antwortenUnsub = null; }
   if (stimmenUnsub) { stimmenUnsub(); stimmenUnsub = null; }
   el = {};
@@ -254,6 +260,7 @@ function zeigeSetup() {
   anzahlFeld.disabled = !api.istLeiter;
   $("fi-starten").hidden = !api.istLeiter;
   $("fi-setup-warten").hidden = api.istLeiter;
+  bereitSystem?.render();
 }
 
 async function raeumeSpieldatenAuf() {

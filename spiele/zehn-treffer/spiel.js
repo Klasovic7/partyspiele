@@ -6,7 +6,7 @@
 //  sie live. Alle Felder dieses Spiels im Raum-Dokument beginnen mit "zt".
 // ============================================================================
 import { updateDoc, runTransaction, serverTimestamp } from "../../kern/firebase.js";
-import { escapeHtml, avatarHtml, spielerKarte, zeigeDebug } from "../../kern/ui.js";
+import { escapeHtml, avatarHtml, spielerKarte, zeigeDebug, initBereitSystem } from "../../kern/ui.js";
 import { speichereWertung } from "../../kern/wertung.js";
 import { pooleOhneWiederholung, aktualisierterVerlauf } from "../../kern/verlauf.js";
 import {
@@ -71,6 +71,7 @@ const VORLAGE = `
     <p id="zt-setup-fehler" class="fehler-text"></p>
     <p><button id="zt-starten" class="btn-primaer" hidden>Spiel starten</button></p>
     <p id="zt-setup-warten" hidden><em>Warte, bis der Spielleiter das Spiel startet …</em></p>
+    <div id="zt-bereit-bereich" class="bereit-bereich" hidden></div>
   </div>
 
   <div id="zt-runde" class="bildschirm-karte" hidden>
@@ -263,10 +264,14 @@ function stoppeRundenTimer() {
   $("zt-runde")?.classList.remove("zt-countdown-warnung");
 }
 
+// Bereit-System (v190) - siehe kern/ui.js
+let bereitSystem = null;
+
 export async function starten(uebergebeneApi) {
   api = uebergebeneApi;
   el.wurzel = api.wurzel;
   el.wurzel.innerHTML = VORLAGE;
+  bereitSystem = initBereitSystem(api, "zt");
 
   if (karten.length === 0) {
     const antwort = await fetch(new URL("fragen.json", import.meta.url), { cache: "no-store" });
@@ -309,6 +314,7 @@ function verdrahteBedienelemente() {
 }
 
 export function beenden() {
+  bereitSystem = null;
   stoppeRundenTimer();
   if (audioFreischaltListener && el.wurzel) {
     el.wurzel.removeEventListener("pointerdown", audioFreischaltListener);
@@ -475,6 +481,7 @@ function zeigeSetup() {
   anzahlFeld.disabled = !api.istLeiter;
   $("zt-starten").hidden = !api.istLeiter;
   $("zt-setup-warten").hidden = api.istLeiter;
+  bereitSystem?.render();
 }
 
 async function spielStarten() {

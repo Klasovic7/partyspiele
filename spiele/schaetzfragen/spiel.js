@@ -15,7 +15,7 @@ import {
   doc, setDoc, updateDoc, deleteDoc, collection, getDocs, onSnapshot,
   serverTimestamp, increment, arrayUnion, arrayRemove
 } from "../../kern/firebase.js";
-import { escapeHtml, textMitZusatz, spielerKarte, teamEndstandHtml, teamGruppeHtml, renderWarteAvatare, avatarHtml, zeigeDebug } from "../../kern/ui.js";
+import { escapeHtml, textMitZusatz, spielerKarte, teamEndstandHtml, teamGruppeHtml, renderWarteAvatare, avatarHtml, zeigeDebug, initBereitSystem } from "../../kern/ui.js";
 import { erstelleTeams, ergaenzeFehlendeTeams } from "../../kern/teams.js";
 import { speichereWertung } from "../../kern/wertung.js";
 import { pooleOhneWiederholung, aktualisierterVerlauf } from "../../kern/verlauf.js";
@@ -106,6 +106,7 @@ const VORLAGE = `
     <p id="sf-setup-fehler" class="fehler-text"></p>
     <p><button id="sf-starten" class="btn-primaer" hidden>Spiel starten</button></p>
     <p id="sf-setup-warten" hidden><em>Warte, bis der Spielleiter das Spiel startet …</em></p>
+    <div id="sf-bereit-bereich" class="bereit-bereich" hidden></div>
   </div>
 
   <div id="sf-dummkopf-screen" class="bildschirm-karte" hidden>
@@ -185,10 +186,14 @@ function fragenAnzahlFuerKategorie(id) {
 // ============================================================================
 //  Start
 // ============================================================================
+// Bereit-System (v190) - siehe kern/ui.js
+let bereitSystem = null;
+
 export async function starten(uebergebeneApi) {
   api = uebergebeneApi;
   el.wurzel = api.wurzel;
   el.wurzel.innerHTML = VORLAGE;
+  bereitSystem = initBereitSystem(api, "sf");
 
   // Fragen liegen als eigene Datei daneben - so bleibt die App klein und der
   // Katalog lässt sich bearbeiten, ohne Programmcode anzufassen.
@@ -258,6 +263,7 @@ function starteListener() {
 }
 
 export function beenden() {
+  bereitSystem = null;
   if (antwortenUnsub) { antwortenUnsub(); antwortenUnsub = null; }
   if (dummkoepfeUnsub) { dummkoepfeUnsub(); dummkoepfeUnsub = null; }
   el = {};
@@ -550,6 +556,7 @@ function zeigeSetup() {
   }
   $("sf-starten").hidden = !api.istLeiter;
   $("sf-setup-warten").hidden = api.istLeiter;
+  bereitSystem?.render();
 }
 
 async function spielStarten() {

@@ -2154,6 +2154,32 @@
     .warten-block.warten-einzeln .warten-avatar-text { width: 88px; height: 88px; font-size: 2.2rem; opacity: 1; }
     .warten-text { margin: 0; font-weight: 700; text-align: center; }
 
+    /* Bereit-System (v190): Bereit-Button für Mitspieler*innen + Profilbild-
+       Übersicht für den Spielleiter im Setup-Bildschirm jedes Spiels. */
+    .bereit-btn { margin-top: 6px; }
+    .bereit-bereich {
+      display: flex; flex-wrap: wrap; justify-content: center; align-items: center;
+      gap: 10px; margin: 14px 0;
+    }
+    .bereit-avatar-wrapper { position: relative; width: 46px; height: 46px; }
+    .bereit-avatar {
+      width: 46px; height: 46px; border-radius: 50%; object-fit: cover; display: block;
+      border: 2px solid var(--club-ink); opacity: .4; filter: grayscale(45%) brightness(.75);
+      transition: opacity .2s ease, filter .2s ease;
+    }
+    .bereit-avatar-text {
+      width: 46px; height: 46px; border-radius: 50%; display: flex; align-items: center;
+      justify-content: center; font-size: 1.1rem; background: #eee;
+      opacity: .4; filter: brightness(.75); transition: opacity .2s ease, filter .2s ease;
+    }
+    .bereit-avatar-wrapper.bereit .bereit-avatar,
+    .bereit-avatar-wrapper.bereit .bereit-avatar-text { opacity: 1; filter: none; }
+    .bereit-haken {
+      position: absolute; right: -2px; bottom: -2px; width: 18px; height: 18px;
+      border-radius: 50%; background: #16a34a; color: #fff; font-size: .72rem; font-weight: 900;
+      display: flex; align-items: center; justify-content: center; border: 2px solid #fff;
+    }
+
     /* Schätzfragen-Auswertung als Balkendiagramm (v155, v159 groesser, v160 auf
        Zeilen-Layout umgestellt, v161 Balken mit Luecke zum Profilbild - in v162
        komplett auf ein CSS-Grid umgebaut: Spalte 1 = Punkte (wie in den anderen

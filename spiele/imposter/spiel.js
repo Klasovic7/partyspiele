@@ -29,7 +29,7 @@
 //  also auch keine sinnvollen Punkte vergeben.
 // ============================================================================
 import { updateDoc } from "../../kern/firebase.js";
-import { escapeHtml, avatarHtml, zeigeDebug } from "../../kern/ui.js";
+import { escapeHtml, avatarHtml, zeigeDebug, initBereitSystem } from "../../kern/ui.js";
 import { pooleOhneWiederholung, aktualisierterVerlauf } from "../../kern/verlauf.js";
 
 const STANDARD_ANZAHL = 5;
@@ -63,6 +63,7 @@ const VORLAGE = `
     <p id="imp-setup-fehler" class="fehler-text"></p>
     <p><button id="imp-starten" class="btn-primaer" hidden>Spiel starten</button></p>
     <p id="imp-setup-warten" hidden><em>Warte, bis der Spielleiter das Spiel startet …</em></p>
+    <div id="imp-bereit-bereich" class="bereit-bereich" hidden></div>
   </div>
 
   <div id="imp-runde-screen" class="bildschirm-karte" hidden>
@@ -130,10 +131,14 @@ let gespielt = []; // Indizes der zuletzt gespielten Woerter (fuer Wiederholungs
 
 const $ = (id) => el.wurzel.querySelector("#" + id);
 
+// Bereit-System (v190) - siehe kern/ui.js
+let bereitSystem = null;
+
 export async function starten(uebergebeneApi) {
   api = uebergebeneApi;
   el.wurzel = api.wurzel;
   el.wurzel.innerHTML = VORLAGE;
+  bereitSystem = initBereitSystem(api, "imp");
 
   if (woerter.length === 0) {
     const antwort = await fetch(new URL("woerter.json", import.meta.url), { cache: "no-store" });
@@ -174,6 +179,7 @@ function verdrahteBedienelemente() {
 }
 
 export function beenden() {
+  bereitSystem = null;
   el = {};
   spielerListe = [];
   status = null;
@@ -246,6 +252,7 @@ function zeigeSetup() {
 
   $("imp-starten").hidden = !api.istLeiter;
   $("imp-setup-warten").hidden = api.istLeiter;
+  bereitSystem?.render();
 }
 
 async function spielStarten() {

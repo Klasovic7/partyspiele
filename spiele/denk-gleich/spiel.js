@@ -9,7 +9,7 @@ import {
   doc, setDoc, updateDoc, deleteDoc, collection, getDocs, onSnapshot,
   serverTimestamp, increment, writeBatch
 } from "../../kern/firebase.js";
-import { spielerKarte, renderWarteAvatare, zeigeDebug } from "../../kern/ui.js";
+import { spielerKarte, renderWarteAvatare, zeigeDebug, initBereitSystem } from "../../kern/ui.js";
 import { speichereWertung } from "../../kern/wertung.js";
 import { pooleOhneWiederholung, aktualisierterVerlauf } from "../../kern/verlauf.js";
 
@@ -32,6 +32,7 @@ const VORLAGE = `
     <p id="dg-setup-fehler" class="fehler-text"></p>
     <p><button id="dg-starten" class="btn-primaer" hidden>Spiel starten</button></p>
     <p id="dg-setup-warten" hidden><em>Warte, bis der Spielleiter das Spiel startet …</em></p>
+    <div id="dg-bereit-bereich" class="bereit-bereich" hidden></div>
   </div>
 
   <div id="dg-frage-screen" class="bildschirm-karte" hidden>
@@ -129,10 +130,14 @@ function mischeFragenOhneAehnlicheNachbarn(fragenListe) {
   return ergebnis;
 }
 
+// Bereit-System (v190) - siehe kern/ui.js
+let bereitSystem = null;
+
 export async function starten(uebergebeneApi) {
   api = uebergebeneApi;
   el.wurzel = api.wurzel;
   el.wurzel.innerHTML = VORLAGE;
+  bereitSystem = initBereitSystem(api, "dg");
 
   if (fragen.length === 0) {
     const antwort = await fetch(new URL("fragen.json", import.meta.url), { cache: "no-store" });
@@ -178,6 +183,7 @@ function starteListener() {
 }
 
 export function beenden() {
+  bereitSystem = null;
   if (antwortenUnsub) { antwortenUnsub(); antwortenUnsub = null; }
   el = {};
   spielerListe = [];
@@ -256,6 +262,7 @@ function zeigeSetup() {
   anzahlFeld.disabled = !api.istLeiter;
   $("dg-starten").hidden = !api.istLeiter;
   $("dg-setup-warten").hidden = api.istLeiter;
+  bereitSystem?.render();
 }
 
 async function spielStarten() {

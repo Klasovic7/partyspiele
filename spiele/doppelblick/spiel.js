@@ -30,7 +30,7 @@ import {
   doc, setDoc, updateDoc, deleteDoc, collection, getDocs, onSnapshot,
   serverTimestamp, increment, runTransaction
 } from "../../kern/firebase.js";
-import { spielerKarte, teamEndstandHtml, teamGruppeHtml, renderWarteAvatare, avatarHtml, zeigeDebug } from "../../kern/ui.js";
+import { spielerKarte, teamEndstandHtml, teamGruppeHtml, renderWarteAvatare, avatarHtml, zeigeDebug, initBereitSystem } from "../../kern/ui.js";
 import { erstelleTeams, ergaenzeFehlendeTeams } from "../../kern/teams.js";
 import { speichereWertung } from "../../kern/wertung.js";
 
@@ -191,6 +191,7 @@ const VORLAGE = `
     <p id="db-setup-fehler" class="fehler-text"></p>
     <p><button id="db-starten" class="btn-primaer" hidden>Spiel starten</button></p>
     <p id="db-setup-warten" hidden><em>Warte, bis der Spielleiter das Spiel startet …</em></p>
+    <div id="db-bereit-bereich" class="bereit-bereich" hidden></div>
   </div>
 
   <div id="db-frage-screen" class="bildschirm-karte" hidden>
@@ -349,10 +350,14 @@ function zeitText(millisekunden) {
 // ============================================================================
 //  Start
 // ============================================================================
+// Bereit-System (v190) - siehe kern/ui.js
+let bereitSystem = null;
+
 export async function starten(uebergebeneApi) {
   api = uebergebeneApi;
   el.wurzel = api.wurzel;
   el.wurzel.innerHTML = VORLAGE;
+  bereitSystem = initBereitSystem(api, "db");
 
   verdrahteBedienelemente();
   starteListener();
@@ -398,6 +403,7 @@ function starteListener() {
 }
 
 export function beenden() {
+  bereitSystem = null;
   if (timerId) { clearInterval(timerId); timerId = null; }
   if (turmSperreTimer) { clearTimeout(turmSperreTimer); turmSperreTimer = null; }
   if (antwortenUnsub) { antwortenUnsub(); antwortenUnsub = null; }
@@ -534,6 +540,7 @@ function zeigeSetup() {
   $("db-starten").hidden = !api.istLeiter;
   $("db-starten").disabled = istTurm && spielerListe.length < 2;
   $("db-setup-warten").hidden = api.istLeiter;
+  bereitSystem?.render();
 }
 
 async function modusUmschalten(neuerModus) {
