@@ -391,6 +391,75 @@
     .wertung-tabelle .wertung-gesamt-zelle { font-weight: 900; color: var(--akzent); }
     .wertung-tabelle tbody tr:last-child td { border-bottom: none; }
 
+    /* ---------- Chat (v186): schwebender Knopf + Dialog, während der ganzen
+       Raum-Sitzung (Lobby + laufendes Spiel) erreichbar ---------- */
+    .chat-button {
+      position: fixed; z-index: 60; right: 18px;
+      bottom: max(18px, calc(env(safe-area-inset-bottom) + 18px));
+      width: 56px; height: 56px; margin: 0; padding: 0; border: 1px solid rgba(255,115,90,.7);
+      border-radius: 50%; display: grid; place-items: center; font-size: 1.55rem; line-height: 1;
+      background: linear-gradient(135deg, var(--club-orange), #ffb066); color: #2a1305;
+      box-shadow: 0 10px 22px rgba(0,0,0,.38);
+    }
+    .chat-button:hover { filter: brightness(1.06); }
+    .chat-button:active { transform: scale(.97); }
+    .chat-button[hidden] { display: none; }
+    .chat-badge {
+      position: absolute; top: -4px; right: -4px; min-width: 22px; height: 22px; padding: 0 5px;
+      border-radius: 999px; background: #dc493d; color: #fff; font-size: .72rem; font-weight: 800;
+      display: flex; align-items: center; justify-content: center; border: 2px solid var(--club-ink, #18101d);
+      font-variant-numeric: tabular-nums;
+    }
+    .chat-badge[hidden] { display: none; }
+
+    body.chat-offen { overflow: hidden; }
+    .chat-dialog[hidden] { display: none; }
+    .chat-dialog {
+      position: fixed; z-index: 78; inset: 0; display: grid; place-items: center;
+      padding: max(20px, env(safe-area-inset-top)) 18px max(20px, env(safe-area-inset-bottom));
+      background: rgba(8,5,11,.78); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    }
+    .chat-dialog-inhalt {
+      position: relative; width: min(100%, 440px); height: min(78vh, 640px);
+      display: flex; flex-direction: column;
+      padding: 27px 20px 16px; border-radius: 24px; color: var(--club-text);
+      background: var(--club-glow) center/100% 100% no-repeat, var(--club-ink);
+      border: 1px solid rgba(255,115,90,.7); box-shadow: 0 24px 70px rgba(0,0,0,.55);
+      animation: beitreten-einblenden .18s ease-out;
+    }
+    .chat-dialog-inhalt h2 { margin: 0 42px 12px 0; flex-shrink: 0; font-size: 1.55rem; color: var(--club-text); }
+    .chat-nachrichten {
+      flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 10px;
+      padding: 4px 2px; margin-bottom: 8px;
+    }
+    .chat-leer { margin: auto; color: var(--club-muted); text-align: center; font-size: .92rem; }
+    .chat-nachricht { display: flex; flex-direction: column; max-width: 82%; gap: 2px; }
+    .chat-nachricht.chat-eigene { align-self: flex-end; align-items: flex-end; }
+    .chat-nachricht.chat-fremde { align-self: flex-start; align-items: flex-start; }
+    .chat-autor { font-size: .72rem; font-weight: 700; color: var(--chat-farbe, var(--club-orange)); }
+    .chat-blase {
+      padding: 9px 13px; border-radius: 16px; font-size: .95rem; line-height: 1.35;
+      overflow-wrap: anywhere; white-space: pre-wrap;
+    }
+    .chat-eigene .chat-blase {
+      background: linear-gradient(135deg, var(--club-orange), #ff8a5c); color: #2a1305;
+      border-bottom-right-radius: 4px;
+    }
+    .chat-fremde .chat-blase {
+      background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.13);
+      border-bottom-left-radius: 4px;
+    }
+    .chat-zeit { font-size: .66rem; color: var(--club-muted); padding: 0 2px; }
+    .chat-eingabeleiste { flex-shrink: 0; display: flex; gap: 8px; align-items: flex-end; }
+    .chat-eingabeleiste input {
+      flex: 1; margin: 0; min-height: 46px; border-radius: 14px;
+      background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.16); color: var(--club-text);
+    }
+    .chat-eingabeleiste input::placeholder { color: var(--club-muted); }
+    .chat-senden-btn { width: auto; margin: 0; padding: 0 18px; min-height: 46px; flex-shrink: 0; }
+    #chat-fehler { min-height: 0; margin: 4px 0 0; flex-shrink: 0; }
+    @media (max-width: 370px) { .chat-dialog-inhalt { padding: 22px 14px 14px; } }
+
     .auswahl-reihe { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0 16px; }
     .farb-swatch {
       width: 36px; height: 36px; border-radius: 50%; border: 2px solid rgba(0,0,0,0.15);

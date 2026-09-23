@@ -2,14 +2,14 @@
 // des jeweiligen Spielmoduls. Alles Spielspezifische steckt in spiele/<id>/spiel.js.
 import {
   db, RAEUME, authBereit, doc, setDoc, getDoc, updateDoc, deleteDoc, collection, getDocs, onSnapshot,
-  serverTimestamp, runTransaction
+  serverTimestamp, runTransaction, query, orderBy, limitToLast
 } from "./kern/firebase.js";
 import {
   FARBEN, AVATARE, FREUNDE, escapeHtml, avatarHtml, textFarbeFuer, zeigeDebug, erzeugeZufallsId
 } from "./kern/ui.js";
 import { SPIELE, spielInfo } from "./spiele/register.js";
 
-export const APP_VERSION = "v185";
+export const APP_VERSION = "v186";
 const appVersion = document.getElementById("app-version");
 appVersion.textContent = "Version " + APP_VERSION;
 
@@ -63,6 +63,17 @@ const wertungKachel = document.getElementById("wertung-kachel");
 const wertungDialog = document.getElementById("wertung-dialog");
 const btnWertungSchliessen = document.getElementById("btn-wertung-schliessen");
 const wertungTabelle = document.getElementById("wertung-tabelle");
+
+// v186: Chat (während Lobby und laufendem Spiel)
+const chatButton = document.getElementById("btn-chat-oeffnen");
+const chatBadge = document.getElementById("chat-badge");
+const chatDialog = document.getElementById("chat-dialog");
+const btnChatSchliessen = document.getElementById("btn-chat-schliessen");
+const chatNachrichtenEl = document.getElementById("chat-nachrichten");
+const chatFehler = document.getElementById("chat-fehler");
+const chatForm = document.getElementById("chat-form");
+const chatEingabe = document.getElementById("chat-eingabe");
+const btnChatSenden = document.getElementById("btn-chat-senden");
 
 window.addEventListener("error", (e) => zeigeDebug("Fehler: " + e.message));
 window.addEventListener("unhandledrejection", (e) => zeigeDebug("Fehler: " + (e.reason?.message || e.reason)));
@@ -123,6 +134,10 @@ const zustand = {
 let raumUnsubscribe = null;
 let spielerUnsubscribe = null;
 let wertungUnsubscribe = null;
+let chatUnsubscribe = null;
+let chatNachrichten = [];
+let chatListeInitial = true;
+let chatUngelesen = 0;
 let aktivesSpielModul = null;
 let aktivesSpielId = null;
 let raumSyncIntervall = null;
@@ -401,6 +416,7 @@ function zeigeProfilAuswahl() {
   lobbyScreen.hidden = true;
   spielWurzel.hidden = true;
   topBar.hidden = true;
+  chatButton.hidden = true;
   profilScreen.hidden = false;
   document.body.classList.add("profil-offen");
   renderProfilAuswahl();
@@ -448,6 +464,7 @@ async function bestaetigeProfilAuswahl() {
     profilScreen.hidden = true;
     document.body.classList.remove("profil-offen");
     topBar.hidden = false;
+    chatButton.hidden = false;
     if (zustand.raum) {
       reagiereAufRaum(zustand.raum);
     } else {
@@ -625,6 +642,88 @@ document.addEventListener("keydown", (event) => {
   if (event.key === "Escape" && !wertungDialog.hidden) schliesseWertungDialog();
 });
 
+// ---------- Chat (v186) ----------
+// Ein Chat pro Raum, in einer Unter-Sammlung "chat" (gleiches Muster wie
+// "spieler"/"wertung") - läuft während der ganzen Raum-Sitzung mit, also
+// sowohl in der Lobby als auch während eines laufenden Spiels, nicht nur
+// während des Spiels selbst.
+function chatRef() { return collection(db, RAEUME, zustand.code, "chat"); }
+
+function formatiereChatZeit(zeit) {
+  if (!zeit || typeof zeit.toDate !== "function") return "";
+  return zeit.toDate().toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" });
+}
+
+function renderChatNachrichten() {
+  if (!chatNachrichten.length) {
+    chatNachrichtenEl.innerHTML = '<p class="chat-leer">Noch keine Nachrichten - schreib die erste!</p>';
+    return;
+  }
+  chatNachrichtenEl.innerHTML = chatNachrichten.map((n) => {
+    const eigene = n.autorId === spielerId;
+    return (
+      `<div class="chat-nachricht ${eigene ? "chat-eigene" : "chat-fremde"}">` +
+      (eigene ? "" : `<span class="chat-autor" style="--chat-farbe:${escapeHtml(n.farbe || "#7f8c8d")}">${escapeHtml(n.autorName || "?")}</span>`) +
+      `<span class="chat-blase">${escapeHtml(n.text || "")}</span>` +
+      `<span class="chat-zeit">${formatiereChatZeit(n.zeit)}</span>` +
+      `</div>`
+    );
+  }).join("");
+  chatNachrichtenEl.scrollTop = chatNachrichtenEl.scrollHeight;
+}
+
+function aktualisiereChatBadge() {
+  chatBadge.hidden = chatUngelesen <= 0;
+  chatBadge.textContent = chatUngelesen > 9 ? "9+" : String(chatUngelesen);
+}
+
+function oeffneChatDialog() {
+  chatDialog.hidden = false;
+  document.body.classList.add("chat-offen");
+  chatUngelesen = 0;
+  aktualisiereChatBadge();
+  renderChatNachrichten();
+  requestAnimationFrame(() => chatEingabe.focus());
+}
+
+function schliesseChatDialog(fokusZurueck = true) {
+  chatDialog.hidden = true;
+  document.body.classList.remove("chat-offen");
+  if (fokusZurueck && !chatButton.hidden) chatButton.focus();
+}
+
+chatButton.addEventListener("click", oeffneChatDialog);
+btnChatSchliessen.addEventListener("click", () => schliesseChatDialog());
+chatDialog.addEventListener("click", (event) => {
+  if (event.target === chatDialog) schliesseChatDialog();
+});
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && !chatDialog.hidden) schliesseChatDialog();
+});
+
+chatForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const text = chatEingabe.value.trim();
+  if (!text || !zustand.code) return;
+  chatFehler.textContent = "";
+  chatEingabe.value = "";
+  btnChatSenden.disabled = true;
+  try {
+    await setDoc(doc(chatRef()), {
+      text: text.slice(0, 500),
+      autorId: spielerId,
+      autorName: zustand.name || "?",
+      farbe: zustand.farbe,
+      zeit: serverTimestamp()
+    });
+  } catch (e) {
+    chatFehler.textContent = "Nachricht konnte nicht gesendet werden.";
+    zeigeDebug("Chat-Fehler: " + e.message);
+  }
+  btnChatSenden.disabled = false;
+  chatEingabe.focus();
+});
+
 // ---------- Spielmodul laden / entladen ----------
 // Die Schnittstelle, die jedes Spiel bekommt.
 function baueApi() {
@@ -796,6 +895,30 @@ function starteListener(code) {
     if (!wertungDialog.hidden) renderWertungTabelle();
   });
 
+  // v186: Chat - läuft die ganze Raum-Sitzung über mit (Lobby + Spiel). Beim
+  // allerersten Snapshot nach dem Verbinden zählen die schon vorhandenen
+  // Nachrichten NICHT als "neu" (docChanges() liefert für sie trotzdem
+  // "added") - sonst stünde direkt beim Betreten ein falscher Ungelesen-Zähler.
+  chatListeInitial = true;
+  chatUnsubscribe = onSnapshot(
+    query(collection(db, RAEUME, code, "chat"), orderBy("zeit", "asc"), limitToLast(200)),
+    (snap) => {
+      chatNachrichten = [];
+      snap.forEach((d) => chatNachrichten.push({ id: d.id, ...d.data() }));
+      if (!chatListeInitial) {
+        snap.docChanges().forEach((change) => {
+          if (change.type === "added" && change.doc.data().autorId !== spielerId && chatDialog.hidden) {
+            chatUngelesen++;
+          }
+        });
+        aktualisiereChatBadge();
+      }
+      chatListeInitial = false;
+      if (!chatDialog.hidden) renderChatNachrichten();
+    },
+    (e) => zeigeDebug("Chat-Synchronisation unterbrochen: " + e.message)
+  );
+
   const uebernehmeRaum = (daten) => {
     letzteRaumSignatur = raumSignatur(daten);
     reagiereAufRaum(daten);
@@ -845,6 +968,7 @@ function betreteRaum(code, name) {
     lobbyScreen.hidden = false;
     topBar.hidden = true;
     appVersion.hidden = true;
+    chatButton.hidden = false;
   } else {
     zeigeProfilAuswahl();
   }
@@ -860,6 +984,13 @@ async function verlasseRaum() {
   if (raumUnsubscribe) { raumUnsubscribe(); raumUnsubscribe = null; }
   if (spielerUnsubscribe) { spielerUnsubscribe(); spielerUnsubscribe = null; }
   if (wertungUnsubscribe) { wertungUnsubscribe(); wertungUnsubscribe = null; }
+  if (chatUnsubscribe) { chatUnsubscribe(); chatUnsubscribe = null; }
+  chatNachrichten = [];
+  chatListeInitial = true;
+  chatUngelesen = 0;
+  aktualisiereChatBadge();
+  schliesseChatDialog(false);
+  chatButton.hidden = true;
   if (raumSyncIntervall) { clearInterval(raumSyncIntervall); raumSyncIntervall = null; }
   raumSyncAbrufLaeuft = false;
   letzteRaumSignatur = null;
