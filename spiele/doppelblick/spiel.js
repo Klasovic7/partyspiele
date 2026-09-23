@@ -282,6 +282,8 @@ let turmGesperrtBis = 0; // Date.now()-Zeitstempel: bis dahin nach Falsch-Tipp l
 let turmLetzteMeldung = null; // "falsch" während der kurzen Sperre nach einem Falsch-Tipp, sonst null
 let turmSperreTimer = null;
 let turmRotationSchluessel = null;
+let turmSymboleEigene = []; // v189: gemischte Symbol-Reihenfolge der eigenen Karte (siehe zeigeTurm())
+let turmSymboleMitte = []; // v189: gemischte Symbol-Reihenfolge der Mitte-Karte
 let turmRotationenEigene = [];
 let turmGroessenEigene = [];
 let turmRotationenMitte = [];
@@ -858,9 +860,9 @@ async function antworteSymbol(symbolId) {
 // ============================================================================
 function zeigeTurm() {
   const meinStapel = eigenerStapel();
-  const mitteKarte = dtMitte !== null && dtMitte !== undefined ? DECK[dtMitte] : [];
+  const mitteKarteRoh = dtMitte !== null && dtMitte !== undefined ? DECK[dtMitte] : [];
   const fertig = meinStapel.length === 0;
-  const eigeneKarte = fertig ? [] : DECK[meinStapel[0]];
+  const eigeneKarteRoh = fertig ? [] : DECK[meinStapel[0]];
 
   // Wie bei rotationRunde (Schnelligkeits-Modus): Drehwinkel/Größen nur neu
   // auswürfeln, wenn sich die Mitte-Karte oder die eigene oberste Karte
@@ -869,15 +871,27 @@ function zeigeTurm() {
   const schluessel = `${dtMitte}_${meinStapel[0] ?? "leer"}`;
   if (turmRotationSchluessel !== schluessel) {
     turmRotationSchluessel = schluessel;
-    turmRotationenMitte = zufallsRotationen(mitteKarte.length);
-    turmGroessenMitte = zufallsGroessen(mitteKarte.length);
-    turmRotationenEigene = zufallsRotationen(eigeneKarte.length);
-    turmGroessenEigene = zufallsGroessen(eigeneKarte.length);
+    // v189: Bug behoben - anders als im Schnelligkeits-Modus (neueRunden()
+    // mischt jede Karte einmal per mischeIndizes()) kamen die Turm-Karten
+    // bisher UNGEMISCHT direkt aus DECK[...]. Da das Kartendeck rechnerisch
+    // erzeugt wird, landete das gemeinsame Symbol zwischen zwei Karten
+    // dadurch verlässlich immer am selben Steckplatz (z. B. immer unten
+    // links) - kein Zufall, sondern eine Eigenschaft der Deck-Konstruktion.
+    // Jetzt wird die Symbol-Reihenfolge pro neu gezogener Karte einmal
+    // gemischt (und wie Drehwinkel/Größen nur bei echtem Kartenwechsel neu
+    // gewürfelt) - die dataset-Symbol-Id je Kachel bleibt dabei korrekt,
+    // nur ihre Position auf der Karte wird zufällig.
+    turmSymboleMitte = mischeIndizes(mitteKarteRoh);
+    turmSymboleEigene = mischeIndizes(eigeneKarteRoh);
+    turmRotationenMitte = zufallsRotationen(turmSymboleMitte.length);
+    turmGroessenMitte = zufallsGroessen(turmSymboleMitte.length);
+    turmRotationenEigene = zufallsRotationen(turmSymboleEigene.length);
+    turmGroessenEigene = zufallsGroessen(turmSymboleEigene.length);
   }
 
   const gesperrt = fertig || Date.now() < turmGesperrtBis;
-  rendereEinzelKarte($("db-turm-eigene"), eigeneKarte, turmRotationenEigene, turmGroessenEigene, "db-karte-turm-eigene", !fertig, gesperrt, tippeSymbolTurm);
-  rendereEinzelKarte($("db-turm-mitte"), mitteKarte, turmRotationenMitte, turmGroessenMitte, "db-karte-turm-mitte", false, true);
+  rendereEinzelKarte($("db-turm-eigene"), turmSymboleEigene, turmRotationenEigene, turmGroessenEigene, "db-karte-turm-eigene", !fertig, gesperrt, tippeSymbolTurm);
+  rendereEinzelKarte($("db-turm-mitte"), turmSymboleMitte, turmRotationenMitte, turmGroessenMitte, "db-karte-turm-mitte", false, true);
 
   const statusEl = $("db-turm-status");
   if (fertig) {

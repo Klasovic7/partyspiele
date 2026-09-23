@@ -9,7 +9,7 @@ import {
 } from "./kern/ui.js";
 import { SPIELE, spielInfo } from "./spiele/register.js";
 
-export const APP_VERSION = "v188";
+export const APP_VERSION = "v189";
 const appVersion = document.getElementById("app-version");
 appVersion.textContent = "Version " + APP_VERSION;
 
@@ -800,7 +800,20 @@ function aktualisiereRaumNavigation(spielId) {
   // Mitspieler*innen verlässt derselbe Button stattdessen nur sie selbst den
   // Raum, ohne das laufende Spiel für die anderen zu beenden (siehe
   // raumNavigationAusfuehren()).
-  btnVerlassen.textContent = imSpiel && zustand.istLeiter ? "←  Spielauswahl" : "Raum verlassen";
+  // v189: für Mitspieler*innen sieht der Button jetzt genauso aus wie im
+  // Hauptmenü (Icon oben rechts statt Text-Pille oben links) und öffnet
+  // dieselbe Bestätigung ("Raum verlassen? Ja/Nein") statt sofort ohne
+  // Rückfrage zu verlassen - siehe btnVerlassen-Klick-Handler weiter unten.
+  const verlassenAlsIcon = imSpiel && !zustand.istLeiter;
+  topBar.classList.toggle("verlassen-icon-modus", verlassenAlsIcon);
+  btnVerlassen.classList.toggle("verlassen-icon", verlassenAlsIcon);
+  if (verlassenAlsIcon) {
+    btnVerlassen.innerHTML =
+      '<img src="bilder/icon-raum-verlassen.svg" width="20" height="20" alt="">' +
+      '<span class="nur-screenreader">Raum verlassen</span>';
+  } else {
+    btnVerlassen.textContent = imSpiel && zustand.istLeiter ? "←  Spielauswahl" : "Raum verlassen";
+  }
   btnVerlassen.disabled = false;
   btnVerlassen.hidden = false;
   spielKopfTitel.hidden = !imSpiel;
@@ -1082,8 +1095,16 @@ async function raumNavigationAusfuehren() {
   }
 }
 
-btnVerlassen.addEventListener("click", raumNavigationAusfuehren);
-function oeffneRaumVerlassenDialog() {
+// v189: im Spiel bekommt nur noch der Spielleiter den direkten Klick-Effekt
+// (Spiel für alle beenden) - Mitspieler*innen sehen stattdessen dieselbe
+// Bestätigung wie im Hauptmenü (siehe aktualisiereRaumNavigation()).
+btnVerlassen.addEventListener("click", () => {
+  if (zustand.istLeiter) raumNavigationAusfuehren();
+  else oeffneRaumVerlassenDialog(btnVerlassen);
+});
+let raumVerlassenAusloeser = null;
+function oeffneRaumVerlassenDialog(ausloeser) {
+  raumVerlassenAusloeser = ausloeser || btnLobbyVerlassen;
   raumVerlassenDialog.hidden = false;
   document.body.classList.add("raum-verlassen-offen");
   requestAnimationFrame(() => btnRaumVerlassenNein.focus());
@@ -1092,7 +1113,7 @@ function oeffneRaumVerlassenDialog() {
 function schliesseRaumVerlassenDialog() {
   raumVerlassenDialog.hidden = true;
   document.body.classList.remove("raum-verlassen-offen");
-  btnLobbyVerlassen.focus();
+  (raumVerlassenAusloeser || btnLobbyVerlassen).focus();
 }
 
 btnLobbyVerlassen.addEventListener("click", oeffneRaumVerlassenDialog);

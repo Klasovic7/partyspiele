@@ -1298,6 +1298,22 @@
       color: #dfe7ff; background: rgba(255,255,255,.09); font-size: .78rem;
     }
     #top-bar.im-spiel button:hover { background: rgba(255,255,255,.16); }
+    /* v189: Mitspieler*innen sehen statt der Text-Pille oben links dasselbe
+       runde Symbol oben rechts wie im Hauptmenü (.lobby-verlassen) - siehe
+       aktualisiereRaumNavigation() in app.js. Bleibt (anders als die
+       Fortschrittsanzeige) im normalen Flex-Fluss und wird per align-self
+       nur nach rechts gerückt, damit sich unten die Spielkopf-Zeile nicht
+       verschiebt. Platz macht die gemeinsame Rundenanzeige
+       (.spiel-kopf-fortschritt), die dafür etwas nach links rutscht.*/
+    #top-bar.im-spiel button.verlassen-icon {
+      align-self: flex-end;
+      width: 40px; height: 40px; padding: 0; border-radius: 50%;
+      display: grid; place-items: center;
+      background-color: #bd4e4d;
+    }
+    #top-bar.im-spiel button.verlassen-icon:hover { background-color: #d85a50; }
+    #top-bar.im-spiel button.verlassen-icon img { display: block; width: 20px; height: 20px; }
+    #top-bar.im-spiel.verlassen-icon-modus .spiel-kopf-fortschritt { right: 64px; }
     .spiel-kopf-titel { display: flex; align-items: center; gap: 12px; width: 100%; }
     .spiel-kopf-icon {
       min-width: 58px; font-size: 3.25rem; line-height: 1; text-align: center;
