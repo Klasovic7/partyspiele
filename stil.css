@@ -2230,6 +2230,13 @@
       font-size: clamp(20px, 7vw, 34px); line-height: 1;
       filter: drop-shadow(0 2px 3px rgba(0, 0, 0, .28));
       transition: transform .1s ease, filter .15s ease;
+      /* v187: ohne das hier kann iOS Safari den nativen Tap-Ring eines
+         angetippten Symbol-Buttons an dessen Bildschirmposition "kleben"
+         lassen, wenn die Karte direkt danach per innerHTML durch eine neue
+         Karte mit anderen Symbolen ersetzt wird (z. B. Turm-Modus nach
+         richtigem Tipp) - sichtbar als scheinbar "markiertes" falsches
+         Symbol an der alten Stelle. */
+      -webkit-tap-highlight-color: transparent;
     }
     .db-karten-bereich-klein .db-symbol { font-size: clamp(15px, 5vw, 24px); }
     button.db-symbol:not(:disabled):active { filter: brightness(.92); }

@@ -785,6 +785,11 @@ function rendereKarten(container, symboleA, symboleB, eigene, interaktiv) {
     return `<div class="db-karte ${klasse}">${kacheln}</div>`;
   };
 
+  // v187: siehe Kommentar in rendereEinzelKarte() - derselbe Fokus/Tap-Ring-Bug
+  // kann grundsätzlich auch hier auftreten.
+  if (document.activeElement && container.contains(document.activeElement)) {
+    document.activeElement.blur();
+  }
   container.innerHTML = karteHtml(symboleA, rotationenA, groessenA, "db-karte-a") + karteHtml(symboleB, rotationenB, groessenB, "db-karte-b");
 
   if (interaktiv) {
@@ -803,6 +808,18 @@ function rendereKarten(container, symboleA, symboleB, eigene, interaktiv) {
 //              gerendert (button bleibt ein <button>, nur ausgegraut), statt
 //              gar keinen Klick-Handler zu bekommen
 function rendereEinzelKarte(container, symbole, rotationen, groessenFaktoren, klasse, interaktiv, gesperrt, aufKlick) {
+  // v187: Bug behoben - nach einem Tipp auf ein Symbol (z. B. eine korrekte
+  // Karte, die daraufhin durch die NEUE oberste Stapelkarte ersetzt wird)
+  // blieb auf iOS Safari manchmal der native Tap-/Fokus-Ring des gerade
+  // angetippten Buttons an derselben Bildschirmposition "kleben", obwohl
+  // dort inzwischen ein komplett neues <button>-Element (mit einem anderen
+  // Symbol, z. B. dem Ballon) steht - WebKit räumt das :active/:focus des
+  // entfernten Elements nicht zuverlässig auf, wenn es per innerHTML mitten
+  // im Tap ausgetauscht wird. Deshalb hier VOR dem Austausch aktiv den Fokus
+  // von jedem noch fokussierten Symbol in dieser Karte nehmen.
+  if (document.activeElement && container.contains(document.activeElement)) {
+    document.activeElement.blur();
+  }
   const kacheln = symbole.map((symbolId, i) =>
     kachelHtml(symbolId, i, rotationen[i], groessenFaktoren[i], "", interaktiv, gesperrt)
   ).join("");
