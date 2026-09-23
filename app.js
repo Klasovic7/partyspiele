@@ -9,7 +9,7 @@ import {
 } from "./kern/ui.js";
 import { SPIELE, spielInfo } from "./spiele/register.js";
 
-export const APP_VERSION = "v187";
+export const APP_VERSION = "v188";
 const appVersion = document.getElementById("app-version");
 appVersion.textContent = "Version " + APP_VERSION;
 
@@ -661,11 +661,16 @@ function renderChatNachrichten() {
   }
   chatNachrichtenEl.innerHTML = chatNachrichten.map((n) => {
     const eigene = n.autorId === spielerId;
+    // v188: statt des Namens in schwer lesbarer Textfarbe zeigt jede fremde
+    // Nachricht das Profilbild der Person (wie in Lobby/Wertung) - eindeutig
+    // erkennbar, ohne auf Kontrast/Textfarbe angewiesen zu sein.
     return (
       `<div class="chat-nachricht ${eigene ? "chat-eigene" : "chat-fremde"}">` +
-      (eigene ? "" : `<span class="chat-autor" style="--chat-farbe:${escapeHtml(n.farbe || "#7f8c8d")}">${escapeHtml(n.autorName || "?")}</span>`) +
+      (eigene ? "" : avatarHtml(n.icon, "chat-avatar")) +
+      `<div class="chat-inhalt">` +
       `<span class="chat-blase">${escapeHtml(n.text || "")}</span>` +
       `<span class="chat-zeit">${formatiereChatZeit(n.zeit)}</span>` +
+      `</div>` +
       `</div>`
     );
   }).join("");
@@ -714,6 +719,7 @@ chatForm.addEventListener("submit", async (event) => {
       autorId: spielerId,
       autorName: zustand.name || "?",
       farbe: zustand.farbe,
+      icon: zustand.icon,
       zeit: serverTimestamp()
     });
   } catch (e) {
