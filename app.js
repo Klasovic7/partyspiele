@@ -9,7 +9,7 @@ import {
 } from "./kern/ui.js";
 import { SPIELE, spielInfo } from "./spiele/register.js";
 
-export const APP_VERSION = "v194";
+export const APP_VERSION = "v195";
 const appVersion = document.getElementById("app-version");
 appVersion.textContent = "Version " + APP_VERSION;
 
@@ -1361,12 +1361,19 @@ async function ladeOffeneRaeume() {
       const spielerSnap = await getDocs(collection(db, RAEUME, raumDoc.id, "spieler"));
       if (spielerSnap.empty) continue;
       let leiterName = "";
-      spielerSnap.forEach((s) => { if (s.id === daten.leiterId) leiterName = s.data().name || ""; });
+      const spielerListe = [];
+      spielerSnap.forEach((s) => {
+        const daten2 = s.data();
+        if (s.id === daten.leiterId) leiterName = daten2.name || "";
+        spielerListe.push({ id: s.id, name: daten2.name || "", icon: daten2.icon || "", farbe: daten2.farbe || "" });
+      });
       raeume.push({
         code: raumDoc.id,
         privat: !!daten.privat,
         anzahlSpieler: spielerSnap.size,
         leiterName,
+        leiterId: daten.leiterId || "",
+        spielerListe,
         erstelltAm: daten.erstelltAm?.toDate?.() || null
       });
     }
@@ -1391,6 +1398,23 @@ function formatRaumZeit(datum) {
   return `Erstellt am ${datumText}, ${uhrzeit} Uhr`;
 }
 
+// Baut die Mini-Avatarliste (Name + Bild) fuer die aufklappbare Spieleransicht
+// einer Raum-Kachel in der Raumliste.
+function renderRaumSpielerListe(raum) {
+  return raum.spielerListe
+    .map((s) => {
+      const istLeiter = s.id === raum.leiterId;
+      return (
+        `<li class="raumliste-spieler-zeile">` +
+          `<span class="raumliste-spieler-avatar" style="--spieler-farbe:${escapeHtml(s.farbe || "#7f8c8d")}">${avatarHtml(s.icon, "raumliste-spieler-bild")}</span>` +
+          `<span class="raumliste-spieler-name">${escapeHtml(s.name || "Unbenannt")}</span>` +
+          (istLeiter ? `<span class="raumliste-spieler-krone" title="Spielleiter" aria-label="Spielleiter">♛</span>` : "") +
+        `</li>`
+      );
+    })
+    .join("");
+}
+
 function renderRaumliste(raeume) {
   if (raeume.length === 0) {
     raumlisteInhalt.innerHTML = '<p class="raumliste-hinweis">Gerade ist kein Raum offen. Erstelle doch einen!</p>';
@@ -1398,8 +1422,13 @@ function renderRaumliste(raeume) {
   }
   raumlisteInhalt.innerHTML = "";
   raeume.forEach((raum) => {
-    const kachel = document.createElement("button");
-    kachel.type = "button";
+    // Ein <div role="button"> statt <button>, weil die Kachel jetzt selbst
+    // einen echten <button> (Spieler-aufklappen) enthaelt - verschachtelte
+    // Buttons sind ungueltiges HTML und wuerden vom Browser aus der Kachel
+    // herausgehoben.
+    const kachel = document.createElement("div");
+    kachel.setAttribute("role", "button");
+    kachel.tabIndex = 0;
     kachel.className = "raum-kachel" + (raum.privat ? " raum-kachel-privat" : "");
     const spielerText = raum.anzahlSpieler === 1 ? "1 Spieler*in" : `${raum.anzahlSpieler} Spieler*innen`;
     const zeitText = formatRaumZeit(raum.erstelltAm);
@@ -1412,28 +1441,51 @@ function renderRaumliste(raeume) {
         : "") +
       `<span class="raum-kachel-info">` +
         `<strong class="raum-kachel-name">${escapeHtml(raum.leiterName ? `Raum von ${raum.leiterName}` : "Raum")}</strong>` +
-        `<span class="raum-kachel-spieler">${spielerText}</span>` +
+        `<button type="button" class="raum-kachel-spieler-toggle" aria-expanded="false">` +
+          `<span class="raum-kachel-spieler">${spielerText}</span>` +
+          `<span class="raum-kachel-spieler-pfeil" aria-hidden="true">▾</span>` +
+        `</button>` +
         (raum.privat ? "" : `<span class="raum-kachel-code">Code: ${escapeHtml(raum.code)}</span>`) +
         (zeitText ? `<span class="raum-kachel-zeit">${escapeHtml(zeitText)}</span>` : "") +
+        `<ul class="raumliste-spieler-liste" hidden>${renderRaumSpielerListe(raum)}</ul>` +
       `</span>`;
+    const toggle = kachel.querySelector(".raum-kachel-spieler-toggle");
+    const liste = kachel.querySelector(".raumliste-spieler-liste");
+    toggle.addEventListener("click", (ev) => {
+      ev.stopPropagation();
+      const offen = !liste.hidden;
+      liste.hidden = offen;
+      toggle.setAttribute("aria-expanded", String(!offen));
+    });
     kachel.addEventListener("click", () => raumKachelKlick(raum, kachel));
+    kachel.addEventListener("keydown", (ev) => {
+      if (ev.key === "Enter" || ev.key === " ") {
+        ev.preventDefault();
+        raumKachelKlick(raum, kachel);
+      }
+    });
     raumlisteInhalt.appendChild(kachel);
   });
 }
 
 function raumKachelKlick(raum, kachel) {
+  if (kachel.classList.contains("raum-kachel-deaktiviert")) return;
   if (raum.privat) {
     schliesseRaumlisteDialog(false);
     oeffneBeitretenDialog();
     return;
   }
   raumlisteFehler.textContent = "";
-  kachel.disabled = true;
+  kachel.classList.add("raum-kachel-deaktiviert");
+  kachel.setAttribute("aria-disabled", "true");
   raumBeitreten(raum.code, inputName.value.trim(), {
     aufFehler: (text) => { raumlisteFehler.textContent = text; }
   }).then((erfolgreich) => {
     if (erfolgreich) schliesseRaumlisteDialog(false);
-    else kachel.disabled = false;
+    else {
+      kachel.classList.remove("raum-kachel-deaktiviert");
+      kachel.removeAttribute("aria-disabled");
+    }
   });
 }
 
