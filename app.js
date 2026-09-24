@@ -9,7 +9,7 @@ import {
 } from "./kern/ui.js";
 import { SPIELE, spielInfo } from "./spiele/register.js";
 
-export const APP_VERSION = "v193";
+export const APP_VERSION = "v194";
 const appVersion = document.getElementById("app-version");
 appVersion.textContent = "Version " + APP_VERSION;
 
@@ -151,6 +151,7 @@ let aktivesSpielId = null;
 let raumSyncIntervall = null;
 let raumSyncAbrufLaeuft = false;
 let letzteRaumSignatur = null;
+let raumHeartbeatIntervall = null;
 
 function raumRef() { return doc(db, RAEUME, zustand.code); }
 function spielerRef(id = spielerId) { return doc(db, RAEUME, zustand.code, "spieler", id); }
@@ -973,6 +974,16 @@ function starteListener(code) {
     } catch { /* Der Snapshot-Listener bleibt der Hauptweg. */ }
     raumSyncAbrufLaeuft = false;
   }, 1000);
+
+  // Solange jemand im Raum aktiv ist, wird "zuletztAktiv" regelmaessig
+  // aktualisiert. Die Raumliste blendet Raeume aus, die lange keinen
+  // Heartbeat mehr hatten (z. B. weil alle die App einfach geschlossen statt
+  // "Raum verlassen" geklickt haben, wodurch sonst niemand aufraeumt).
+  if (raumHeartbeatIntervall) clearInterval(raumHeartbeatIntervall);
+  raumHeartbeatIntervall = setInterval(() => {
+    if (zustand.code !== code) return;
+    updateDoc(doc(db, RAEUME, code), { zuletztAktiv: serverTimestamp() }).catch(() => {});
+  }, 120000);
 }
 
 // v182: betreteRaum() wird von drei Stellen aus aufgerufen - Raum erstellen,
@@ -1019,6 +1030,7 @@ async function verlasseRaum() {
   schliesseChatDialog(false);
   chatButton.hidden = true;
   if (raumSyncIntervall) { clearInterval(raumSyncIntervall); raumSyncIntervall = null; }
+  if (raumHeartbeatIntervall) { clearInterval(raumHeartbeatIntervall); raumHeartbeatIntervall = null; }
   raumSyncAbrufLaeuft = false;
   letzteRaumSignatur = null;
   zustand.wertung = {};
@@ -1184,6 +1196,7 @@ btnErstellen.addEventListener("click", async () => {
 
     await setDoc(doc(db, RAEUME, code), {
       erstelltAm: serverTimestamp(),
+      zuletztAktiv: serverTimestamp(),
       leiterId: spielerId,
       phase: "lobby",
       aktuellesSpiel: null,
@@ -1327,15 +1340,24 @@ btnRaumlisteCode.addEventListener("click", () => {
 // Holt alle Räume, die noch in der Lobby (nicht mitten im Spiel) sind, und
 // blendet dabei verwaiste Räume ohne Spieler (z. B. weil niemand ordentlich
 // verlassen hat) aus - eine echte Löschung alter Räume gibt es bisher nicht.
+// Raeume gelten ab diesem Alter ohne Heartbeat als verwaist und werden aus
+// der Liste ausgeblendet (siehe starteListener() fuer den Heartbeat selbst).
+const RAUM_INAKTIV_MS = 6 * 60 * 60 * 1000; // 6 Stunden
+
 async function ladeOffeneRaeume() {
   raumlisteInhalt.innerHTML = '<p class="raumliste-hinweis">Räume werden geladen …</p>';
   raumlisteFehler.textContent = "";
   try {
     await authBereit;
     const snap = await getDocs(query(collection(db, RAEUME), where("phase", "==", "lobby")));
+    const jetzt = Date.now();
     const raeume = [];
     for (const raumDoc of snap.docs) {
       const daten = raumDoc.data();
+      // Fallback auf erstelltAm fuer Raeume, die vor Einfuehrung von
+      // zuletztAktiv angelegt wurden.
+      const letzteAktivitaet = (daten.zuletztAktiv || daten.erstelltAm)?.toDate?.();
+      if (letzteAktivitaet && jetzt - letzteAktivitaet.getTime() > RAUM_INAKTIV_MS) continue;
       const spielerSnap = await getDocs(collection(db, RAEUME, raumDoc.id, "spieler"));
       if (spielerSnap.empty) continue;
       let leiterName = "";
@@ -1344,7 +1366,8 @@ async function ladeOffeneRaeume() {
         code: raumDoc.id,
         privat: !!daten.privat,
         anzahlSpieler: spielerSnap.size,
-        leiterName
+        leiterName,
+        erstelltAm: daten.erstelltAm?.toDate?.() || null
       });
     }
     raeume.sort((a, b) => b.anzahlSpieler - a.anzahlSpieler);
@@ -1354,6 +1377,18 @@ async function ladeOffeneRaeume() {
     raumlisteInhalt.innerHTML = "";
     raumlisteFehler.textContent = "Die Raumliste konnte nicht geladen werden.";
   }
+}
+
+// Zeigt die Uhrzeit (heute) bzw. Datum + Uhrzeit (aeltere Raeume) der
+// Raumerstellung an.
+function formatRaumZeit(datum) {
+  if (!datum) return "";
+  const heute = new Date();
+  const istHeute = datum.toDateString() === heute.toDateString();
+  const uhrzeit = datum.toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" });
+  if (istHeute) return `Erstellt um ${uhrzeit} Uhr`;
+  const datumText = datum.toLocaleDateString("de-DE", { day: "2-digit", month: "2-digit" });
+  return `Erstellt am ${datumText}, ${uhrzeit} Uhr`;
 }
 
 function renderRaumliste(raeume) {
@@ -1367,15 +1402,19 @@ function renderRaumliste(raeume) {
     kachel.type = "button";
     kachel.className = "raum-kachel" + (raum.privat ? " raum-kachel-privat" : "");
     const spielerText = raum.anzahlSpieler === 1 ? "1 Spieler*in" : `${raum.anzahlSpieler} Spieler*innen`;
+    const zeitText = formatRaumZeit(raum.erstelltAm);
     kachel.innerHTML =
-      `<span class="raum-kachel-schloss">` +
-        `<span class="raum-kachel-schloss-icon" aria-hidden="true">${raum.privat ? "🔒" : "🔓"}</span>` +
-        `<span class="raum-kachel-schloss-text">${raum.privat ? "Privat" : "Offen"}</span>` +
-      `</span>` +
+      (raum.privat
+        ? `<span class="raum-kachel-schloss">` +
+            `<span class="raum-kachel-schloss-icon" aria-hidden="true">🔒</span>` +
+            `<span class="raum-kachel-schloss-text">Privat</span>` +
+          `</span>`
+        : "") +
       `<span class="raum-kachel-info">` +
         `<strong class="raum-kachel-name">${escapeHtml(raum.leiterName ? `Raum von ${raum.leiterName}` : "Raum")}</strong>` +
         `<span class="raum-kachel-spieler">${spielerText}</span>` +
         (raum.privat ? "" : `<span class="raum-kachel-code">Code: ${escapeHtml(raum.code)}</span>`) +
+        (zeitText ? `<span class="raum-kachel-zeit">${escapeHtml(zeitText)}</span>` : "") +
       `</span>`;
     kachel.addEventListener("click", () => raumKachelKlick(raum, kachel));
     raumlisteInhalt.appendChild(kachel);
