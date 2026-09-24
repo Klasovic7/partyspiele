@@ -219,6 +219,16 @@ export async function starten(uebergebeneApi) {
   }
 
   timerId = setInterval(() => { aktualisiereCountdown(); pruefeHinweisFortschritt(); pruefeAntwortZeitAblauf(); }, 300);
+
+  // v196: Olympiade - Anzahl steht schon fest, direkt starten statt das
+  // Setup-Fenster zu zeigen (Tick warten, bis spielerListe gefuellt ist).
+  if (api.istLeiter && api.olympiadeAnzahl) {
+    setTimeout(() => {
+      const feld = $("ww-anzahl");
+      if (feld) feld.value = String(api.olympiadeAnzahl);
+      spielStarten();
+    }, 0);
+  }
 }
 
 function verdrahteBedienelemente() {

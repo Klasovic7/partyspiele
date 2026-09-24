@@ -9,7 +9,7 @@ import {
 } from "./kern/ui.js";
 import { SPIELE, spielInfo } from "./spiele/register.js";
 
-export const APP_VERSION = "v195";
+export const APP_VERSION = "v196";
 const appVersion = document.getElementById("app-version");
 appVersion.textContent = "Version " + APP_VERSION;
 
@@ -71,6 +71,14 @@ const wertungKachel = document.getElementById("wertung-kachel");
 const wertungDialog = document.getElementById("wertung-dialog");
 const btnWertungSchliessen = document.getElementById("btn-wertung-schliessen");
 const wertungTabelle = document.getElementById("wertung-tabelle");
+const olympiadeKachel = document.getElementById("olympiade-kachel");
+const olympiadeDialog = document.getElementById("olympiade-dialog");
+const btnOlympiadeSchliessen = document.getElementById("btn-olympiade-schliessen");
+const olympiadeAuswahlGrid = document.getElementById("olympiade-auswahl-grid");
+const olympiadeAuswahlListe = document.getElementById("olympiade-auswahl-liste");
+const olympiadeAuswahlLeer = document.getElementById("olympiade-auswahl-leer");
+const olympiadeFehler = document.getElementById("olympiade-fehler");
+const btnOlympiadeStarten = document.getElementById("btn-olympiade-starten");
 
 // v186: Chat (während Lobby und laufendem Spiel)
 const chatButton = document.getElementById("btn-chat-oeffnen");
@@ -201,6 +209,32 @@ const SPIEL_ANZAHL_FELD = {
 // wurde, damit nicht bei jeder Raum-Aktualisierung (onSnapshot feuert oft)
 // derselbe Eintrag erneut geschrieben wird.
 let protokolliertesRundenSchluessel = null;
+
+// v196: Olympiade - mehrere Spiele nacheinander, siehe olympiade-Feld im
+// Raum-Dokument ({ aktiv, plan: [{spielId, anzahl}], index, beendetAm }).
+// Welche Spiele fuer die Olympiade waehlbar sind: alle ausser Imposter, das
+// (noch) kein Punktesystem hat und sich daher nicht in die gemeinsame
+// Wertung am Ende einreiht.
+const OLYMPIADE_SPIELE = SPIELE.filter((s) => s.id !== "imposter");
+// Vorbelegte Anzahl je Spiel in der Olympiade-Planung - orientiert sich an
+// den Standardwerten, die die einzelnen Spiele selbst in ihrem Setup zeigen.
+const OLYMPIADE_STANDARD_ANZAHL = {
+  schaetzfragen: 1,
+  "denk-gleich": 5,
+  "zehn-treffer": 5,
+  "reih-dich-ein": 5,
+  "wer-ist-es": 8,
+  "wann-war-es": 8,
+  blitzquiz: 10,
+  doppelblick: 10,
+  finto: 5
+};
+// Lokaler Planungszustand des Dialogs (erst beim Klick auf "Olympiade
+// starten" wird daraus ein gemeinsamer Raum-Zustand).
+let olympiadePlanung = [];
+// Verhindert, dass die Wertung bei jeder Raum-Aktualisierung erneut
+// automatisch aufgeht, nachdem eine Olympiade zu Ende gegangen ist.
+let olympiadeAngezeigteSignatur = null;
 
 function stabilerSignaturWert(wert) {
   if (Array.isArray(wert)) return wert.map(stabilerSignaturWert);
@@ -571,6 +605,7 @@ function renderLobby() {
     spielerliste.appendChild(li);
   });
   aktualisiereWertungsKachel();
+  aktualisiereOlympiadeKachel();
   renderSpieleAuswahl();
 }
 
@@ -648,8 +683,138 @@ wertungDialog.addEventListener("click", (event) => {
   if (event.target === wertungDialog) schliesseWertungDialog();
 });
 document.addEventListener("keydown", (event) => {
-  if (event.key === "Escape" && !wertungDialog.hidden) schliesseWertungDialog();
+  if (event.key !== "Escape") return;
+  if (!wertungDialog.hidden) schliesseWertungDialog();
+  else if (!olympiadeDialog.hidden) schliesseOlympiadeDialog();
 });
+
+// ---------- Olympiade (v196): mehrere Spiele nacheinander ----------
+function aktualisiereOlympiadeKachel() {
+  olympiadeKachel.hidden = !zustand.istLeiter;
+}
+
+function oeffneOlympiadeDialog() {
+  if (!zustand.istLeiter) return;
+  olympiadePlanung = [];
+  olympiadeFehler.textContent = "";
+  renderOlympiadeDialog();
+  olympiadeDialog.hidden = false;
+  document.body.classList.add("wertung-offen");
+  requestAnimationFrame(() => btnOlympiadeSchliessen.focus());
+}
+
+function schliesseOlympiadeDialog(fokusZurueck = true) {
+  olympiadeDialog.hidden = true;
+  document.body.classList.remove("wertung-offen");
+  if (fokusZurueck && !olympiadeKachel.hidden) olympiadeKachel.focus();
+}
+
+function olympiadeSpielHinzufuegen(id) {
+  if (olympiadePlanung.some((e) => e.spielId === id)) return;
+  const info = spielInfo(id);
+  if (!info) return;
+  olympiadePlanung.push({ spielId: id, anzahl: OLYMPIADE_STANDARD_ANZAHL[id] ?? 5 });
+  renderOlympiadeDialog();
+}
+
+function olympiadeSpielEntfernen(id) {
+  olympiadePlanung = olympiadePlanung.filter((e) => e.spielId !== id);
+  renderOlympiadeDialog();
+}
+
+function olympiadeVerschieben(id, richtung) {
+  const index = olympiadePlanung.findIndex((e) => e.spielId === id);
+  const ziel = index + richtung;
+  if (index < 0 || ziel < 0 || ziel >= olympiadePlanung.length) return;
+  const [eintrag] = olympiadePlanung.splice(index, 1);
+  olympiadePlanung.splice(ziel, 0, eintrag);
+  renderOlympiadeDialog();
+}
+
+function olympiadeAnzahlAendern(id, wert) {
+  const eintrag = olympiadePlanung.find((e) => e.spielId === id);
+  if (!eintrag) return;
+  let anzahl = parseInt(wert, 10);
+  if (!Number.isFinite(anzahl) || anzahl < 1) anzahl = 1;
+  if (anzahl > 50) anzahl = 50;
+  eintrag.anzahl = anzahl;
+}
+
+function renderOlympiadeDialog() {
+  // Verfuegbare Spiele: noch nicht ausgewaehlt, sonst wie in der normalen
+  // Spielauswahl grau/deaktiviert, wenn zu wenige Mitspieler*innen da sind.
+  olympiadeAuswahlGrid.innerHTML = "";
+  OLYMPIADE_SPIELE.forEach((spiel) => {
+    if (olympiadePlanung.some((e) => e.spielId === spiel.id)) return;
+    const zuWenige = zustand.spieler.length < spiel.minSpieler;
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "spiel-kachel olympiade-spiel-kachel" + (zuWenige ? " passiv" : "");
+    if (spiel.farbe) btn.style.setProperty("--spiel-farbe", spiel.farbe);
+    btn.innerHTML =
+      `<span class="spiel-emoji">${spiel.emoji}</span>` +
+      `<span class="spiel-name">${escapeHtml(spiel.name)}</span>` +
+      (zuWenige ? `<span class="spiel-badge">mind. ${spiel.minSpieler} Spieler</span>` : `<span class="olympiade-hinzufuegen-hinweis">+ hinzufuegen</span>`);
+    if (zuWenige) btn.disabled = true;
+    else btn.addEventListener("click", () => olympiadeSpielHinzufuegen(spiel.id));
+    olympiadeAuswahlGrid.appendChild(btn);
+  });
+
+  // Ausgewaehlte Spiele in Reihenfolge, mit Anzahl-Eingabe und Sortier-Pfeilen.
+  olympiadeAuswahlListe.innerHTML = "";
+  olympiadePlanung.forEach((eintrag, i) => {
+    const info = spielInfo(eintrag.spielId);
+    if (!info) return;
+    const li = document.createElement("li");
+    li.className = "olympiade-auswahl-zeile";
+    li.innerHTML =
+      `<span class="olympiade-zeile-nummer">${i + 1}</span>` +
+      `<span class="olympiade-zeile-emoji">${info.emoji}</span>` +
+      `<span class="olympiade-zeile-name">${escapeHtml(info.name)}</span>` +
+      `<label class="olympiade-zeile-anzahl">` +
+        `<span class="nur-screenreader">Anzahl fuer ${escapeHtml(info.name)}</span>` +
+        `<input type="text" inputmode="numeric" class="olympiade-anzahl-feld" value="${eintrag.anzahl}">` +
+      `</label>` +
+      `<button type="button" class="olympiade-zeile-btn olympiade-zeile-hoch" aria-label="${escapeHtml(info.name)} nach oben">↑</button>` +
+      `<button type="button" class="olympiade-zeile-btn olympiade-zeile-runter" aria-label="${escapeHtml(info.name)} nach unten">↓</button>` +
+      `<button type="button" class="olympiade-zeile-btn olympiade-zeile-entfernen" aria-label="${escapeHtml(info.name)} entfernen">✕</button>`;
+    li.querySelector(".olympiade-anzahl-feld").addEventListener("change", (ev) => olympiadeAnzahlAendern(eintrag.spielId, ev.target.value));
+    li.querySelector(".olympiade-zeile-hoch").addEventListener("click", () => olympiadeVerschieben(eintrag.spielId, -1));
+    li.querySelector(".olympiade-zeile-runter").addEventListener("click", () => olympiadeVerschieben(eintrag.spielId, 1));
+    li.querySelector(".olympiade-zeile-entfernen").addEventListener("click", () => olympiadeSpielEntfernen(eintrag.spielId));
+    if (i === 0) li.querySelector(".olympiade-zeile-hoch").disabled = true;
+    if (i === olympiadePlanung.length - 1) li.querySelector(".olympiade-zeile-runter").disabled = true;
+    olympiadeAuswahlListe.appendChild(li);
+  });
+
+  olympiadeAuswahlLeer.hidden = olympiadePlanung.length > 0;
+  btnOlympiadeStarten.disabled = olympiadePlanung.length === 0;
+}
+
+async function starteOlympiade() {
+  if (!zustand.istLeiter || olympiadePlanung.length === 0) return;
+  olympiadeFehler.textContent = "";
+  const plan = olympiadePlanung.map((e) => ({ spielId: e.spielId, anzahl: e.anzahl }));
+  try {
+    await updateDoc(raumRef(), {
+      olympiade: { aktiv: true, plan, index: 0 },
+      aktuellesSpiel: plan[0].spielId,
+      phase: "spiel",
+      bereitSpieler: {}
+    });
+    protokolliere("olympiade_gestartet", { anzahlSpiele: plan.length });
+    schliesseOlympiadeDialog(false);
+  } catch (e) {
+    olympiadeFehler.textContent = "Die Olympiade konnte nicht gestartet werden: " + e.message;
+  }
+}
+
+olympiadeKachel.addEventListener("click", oeffneOlympiadeDialog);
+btnOlympiadeSchliessen.addEventListener("click", () => schliesseOlympiadeDialog());
+olympiadeDialog.addEventListener("click", (event) => {
+  if (event.target === olympiadeDialog) schliesseOlympiadeDialog();
+});
+btnOlympiadeStarten.addEventListener("click", starteOlympiade);
 
 // ---------- Chat (v186) ----------
 // Ein Chat pro Raum, in einer Unter-Sammlung "chat" (gleiches Muster wie
@@ -751,10 +916,44 @@ function baueApi() {
     get istLeiter() { return zustand.istLeiter; },
     get spieler() { return zustand.spieler; },
     get raum() { return zustand.raum; },
-    // Vom Spiel aufzurufen, wenn es fertig ist: zurück zur Spielauswahl,
-    // ohne dass jemand den Raum neu betreten muss.
+    // v196: In einer laufenden Olympiade gibt dies die vorab festgelegte
+    // Anzahl (Runden/Fragen) fuer das GERADE aktive Spiel zurueck, damit es
+    // ohne eigenes Setup-Fenster direkt mit dieser Anzahl starten kann - sonst
+    // null (keine Olympiade, oder das Spiel ist nicht das aktuelle Olympiade-Spiel).
+    get olympiadeAnzahl() {
+      const oly = zustand.raum?.olympiade;
+      if (!oly?.aktiv) return null;
+      const eintrag = oly.plan?.[oly.index];
+      if (!eintrag || eintrag.spielId !== aktivesSpielId) return null;
+      return eintrag.anzahl || null;
+    },
+    // Vom Spiel aufzurufen, wenn es fertig ist: zurück zur Spielauswahl (oder,
+    // in einer laufenden Olympiade, direkt weiter zum naechsten Spiel dieser
+    // Olympiade), ohne dass jemand den Raum neu betreten muss.
     zurueckZurAuswahl: async () => {
-      try { await updateDoc(raumRef(), { aktuellesSpiel: null, phase: "lobby" }); }
+      try {
+        const oly = zustand.raum?.olympiade;
+        if (oly?.aktiv) {
+          const naechsterIndex = oly.index + 1;
+          if (naechsterIndex < (oly.plan?.length ?? 0)) {
+            await updateDoc(raumRef(), {
+              aktuellesSpiel: oly.plan[naechsterIndex].spielId,
+              phase: "spiel",
+              bereitSpieler: {},
+              "olympiade.index": naechsterIndex
+            });
+          } else {
+            await updateDoc(raumRef(), {
+              aktuellesSpiel: null,
+              phase: "lobby",
+              "olympiade.aktiv": false,
+              "olympiade.beendetAm": serverTimestamp()
+            });
+          }
+          return;
+        }
+        await updateDoc(raumRef(), { aktuellesSpiel: null, phase: "lobby" });
+      }
       catch (e) { zeigeDebug("Fehler beim Zurückkehren: " + e.message); }
     },
     // v113: gemeinsame Rundenfortschrittsanzeige oben rechts im Spielkopf (z. B.
@@ -876,6 +1075,19 @@ function reagiereAufRaum(daten) {
   if (spielId !== aktivesSpielId) {
     entladeSpiel();
     if (spielId) ladeSpiel(spielId);
+  }
+
+  // v196: Ist gerade eine Olympiade zu Ende gegangen, geht bei allen im Raum
+  // automatisch die Wertung mit der Gesamtpunktzahl aller gespielten Spiele
+  // auf - "beendetAm" dient als Signatur, damit das nicht bei jeder weiteren
+  // Raum-Aktualisierung (onSnapshot feuert oft) erneut passiert.
+  const olyBeendetAm = daten.olympiade?.beendetAm;
+  if (!spielId && !daten.olympiade?.aktiv && olyBeendetAm) {
+    const signatur = `${zustand.code}:${olyBeendetAm.toMillis?.() ?? olyBeendetAm}`;
+    if (signatur !== olympiadeAngezeigteSignatur) {
+      olympiadeAngezeigteSignatur = signatur;
+      requestAnimationFrame(() => oeffneWertungDialog());
+    }
   }
 
   if (spielId) {

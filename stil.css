@@ -1252,6 +1252,43 @@
     .wertung-kachel:active { transform: scale(.99); }
     .wertung-kachel-symbol { font-size: 1.35rem; }
 
+    /* v196: Olympiade-Kachel (oranger statt violetter Verlauf, damit sie sich
+       von der Wertung-Kachel unterscheidet) + Planungs-Dialog. */
+    .olympiade-kachel { background: linear-gradient(90deg, #ff9d42, #ffb066); color: #2a1305; }
+    .olympiade-dialog-inhalt { width: min(100%, 560px); }
+    .olympiade-zwischentitel { margin: 14px 0 6px; font-size: 1rem; }
+    .olympiade-auswahl-grid { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); margin-bottom: 4px; }
+    .olympiade-auswahl-grid .spiel-kachel { min-height: 110px; padding: 12px 8px; gap: 2px; }
+    .olympiade-auswahl-grid .spiel-emoji { font-size: 26px; line-height: 30px; }
+    .olympiade-auswahl-grid .spiel-name { font-size: .82rem; }
+    .olympiade-hinzufuegen-hinweis { font-size: .62rem; color: var(--akzent); font-weight: 700; }
+    .olympiade-auswahl-liste { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+    .olympiade-auswahl-zeile {
+      display: flex; align-items: center; gap: 8px; padding: 8px 10px;
+      border-radius: 12px; background: #f6f4fb;
+    }
+    .olympiade-zeile-nummer {
+      width: 20px; height: 20px; flex: none; display: flex; align-items: center; justify-content: center;
+      border-radius: 50%; background: var(--akzent); color: #fff; font-size: .68rem; font-weight: 800;
+    }
+    .olympiade-zeile-emoji { font-size: 1.15rem; flex: none; }
+    .olympiade-zeile-name { flex: 1 1 auto; font-weight: 700; font-size: .88rem; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .olympiade-zeile-anzahl { flex: none; }
+    .olympiade-anzahl-feld {
+      width: 44px; padding: 5px 4px; text-align: center; border-radius: 8px;
+      border: 1px solid var(--linie, #ddd6f3); font: inherit; font-variant-numeric: tabular-nums;
+    }
+    .olympiade-zeile-btn {
+      flex: none; width: 26px; height: 26px; border: none; border-radius: 8px;
+      background: #e9e4f7; color: var(--text-dunkel); font-size: .8rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; padding: 0;
+    }
+    .olympiade-zeile-btn:hover { background: #ddd4f5; }
+    .olympiade-zeile-btn:disabled { opacity: .4; cursor: default; }
+    .olympiade-zeile-entfernen { background: #f6dade; color: #c8324a; }
+    .olympiade-zeile-entfernen:hover { background: #f1c3ca; }
+    .olympiade-starten-btn { margin-top: 14px; }
+
     /* Größere Spielkacheln – Spielname und Symbol bilden den Blickfang. */
     .spiele-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
     .spiel-kachel {
@@ -1557,6 +1594,20 @@
       color: #2a1305;
       box-shadow: 0 8px 18px rgba(0, 0, 0, .35);
     }
+    .olympiade-kachel {
+      background: linear-gradient(90deg, var(--club-lila, #a78bfa), #7c3aed);
+      color: #fff;
+    }
+    .olympiade-auswahl-zeile { background: rgba(255, 255, 255, .06); }
+    .olympiade-zeile-name { color: var(--club-text); }
+    .olympiade-anzahl-feld {
+      background: rgba(0, 0, 0, .25); color: var(--club-text);
+      border-color: rgba(255, 255, 255, .18);
+    }
+    .olympiade-zeile-btn { background: rgba(255, 255, 255, .12); color: var(--club-text); }
+    .olympiade-zeile-btn:hover { background: rgba(255, 255, 255, .2); }
+    .olympiade-zeile-entfernen { background: rgba(220, 73, 61, .3); color: #ff9d94; }
+    .olympiade-zeile-entfernen:hover { background: rgba(220, 73, 61, .45); }
     .wertung-dialog { background: rgba(8, 5, 11, .78); backdrop-filter: blur(12px); }
     .wertung-dialog-inhalt {
       color: var(--club-text);

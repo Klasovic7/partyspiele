@@ -214,6 +214,20 @@ export async function starten(uebergebeneApi) {
       sfFragenIndex: 0, sfFrageVersion: 0, sfReihenfolge: [], sfAnzahlFragen: 0
     });
   }
+
+  // v196: In einer Olympiade waehlt der Leiter die Anzahl schon vorab in der
+  // Olympiade-Planung - hier startet das Spiel deshalb sofort automatisch
+  // (mit allen Kategorien) statt das eigene Setup-Fenster zu zeigen. Das
+  // setTimeout wartet einen Tick, bis app.js nach starten() noch api.spieler()
+  // aufgerufen hat (sonst waere spielerListe hier noch leer).
+  if (api.istLeiter && api.olympiadeAnzahl) {
+    kategorien = KATEGORIEN.map((k) => k.id);
+    setTimeout(() => {
+      const feld = $("sf-anzahl");
+      if (feld) feld.value = String(api.olympiadeAnzahl);
+      spielStarten();
+    }, 0);
+  }
 }
 
 function verdrahteBedienelemente() {

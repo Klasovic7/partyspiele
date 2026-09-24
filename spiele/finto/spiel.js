@@ -147,6 +147,16 @@ export async function starten(uebergebeneApi) {
       fiStatus: "setup", fiFragenIndex: 0, fiReihenfolge: [], fiAnzahlFragen: 0, fiOptionen: []
     });
   }
+
+  // v196: Olympiade - Anzahl steht schon fest, direkt starten statt das
+  // Setup-Fenster zu zeigen (Tick warten, bis spielerListe gefuellt ist).
+  if (api.istLeiter && api.olympiadeAnzahl) {
+    setTimeout(() => {
+      const feld = $("fi-anzahl");
+      if (feld) feld.value = String(api.olympiadeAnzahl);
+      spielStarten();
+    }, 0);
+  }
 }
 
 function verdrahteBedienelemente() {
