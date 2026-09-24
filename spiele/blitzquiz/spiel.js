@@ -81,6 +81,7 @@ const VORLAGE = `
           <input id="bz-anzahl" type="text" inputmode="numeric" pattern="[0-9]*" min="1" value="10" class="anzahl-eingabe">
         </span>
       </div>
+      <p id="bz-anzahl-max" class="hinweis-text"></p>
     </div>
 
     <div id="bz-teammodus-zeile" class="setup-modusblock" hidden>
@@ -426,6 +427,7 @@ function zeigeSetup() {
   if (gewuenschteAnzahl === 0) gewuenschteAnzahl = Math.min(STANDARD_ANZAHL, fragen.length);
   $("bz-anzahl").max = String(Math.max(1, fragen.length));
   $("bz-anzahl").value = String(gewuenschteAnzahl);
+  $("bz-anzahl-max").textContent = `Insgesamt ${fragen.length} Fragen verfügbar.`;
   $("bz-anzahl-zeile").hidden = false;
   $("bz-anzahl").disabled = !api.istLeiter;
   $("bz-teammodus-zeile").hidden = false;

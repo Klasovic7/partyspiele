@@ -144,6 +144,7 @@ const VORLAGE = `
           <input id="db-anzahl" type="text" inputmode="numeric" pattern="[0-9]*" min="1" value="10" class="anzahl-eingabe">
         </span>
       </div>
+      <p id="db-anzahl-max" class="hinweis-text"></p>
     </div>
 
     <div id="db-kpsp-zeile" class="setup-anzahlblock" hidden>
@@ -523,6 +524,7 @@ function zeigeSetup() {
   if (gewuenschteAnzahl === 0) gewuenschteAnzahl = Math.min(STANDARD_ANZAHL, MAX_RUNDEN);
   $("db-anzahl").max = String(MAX_RUNDEN);
   $("db-anzahl").value = String(gewuenschteAnzahl);
+  $("db-anzahl-max").textContent = `Insgesamt ${MAX_RUNDEN} Runden möglich.`;
   $("db-anzahl-zeile").hidden = istTurm;
   $("db-anzahl").disabled = !api.istLeiter;
 

@@ -57,6 +57,7 @@ const VORLAGE = `
           <input id="wi-anzahl" type="text" inputmode="numeric" pattern="[0-9]*" min="1" value="8" class="anzahl-eingabe">
         </span>
       </div>
+      <p id="wi-anzahl-max" class="hinweis-text"></p>
     </div>
 
     <div id="wi-teammodus-zeile" class="setup-modusblock" hidden>
@@ -410,6 +411,7 @@ function zeigeSetup() {
   if (gewuenschteAnzahl === 0) gewuenschteAnzahl = Math.min(STANDARD_ANZAHL, fragen.length);
   $("wi-anzahl").max = String(Math.max(1, fragen.length));
   $("wi-anzahl").value = String(gewuenschteAnzahl);
+  $("wi-anzahl-max").textContent = `Insgesamt ${fragen.length} Runden verfügbar.`;
   $("wi-anzahl-zeile").hidden = false;
   $("wi-anzahl").disabled = !api.istLeiter;
   $("wi-teammodus-zeile").hidden = false;

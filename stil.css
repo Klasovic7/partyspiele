@@ -322,6 +322,7 @@
       display: flex; align-items: center; gap: 12px; width: 100%; margin: 0;
       padding: 12px 14px; border-radius: 16px; border: 1px solid #e3e5eb; cursor: pointer;
       background: #f7f8fb; text-align: left; transition: background .15s ease, border-color .15s ease;
+      -webkit-tap-highlight-color: transparent;
     }
     .raum-kachel:hover { background: #eef0f6; border-color: #d7dae2; }
     .raum-kachel-deaktiviert { opacity: .6; pointer-events: none; }
@@ -338,6 +339,11 @@
     .raum-kachel-spieler-toggle {
       display: inline-flex; align-items: center; gap: 4px; margin: 0; padding: 2px 0; border: none;
       background: none; font: inherit; cursor: pointer; color: #6b7280;
+      /* v197: ohne das hier kann iOS Safari den nativen Tap-Ring hier "kleben"
+         lassen, wenn die Raumliste kurz nach dem Antippen per onSnapshot neu
+         gerendert wird (gleiches Problem wie beim .db-symbol, siehe dort) -
+         sichtbar als schief sitzendes, orangenes Rechteck um den Text. */
+      -webkit-tap-highlight-color: transparent;
     }
     .raum-kachel-spieler-toggle:hover .raum-kachel-spieler { text-decoration: underline; }
     .raum-kachel-spieler { font-size: 0.8rem; color: #6b7280; }

@@ -51,6 +51,7 @@ const VORLAGE = `
           <input id="sf-anzahl" type="text" inputmode="numeric" pattern="[0-9]*" min="1" value="1" class="anzahl-eingabe">
         </span>
       </div>
+      <p id="sf-anzahl-max" class="hinweis-text"></p>
     </div>
 
     <div id="sf-dummkopf-zeile" class="setup-modusblock" hidden>
@@ -553,6 +554,8 @@ function zeigeSetup() {
     : obergrenze;
   anzahlFeld.max = String(obergrenze);
   anzahlFeld.value = String(auswahl);
+  $("sf-anzahl-max").textContent =
+    `Mit den gewählten Kategorien sind maximal ${obergrenze} möglich.`;
 
   $("sf-anzahl-zeile").hidden = false;
   anzahlFeld.disabled = !api.istLeiter;

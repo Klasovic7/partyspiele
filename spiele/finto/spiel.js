@@ -46,6 +46,7 @@ const VORLAGE = `
           <input id="fi-anzahl" type="text" inputmode="numeric" pattern="[0-9]*" min="1" class="anzahl-eingabe">
         </span>
       </div>
+      <p id="fi-anzahl-max" class="hinweis-text"></p>
     </div>
 
     <p id="fi-setup-fehler" class="fehler-text"></p>
@@ -165,6 +166,16 @@ function verdrahteBedienelemente() {
     const bereinigt = feld.value.replace(/[^0-9]/g, "");
     if (bereinigt !== feld.value) feld.value = bereinigt;
   });
+  // v197: type="text" ignoriert das max-Attribut - ohne diese eigene
+  // Begrenzung beim Verlassen des Feldes liesse sich eine beliebig hohe Zahl
+  // eintippen, die stehen bliebe, bis sie beim Start still zurueckgestutzt wird.
+  $("fi-anzahl").addEventListener("change", () => {
+    const feld = $("fi-anzahl");
+    let wert = parseInt(feld.value, 10);
+    if (!Number.isFinite(wert) || wert < 1) wert = 1;
+    if (wert > fragen.length) wert = fragen.length;
+    feld.value = String(wert);
+  });
   $("fi-anzahl").addEventListener("focus", () => { $("fi-anzahl").select(); });
   $("fi-starten").addEventListener("click", spielStarten);
   $("fi-absenden").addEventListener("click", antwortAbsenden);
@@ -266,6 +277,7 @@ function zeigeSetup() {
   const anzahlFeld = $("fi-anzahl");
   anzahlFeld.max = fragen.length;
   if (!anzahlFeld.value) anzahlFeld.value = fragen.length;
+  $("fi-anzahl-max").textContent = `Insgesamt ${fragen.length} Fragen verfügbar.`;
   $("fi-anzahl-zeile").hidden = false;
   anzahlFeld.disabled = !api.istLeiter;
   $("fi-starten").hidden = !api.istLeiter;

@@ -66,6 +66,7 @@ const VORLAGE = `
           <input id="zt-anzahl" type="text" inputmode="numeric" pattern="[0-9]*" min="1" class="anzahl-eingabe">
         </span>
       </div>
+      <p id="zt-anzahl-max" class="hinweis-text"></p>
     </div>
 
     <p id="zt-setup-fehler" class="fehler-text"></p>
@@ -315,6 +316,17 @@ function verdrahteBedienelemente() {
     if (bereinigt !== feld.value) feld.value = bereinigt;
     anzahlManuellGesetzt = true;
   });
+  // v197: type="text" ignoriert das max-Attribut - ohne diese eigene
+  // Begrenzung beim Verlassen des Feldes liesse sich eine beliebig hohe Zahl
+  // eintippen, die stehen bliebe, bis sie beim Start still zurueckgestutzt wird.
+  $("zt-anzahl").addEventListener("change", () => {
+    const feld = $("zt-anzahl");
+    let wert = parseInt(feld.value, 10);
+    if (!Number.isFinite(wert) || wert < 1) wert = 1;
+    if (wert > karten.length) wert = karten.length;
+    feld.value = String(wert);
+    anzahlManuellGesetzt = true;
+  });
   // v105: als type="number" ließ sich der vorhandene Wert beim Fokussieren nicht
   // markieren - jetzt ein Textfeld mit numerischer Tastatur, select() funktioniert.
   $("zt-anzahl").addEventListener("focus", () => { $("zt-anzahl").select(); });
@@ -487,6 +499,7 @@ function zeigeSetup() {
   const anzahlFeld = $("zt-anzahl");
   anzahlFeld.max = karten.length;
   if (!anzahlManuellGesetzt || !anzahlFeld.value) anzahlFeld.value = karten.length;
+  $("zt-anzahl-max").textContent = `Insgesamt ${karten.length} Begriffe verfügbar.`;
   $("zt-anzahl-zeile").hidden = false;
   anzahlFeld.disabled = !api.istLeiter;
   $("zt-starten").hidden = !api.istLeiter;

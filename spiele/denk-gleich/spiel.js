@@ -27,6 +27,7 @@ const VORLAGE = `
           <input id="dg-anzahl" type="text" inputmode="numeric" pattern="[0-9]*" min="1" class="anzahl-eingabe">
         </span>
       </div>
+      <p id="dg-anzahl-max" class="hinweis-text"></p>
     </div>
 
     <p id="dg-setup-fehler" class="fehler-text"></p>
@@ -172,6 +173,18 @@ function verdrahteBedienelemente() {
     const bereinigt = feld.value.replace(/[^0-9]/g, "");
     if (bereinigt !== feld.value) feld.value = bereinigt;
   });
+  // v197: type="text" (fuer verlaessliches select() bei Fokus, siehe unten)
+  // ignoriert das max-Attribut - ohne diese eigene Begrenzung beim Verlassen
+  // des Feldes liesse sich hier z. B. "999999" eintippen, was stehen bliebe,
+  // bis das Spiel (unsichtbar fuer die Person) beim Start still auf die
+  // tatsaechlich verfuegbare Anzahl zurueckgestutzt wird.
+  $("dg-anzahl").addEventListener("change", () => {
+    const feld = $("dg-anzahl");
+    let wert = parseInt(feld.value, 10);
+    if (!Number.isFinite(wert) || wert < 1) wert = 1;
+    if (wert > fragen.length) wert = fragen.length;
+    feld.value = String(wert);
+  });
   // v105: als type="number" ließ sich der vorhandene Wert beim Fokussieren nicht
   // markieren - jetzt ein Textfeld mit numerischer Tastatur, select() funktioniert.
   $("dg-anzahl").addEventListener("focus", () => { $("dg-anzahl").select(); });
@@ -268,6 +281,7 @@ function zeigeSetup() {
   const anzahlFeld = $("dg-anzahl");
   anzahlFeld.max = fragen.length;
   if (!anzahlFeld.value) anzahlFeld.value = fragen.length;
+  $("dg-anzahl-max").textContent = `Insgesamt ${fragen.length} Fragen verfügbar.`;
   $("dg-anzahl-zeile").hidden = false;
   anzahlFeld.disabled = !api.istLeiter;
   $("dg-starten").hidden = !api.istLeiter;
