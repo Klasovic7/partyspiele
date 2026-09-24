@@ -9,7 +9,7 @@ import {
 } from "./kern/ui.js";
 import { SPIELE, spielInfo } from "./spiele/register.js";
 
-export const APP_VERSION = "v197";
+export const APP_VERSION = "v198";
 const appVersion = document.getElementById("app-version");
 appVersion.textContent = "Version " + APP_VERSION;
 
@@ -71,9 +71,12 @@ const wertungKachel = document.getElementById("wertung-kachel");
 const wertungDialog = document.getElementById("wertung-dialog");
 const btnWertungSchliessen = document.getElementById("btn-wertung-schliessen");
 const wertungTabelle = document.getElementById("wertung-tabelle");
-const olympiadeKachel = document.getElementById("olympiade-kachel");
-const olympiadeDialog = document.getElementById("olympiade-dialog");
-const btnOlympiadeSchliessen = document.getElementById("btn-olympiade-schliessen");
+const spielmodusTabs = document.getElementById("spielmodus-tabs");
+const tabSpielauswahl = document.getElementById("tab-spielauswahl");
+const tabOlympiade = document.getElementById("tab-olympiade");
+const spielauswahlTitel = document.getElementById("spielauswahl-titel");
+const spielauswahlBereich = document.getElementById("spielauswahl-bereich");
+const olympiadeBereich = document.getElementById("olympiade-bereich");
 const olympiadeAuswahlGrid = document.getElementById("olympiade-auswahl-grid");
 const olympiadeAuswahlListe = document.getElementById("olympiade-auswahl-liste");
 const olympiadeAuswahlLeer = document.getElementById("olympiade-auswahl-leer");
@@ -232,6 +235,10 @@ const OLYMPIADE_STANDARD_ANZAHL = {
 // Lokaler Planungszustand des Dialogs (erst beim Klick auf "Olympiade
 // starten" wird daraus ein gemeinsamer Raum-Zustand).
 let olympiadePlanung = [];
+// v198: statt eines eigenen Dialogs wechselt die Lobby direkt zwischen der
+// normalen Spielauswahl und der Olympiade-Planung - dieser Wert merkt sich,
+// welche der beiden gerade zu sehen ist (nur fuer den Spielleiter relevant).
+let aktuellerSpielmodus = "auswahl";
 // Verhindert, dass die Wertung bei jeder Raum-Aktualisierung erneut
 // automatisch aufgeht, nachdem eine Olympiade zu Ende gegangen ist.
 let olympiadeAngezeigteSignatur = null;
@@ -605,7 +612,7 @@ function renderLobby() {
     spielerliste.appendChild(li);
   });
   aktualisiereWertungsKachel();
-  aktualisiereOlympiadeKachel();
+  aktualisiereSpielmodusTabs();
   renderSpieleAuswahl();
 }
 
@@ -685,28 +692,43 @@ wertungDialog.addEventListener("click", (event) => {
 document.addEventListener("keydown", (event) => {
   if (event.key !== "Escape") return;
   if (!wertungDialog.hidden) schliesseWertungDialog();
-  else if (!olympiadeDialog.hidden) schliesseOlympiadeDialog();
 });
 
-// ---------- Olympiade (v196): mehrere Spiele nacheinander ----------
-function aktualisiereOlympiadeKachel() {
-  olympiadeKachel.hidden = !zustand.istLeiter;
+// ---------- Olympiade (v196, v198: inline statt eigener Dialog) ----------
+// Blendet den Tab-Umschalter zwischen "Spiel auswählen" und "Olympiade" nur
+// fuer den Spielleiter ein - Mitspieler*innen sehen weiterhin nur die
+// normale (fuer sie ohnehin nicht klickbare) Spielauswahl.
+function aktualisiereSpielmodusTabs() {
+  const zeigeTabs = zustand.istLeiter;
+  spielmodusTabs.hidden = !zeigeTabs;
+  spielauswahlTitel.hidden = zeigeTabs;
+  if (zeigeTabs) {
+    setzeSpielmodusAnzeige();
+  } else {
+    spielauswahlBereich.hidden = false;
+    olympiadeBereich.hidden = true;
+  }
 }
 
-function oeffneOlympiadeDialog() {
-  if (!zustand.istLeiter) return;
-  olympiadePlanung = [];
-  olympiadeFehler.textContent = "";
-  renderOlympiadeDialog();
-  olympiadeDialog.hidden = false;
-  document.body.classList.add("wertung-offen");
-  requestAnimationFrame(() => btnOlympiadeSchliessen.focus());
+function setzeSpielmodusAnzeige() {
+  const istOlympiade = aktuellerSpielmodus === "olympiade";
+  tabSpielauswahl.classList.toggle("aktiv", !istOlympiade);
+  tabSpielauswahl.setAttribute("aria-selected", String(!istOlympiade));
+  tabOlympiade.classList.toggle("aktiv", istOlympiade);
+  tabOlympiade.setAttribute("aria-selected", String(istOlympiade));
+  spielauswahlBereich.hidden = istOlympiade;
+  olympiadeBereich.hidden = !istOlympiade;
 }
 
-function schliesseOlympiadeDialog(fokusZurueck = true) {
-  olympiadeDialog.hidden = true;
-  document.body.classList.remove("wertung-offen");
-  if (fokusZurueck && !olympiadeKachel.hidden) olympiadeKachel.focus();
+function wechsleSpielmodus(modus) {
+  if (!zustand.istLeiter || modus === aktuellerSpielmodus) return;
+  aktuellerSpielmodus = modus;
+  if (modus === "olympiade") {
+    olympiadePlanung = [];
+    olympiadeFehler.textContent = "";
+    renderOlympiadePlanung();
+  }
+  setzeSpielmodusAnzeige();
 }
 
 function olympiadeSpielHinzufuegen(id) {
@@ -714,12 +736,12 @@ function olympiadeSpielHinzufuegen(id) {
   const info = spielInfo(id);
   if (!info) return;
   olympiadePlanung.push({ spielId: id, anzahl: OLYMPIADE_STANDARD_ANZAHL[id] ?? 5 });
-  renderOlympiadeDialog();
+  renderOlympiadePlanung();
 }
 
 function olympiadeSpielEntfernen(id) {
   olympiadePlanung = olympiadePlanung.filter((e) => e.spielId !== id);
-  renderOlympiadeDialog();
+  renderOlympiadePlanung();
 }
 
 function olympiadeVerschieben(id, richtung) {
@@ -728,7 +750,7 @@ function olympiadeVerschieben(id, richtung) {
   if (index < 0 || ziel < 0 || ziel >= olympiadePlanung.length) return;
   const [eintrag] = olympiadePlanung.splice(index, 1);
   olympiadePlanung.splice(ziel, 0, eintrag);
-  renderOlympiadeDialog();
+  renderOlympiadePlanung();
 }
 
 function olympiadeAnzahlAendern(id, wert) {
@@ -740,7 +762,7 @@ function olympiadeAnzahlAendern(id, wert) {
   eintrag.anzahl = anzahl;
 }
 
-function renderOlympiadeDialog() {
+function renderOlympiadePlanung() {
   // Verfuegbare Spiele: noch nicht ausgewaehlt, sonst wie in der normalen
   // Spielauswahl grau/deaktiviert, wenn zu wenige Mitspieler*innen da sind.
   olympiadeAuswahlGrid.innerHTML = "";
@@ -803,17 +825,13 @@ async function starteOlympiade() {
       bereitSpieler: {}
     });
     protokolliere("olympiade_gestartet", { anzahlSpiele: plan.length });
-    schliesseOlympiadeDialog(false);
   } catch (e) {
     olympiadeFehler.textContent = "Die Olympiade konnte nicht gestartet werden: " + e.message;
   }
 }
 
-olympiadeKachel.addEventListener("click", oeffneOlympiadeDialog);
-btnOlympiadeSchliessen.addEventListener("click", () => schliesseOlympiadeDialog());
-olympiadeDialog.addEventListener("click", (event) => {
-  if (event.target === olympiadeDialog) schliesseOlympiadeDialog();
-});
+tabSpielauswahl.addEventListener("click", () => wechsleSpielmodus("auswahl"));
+tabOlympiade.addEventListener("click", () => wechsleSpielmodus("olympiade"));
 btnOlympiadeStarten.addEventListener("click", starteOlympiade);
 
 // ---------- Chat (v186) ----------
@@ -1055,6 +1073,12 @@ function reagiereAufRaum(daten) {
   }
 
   const spielId = daten.aktuellesSpiel ?? null;
+  // v198: kommt die Lobby gerade aus einem beendeten Spiel zurueck (vorher
+  // aktiv, jetzt keins mehr), zeigt sie wieder die normale Spielauswahl statt
+  // eine noch offene Olympiade-Planung stehen zu lassen. Waehrend man selbst
+  // in der Lobby herumklickt, feuert dieser Listener aber staendig erneut
+  // (z. B. wenn jemand beitritt) - deshalb NICHT bei jedem Aufruf zuruecksetzen.
+  const kommtGeradeAusSpiel = !spielId && Boolean(aktivesSpielId);
   aktualisiereRaumNavigation(spielId);
 
   // v182: Sobald der Spielleiter eine Runden-/Fragenanzahl wählt, landet das
@@ -1095,6 +1119,7 @@ function reagiereAufRaum(daten) {
     spielWurzel.hidden = false;
     aktivesSpielModul?.raumDaten?.(daten);
   } else {
+    if (kommtGeradeAusSpiel) aktuellerSpielmodus = "auswahl";
     spielWurzel.hidden = true;
     lobbyScreen.hidden = false;
     renderLobby();

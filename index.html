@@ -18,7 +18,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,800;1,800&family=Bungee&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="stil.css?v=197">
+  <link rel="stylesheet" href="stil.css?v=198">
 </head>
 <body>
 
@@ -39,7 +39,7 @@
   <div id="start-screen" class="bildschirm-karte">
     <div class="start-hero">
       <div class="start-icon">
-        <img src="bilder/logo-fuchs-transparent.png?v=197" width="102" height="102" alt="" class="app-icon">
+        <img src="bilder/logo-fuchs-transparent.png?v=198" width="102" height="102" alt="" class="app-icon">
       </div>
       <h1>Trollhouse</h1>
       <p class="start-tagline">Ein Raum, ein Abend, viele Spiele</p>
@@ -123,26 +123,6 @@
     </div>
   </div>
 
-  <!-- ---------- Olympiade: mehrere Spiele nacheinander planen (v196) ---------- -->
-  <div id="olympiade-dialog" class="wertung-dialog olympiade-dialog" role="dialog" aria-modal="true"
-       aria-labelledby="olympiade-titel" hidden>
-    <div class="wertung-dialog-inhalt olympiade-dialog-inhalt">
-      <button id="btn-olympiade-schliessen" class="beitreten-schliessen" type="button" aria-label="Fenster schließen">×</button>
-      <h2 id="olympiade-titel">🏅 Olympiade</h2>
-      <p class="hinweis-text">Wähle Spiele aus, leg für jedes die Anzahl fest und bring sie in die gewünschte Reihenfolge. Danach laufen alle Spiele automatisch nacheinander durch.</p>
-
-      <h3 class="olympiade-zwischentitel">Spiele hinzufügen</h3>
-      <div id="olympiade-auswahl-grid" class="spiele-grid olympiade-auswahl-grid"></div>
-
-      <h3 class="olympiade-zwischentitel">Reihenfolge &amp; Anzahl</h3>
-      <p id="olympiade-auswahl-leer" class="hinweis-text">Noch keine Spiele ausgewählt.</p>
-      <ul id="olympiade-auswahl-liste" class="olympiade-auswahl-liste"></ul>
-
-      <p id="olympiade-fehler" class="fehler-text"></p>
-      <button id="btn-olympiade-starten" class="btn-primaer olympiade-starten-btn" type="button" disabled>Olympiade starten</button>
-    </div>
-  </div>
-
   <!-- ---------- Chat: während Lobby und laufendem Spiel (v186) ---------- -->
   <button id="btn-chat-oeffnen" class="chat-button" type="button" hidden aria-label="Chat öffnen">
     <span aria-hidden="true">💬</span>
@@ -207,11 +187,11 @@
   <div id="lobby-screen" class="bildschirm-karte" hidden>
     <div class="lobby-kopf">
       <div class="lobby-marke">
-        <span class="lobby-logo-badge"><img src="bilder/logo-fuchs-transparent.png?v=197" width="36" height="36" alt="" class="lobby-app-icon"></span>
+        <span class="lobby-logo-badge"><img src="bilder/logo-fuchs-transparent.png?v=198" width="36" height="36" alt="" class="lobby-app-icon"></span>
         <h1>Trollhouse</h1>
       </div>
       <button id="btn-lobby-verlassen" class="lobby-verlassen" type="button">
-        <img src="bilder/icon-raum-verlassen.svg?v=197" width="32" height="32" alt="">
+        <img src="bilder/icon-raum-verlassen.svg?v=198" width="32" height="32" alt="">
         <span class="nur-screenreader">Raum verlassen</span>
       </button>
     </div>
@@ -227,20 +207,36 @@
       <span class="wertung-kachel-text">Wertung</span>
     </button>
 
-    <button type="button" id="olympiade-kachel" class="wertung-kachel olympiade-kachel" hidden>
-      <span class="wertung-kachel-symbol" aria-hidden="true">🏅</span>
-      <span class="wertung-kachel-text">Olympiade starten</span>
-    </button>
+    <div id="spielmodus-tabs" class="spielmodus-tabs" role="tablist" aria-label="Spielmodus" hidden>
+      <button type="button" id="tab-spielauswahl" class="spielmodus-tab" role="tab" aria-selected="true">Spiel auswählen</button>
+      <button type="button" id="tab-olympiade" class="spielmodus-tab" role="tab" aria-selected="false">🏅 Olympiade</button>
+    </div>
+    <h3 id="spielauswahl-titel">Spiel auswählen</h3>
 
-    <h3>Spiel auswählen</h3>
-    <p id="spielauswahl-hinweis" class="hinweis-text"></p>
-    <div id="spiele-grid" class="spiele-grid"></div>
-    <p id="lobby-fehler" class="fehler-text"></p>
+    <div id="spielauswahl-bereich">
+      <p id="spielauswahl-hinweis" class="hinweis-text"></p>
+      <div id="spiele-grid" class="spiele-grid"></div>
+      <p id="lobby-fehler" class="fehler-text"></p>
+    </div>
+
+    <div id="olympiade-bereich" class="olympiade-bereich" hidden>
+      <p class="hinweis-text">Wähle Spiele aus, leg für jedes die Anzahl fest und bring sie in die gewünschte Reihenfolge. Danach laufen alle Spiele automatisch nacheinander durch.</p>
+
+      <h4 class="olympiade-zwischentitel">Spiele hinzufügen</h4>
+      <div id="olympiade-auswahl-grid" class="spiele-grid olympiade-auswahl-grid"></div>
+
+      <h4 class="olympiade-zwischentitel">Reihenfolge &amp; Anzahl</h4>
+      <p id="olympiade-auswahl-leer" class="hinweis-text">Noch keine Spiele ausgewählt.</p>
+      <ul id="olympiade-auswahl-liste" class="olympiade-auswahl-liste"></ul>
+
+      <p id="olympiade-fehler" class="fehler-text"></p>
+      <button id="btn-olympiade-starten" class="btn-primaer olympiade-starten-btn" type="button" disabled>Olympiade starten</button>
+    </div>
   </div>
 
   <!-- ---------- Hierhin rendert das jeweils laufende Spiel ---------- -->
   <div id="spiel-wurzel"></div>
 
-  <script type="module" src="app.js?v=197"></script>
+  <script type="module" src="app.js?v=198"></script>
 </body>
 </html>

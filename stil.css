@@ -1258,10 +1258,22 @@
     .wertung-kachel:active { transform: scale(.99); }
     .wertung-kachel-symbol { font-size: 1.35rem; }
 
-    /* v196: Olympiade-Kachel (oranger statt violetter Verlauf, damit sie sich
-       von der Wertung-Kachel unterscheidet) + Planungs-Dialog. */
-    .olympiade-kachel { background: linear-gradient(90deg, #ff9d42, #ffb066); color: #2a1305; }
-    .olympiade-dialog-inhalt { width: min(100%, 560px); }
+    /* v198: Umschalter zwischen normaler Spielauswahl und Olympiade-Planung -
+       ersetzt die fruehere separate Olympiade-Kachel/den Dialog aus v196, die
+       Planung sitzt jetzt direkt in der Lobby-Karte. */
+    .spielmodus-tabs {
+      display: flex; gap: 6px; margin: 10px 0 2px; padding: 4px;
+      border-radius: 14px; background: #f0eefa;
+    }
+    .spielmodus-tab {
+      flex: 1 1 0; padding: 9px 10px; border: none; border-radius: 10px; background: transparent;
+      font: inherit; font-weight: 700; font-size: .88rem; color: var(--text-hell); cursor: pointer;
+      transition: background .15s ease, color .15s ease;
+    }
+    .spielmodus-tab.aktiv {
+      background: #fff; color: var(--text-dunkel); box-shadow: 0 2px 6px rgba(42,30,39,.12);
+    }
+    .olympiade-bereich { margin-top: 2px; }
     .olympiade-zwischentitel { margin: 14px 0 6px; font-size: 1rem; }
     .olympiade-auswahl-grid { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); margin-bottom: 4px; }
     .olympiade-auswahl-grid .spiel-kachel { min-height: 110px; padding: 12px 8px; gap: 2px; }
@@ -1600,10 +1612,9 @@
       color: #2a1305;
       box-shadow: 0 8px 18px rgba(0, 0, 0, .35);
     }
-    .olympiade-kachel {
-      background: linear-gradient(90deg, var(--club-lila, #a78bfa), #7c3aed);
-      color: #fff;
-    }
+    .spielmodus-tabs { background: rgba(255, 255, 255, .06); }
+    .spielmodus-tab { color: #cfc3d1; }
+    .spielmodus-tab.aktiv { background: rgba(255, 255, 255, .14); color: var(--club-text); box-shadow: none; }
     .olympiade-auswahl-zeile { background: rgba(255, 255, 255, .06); }
     .olympiade-zeile-name { color: var(--club-text); }
     .olympiade-anzahl-feld {
