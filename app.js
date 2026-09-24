@@ -2,14 +2,14 @@
 // des jeweiligen Spielmoduls. Alles Spielspezifische steckt in spiele/<id>/spiel.js.
 import {
   db, RAEUME, authBereit, doc, setDoc, getDoc, updateDoc, deleteDoc, collection, getDocs, onSnapshot,
-  serverTimestamp, runTransaction, query, orderBy, limitToLast
+  serverTimestamp, runTransaction, query, orderBy, limitToLast, where
 } from "./kern/firebase.js";
 import {
   FARBEN, AVATARE, FREUNDE, escapeHtml, avatarHtml, textFarbeFuer, zeigeDebug, erzeugeZufallsId
 } from "./kern/ui.js";
 import { SPIELE, spielInfo } from "./spiele/register.js";
 
-export const APP_VERSION = "v190";
+export const APP_VERSION = "v191";
 const appVersion = document.getElementById("app-version");
 appVersion.textContent = "Version " + APP_VERSION;
 
@@ -39,6 +39,14 @@ const beitretenDialog = document.getElementById("beitreten-dialog");
 const beitretenForm = document.getElementById("beitreten-form");
 const btnBeitretenSchliessen = document.getElementById("btn-beitreten-schliessen");
 const beitretenError = document.getElementById("beitreten-error");
+
+const inputRaumPrivat = document.getElementById("input-raum-privat");
+const raumlisteDialog = document.getElementById("raumliste-dialog");
+const raumlisteInhalt = document.getElementById("raumliste-inhalt");
+const raumlisteFehler = document.getElementById("raumliste-fehler");
+const btnRaumlisteSchliessen = document.getElementById("btn-raumliste-schliessen");
+const btnRaumlisteCode = document.getElementById("btn-raumliste-code");
+const btnBeitretenZurueck = document.getElementById("btn-beitreten-zurueck");
 
 const anzeigeCode = document.getElementById("anzeige-code");
 const farbKarussell = document.getElementById("farb-karussell");
@@ -1178,7 +1186,8 @@ btnErstellen.addEventListener("click", async () => {
       erstelltAm: serverTimestamp(),
       leiterId: spielerId,
       phase: "lobby",
-      aktuellesSpiel: null
+      aktuellesSpiel: null,
+      privat: inputRaumPrivat.checked
     });
     await setDoc(doc(db, RAEUME, code, "spieler", spielerId), startWerte([]), { merge: true });
 
@@ -1210,18 +1219,54 @@ function schliesseBeitretenDialog(fokusZurueck = true) {
   if (fokusZurueck) btnBeitretenOeffnen.focus();
 }
 
-btnBeitretenOeffnen.addEventListener("click", oeffneBeitretenDialog);
 btnBeitretenSchliessen.addEventListener("click", () => schliesseBeitretenDialog());
 beitretenDialog.addEventListener("click", (event) => {
   if (event.target === beitretenDialog) schliesseBeitretenDialog();
 });
 document.addEventListener("keydown", (event) => {
   if (event.key === "Escape" && !beitretenDialog.hidden) schliesseBeitretenDialog();
+  if (event.key === "Escape" && !raumlisteDialog.hidden) schliesseRaumlisteDialog();
 });
 inputCode.addEventListener("input", () => {
   inputCode.value = inputCode.value.replace(/\D/g, "").slice(0, 4);
   beitretenError.textContent = "";
 });
+btnBeitretenZurueck.addEventListener("click", () => {
+  schliesseBeitretenDialog(false);
+  oeffneRaumlisteDialog();
+});
+
+// Gemeinsame Beitritts-Logik (v191) - genutzt sowohl von der Code-Eingabe als
+// auch vom direkten Klick auf einen öffentlichen Raum in der Raumliste.
+async function raumBeitreten(code, name, { aufFehler } = {}) {
+  try {
+    const snap = await getDoc(doc(db, RAEUME, code));
+    if (!snap.exists()) {
+      aufFehler?.("Diesen Raum gibt es nicht.");
+      return false;
+    }
+
+    zustand.name = name;
+    zustand.code = code;
+    zustand.profilBestaetigt = false;
+
+    // Belegte Farben/Bilder einmal abfragen, damit man nicht direkt mit einer
+    // schon vergebenen Farbe hereinkommt.
+    const vorhandene = [];
+    (await getDocs(collection(db, RAEUME, code, "spieler"))).forEach((d) => vorhandene.push({ id: d.id, ...d.data() }));
+
+    await setDoc(doc(db, RAEUME, code, "spieler", spielerId), startWerte(vorhandene), { merge: true });
+
+    sitzungSpeichern();
+    protokolliere("raum_beigetreten");
+    betreteRaum(code, name);
+    return true;
+  } catch (e) {
+    zeigeDebug("Fehler beim Beitreten: " + e.message);
+    aufFehler?.("Der Raum konnte nicht geöffnet werden. Versuche es erneut.");
+    return false;
+  }
+}
 
 beitretenForm.addEventListener("submit", async (event) => {
   event.preventDefault();
@@ -1241,36 +1286,114 @@ beitretenForm.addEventListener("submit", async (event) => {
 
   beitretenError.textContent = "";
   btnBeitreten.disabled = true;
-
-  try {
-    const snap = await getDoc(doc(db, RAEUME, code));
-    if (!snap.exists()) {
-      beitretenError.textContent = "Diesen Raum gibt es nicht.";
-      btnBeitreten.disabled = false;
-      return;
-    }
-
-    zustand.name = name;
-    zustand.code = code;
-    zustand.profilBestaetigt = false;
-
-    // Belegte Farben/Bilder einmal abfragen, damit man nicht direkt mit einer
-    // schon vergebenen Farbe hereinkommt.
-    const vorhandene = [];
-    (await getDocs(collection(db, RAEUME, code, "spieler"))).forEach((d) => vorhandene.push({ id: d.id, ...d.data() }));
-
-    await setDoc(doc(db, RAEUME, code, "spieler", spielerId), startWerte(vorhandene), { merge: true });
-
-    sitzungSpeichern();
-    protokolliere("raum_beigetreten");
-    schliesseBeitretenDialog(false);
-    betreteRaum(code, name);
-  } catch (e) {
-    zeigeDebug("Fehler beim Beitreten: " + e.message);
-    beitretenError.textContent = "Der Raum konnte nicht geöffnet werden. Versuche es erneut.";
-    btnBeitreten.disabled = false;
-  }
+  const erfolgreich = await raumBeitreten(code, name, {
+    aufFehler: (text) => { beitretenError.textContent = text; }
+  });
+  if (erfolgreich) schliesseBeitretenDialog(false);
+  btnBeitreten.disabled = false;
 });
+
+// ---------- Raumliste: offene Räume durchsuchen (v191) ----------
+function oeffneRaumlisteDialog() {
+  const name = inputName.value.trim();
+  if (!name) {
+    startError.textContent = "Bitte gib zuerst deinen Namen ein.";
+    inputName.focus();
+    return;
+  }
+  startError.textContent = "";
+  raumlisteFehler.textContent = "";
+  raumlisteDialog.hidden = false;
+  document.body.classList.add("beitreten-offen");
+  ladeOffeneRaeume();
+}
+
+function schliesseRaumlisteDialog(fokusZurueck = true) {
+  raumlisteDialog.hidden = true;
+  document.body.classList.remove("beitreten-offen");
+  if (fokusZurueck) btnBeitretenOeffnen.focus();
+}
+
+btnBeitretenOeffnen.addEventListener("click", oeffneRaumlisteDialog);
+btnRaumlisteSchliessen.addEventListener("click", () => schliesseRaumlisteDialog());
+raumlisteDialog.addEventListener("click", (event) => {
+  if (event.target === raumlisteDialog) schliesseRaumlisteDialog();
+});
+btnRaumlisteCode.addEventListener("click", () => {
+  schliesseRaumlisteDialog(false);
+  oeffneBeitretenDialog();
+});
+
+// Holt alle Räume, die noch in der Lobby (nicht mitten im Spiel) sind, und
+// blendet dabei verwaiste Räume ohne Spieler (z. B. weil niemand ordentlich
+// verlassen hat) aus - eine echte Löschung alter Räume gibt es bisher nicht.
+async function ladeOffeneRaeume() {
+  raumlisteInhalt.innerHTML = '<p class="raumliste-hinweis">Räume werden geladen …</p>';
+  raumlisteFehler.textContent = "";
+  try {
+    await authBereit;
+    const snap = await getDocs(query(collection(db, RAEUME), where("phase", "==", "lobby")));
+    const raeume = [];
+    for (const raumDoc of snap.docs) {
+      const daten = raumDoc.data();
+      const spielerSnap = await getDocs(collection(db, RAEUME, raumDoc.id, "spieler"));
+      if (spielerSnap.empty) continue;
+      let leiterName = "";
+      spielerSnap.forEach((s) => { if (s.id === daten.leiterId) leiterName = s.data().name || ""; });
+      raeume.push({
+        code: raumDoc.id,
+        privat: !!daten.privat,
+        anzahlSpieler: spielerSnap.size,
+        leiterName
+      });
+    }
+    raeume.sort((a, b) => b.anzahlSpieler - a.anzahlSpieler);
+    renderRaumliste(raeume);
+  } catch (e) {
+    zeigeDebug("Fehler beim Laden der Raumliste: " + e.message);
+    raumlisteInhalt.innerHTML = "";
+    raumlisteFehler.textContent = "Die Raumliste konnte nicht geladen werden.";
+  }
+}
+
+function renderRaumliste(raeume) {
+  if (raeume.length === 0) {
+    raumlisteInhalt.innerHTML = '<p class="raumliste-hinweis">Gerade ist kein Raum offen. Erstelle doch einen!</p>';
+    return;
+  }
+  raumlisteInhalt.innerHTML = "";
+  raeume.forEach((raum) => {
+    const kachel = document.createElement("button");
+    kachel.type = "button";
+    kachel.className = "raum-kachel";
+    const spielerText = raum.anzahlSpieler === 1 ? "1 Spieler*in" : `${raum.anzahlSpieler} Spieler*innen`;
+    kachel.innerHTML =
+      `<span class="raum-kachel-schloss" aria-hidden="true">${raum.privat ? "🔒" : "🔓"}</span>` +
+      `<span class="raum-kachel-info">` +
+        `<strong class="raum-kachel-name">${escapeHtml(raum.leiterName ? `Raum von ${raum.leiterName}` : "Raum")}</strong>` +
+        `<span class="raum-kachel-spieler">${spielerText}</span>` +
+        (raum.privat ? "" : `<span class="raum-kachel-code">Code: ${escapeHtml(raum.code)}</span>`) +
+      `</span>`;
+    kachel.addEventListener("click", () => raumKachelKlick(raum, kachel));
+    raumlisteInhalt.appendChild(kachel);
+  });
+}
+
+function raumKachelKlick(raum, kachel) {
+  if (raum.privat) {
+    schliesseRaumlisteDialog(false);
+    oeffneBeitretenDialog();
+    return;
+  }
+  raumlisteFehler.textContent = "";
+  kachel.disabled = true;
+  raumBeitreten(raum.code, inputName.value.trim(), {
+    aufFehler: (text) => { raumlisteFehler.textContent = text; }
+  }).then((erfolgreich) => {
+    if (erfolgreich) schliesseRaumlisteDialog(false);
+    else kachel.disabled = false;
+  });
+}
 
 // ---------- Nach Neuladen wieder in den Raum ----------
 async function versucheSitzungFortzusetzen() {

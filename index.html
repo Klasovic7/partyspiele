@@ -18,7 +18,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,800;1,800&family=Bungee&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="stil.css?v=190">
+  <link rel="stylesheet" href="stil.css?v=191">
 </head>
 <body>
 
@@ -39,7 +39,7 @@
   <div id="start-screen" class="bildschirm-karte">
     <div class="start-hero">
       <div class="start-icon">
-        <img src="bilder/logo-fuchs-transparent.png?v=190" width="102" height="102" alt="" class="app-icon">
+        <img src="bilder/logo-fuchs-transparent.png?v=191" width="102" height="102" alt="" class="app-icon">
       </div>
       <h1>Trollhouse</h1>
       <p class="start-tagline">Ein Raum, ein Abend, viele Spiele</p>
@@ -47,6 +47,11 @@
 
     <label class="feld-label">Dein Name
       <input id="input-name" placeholder="z. B. Niklas" autocomplete="nickname">
+    </label>
+
+    <label class="feld-checkbox">
+      <input type="checkbox" id="input-raum-privat">
+      <span>Passwort benötigt (Raum ist dann nur mit Code beitretbar)</span>
     </label>
 
     <div class="start-aktionen">
@@ -58,6 +63,22 @@
     <small id="app-version" class="start-version"></small>
   </div>
 
+  <!-- ---------- Dialog: offene Räume durchsuchen (v191) ---------- -->
+  <div id="raumliste-dialog" class="beitreten-dialog raumliste-dialog" role="dialog" aria-modal="true"
+       aria-labelledby="raumliste-titel" hidden>
+    <div class="beitreten-dialog-inhalt raumliste-dialog-inhalt">
+      <button id="btn-raumliste-schliessen" class="beitreten-schliessen" type="button" aria-label="Fenster schließen">×</button>
+      <p class="kategorie">Bestehender Raum</p>
+      <h2 id="raumliste-titel">Raum beitreten</h2>
+      <p class="hinweis-text">Wähle einen offenen Raum oder gib direkt einen Code ein.</p>
+      <div id="raumliste-inhalt" class="raumliste-inhalt" aria-live="polite">
+        <p class="raumliste-hinweis">Räume werden geladen …</p>
+      </div>
+      <p id="raumliste-fehler" class="fehler-text" role="alert"></p>
+      <button id="btn-raumliste-code" class="btn-sekundaer raumliste-code-btn" type="button">Ich habe einen Code</button>
+    </div>
+  </div>
+
   <!-- ---------- Dialog: bestehendem Raum beitreten ---------- -->
   <div id="beitreten-dialog" class="beitreten-dialog" role="dialog" aria-modal="true"
        aria-labelledby="beitreten-titel" hidden>
@@ -65,6 +86,7 @@
       <button id="btn-beitreten-schliessen" class="beitreten-schliessen" type="button" aria-label="Fenster schließen">×</button>
       <p class="kategorie">Bestehender Raum</p>
       <h2 id="beitreten-titel">Raum beitreten</h2>
+      <button id="btn-beitreten-zurueck" class="beitreten-zurueck" type="button">← Zurück zur Raumliste</button>
       <p class="hinweis-text">Gib den vierstelligen Raum-Code ein.</p>
       <label class="feld-label" for="input-code">Raum-Code</label>
       <input id="input-code" placeholder="1234" maxlength="4" inputmode="numeric" pattern="[0-9]{4}"
@@ -165,11 +187,11 @@
   <div id="lobby-screen" class="bildschirm-karte" hidden>
     <div class="lobby-kopf">
       <div class="lobby-marke">
-        <span class="lobby-logo-badge"><img src="bilder/logo-fuchs-transparent.png?v=190" width="36" height="36" alt="" class="lobby-app-icon"></span>
+        <span class="lobby-logo-badge"><img src="bilder/logo-fuchs-transparent.png?v=191" width="36" height="36" alt="" class="lobby-app-icon"></span>
         <h1>Trollhouse</h1>
       </div>
       <button id="btn-lobby-verlassen" class="lobby-verlassen" type="button">
-        <img src="bilder/icon-raum-verlassen.svg?v=190" width="32" height="32" alt="">
+        <img src="bilder/icon-raum-verlassen.svg?v=191" width="32" height="32" alt="">
         <span class="nur-screenreader">Raum verlassen</span>
       </button>
     </div>
@@ -194,6 +216,6 @@
   <!-- ---------- Hierhin rendert das jeweils laufende Spiel ---------- -->
   <div id="spiel-wurzel"></div>
 
-  <script type="module" src="app.js?v=190"></script>
+  <script type="module" src="app.js?v=191"></script>
 </body>
 </html>

@@ -4,7 +4,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/fireba
 import {
   initializeFirestore, doc, setDoc, getDoc, updateDoc, deleteDoc, collection, getDocs,
   onSnapshot, serverTimestamp, increment, runTransaction, arrayUnion, arrayRemove, writeBatch,
-  query, orderBy, limitToLast
+  query, orderBy, limitToLast, where
 } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 import {
   getAuth, signInAnonymously, onAuthStateChanged
@@ -47,5 +47,5 @@ export const RAEUME = "raeume";
 export {
   doc, setDoc, getDoc, updateDoc, deleteDoc, collection, getDocs, onSnapshot,
   serverTimestamp, increment, runTransaction, arrayUnion, arrayRemove, writeBatch,
-  query, orderBy, limitToLast
+  query, orderBy, limitToLast, where
 };

@@ -304,6 +304,36 @@
     .btn-flach:hover { background: rgba(124,58,237,0.08); }
     .code-eingabe { text-align: center; letter-spacing: 4px; font-size: 1.2rem; font-weight: 700; }
 
+    /* Checkbox "Passwort benötigt" beim Raum erstellen (v191). */
+    .feld-checkbox {
+      display: flex; align-items: center; gap: 8px; margin: 14px 0 0;
+      font-size: 0.85rem; font-weight: 600; color: #4b5061; cursor: pointer;
+    }
+    .feld-checkbox input { width: 18px; height: 18px; margin: 0; flex: none; }
+
+    /* ---------- Dialog: offene Räume durchsuchen (v191) ---------- */
+    .raumliste-dialog-inhalt { max-height: min(80vh, 620px); display: flex; flex-direction: column; }
+    .raumliste-inhalt {
+      overflow-y: auto; display: flex; flex-direction: column; gap: 10px;
+      margin: 4px 0 14px; min-height: 60px;
+    }
+    .raumliste-hinweis { margin: 10px 0; text-align: center; color: var(--text-hell); }
+    .raum-kachel {
+      display: flex; align-items: center; gap: 12px; width: 100%; margin: 0;
+      padding: 12px 14px; border-radius: 16px; border: 1px solid #e3e5eb;
+      background: #f7f8fb; text-align: left; transition: background .15s ease, border-color .15s ease;
+    }
+    .raum-kachel:hover { background: #eef0f6; border-color: #d7dae2; }
+    .raum-kachel-schloss { font-size: 1.3rem; flex: none; }
+    .raum-kachel-info { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+    .raum-kachel-name { font-size: 0.98rem; }
+    .raum-kachel-spieler, .raum-kachel-code { font-size: 0.8rem; color: var(--text-hell); }
+    .raumliste-code-btn { width: 100%; margin-top: 4px; }
+    .beitreten-zurueck {
+      display: inline-block; margin: 0 0 8px; padding: 0; background: none; border: none;
+      color: var(--text-hell); font-size: 0.85rem; font-weight: 600; text-decoration: underline;
+    }
+
     /* ---------- Raum beitreten ---------- */
     body.beitreten-offen { overflow: hidden; }
     .beitreten-dialog[hidden] { display: none; }
