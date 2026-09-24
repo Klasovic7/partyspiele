@@ -324,10 +324,15 @@
       background: #f7f8fb; text-align: left; transition: background .15s ease, border-color .15s ease;
     }
     .raum-kachel:hover { background: #eef0f6; border-color: #d7dae2; }
-    .raum-kachel-schloss { font-size: 1.3rem; flex: none; }
+    .raum-kachel-schloss {
+      display: flex; flex-direction: column; align-items: center; gap: 2px; flex: none; width: 44px;
+    }
+    .raum-kachel-schloss-icon { font-size: 1.3rem; line-height: 1; }
+    .raum-kachel-schloss-text { font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: .02em; color: #6b7280; }
+    .raum-kachel.raum-kachel-privat .raum-kachel-schloss-text { color: #b45309; }
     .raum-kachel-info { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
-    .raum-kachel-name { font-size: 0.98rem; }
-    .raum-kachel-spieler, .raum-kachel-code { font-size: 0.8rem; color: var(--text-hell); }
+    .raum-kachel-name { font-size: 0.98rem; color: #211827; }
+    .raum-kachel-spieler, .raum-kachel-code { font-size: 0.8rem; color: #6b7280; }
     .raumliste-code-btn { width: 100%; margin-top: 4px; }
     .beitreten-zurueck {
       display: inline-block; margin: 0 0 8px; padding: 0; background: none; border: none;

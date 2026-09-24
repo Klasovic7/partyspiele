@@ -9,7 +9,7 @@ import {
 } from "./kern/ui.js";
 import { SPIELE, spielInfo } from "./spiele/register.js";
 
-export const APP_VERSION = "v191";
+export const APP_VERSION = "v192";
 const appVersion = document.getElementById("app-version");
 appVersion.textContent = "Version " + APP_VERSION;
 
@@ -1365,10 +1365,13 @@ function renderRaumliste(raeume) {
   raeume.forEach((raum) => {
     const kachel = document.createElement("button");
     kachel.type = "button";
-    kachel.className = "raum-kachel";
+    kachel.className = "raum-kachel" + (raum.privat ? " raum-kachel-privat" : "");
     const spielerText = raum.anzahlSpieler === 1 ? "1 Spieler*in" : `${raum.anzahlSpieler} Spieler*innen`;
     kachel.innerHTML =
-      `<span class="raum-kachel-schloss" aria-hidden="true">${raum.privat ? "🔒" : "🔓"}</span>` +
+      `<span class="raum-kachel-schloss">` +
+        `<span class="raum-kachel-schloss-icon" aria-hidden="true">${raum.privat ? "🔒" : "🔓"}</span>` +
+        `<span class="raum-kachel-schloss-text">${raum.privat ? "Privat" : "Offen"}</span>` +
+      `</span>` +
       `<span class="raum-kachel-info">` +
         `<strong class="raum-kachel-name">${escapeHtml(raum.leiterName ? `Raum von ${raum.leiterName}` : "Raum")}</strong>` +
         `<span class="raum-kachel-spieler">${spielerText}</span>` +
