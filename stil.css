@@ -1285,6 +1285,19 @@
       display: flex; align-items: center; gap: 8px; padding: 8px 10px;
       border-radius: 12px; background: #f6f4fb;
     }
+    /* v200: Ziehgriff fuer die Drag-&-Drop-Sortierung (loest die vorherigen
+       ↑/↓-Buttons ab) - touch-action:none verhindert, dass das Ziehen auf dem
+       Handy gleichzeitig die Seite scrollt. */
+    .olympiade-zeile-griff {
+      flex: none; width: 20px; text-align: center; cursor: grab;
+      touch-action: none; color: var(--text-dezent, #8b849c); font-size: 1.05rem;
+      user-select: none;
+    }
+    .olympiade-auswahl-zeile.ziehend {
+      position: relative; z-index: 5; background: #ece7f9;
+      box-shadow: 0 10px 22px rgba(0,0,0,.18);
+    }
+    .olympiade-auswahl-zeile.ziehend .olympiade-zeile-griff { cursor: grabbing; }
     .olympiade-zeile-nummer {
       width: 20px; height: 20px; flex: none; display: flex; align-items: center; justify-content: center;
       border-radius: 50%; background: var(--akzent); color: #fff; font-size: .68rem; font-weight: 800;
@@ -1399,36 +1412,39 @@
         var(--app-hintergrund);
       box-shadow: 0 14px 28px rgba(7,9,20,.22), inset 0 1px 0 rgba(255,255,255,.08);
     }
-    /* v112: gemeinsame Rundenfortschrittsanzeige (z. B. "2/8") oben rechts im
+    /* v112: gemeinsame Rundenfortschrittsanzeige (z. B. "2/8") oben links im
        Spielkopf - für alle Spiele einheitlich, statt je Spiel eine eigene
-       "Frage X von Y"-Zeile auf dem Bildschirm zu wiederholen. */
+       "Frage X von Y"-Zeile auf dem Bildschirm zu wiederholen.
+       v200: von oben rechts nach oben links gewechselt, damit sie beim
+       Spielleiter nicht mehr mit dem "<- Spielauswahl"-Text und bei
+       Mitspieler*innen nicht mehr mit dem runden Verlassen-Symbol denselben
+       Eck-Platz teilt - beide Buttons sitzen jetzt einheitlich oben rechts. */
     .spiel-kopf-fortschritt {
-      position: absolute; top: 14px; right: 17px;
+      position: absolute; top: 14px; left: 17px;
       font-family: "Barlow Condensed", sans-serif; font-weight: 800; font-style: italic;
       font-size: 1.15rem; color: #dfe7ff; letter-spacing: .02em;
       background: rgba(255,255,255,.1); padding: 3px 12px; border-radius: 999px;
     }
+    /* v200: sowohl die Text-Pille des Spielleiters ("<- Spielauswahl") als
+       auch das runde Verlassen-Symbol der Mitspieler*innen sitzen jetzt
+       einheitlich oben RECHTS (align-self statt des Flex-Flusses von links),
+       während die Rundenanzeige oben links eigenen Platz hat. */
     #top-bar.im-spiel button {
+      align-self: flex-end;
       margin: 0; padding: 7px 12px 7px 9px; border: 0; border-radius: 999px;
       color: #dfe7ff; background: rgba(255,255,255,.09); font-size: .78rem;
     }
     #top-bar.im-spiel button:hover { background: rgba(255,255,255,.16); }
-    /* v189: Mitspieler*innen sehen statt der Text-Pille oben links dasselbe
-       runde Symbol oben rechts wie im Hauptmenü (.lobby-verlassen) - siehe
-       aktualisiereRaumNavigation() in app.js. Bleibt (anders als die
-       Fortschrittsanzeige) im normalen Flex-Fluss und wird per align-self
-       nur nach rechts gerückt, damit sich unten die Spielkopf-Zeile nicht
-       verschiebt. Platz macht die gemeinsame Rundenanzeige
-       (.spiel-kopf-fortschritt), die dafür etwas nach links rutscht.*/
+    /* v189: Mitspieler*innen sehen statt der Text-Pille dasselbe runde
+       Symbol wie im Hauptmenü (.lobby-verlassen) - siehe
+       aktualisiereRaumNavigation() in app.js. */
     #top-bar.im-spiel button.verlassen-icon {
-      align-self: flex-end;
       width: 40px; height: 40px; padding: 0; border-radius: 50%;
       display: grid; place-items: center;
       background-color: #bd4e4d;
     }
     #top-bar.im-spiel button.verlassen-icon:hover { background-color: #d85a50; }
     #top-bar.im-spiel button.verlassen-icon img { display: block; width: 20px; height: 20px; }
-    #top-bar.im-spiel.verlassen-icon-modus .spiel-kopf-fortschritt { right: 64px; }
     .spiel-kopf-titel { display: flex; align-items: center; gap: 12px; width: 100%; }
     .spiel-kopf-icon {
       min-width: 58px; font-size: 3.25rem; line-height: 1; text-align: center;
@@ -1457,7 +1473,7 @@
       #top-bar.im-spiel { padding-inline: 13px; }
       .spiel-kopf-icon { min-width: 50px; font-size: 2.8rem; }
       .spiel-kopf-titel strong { font-size: 2.25rem; }
-      .spiel-kopf-fortschritt { top: 11px; right: 13px; font-size: 1rem; padding: 2px 10px; }
+      .spiel-kopf-fortschritt { top: 11px; left: 13px; font-size: 1rem; padding: 2px 10px; }
     }
 
     @media (max-height: 720px) {
@@ -1616,6 +1632,8 @@
     .spielmodus-tab { color: #cfc3d1; }
     .spielmodus-tab.aktiv { background: rgba(255, 255, 255, .14); color: var(--club-text); box-shadow: none; }
     .olympiade-auswahl-zeile { background: rgba(255, 255, 255, .06); }
+    .olympiade-auswahl-zeile.ziehend { background: rgba(255, 255, 255, .12); }
+    .olympiade-zeile-griff { color: rgba(255, 255, 255, .55); }
     .olympiade-zeile-name { color: var(--club-text); }
     .olympiade-anzahl-feld {
       background: rgba(0, 0, 0, .25); color: var(--club-text);

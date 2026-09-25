@@ -9,7 +9,7 @@ import {
 } from "./kern/ui.js";
 import { SPIELE, spielInfo } from "./spiele/register.js";
 
-export const APP_VERSION = "v200";
+export const APP_VERSION = "v201";
 const appVersion = document.getElementById("app-version");
 appVersion.textContent = "Version " + APP_VERSION;
 
@@ -750,14 +750,68 @@ function olympiadeSpielEntfernen(id) {
   renderOlympiadePlanung();
 }
 
-function olympiadeVerschieben(id, richtung) {
-  const index = olympiadePlanung.findIndex((e) => e.spielId === id);
-  const ziel = index + richtung;
-  if (index < 0 || ziel < 0 || ziel >= olympiadePlanung.length) return;
-  const [eintrag] = olympiadePlanung.splice(index, 1);
-  olympiadePlanung.splice(ziel, 0, eintrag);
+
+
+// v200: Reihenfolge per Drag & Drop statt Pfeil-Buttons verschieben - siehe
+// olympiadeZeileGriffPointerDown() unten fuer den Ablauf. Waehrend des Ziehens
+// wird nur optisch per transform verschoben (DOM-Reihenfolge bleibt gleich),
+// olympiadePlanung wird erst beim Loslassen tatsaechlich umsortiert.
+let olympiadeDrag = null;
+
+function olympiadeZeileGriffPointerDown(ev, li) {
+  if (ev.pointerType === "mouse" && ev.button !== 0) return;
+  const liste = li.parentElement;
+  const zeilen = [...liste.children];
+  const startIndex = zeilen.indexOf(li);
+  if (startIndex < 0) return;
+  const rect = li.getBoundingClientRect();
+  const luecke = parseFloat(getComputedStyle(liste).rowGap || getComputedStyle(liste).gap || "0") || 0;
+  ev.preventDefault();
+  li.setPointerCapture(ev.pointerId);
+  olympiadeDrag = {
+    li, zeilen, startIndex, zielIndex: startIndex,
+    startY: ev.clientY, hoehe: rect.height + luecke, pointerId: ev.pointerId
+  };
+  li.classList.add("ziehend");
+}
+
+function olympiadeZeileGriffPointerMove(ev) {
+  const d = olympiadeDrag;
+  if (!d || ev.pointerId !== d.pointerId) return;
+  const dy = ev.clientY - d.startY;
+  d.li.style.transform = `translateY(${dy}px)`;
+
+  let neuesZiel = d.startIndex + Math.round(dy / d.hoehe);
+  neuesZiel = Math.max(0, Math.min(d.zeilen.length - 1, neuesZiel));
+  if (neuesZiel === d.zielIndex) return;
+  d.zielIndex = neuesZiel;
+  d.zeilen.forEach((zeile, i) => {
+    if (zeile === d.li) return;
+    let versatz = 0;
+    if (d.zielIndex <= i && i < d.startIndex) versatz = d.hoehe;
+    else if (d.startIndex < i && i <= d.zielIndex) versatz = -d.hoehe;
+    zeile.style.transform = versatz ? `translateY(${versatz}px)` : "";
+  });
+}
+
+function olympiadeZeileGriffPointerEnde(ev) {
+  const d = olympiadeDrag;
+  if (!d || ev.pointerId !== d.pointerId) return;
+  try { d.li.releasePointerCapture(ev.pointerId); } catch (e) { /* egal */ }
+  d.li.classList.remove("ziehend");
+  d.li.style.transform = "";
+  d.zeilen.forEach((zeile) => { if (zeile !== d.li) zeile.style.transform = ""; });
+  olympiadeDrag = null;
+  if (d.zielIndex !== d.startIndex) {
+    const [eintrag] = olympiadePlanung.splice(d.startIndex, 1);
+    olympiadePlanung.splice(d.zielIndex, 0, eintrag);
+  }
   renderOlympiadePlanung();
 }
+
+document.addEventListener("pointermove", olympiadeZeileGriffPointerMove);
+document.addEventListener("pointerup", olympiadeZeileGriffPointerEnde);
+document.addEventListener("pointercancel", olympiadeZeileGriffPointerEnde);
 
 function olympiadeAnzahlAendern(id, wert) {
   const eintrag = olympiadePlanung.find((e) => e.spielId === id);
@@ -796,6 +850,10 @@ function renderOlympiadePlanung() {
     const li = document.createElement("li");
     li.className = "olympiade-auswahl-zeile";
     li.innerHTML =
+      // v200: Pfeil-Buttons durch einen Ziehgriff ersetzt - Reihenfolge wird
+      // jetzt per Drag & Drop (siehe olympiadeZeileGriffPointerDown()) statt
+      // ueber ↑/↓ festgelegt, das schafft mehr Platz fuer den Spielnamen.
+      `<span class="olympiade-zeile-griff" aria-hidden="true">⠿</span>` +
       `<span class="olympiade-zeile-nummer">${i + 1}</span>` +
       `<span class="olympiade-zeile-emoji">${info.emoji}</span>` +
       `<span class="olympiade-zeile-name">${escapeHtml(info.name)}</span>` +
@@ -803,19 +861,14 @@ function renderOlympiadePlanung() {
         `<span class="nur-screenreader">Anzahl fuer ${escapeHtml(info.name)}</span>` +
         `<input type="text" inputmode="numeric" class="olympiade-anzahl-feld" value="${eintrag.anzahl}">` +
       `</label>` +
-      `<button type="button" class="olympiade-zeile-btn olympiade-zeile-hoch" aria-label="${escapeHtml(info.name)} nach oben">↑</button>` +
-      `<button type="button" class="olympiade-zeile-btn olympiade-zeile-runter" aria-label="${escapeHtml(info.name)} nach unten">↓</button>` +
       `<button type="button" class="olympiade-zeile-btn olympiade-zeile-entfernen" aria-label="${escapeHtml(info.name)} entfernen">✕</button>`;
     const olympiadeAnzahlFeld = li.querySelector(".olympiade-anzahl-feld");
     olympiadeAnzahlFeld.addEventListener("change", (ev) => olympiadeAnzahlAendern(eintrag.spielId, ev.target.value));
     // v200: Wert beim Reintippen sofort markiert, wie bei den Anzahl-Feldern
     // in den einzelnen Spielen - erspart das manuelle Loeschen der alten Zahl.
     olympiadeAnzahlFeld.addEventListener("focus", () => olympiadeAnzahlFeld.select());
-    li.querySelector(".olympiade-zeile-hoch").addEventListener("click", () => olympiadeVerschieben(eintrag.spielId, -1));
-    li.querySelector(".olympiade-zeile-runter").addEventListener("click", () => olympiadeVerschieben(eintrag.spielId, 1));
+    li.querySelector(".olympiade-zeile-griff").addEventListener("pointerdown", (ev) => olympiadeZeileGriffPointerDown(ev, li));
     li.querySelector(".olympiade-zeile-entfernen").addEventListener("click", () => olympiadeSpielEntfernen(eintrag.spielId));
-    if (i === 0) li.querySelector(".olympiade-zeile-hoch").disabled = true;
-    if (i === olympiadePlanung.length - 1) li.querySelector(".olympiade-zeile-runter").disabled = true;
     olympiadeAuswahlListe.appendChild(li);
   });
 

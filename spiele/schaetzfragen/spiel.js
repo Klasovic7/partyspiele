@@ -229,6 +229,16 @@ export async function starten(uebergebeneApi) {
   // uebernimmt der Aufruf in zeigeSetup() weiter unten.
   if (api.istLeiter && api.olympiadeAnzahl) {
     kategorien = KATEGORIEN.map((k) => k.id);
+    // v200-Fix: die lokale Zuweisung oben reicht NICHT - direkt nach starten()
+    // ruft app.js (ladeSpiel()) noch einmal raumDaten(zustand.raum) auf, und
+    // das setzt kategorien anhand von daten.sfKategorien wieder zurueck. Ohne
+    // diesen Schreibvorgang blieb sfKategorien in Firestore beim (oben
+    // gesetzten) leeren Array haengen, wodurch "maximal spielbare Fragen"
+    // mit 0 Kategorien berechnet wurde ("Fuer die ausgewaehlten Kategorien
+    // gibt es noch keine Fragen" beim Olympiade-Start).
+    try {
+      await updateDoc(api.raumRef(), { sfKategorien: kategorien });
+    } catch (e) { zeigeDebug("Fehler beim Vorbelegen der Olympiade-Kategorien: " + e.message); }
     setTimeout(() => {
       const feld = $("sf-anzahl");
       if (feld) feld.value = String(api.olympiadeAnzahl);

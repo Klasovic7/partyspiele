@@ -109,12 +109,14 @@ const SLOT_POSITIONEN = [
 // v178: wie beim echten Vorbild ist dasselbe Symbol auf den beiden Karten
 // unterschiedlich groß und unterschiedlich gedreht (auch mal auf dem Kopf) -
 // jeder Steckplatz-Auftritt bekommt unabhängig einen eigenen Zufallsfaktor
-// zwischen 1.3 und 2.0 auf seine Grundgröße oben. Die Grundgrößen selbst
+// zwischen 1.6 und 2.3 auf seine Grundgröße oben. Die Grundgrößen selbst
 // wurden gegenüber v176 nochmal nach unten angepasst, damit auch das
 // größte mögliche Symbol (Faktor 2.0) noch sicher innerhalb der Karte
 // bleibt und sich Symbole im ungünstigsten Fall nicht überlappen (per
-// Skript gegengerechnet).
-const ZUFALLSGROESSE_BEREICH = [1.3, 2.0];
+// Skript gegengerechnet). v200: auf Wunsch nochmal um 0,3 nach oben
+// verschoben (1.3-2.0 -> 1.6-2.3) - bei den größten Symbolen ist ein
+// Überlappen an vollen Karten jetzt etwas wahrscheinlicher als vorher.
+const ZUFALLSGROESSE_BEREICH = [1.6, 2.3];
 
 const VORLAGE = `
   <div id="db-setup" class="bildschirm-karte" hidden>
