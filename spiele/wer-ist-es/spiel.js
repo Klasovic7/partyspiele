@@ -264,12 +264,15 @@ function formatiertePunkte(p) {
 // ============================================================================
 // Bereit-System (v190) - siehe kern/ui.js
 let bereitSystem = null;
+// v199: verhindert, dass der Bereit-Auto-Start (siehe zeigeSetup) mehrfach feuert.
+let olympiadeAutoStart = false;
 
 export async function starten(uebergebeneApi) {
   api = uebergebeneApi;
   el.wurzel = api.wurzel;
   el.wurzel.innerHTML = VORLAGE;
   bereitSystem = initBereitSystem(api, "wi");
+  olympiadeAutoStart = false;
 
   if (fragen.length === 0) {
     const antwort = await fetch(new URL("fragen.json", import.meta.url), { cache: "no-store" });
@@ -285,13 +288,14 @@ export async function starten(uebergebeneApi) {
 
   timerId = setInterval(() => { aktualisiereCountdown(); pruefeHinweisFortschritt(); pruefeAntwortZeitAblauf(); }, 300);
 
-  // v196: Olympiade - Anzahl steht schon fest, direkt starten statt das
-  // Setup-Fenster zu zeigen (Tick warten, bis spielerListe gefuellt ist).
+  // v196/v199: Olympiade - die Anzahl steht schon vorab fest, wird hier nur
+  // vorbelegt (Tick warten, bis spielerListe gefuellt ist). Gestartet wird
+  // trotzdem erst, wenn alle Mitspieler*innen "Bereit" geklickt haben - das
+  // uebernimmt der Aufruf in zeigeSetup() weiter unten.
   if (api.istLeiter && api.olympiadeAnzahl) {
     setTimeout(() => {
       const feld = $("wi-anzahl");
       if (feld) feld.value = String(api.olympiadeAnzahl);
-      spielStarten();
     }, 0);
   }
 }
@@ -427,6 +431,15 @@ function zeigeSetup() {
   $("wi-starten").hidden = !api.istLeiter;
   $("wi-setup-warten").hidden = api.istLeiter;
   bereitSystem?.render();
+
+  // v199: In der Olympiade ist die Anzahl schon vorab festgelegt, aber es
+  // soll trotzdem ganz normal erst "Bereit" geklickt werden muessen - sobald
+  // alle Mitspieler*innen bereit sind, startet das Spiel automatisch, ohne
+  // dass der Leiter selbst noch auf "Spiel starten" tippen muss.
+  if (api.istLeiter && api.olympiadeAnzahl && !olympiadeAutoStart && bereitSystem?.alleBereit()) {
+    olympiadeAutoStart = true;
+    spielStarten();
+  }
 }
 
 // v109: Teammodus - alle dürfen buzzern, gewinnt aber das ganze Team die Punkte

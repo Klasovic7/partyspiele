@@ -9,7 +9,7 @@ import {
 } from "./kern/ui.js";
 import { SPIELE, spielInfo } from "./spiele/register.js";
 
-export const APP_VERSION = "v198";
+export const APP_VERSION = "v199";
 const appVersion = document.getElementById("app-version");
 appVersion.textContent = "Version " + APP_VERSION;
 
@@ -207,6 +207,21 @@ const SPIEL_ANZAHL_FELD = {
   finto: "fiAnzahlFragen",
   imposter: "impAnzahlRunden",
   doppelblick: "dbAnzahlRunden"
+};
+// v199: analog zu SPIEL_ANZAHL_FELD, aber der Status-Feldname je Spiel - damit
+// erkennbar ist, wann ein Spiel innerhalb einer laufenden Olympiade fertig
+// ist ("beendet"), um dann zusaetzlich zum eigenen Endstand-Bildschirm auch
+// die Olympiade-Gesamtwertung automatisch aufgehen zu lassen.
+const SPIEL_STATUS_FELD = {
+  schaetzfragen: "sfStatus",
+  "denk-gleich": "dgStatus",
+  "zehn-treffer": "ztStatus",
+  "reih-dich-ein": "rdStatus",
+  "wer-ist-es": "wiStatus",
+  "wann-war-es": "wwStatus",
+  blitzquiz: "bzStatus",
+  finto: "fiStatus",
+  doppelblick: "dbStatus"
 };
 // Merkt sich, für welche Kombination aus Raum+Spiel+Anzahl schon protokolliert
 // wurde, damit nicht bei jeder Raum-Aktualisierung (onSnapshot feuert oft)
@@ -1114,6 +1129,22 @@ function reagiereAufRaum(daten) {
     }
   }
 
+  // v199: Ist gerade EIN Spiel innerhalb einer noch laufenden Olympiade zu
+  // Ende gegangen (Endstand-Bildschirm des Spiels selbst wird davon nicht
+  // beruehrt), geht zusaetzlich automatisch die Gesamtwertung ueber alle
+  // bisher gespielten Olympiade-Spiele auf - Signatur aus Spiel+Runden-Index
+  // verhindert erneutes Aufgehen bei jeder weiteren Raum-Aktualisierung.
+  if (daten.olympiade?.aktiv && spielId) {
+    const statusFeld = SPIEL_STATUS_FELD[spielId];
+    if (statusFeld && daten[statusFeld] === "beendet") {
+      const signatur = `${zustand.code}:${spielId}:${daten.olympiade.index}:zwischenstand`;
+      if (signatur !== olympiadeAngezeigteSignatur) {
+        olympiadeAngezeigteSignatur = signatur;
+        requestAnimationFrame(() => oeffneWertungDialog());
+      }
+    }
+  }
+
   if (spielId) {
     lobbyScreen.hidden = true;
     spielWurzel.hidden = false;
@@ -1373,7 +1404,10 @@ function schliesseRaumVerlassenDialog() {
   (raumVerlassenAusloeser || btnLobbyVerlassen).focus();
 }
 
-btnLobbyVerlassen.addEventListener("click", oeffneRaumVerlassenDialog);
+// v199: nicht direkt als Handler uebergeben - addEventListener wuerde dann
+// das Klick-Event (statt des Buttons) als "ausloeser" hineinreichen, worauf
+// spaeter .focus() aufgerufen wird -> "focus is not a function".
+btnLobbyVerlassen.addEventListener("click", () => oeffneRaumVerlassenDialog(btnLobbyVerlassen));
 btnRaumVerlassenNein.addEventListener("click", schliesseRaumVerlassenDialog);
 btnRaumVerlassenJa.addEventListener("click", async () => {
   btnRaumVerlassenJa.disabled = true;

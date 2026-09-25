@@ -189,12 +189,15 @@ function fragenAnzahlFuerKategorie(id) {
 // ============================================================================
 // Bereit-System (v190) - siehe kern/ui.js
 let bereitSystem = null;
+// v199: verhindert, dass der Bereit-Auto-Start (siehe zeigeSetup) mehrfach feuert.
+let olympiadeAutoStart = false;
 
 export async function starten(uebergebeneApi) {
   api = uebergebeneApi;
   el.wurzel = api.wurzel;
   el.wurzel.innerHTML = VORLAGE;
   bereitSystem = initBereitSystem(api, "sf");
+  olympiadeAutoStart = false;
 
   // Fragen liegen als eigene Datei daneben - so bleibt die App klein und der
   // Katalog lässt sich bearbeiten, ohne Programmcode anzufassen.
@@ -216,17 +219,17 @@ export async function starten(uebergebeneApi) {
     });
   }
 
-  // v196: In einer Olympiade waehlt der Leiter die Anzahl schon vorab in der
-  // Olympiade-Planung - hier startet das Spiel deshalb sofort automatisch
-  // (mit allen Kategorien) statt das eigene Setup-Fenster zu zeigen. Das
-  // setTimeout wartet einen Tick, bis app.js nach starten() noch api.spieler()
-  // aufgerufen hat (sonst waere spielerListe hier noch leer).
+  // v196/v199: In einer Olympiade waehlt der Leiter die Anzahl schon vorab in
+  // der Olympiade-Planung - hier werden Kategorien (alle) und Anzahl nur
+  // vorbelegt (Tick warten, bis app.js nach starten() noch api.spieler()
+  // aufgerufen hat, sonst waere spielerListe hier noch leer). Gestartet wird
+  // trotzdem erst, wenn alle Mitspieler*innen "Bereit" geklickt haben - das
+  // uebernimmt der Aufruf in zeigeSetup() weiter unten.
   if (api.istLeiter && api.olympiadeAnzahl) {
     kategorien = KATEGORIEN.map((k) => k.id);
     setTimeout(() => {
       const feld = $("sf-anzahl");
       if (feld) feld.value = String(api.olympiadeAnzahl);
-      spielStarten();
     }, 0);
   }
 }
@@ -574,6 +577,15 @@ function zeigeSetup() {
   $("sf-starten").hidden = !api.istLeiter;
   $("sf-setup-warten").hidden = api.istLeiter;
   bereitSystem?.render();
+
+  // v199: In der Olympiade ist die Anzahl schon vorab festgelegt, aber es
+  // soll trotzdem ganz normal erst "Bereit" geklickt werden muessen - sobald
+  // alle Mitspieler*innen bereit sind, startet das Spiel automatisch, ohne
+  // dass der Leiter selbst noch auf "Spiel starten" tippen muss.
+  if (api.istLeiter && api.olympiadeAnzahl && !olympiadeAutoStart && bereitSystem?.alleBereit()) {
+    olympiadeAutoStart = true;
+    spielStarten();
+  }
 }
 
 async function spielStarten() {
