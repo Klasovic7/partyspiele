@@ -2499,3 +2499,24 @@
       font-variant-numeric: tabular-nums;
     }
     .db-turm-sieger-hinweis { margin: 2px 0 0; font-weight: 700; color: var(--akzent); }
+
+/* ---------------------------------------------------------------------------
+   Zeitgefühl! - Countdown-Anzeige und großer, runder roter Buzzer. Bewusst
+   NICHT die bestehende .wi-buzzer-Farbe (Orange) wiederverwendet, da hier
+   ausdrücklich ein roter, runder Buzzer gewünscht ist. */
+.zg-mitte { text-align: center; }
+.zg-ziel-anzeige { font-size: 1.15rem; margin: 0 0 6px; }
+.zg-ziel-anzeige strong { font-size: 1.4rem; color: var(--akzent); }
+.zg-countdown-ziffer {
+  font-size: 4.5rem; font-weight: 800; margin: 18px 0 4px;
+  font-variant-numeric: tabular-nums;
+}
+.zg-buzzer-btn {
+  width: 200px; height: 200px; border-radius: 50%; border: none;
+  margin: 10px auto; display: block;
+  font-size: 1.5rem; font-weight: 800; letter-spacing: .04em; color: #fff;
+  background: radial-gradient(circle at 32% 28%, #ff6b5c, #e0261a 68%, #a8150c);
+  box-shadow: 0 14px 30px rgba(224, 38, 26, .45), inset 0 -6px 14px rgba(0, 0, 0, .25);
+}
+.zg-buzzer-btn:disabled { opacity: .45; box-shadow: none; }
+.zg-buzzer-btn:not(:disabled):active { transform: scale(.96); }
