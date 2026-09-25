@@ -228,6 +228,7 @@ const VORLAGE = `
     <div id="db-endstand-teams" hidden></div>
     <ul id="db-endstand-liste"></ul>
     <p id="db-endstand-warten" hidden><em>Der Spielleiter wählt gleich das nächste Spiel …</em></p>
+    <p><button id="db-naechstes-spiel" class="btn-primaer" type="button" hidden>Nächstes Spiel</button></p>
   </div>
 `;
 
@@ -540,7 +541,11 @@ function zeigeSetup() {
   $("db-kpsp-zeile").hidden = !istTurm;
   $("db-kpsp").disabled = !api.istLeiter;
 
-  $("db-teammodus-zeile").hidden = istTurm;
+  // v200: in der Olympiade entfaellt der Team-Modus komplett - alle spielen
+  // einzeln, damit sich niemand extra dafuer koordinieren muss.
+  const inOlympiade = Boolean(api.olympiadeAnzahl);
+  if (inOlympiade) teammodus = false;
+  $("db-teammodus-zeile").hidden = istTurm || inOlympiade;
   const teamSchalter = $("db-teammodus");
   teamSchalter.checked = teammodus;
   teamSchalter.disabled = !api.istLeiter;
@@ -1205,6 +1210,15 @@ function zeigeEndstand() {
   teamsEl.hidden = !teammodus || spielModus === "turm";
   if (teammodus && spielModus !== "turm") teamsEl.innerHTML = teamEndstandHtml(spielerListe, teams);
   $("db-endstand-warten").hidden = api.istLeiter;
+  // v200: in einer laufenden Olympiade muss der Spielleiter nicht mehr
+  // extra oben links auf "Spielauswahl" tippen, um weiterzukommen - hier
+  // direkt ein Button zum naechsten Olympiade-Spiel.
+  const dbNaechstesBtn = $("db-naechstes-spiel");
+  if (dbNaechstesBtn) {
+    dbNaechstesBtn.hidden = !(api.istLeiter && Boolean(api.olympiadeAnzahl));
+    dbNaechstesBtn.disabled = false;
+    dbNaechstesBtn.onclick = () => { dbNaechstesBtn.disabled = true; vorZurueck(); };
+  }
 }
 
 // Anders als im Schnelligkeits-Modus gibt es im Turm-Modus keinen "weiter()"-

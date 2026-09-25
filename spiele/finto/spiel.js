@@ -89,6 +89,7 @@ const VORLAGE = `
     <h1>Endstand</h1>
     <ul id="fi-endstand-liste"></ul>
     <p id="fi-endstand-warten" hidden><em>Der Spielleiter wählt gleich das nächste Spiel …</em></p>
+    <p><button id="fi-naechstes-spiel" class="btn-primaer" type="button" hidden>Nächstes Spiel</button></p>
   </div>
 `;
 
@@ -623,4 +624,13 @@ function zeigeEndstand() {
     liste.appendChild(li);
   });
   $("fi-endstand-warten").hidden = api.istLeiter;
+  // v200: in einer laufenden Olympiade muss der Spielleiter nicht mehr
+  // extra oben links auf "Spielauswahl" tippen, um weiterzukommen - hier
+  // direkt ein Button zum naechsten Olympiade-Spiel.
+  const fiNaechstesBtn = $("fi-naechstes-spiel");
+  if (fiNaechstesBtn) {
+    fiNaechstesBtn.hidden = !(api.istLeiter && Boolean(api.olympiadeAnzahl));
+    fiNaechstesBtn.disabled = false;
+    fiNaechstesBtn.onclick = () => { fiNaechstesBtn.disabled = true; vorZurueck(); };
+  }
 }

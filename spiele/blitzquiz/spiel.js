@@ -160,6 +160,7 @@ const VORLAGE = `
     <div id="bz-endstand-teams" hidden></div>
     <ul id="bz-endstand-liste"></ul>
     <p id="bz-endstand-warten" hidden><em>Der Spielleiter wählt gleich das nächste Spiel …</em></p>
+    <p><button id="bz-naechstes-spiel" class="btn-primaer" type="button" hidden>Nächstes Spiel</button></p>
   </div>
 `;
 
@@ -434,7 +435,11 @@ function zeigeSetup() {
   $("bz-anzahl-max").textContent = `Insgesamt ${fragen.length} Fragen verfügbar.`;
   $("bz-anzahl-zeile").hidden = false;
   $("bz-anzahl").disabled = !api.istLeiter;
-  $("bz-teammodus-zeile").hidden = false;
+  // v200: in der Olympiade entfaellt der Team-Modus komplett - alle spielen
+  // einzeln, damit sich niemand extra dafuer koordinieren muss.
+  const inOlympiade = Boolean(api.olympiadeAnzahl);
+  if (inOlympiade) teammodus = false;
+  $("bz-teammodus-zeile").hidden = inOlympiade;
   const teamSchalter = $("bz-teammodus");
   teamSchalter.checked = teammodus;
   teamSchalter.disabled = !api.istLeiter;
@@ -983,6 +988,15 @@ function zeigeEndstand() {
   teamsEl.hidden = !teammodus;
   if (teammodus) teamsEl.innerHTML = teamEndstandHtml(spielerListe, teams);
   $("bz-endstand-warten").hidden = api.istLeiter;
+  // v200: in einer laufenden Olympiade muss der Spielleiter nicht mehr
+  // extra oben links auf "Spielauswahl" tippen, um weiterzukommen - hier
+  // direkt ein Button zum naechsten Olympiade-Spiel.
+  const bzNaechstesBtn = $("bz-naechstes-spiel");
+  if (bzNaechstesBtn) {
+    bzNaechstesBtn.hidden = !(api.istLeiter && Boolean(api.olympiadeAnzahl));
+    bzNaechstesBtn.disabled = false;
+    bzNaechstesBtn.onclick = () => { bzNaechstesBtn.disabled = true; vorZurueck(); };
+  }
 }
 
 // Für lokale Logiktests exportiert; das Spiel selbst verwendet dieselben Funktionen.

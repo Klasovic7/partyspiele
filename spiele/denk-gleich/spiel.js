@@ -61,6 +61,7 @@ const VORLAGE = `
     <h1>Endstand</h1>
     <ul id="dg-endstand-liste"></ul>
     <p id="dg-endstand-warten" hidden><em>Der Spielleiter wählt gleich das nächste Spiel …</em></p>
+    <p><button id="dg-naechstes-spiel" class="btn-primaer" type="button" hidden>Nächstes Spiel</button></p>
   </div>
 `;
 
@@ -657,6 +658,15 @@ function zeigeEndstand() {
     liste.appendChild(li);
   });
   $("dg-endstand-warten").hidden = api.istLeiter;
+  // v200: in einer laufenden Olympiade muss der Spielleiter nicht mehr
+  // extra oben links auf "Spielauswahl" tippen, um weiterzukommen - hier
+  // direkt ein Button zum naechsten Olympiade-Spiel.
+  const dgNaechstesBtn = $("dg-naechstes-spiel");
+  if (dgNaechstesBtn) {
+    dgNaechstesBtn.hidden = !(api.istLeiter && Boolean(api.olympiadeAnzahl));
+    dgNaechstesBtn.disabled = false;
+    dgNaechstesBtn.onclick = () => { dgNaechstesBtn.disabled = true; vorZurueck(); };
+  }
 }
 
 // Für kleine lokale Tests exportiert; die Spiellogik nutzt dieselben Funktionen.

@@ -135,6 +135,7 @@ const VORLAGE = `
     <div id="wi-endstand-teams" hidden></div>
     <ul id="wi-endstand-liste"></ul>
     <p id="wi-endstand-warten" hidden><em>Der Spielleiter wählt gleich das nächste Spiel …</em></p>
+    <p><button id="wi-naechstes-spiel" class="btn-primaer" type="button" hidden>Nächstes Spiel</button></p>
   </div>
 `;
 
@@ -418,7 +419,11 @@ function zeigeSetup() {
   $("wi-anzahl-max").textContent = `Insgesamt ${fragen.length} Runden verfügbar.`;
   $("wi-anzahl-zeile").hidden = false;
   $("wi-anzahl").disabled = !api.istLeiter;
-  $("wi-teammodus-zeile").hidden = false;
+  // v200: in der Olympiade entfaellt der Team-Modus komplett - alle spielen
+  // einzeln, damit sich niemand extra dafuer koordinieren muss.
+  const inOlympiade = Boolean(api.olympiadeAnzahl);
+  if (inOlympiade) teammodus = false;
+  $("wi-teammodus-zeile").hidden = inOlympiade;
   const teamSchalter = $("wi-teammodus");
   teamSchalter.checked = teammodus;
   teamSchalter.disabled = !api.istLeiter;
@@ -884,6 +889,15 @@ function zeigeEndstand() {
   teamsEl.hidden = !teammodus;
   if (teammodus) teamsEl.innerHTML = teamEndstandHtml(spielerListe, teams);
   $("wi-endstand-warten").hidden = api.istLeiter;
+  // v200: in einer laufenden Olympiade muss der Spielleiter nicht mehr
+  // extra oben links auf "Spielauswahl" tippen, um weiterzukommen - hier
+  // direkt ein Button zum naechsten Olympiade-Spiel.
+  const wiNaechstesBtn = $("wi-naechstes-spiel");
+  if (wiNaechstesBtn) {
+    wiNaechstesBtn.hidden = !(api.istLeiter && Boolean(api.olympiadeAnzahl));
+    wiNaechstesBtn.disabled = false;
+    wiNaechstesBtn.onclick = () => { wiNaechstesBtn.disabled = true; vorZurueck(); };
+  }
 }
 
 // Für lokale Logiktests exportiert; das Spiel selbst verwendet dieselben Funktionen.

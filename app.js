@@ -9,7 +9,7 @@ import {
 } from "./kern/ui.js";
 import { SPIELE, spielInfo } from "./spiele/register.js";
 
-export const APP_VERSION = "v199";
+export const APP_VERSION = "v200";
 const appVersion = document.getElementById("app-version");
 appVersion.textContent = "Version " + APP_VERSION;
 
@@ -234,19 +234,10 @@ let protokolliertesRundenSchluessel = null;
 // (noch) kein Punktesystem hat und sich daher nicht in die gemeinsame
 // Wertung am Ende einreiht.
 const OLYMPIADE_SPIELE = SPIELE.filter((s) => s.id !== "imposter");
-// Vorbelegte Anzahl je Spiel in der Olympiade-Planung - orientiert sich an
-// den Standardwerten, die die einzelnen Spiele selbst in ihrem Setup zeigen.
-const OLYMPIADE_STANDARD_ANZAHL = {
-  schaetzfragen: 1,
-  "denk-gleich": 5,
-  "zehn-treffer": 5,
-  "reih-dich-ein": 5,
-  "wer-ist-es": 8,
-  "wann-war-es": 8,
-  blitzquiz: 10,
-  doppelblick: 10,
-  finto: 5
-};
+// Vorbelegte Anzahl je Spiel in der Olympiade-Planung - bewusst bei allen
+// Spielen gleich, damit eine Olympiade mit mehreren Spielen nicht von
+// vornherein unterschiedlich lang pro Runde ausfaellt.
+const OLYMPIADE_STANDARD_ANZAHL = 5;
 // Lokaler Planungszustand des Dialogs (erst beim Klick auf "Olympiade
 // starten" wird daraus ein gemeinsamer Raum-Zustand).
 let olympiadePlanung = [];
@@ -750,7 +741,7 @@ function olympiadeSpielHinzufuegen(id) {
   if (olympiadePlanung.some((e) => e.spielId === id)) return;
   const info = spielInfo(id);
   if (!info) return;
-  olympiadePlanung.push({ spielId: id, anzahl: OLYMPIADE_STANDARD_ANZAHL[id] ?? 5 });
+  olympiadePlanung.push({ spielId: id, anzahl: OLYMPIADE_STANDARD_ANZAHL });
   renderOlympiadePlanung();
 }
 
@@ -815,7 +806,11 @@ function renderOlympiadePlanung() {
       `<button type="button" class="olympiade-zeile-btn olympiade-zeile-hoch" aria-label="${escapeHtml(info.name)} nach oben">↑</button>` +
       `<button type="button" class="olympiade-zeile-btn olympiade-zeile-runter" aria-label="${escapeHtml(info.name)} nach unten">↓</button>` +
       `<button type="button" class="olympiade-zeile-btn olympiade-zeile-entfernen" aria-label="${escapeHtml(info.name)} entfernen">✕</button>`;
-    li.querySelector(".olympiade-anzahl-feld").addEventListener("change", (ev) => olympiadeAnzahlAendern(eintrag.spielId, ev.target.value));
+    const olympiadeAnzahlFeld = li.querySelector(".olympiade-anzahl-feld");
+    olympiadeAnzahlFeld.addEventListener("change", (ev) => olympiadeAnzahlAendern(eintrag.spielId, ev.target.value));
+    // v200: Wert beim Reintippen sofort markiert, wie bei den Anzahl-Feldern
+    // in den einzelnen Spielen - erspart das manuelle Loeschen der alten Zahl.
+    olympiadeAnzahlFeld.addEventListener("focus", () => olympiadeAnzahlFeld.select());
     li.querySelector(".olympiade-zeile-hoch").addEventListener("click", () => olympiadeVerschieben(eintrag.spielId, -1));
     li.querySelector(".olympiade-zeile-runter").addEventListener("click", () => olympiadeVerschieben(eintrag.spielId, 1));
     li.querySelector(".olympiade-zeile-entfernen").addEventListener("click", () => olympiadeSpielEntfernen(eintrag.spielId));

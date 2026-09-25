@@ -113,6 +113,7 @@ const VORLAGE = `
     <h1>Endstand</h1>
     <div id="zt-endstand-inhalt"></div>
     <p id="zt-endstand-warten" hidden><em>Der Spielleiter wählt gleich das nächste Spiel …</em></p>
+    <p><button id="zt-naechstes-spiel" class="btn-primaer" type="button" hidden>Nächstes Spiel</button></p>
   </div>
 `;
 
@@ -490,6 +491,11 @@ function rendereTeamListe(team) {
 }
 
 function zeigeSetup() {
+  // v200: in der Olympiade entfaellt der Team-Modus komplett - alle spielen
+  // einzeln, damit sich niemand extra dafuer koordinieren muss.
+  const inOlympiade = Boolean(api.olympiadeAnzahl);
+  if (inOlympiade) teammodus = false;
+  $("zt-teammodus-zeile").hidden = inOlympiade;
   const teamSchalter = $("zt-teammodus");
   teamSchalter.checked = teammodus;
   teamSchalter.disabled = !api.istLeiter;
@@ -810,6 +816,15 @@ function zeigeEndstand() {
     ? teamEndstandHtml()
     : zwischenstandHtml(false);
   $("zt-endstand-warten").hidden = api.istLeiter;
+  // v200: in einer laufenden Olympiade muss der Spielleiter nicht mehr
+  // extra oben links auf "Spielauswahl" tippen, um weiterzukommen - hier
+  // direkt ein Button zum naechsten Olympiade-Spiel.
+  const ztNaechstesBtn = $("zt-naechstes-spiel");
+  if (ztNaechstesBtn) {
+    ztNaechstesBtn.hidden = !(api.istLeiter && Boolean(api.olympiadeAnzahl));
+    ztNaechstesBtn.disabled = false;
+    ztNaechstesBtn.onclick = () => { ztNaechstesBtn.disabled = true; vorZurueck(); };
+  }
 }
 
 // v104: der eigene "Zurück zur Spielauswahl"-Button (Setup- und Endstand-

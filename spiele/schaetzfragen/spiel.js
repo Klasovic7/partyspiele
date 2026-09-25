@@ -37,8 +37,9 @@ export const KATEGORIEN = [
 const VORLAGE = `
   <div id="sf-setup" class="bildschirm-karte" hidden>
     <h1>🎯 Schätzfragen</h1>
-    <p class="hinweis-text">Jeder kann abstimmen, welche Kategorien dabei sein sollen.</p>
-    <p class="kategorien-aktionen">
+    <p id="sf-kategorien-hinweis" class="hinweis-text">Jeder kann abstimmen, welche Kategorien dabei sein sollen.</p>
+    <p id="sf-olympiade-hinweis" class="hinweis-text" hidden>In der Olympiade sind automatisch alle Kategorien dabei.</p>
+    <p id="sf-kategorien-aktionen" class="kategorien-aktionen">
       <button id="sf-alle" class="btn-flach">Alle auswählen</button>
       <button id="sf-keine" class="btn-flach">Alle abwählen</button>
     </p>
@@ -144,6 +145,7 @@ const VORLAGE = `
     <div id="sf-endstand-teams" hidden></div>
     <ul id="sf-endstand-liste"></ul>
     <p id="sf-endstand-warten" hidden><em>Der Spielleiter wählt gleich das nächste Spiel …</em></p>
+    <p><button id="sf-naechstes-spiel" class="btn-primaer" type="button" hidden>Nächstes Spiel</button></p>
   </div>
 `;
 
@@ -560,11 +562,22 @@ function zeigeSetup() {
   $("sf-anzahl-max").textContent =
     `Mit den gewählten Kategorien sind maximal ${obergrenze} möglich.`;
 
+  // v200: in der Olympiade ist die Runde ohnehin schon vorab geplant - Wahl
+  // der Kategorien sowie Dummkopf-/Team-Modus entfallen dafuer komplett,
+  // es zaehlen automatisch alle Kategorien (siehe api.olympiadeAnzahl weiter
+  // unten in starten()).
+  const inOlympiade = Boolean(api.olympiadeAnzahl);
+  if (inOlympiade) { dummkopfModus = false; teammodus = false; }
+  $("sf-kategorien-hinweis").hidden = inOlympiade;
+  $("sf-olympiade-hinweis").hidden = !inOlympiade;
+  $("sf-kategorien-aktionen").hidden = inOlympiade;
+  $("sf-kategorien").hidden = inOlympiade;
+
   $("sf-anzahl-zeile").hidden = false;
   anzahlFeld.disabled = !api.istLeiter;
-  $("sf-dummkopf-zeile").hidden = false;
+  $("sf-dummkopf-zeile").hidden = inOlympiade;
   $("sf-dummkopf").disabled = !api.istLeiter;
-  $("sf-teammodus-zeile").hidden = false;
+  $("sf-teammodus-zeile").hidden = inOlympiade;
   const teamSchalter = $("sf-teammodus");
   teamSchalter.checked = teammodus;
   teamSchalter.disabled = !api.istLeiter;
@@ -1065,6 +1078,15 @@ function zeigeEndstand() {
   teamsEl.hidden = !teammodus;
   if (teammodus) teamsEl.innerHTML = teamEndstandHtml(spielerListe, teams);
   $("sf-endstand-warten").hidden = api.istLeiter;
+  // v200: in einer laufenden Olympiade muss der Spielleiter nicht mehr
+  // extra oben links auf "Spielauswahl" tippen, um weiterzukommen - hier
+  // direkt ein Button zum naechsten Olympiade-Spiel.
+  const sfNaechstesBtn = $("sf-naechstes-spiel");
+  if (sfNaechstesBtn) {
+    sfNaechstesBtn.hidden = !(api.istLeiter && Boolean(api.olympiadeAnzahl));
+    sfNaechstesBtn.disabled = false;
+    sfNaechstesBtn.onclick = () => { sfNaechstesBtn.disabled = true; vorZurueck(); };
+  }
 }
 
 // Für lokale Logiktests exportiert; das Spiel selbst verwendet dieselben Funktionen.

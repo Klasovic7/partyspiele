@@ -2284,7 +2284,15 @@
 
     /* Bereit-System (v190): Bereit-Button für Mitspieler*innen + Profilbild-
        Übersicht für den Spielleiter im Setup-Bildschirm jedes Spiels. */
-    .bereit-btn { margin-top: 6px; }
+    /* v200: bewusst gruen statt orange - hebt sich klar von den normalen
+       Primaer-Buttons ab und signalisiert "positive, eigene Aktion". */
+    .bereit-btn.btn-primaer {
+      margin-top: 6px;
+      background: linear-gradient(135deg, #34c465, #22a350);
+      border-color: #4fdc80;
+      box-shadow: 0 8px 18px rgba(34,163,80,.28);
+    }
+    .bereit-btn.btn-primaer:hover { background: linear-gradient(135deg, #3fd473, #1f9a4a); }
     .bereit-bereich {
       display: flex; flex-wrap: wrap; justify-content: center; align-items: center;
       gap: 10px; margin: 14px 0;

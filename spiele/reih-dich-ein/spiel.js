@@ -85,6 +85,7 @@ const VORLAGE = `
     <p class="hinweis-text">Wer die meisten Punkte gesammelt hat, gewinnt.</p>
     <div id="rd-endstand-inhalt"></div>
     <p id="rd-endstand-warten" hidden><em>Der Spielleiter wählt gleich das nächste Spiel …</em></p>
+    <p><button id="rd-naechstes-spiel" class="btn-primaer" type="button" hidden>Nächstes Spiel</button></p>
   </div>
 `;
 
@@ -725,6 +726,15 @@ async function naechsteKategorie() {
 function zeigeEndstand() {
   $("rd-endstand-inhalt").innerHTML = punktestandHtml(false);
   $("rd-endstand-warten").hidden = api.istLeiter;
+  // v200: in einer laufenden Olympiade muss der Spielleiter nicht mehr
+  // extra oben links auf "Spielauswahl" tippen, um weiterzukommen - hier
+  // direkt ein Button zum naechsten Olympiade-Spiel.
+  const rdNaechstesBtn = $("rd-naechstes-spiel");
+  if (rdNaechstesBtn) {
+    rdNaechstesBtn.hidden = !(api.istLeiter && Boolean(api.olympiadeAnzahl));
+    rdNaechstesBtn.disabled = false;
+    rdNaechstesBtn.onclick = () => { rdNaechstesBtn.disabled = true; vorZurueck(); };
+  }
 }
 
 // v104: der eigene "← Spielauswahl"/"Zurück zur Spielauswahl"-Button
