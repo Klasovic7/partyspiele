@@ -135,7 +135,7 @@ const VORLAGE = `
     <div id="wi-endstand-teams" hidden></div>
     <ul id="wi-endstand-liste"></ul>
     <p id="wi-endstand-warten" hidden><em>Der Spielleiter wählt gleich das nächste Spiel …</em></p>
-    <p><button id="wi-naechstes-spiel" class="btn-primaer" type="button" hidden>Nächstes Spiel</button></p>
+    <p><button id="wi-gesamtwertung-btn" class="btn-primaer" type="button" hidden>Gesamtwertung</button></p>
   </div>
 `;
 
@@ -904,14 +904,14 @@ function zeigeEndstand() {
   teamsEl.hidden = !teammodus;
   if (teammodus) teamsEl.innerHTML = teamEndstandHtml(spielerListe, teams);
   $("wi-endstand-warten").hidden = api.istLeiter;
-  // v200: in einer laufenden Olympiade muss der Spielleiter nicht mehr
-  // extra oben links auf "Spielauswahl" tippen, um weiterzukommen - hier
-  // direkt ein Button zum naechsten Olympiade-Spiel.
-  const wiNaechstesBtn = $("wi-naechstes-spiel");
-  if (wiNaechstesBtn) {
-    wiNaechstesBtn.hidden = !(api.istLeiter && Boolean(api.olympiadeAnzahl));
-    wiNaechstesBtn.disabled = false;
-    wiNaechstesBtn.onclick = () => { wiNaechstesBtn.disabled = true; vorZurueck(); };
+  // v202: in einer laufenden Olympiade fuehrt dieser Button jetzt zur
+  // Gesamtwertung statt direkt zum naechsten Spiel - "Naechstes Spiel"
+  // gibt es von dort aus als eigenen Button (siehe oeffneWertungDialog()
+  // in app.js). So bleibt der eigene Endstand erst einmal sichtbar.
+  const wiGesamtwertungBtn = $("wi-gesamtwertung-btn");
+  if (wiGesamtwertungBtn) {
+    wiGesamtwertungBtn.hidden = !(api.istLeiter && Boolean(api.olympiadeAnzahl));
+    wiGesamtwertungBtn.onclick = () => api.zeigeGesamtwertung();
   }
 }
 

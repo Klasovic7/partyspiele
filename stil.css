@@ -442,6 +442,7 @@
     .wertung-dialog-inhalt h2 { margin: 0 42px 5px 0; font-size: 1.55rem; }
     .wertung-dialog-inhalt .hinweis-text { margin: 0 0 16px; }
     .wertung-tabelle-wrapper { overflow-x: auto; margin: 0 -4px; padding: 0 4px; }
+    .wertung-naechstes-spiel { width: 100%; margin-top: 16px; }
     .wertung-tabelle { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
     .wertung-tabelle th, .wertung-tabelle td {
       padding: 8px 10px; text-align: center; white-space: nowrap;

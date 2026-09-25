@@ -7,9 +7,15 @@ import {
 import {
   FARBEN, AVATARE, FREUNDE, escapeHtml, avatarHtml, textFarbeFuer, zeigeDebug, erzeugeZufallsId
 } from "./kern/ui.js";
-import { SPIELE, spielInfo } from "./spiele/register.js";
+// v202-Fix: mit Versions-Query wie bei allen anderen Dateien - sonst kann der
+// Browser/GitHub-Pages-Cache hier eine alte Fassung ausliefern, obwohl
+// index.html/app.js schon aktuell sind (siehe auch spiele/register.js).
+// WICHTIG: bei jedem Versionssprung hier UND in spiele/register.js
+// (SPIEL_VERSION) mit hochzaehlen, sonst bekommen manche Geraete
+// Spiel-Fixes (spiele/<id>/spiel.js) verzoegert oder gar nicht mit.
+import { SPIELE, spielInfo } from "./spiele/register.js?v=203";
 
-export const APP_VERSION = "v202";
+export const APP_VERSION = "v203";
 const appVersion = document.getElementById("app-version");
 appVersion.textContent = "Version " + APP_VERSION;
 
@@ -71,6 +77,7 @@ const wertungKachel = document.getElementById("wertung-kachel");
 const wertungDialog = document.getElementById("wertung-dialog");
 const btnWertungSchliessen = document.getElementById("btn-wertung-schliessen");
 const wertungTabelle = document.getElementById("wertung-tabelle");
+const btnWertungNaechstesSpiel = document.getElementById("btn-wertung-naechstes-spiel");
 const spielmodusTabs = document.getElementById("spielmodus-tabs");
 const tabSpielauswahl = document.getElementById("tab-spielauswahl");
 const tabOlympiade = document.getElementById("tab-olympiade");
@@ -207,21 +214,6 @@ const SPIEL_ANZAHL_FELD = {
   finto: "fiAnzahlFragen",
   imposter: "impAnzahlRunden",
   doppelblick: "dbAnzahlRunden"
-};
-// v199: analog zu SPIEL_ANZAHL_FELD, aber der Status-Feldname je Spiel - damit
-// erkennbar ist, wann ein Spiel innerhalb einer laufenden Olympiade fertig
-// ist ("beendet"), um dann zusaetzlich zum eigenen Endstand-Bildschirm auch
-// die Olympiade-Gesamtwertung automatisch aufgehen zu lassen.
-const SPIEL_STATUS_FELD = {
-  schaetzfragen: "sfStatus",
-  "denk-gleich": "dgStatus",
-  "zehn-treffer": "ztStatus",
-  "reih-dich-ein": "rdStatus",
-  "wer-ist-es": "wiStatus",
-  "wann-war-es": "wwStatus",
-  blitzquiz: "bzStatus",
-  finto: "fiStatus",
-  doppelblick: "dbStatus"
 };
 // Merkt sich, für welche Kombination aus Raum+Spiel+Anzahl schon protokolliert
 // wurde, damit nicht bei jeder Raum-Aktualisierung (onSnapshot feuert oft)
@@ -679,6 +671,14 @@ function renderWertungTabelle() {
 
 function oeffneWertungDialog() {
   renderWertungTabelle();
+  // v202: "Naechstes Spiel" nur waehrend einer laufenden Olympiade und nur
+  // fuer den Spielleiter - der Endstand des gerade beendeten Spiels bleibt
+  // jetzt erst stehen, statt dass diese Wertung automatisch aufgeht; von
+  // hier aus geht es auf Wunsch weiter zum naechsten Olympiade-Spiel.
+  btnWertungNaechstesSpiel.hidden = !(
+    zustand.istLeiter && zustand.raum?.olympiade?.aktiv && Boolean(zustand.raum?.aktuellesSpiel)
+  );
+  btnWertungNaechstesSpiel.disabled = false;
   wertungDialog.hidden = false;
   document.body.classList.add("wertung-offen");
   requestAnimationFrame(() => btnWertungSchliessen.focus());
@@ -692,6 +692,11 @@ function schliesseWertungDialog(fokusZurueck = true) {
 
 wertungKachel.addEventListener("click", oeffneWertungDialog);
 btnWertungSchliessen.addEventListener("click", () => schliesseWertungDialog());
+btnWertungNaechstesSpiel.addEventListener("click", () => {
+  btnWertungNaechstesSpiel.disabled = true;
+  schliesseWertungDialog(false);
+  raumNavigationAusfuehren();
+});
 wertungDialog.addEventListener("click", (event) => {
   if (event.target === wertungDialog) schliesseWertungDialog();
 });
@@ -1044,6 +1049,11 @@ function baueApi() {
       spielKopfFortschritt.textContent = text || "";
       spielKopfFortschritt.hidden = !text;
     },
+    // v202: vom eigenen Endstand-Bildschirm aus (waehrend einer aktiven
+    // Olympiade) zur Gesamtwertung springen statt direkt zum naechsten
+    // Spiel - "Naechstes Spiel" gibt es von dort aus jetzt nur noch als
+    // eigenen Button INNERHALB der Gesamtwertung (siehe oeffneWertungDialog()).
+    zeigeGesamtwertung: () => oeffneWertungDialog(),
     fehler: zeigeDebug
   };
 }
@@ -1177,21 +1187,12 @@ function reagiereAufRaum(daten) {
     }
   }
 
-  // v199: Ist gerade EIN Spiel innerhalb einer noch laufenden Olympiade zu
-  // Ende gegangen (Endstand-Bildschirm des Spiels selbst wird davon nicht
-  // beruehrt), geht zusaetzlich automatisch die Gesamtwertung ueber alle
-  // bisher gespielten Olympiade-Spiele auf - Signatur aus Spiel+Runden-Index
-  // verhindert erneutes Aufgehen bei jeder weiteren Raum-Aktualisierung.
-  if (daten.olympiade?.aktiv && spielId) {
-    const statusFeld = SPIEL_STATUS_FELD[spielId];
-    if (statusFeld && daten[statusFeld] === "beendet") {
-      const signatur = `${zustand.code}:${spielId}:${daten.olympiade.index}:zwischenstand`;
-      if (signatur !== olympiadeAngezeigteSignatur) {
-        olympiadeAngezeigteSignatur = signatur;
-        requestAnimationFrame(() => oeffneWertungDialog());
-      }
-    }
-  }
+  // v202: Ist gerade EIN Spiel innerhalb einer noch laufenden Olympiade zu
+  // Ende gegangen, geht die Gesamtwertung NICHT mehr automatisch auf (das
+  // hat vorher den gerade erst angezeigten Endstand des Spiels sofort
+  // wieder verdeckt) - stattdessen bleibt der Endstand stehen, und wer will,
+  // oeffnet die Wertung ueber die "Wertung"-Kachel selbst; von dort geht es
+  // dann per "Naechstes Spiel"-Button weiter (siehe oeffneWertungDialog()).
 
   if (spielId) {
     lobbyScreen.hidden = true;

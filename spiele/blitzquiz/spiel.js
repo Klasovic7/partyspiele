@@ -160,7 +160,7 @@ const VORLAGE = `
     <div id="bz-endstand-teams" hidden></div>
     <ul id="bz-endstand-liste"></ul>
     <p id="bz-endstand-warten" hidden><em>Der Spielleiter wählt gleich das nächste Spiel …</em></p>
-    <p><button id="bz-naechstes-spiel" class="btn-primaer" type="button" hidden>Nächstes Spiel</button></p>
+    <p><button id="bz-gesamtwertung-btn" class="btn-primaer" type="button" hidden>Gesamtwertung</button></p>
   </div>
 `;
 
@@ -1003,14 +1003,14 @@ function zeigeEndstand() {
   teamsEl.hidden = !teammodus;
   if (teammodus) teamsEl.innerHTML = teamEndstandHtml(spielerListe, teams);
   $("bz-endstand-warten").hidden = api.istLeiter;
-  // v200: in einer laufenden Olympiade muss der Spielleiter nicht mehr
-  // extra oben links auf "Spielauswahl" tippen, um weiterzukommen - hier
-  // direkt ein Button zum naechsten Olympiade-Spiel.
-  const bzNaechstesBtn = $("bz-naechstes-spiel");
-  if (bzNaechstesBtn) {
-    bzNaechstesBtn.hidden = !(api.istLeiter && Boolean(api.olympiadeAnzahl));
-    bzNaechstesBtn.disabled = false;
-    bzNaechstesBtn.onclick = () => { bzNaechstesBtn.disabled = true; vorZurueck(); };
+  // v202: in einer laufenden Olympiade fuehrt dieser Button jetzt zur
+  // Gesamtwertung statt direkt zum naechsten Spiel - "Naechstes Spiel"
+  // gibt es von dort aus als eigenen Button (siehe oeffneWertungDialog()
+  // in app.js). So bleibt der eigene Endstand erst einmal sichtbar.
+  const bzGesamtwertungBtn = $("bz-gesamtwertung-btn");
+  if (bzGesamtwertungBtn) {
+    bzGesamtwertungBtn.hidden = !(api.istLeiter && Boolean(api.olympiadeAnzahl));
+    bzGesamtwertungBtn.onclick = () => api.zeigeGesamtwertung();
   }
 }
 
