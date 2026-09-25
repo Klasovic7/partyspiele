@@ -59,6 +59,7 @@ const VORLAGE = `
   </div>
 
   <div id="zg-buzzer-screen" class="bildschirm-karte zg-mitte" hidden>
+    <div id="zg-flash" class="zg-flash-overlay" aria-hidden="true"></div>
     <p class="hinweis-text" id="zg-buzzer-hinweis">Zähl für dich mit und drück im richtigen Moment!</p>
     <p><button id="zg-buzzer" class="zg-buzzer-btn" type="button">BUZZER</button></p>
     <div id="zg-buzzer-status" class="warten-block"></div>
@@ -92,6 +93,7 @@ let anzahlRunden = 0;
 let zielSekunden = 0;
 let vorbereitungSeit = 0;
 let eigenerBuzzerGedrueckt = false;
+let buzzerPhaseGezeigt = false;
 let auswertungLaeuft = false;
 
 // Bereit-System (siehe kern/ui.js) und Olympiade-Auto-Start wie bei allen
@@ -170,6 +172,7 @@ export function beenden() {
   zielSekunden = 0;
   vorbereitungSeit = 0;
   eigenerBuzzerGedrueckt = false;
+  buzzerPhaseGezeigt = false;
   auswertungLaeuft = false;
 }
 
@@ -194,6 +197,7 @@ export function raumDaten(daten) {
     zielSekunden = neuesZiel;
     vorbereitungSeit = neuerStart;
     eigenerBuzzerGedrueckt = false;
+    buzzerPhaseGezeigt = false;
     auswertungLaeuft = false;
     $("zg-buzzer").disabled = false;
     $("zg-buzzer-hinweis").textContent = "Zähl für dich mit und drück im richtigen Moment!";
@@ -317,12 +321,15 @@ function rundenTick() {
     $("zg-buzzer-screen").hidden = true;
     $("zg-vorbereitung-screen").hidden = false;
     $("zg-ziel-wert").textContent = String(zielSekunden);
-    const schritt = Math.min(3, Math.floor(elapsedGesamt / (COUNTDOWN_MS / 4)));
-    $("zg-countdown-ziffer").textContent = ["3", "2", "1", "Los!"][schritt];
+    const schritt = Math.min(2, Math.floor(elapsedGesamt / (COUNTDOWN_MS / 3)));
+    $("zg-countdown-ziffer").textContent = ["3", "2", "1"][schritt];
   } else {
     $("zg-vorbereitung-screen").hidden = true;
     $("zg-buzzer-screen").hidden = false;
-    aktualisiereBuzzerStatus();
+    if (!buzzerPhaseGezeigt) {
+      buzzerPhaseGezeigt = true;
+      aktualisiereBuzzerStatus();
+    }
   }
 
   if (api.istLeiter) pruefeAuswertung(elapsedGesamt);

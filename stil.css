@@ -2520,3 +2520,20 @@
 }
 .zg-buzzer-btn:disabled { opacity: .45; box-shadow: none; }
 .zg-buzzer-btn:not(:disabled):active { transform: scale(.96); }
+
+/* v205: statt eines weiteren Text-Schritts ("Los!") signalisiert jetzt ein
+   kurzer roter Bildschirmblitz eindeutig den genauen Startzeitpunkt. Das
+   Element steckt im Buzzer-Bildschirm und wird beim Umschalten von "hidden"
+   auf sichtbar automatisch neu von Opak auf Transparent animiert (der
+   Browser startet eine CSS-Animation neu, sobald ein Element von
+   display:none in den normalen Fluss wechselt) - pointer-events:none, damit
+   ein schneller Klick auf den Buzzer waehrenddessen nicht blockiert wird. */
+.zg-flash-overlay {
+  position: fixed; inset: 0; z-index: 999; pointer-events: none;
+  background: #ff2418;
+  animation: zg-flash .5s ease-out forwards;
+}
+@keyframes zg-flash {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
