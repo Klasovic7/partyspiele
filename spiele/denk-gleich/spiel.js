@@ -164,12 +164,9 @@ export async function starten(uebergebeneApi) {
   // vorbelegt (Tick warten, bis spielerListe gefuellt ist). Gestartet wird
   // trotzdem erst, wenn alle Mitspieler*innen "Bereit" geklickt haben - das
   // uebernimmt der Aufruf in zeigeSetup() weiter unten.
-  if (api.istLeiter && api.olympiadeAnzahl) {
-    setTimeout(() => {
-      const feld = $("dg-anzahl");
-      if (feld) feld.value = String(api.olympiadeAnzahl);
-    }, 0);
-  }
+  // v201: die Anzahl wird nicht mehr hier vorbelegt, sondern bei jedem
+  // Render in zeigeSetup() direkt aus api.olympiadeAnzahl gesetzt (siehe
+  // dort).
 }
 
 function verdrahteBedienelemente() {
@@ -285,10 +282,25 @@ function alleVerstecken() {
 function zeigeSetup() {
   const anzahlFeld = $("dg-anzahl");
   anzahlFeld.max = fragen.length;
-  if (!anzahlFeld.value) anzahlFeld.value = fragen.length;
-  $("dg-anzahl-max").textContent = `Insgesamt ${fragen.length} Fragen verfügbar.`;
+  const inOlympiade = Boolean(api.olympiadeAnzahl);
+  if (inOlympiade) {
+    // v201-Fix: der bisherige "nur setzen, wenn das Feld noch leer ist"-
+    // Trick hat zwar zufaellig beim Leiter funktioniert (das Feld startet
+    // leer, der setTimeout in starten() kam als erstes zum Zug), aber bei
+    // Mitspieler*innen NIE (deren Feld wird direkt beim ersten Render mit
+    // der Obergrenze befuellt und blieb danach dabei). api.olympiadeAnzahl
+    // ist bei allen Clients gleichermaßen verfuegbar - bei jedem Render
+    // fest darauf setzen und das Feld komplett sperren.
+    const festgelegt = Math.min(Math.max(1, api.olympiadeAnzahl), fragen.length);
+    anzahlFeld.value = String(festgelegt);
+    $("dg-anzahl-max").textContent = `In der Olympiade festgelegt: ${festgelegt} ${festgelegt === 1 ? "Frage" : "Fragen"}.`;
+    anzahlFeld.disabled = true;
+  } else {
+    if (!anzahlFeld.value) anzahlFeld.value = fragen.length;
+    $("dg-anzahl-max").textContent = `Insgesamt ${fragen.length} Fragen verfügbar.`;
+    anzahlFeld.disabled = !api.istLeiter;
+  }
   $("dg-anzahl-zeile").hidden = false;
-  anzahlFeld.disabled = !api.istLeiter;
   $("dg-starten").hidden = !api.istLeiter;
   $("dg-setup-warten").hidden = api.istLeiter;
   bereitSystem?.render();

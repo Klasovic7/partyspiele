@@ -190,12 +190,9 @@ export async function starten(uebergebeneApi) {
   // vorbelegt (Tick warten, bis spielerListe gefuellt ist). Gestartet wird
   // trotzdem erst, wenn alle Mitspieler*innen "Bereit" geklickt haben - das
   // uebernimmt der Aufruf in zeigeSetup() weiter unten.
-  if (api.istLeiter && api.olympiadeAnzahl) {
-    setTimeout(() => {
-      const feld = $("rd-anzahl");
-      if (feld) feld.value = String(api.olympiadeAnzahl);
-    }, 0);
-  }
+  // v201: die Anzahl wird nicht mehr hier vorbelegt, sondern bei jedem
+  // Render in zeigeSetup() direkt aus api.olympiadeAnzahl gesetzt (siehe
+  // dort).
 }
 
 function verdrahteBedienelemente() {
@@ -321,10 +318,24 @@ function renderAktuellenStatus() {
 function zeigeSetup() {
   const anzahlFeld = $("rd-anzahl");
   anzahlFeld.max = karten.length;
-  if (!anzahlManuellGesetzt || !anzahlFeld.value) anzahlFeld.value = Math.min(3, karten.length);
-  $("rd-anzahl-max").textContent = `Insgesamt ${karten.length} Kategorien verfügbar.`;
+  const inOlympiade = Boolean(api.olympiadeAnzahl);
+  if (inOlympiade) {
+    // v201-Fix: vorher wurde die Anzahl nur einmalig beim Leiter per
+    // setTimeout in starten() vorbelegt - jeder weitere zeigeSetup()-Aufruf
+    // hat sie wieder zurueckgesetzt (anzahlManuellGesetzt blieb false), und
+    // bei Mitspieler*innen wurde sie nie gesetzt. api.olympiadeAnzahl ist bei
+    // allen Clients gleichermaßen verfuegbar - bei jedem Render fest darauf
+    // setzen und das Feld komplett sperren.
+    const festgelegt = Math.min(Math.max(1, api.olympiadeAnzahl), karten.length);
+    anzahlFeld.value = String(festgelegt);
+    $("rd-anzahl-max").textContent = `In der Olympiade festgelegt: ${festgelegt} Kategorie${festgelegt === 1 ? "" : "n"}.`;
+    anzahlFeld.disabled = true;
+  } else {
+    if (!anzahlManuellGesetzt || !anzahlFeld.value) anzahlFeld.value = Math.min(3, karten.length);
+    $("rd-anzahl-max").textContent = `Insgesamt ${karten.length} Kategorien verfügbar.`;
+    anzahlFeld.disabled = !api.istLeiter;
+  }
   $("rd-anzahl-zeile").hidden = false;
-  anzahlFeld.disabled = !api.istLeiter;
   $("rd-starten").hidden = !api.istLeiter;
   $("rd-setup-warten").hidden = api.istLeiter;
   bereitSystem?.render();

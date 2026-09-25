@@ -222,11 +222,13 @@ export async function starten(uebergebeneApi) {
   }
 
   // v196/v199: In einer Olympiade waehlt der Leiter die Anzahl schon vorab in
-  // der Olympiade-Planung - hier werden Kategorien (alle) und Anzahl nur
-  // vorbelegt (Tick warten, bis app.js nach starten() noch api.spieler()
-  // aufgerufen hat, sonst waere spielerListe hier noch leer). Gestartet wird
-  // trotzdem erst, wenn alle Mitspieler*innen "Bereit" geklickt haben - das
-  // uebernimmt der Aufruf in zeigeSetup() weiter unten.
+  // der Olympiade-Planung - hier wird nur die Kategorienliste (alle)
+  // vorbelegt. Die Anzahl selbst setzt zeigeSetup() bei JEDEM Render aus
+  // api.olympiadeAnzahl (siehe dort, v201-Fix) - das ist bei allen
+  // Clients (Leiter wie Mitspieler*innen) gleichermaßen verfuegbar, ein
+  // einmaliges Vorbelegen hier reicht nicht. Gestartet wird trotzdem erst,
+  // wenn alle Mitspieler*innen "Bereit" geklickt haben - das uebernimmt der
+  // Aufruf in zeigeSetup() weiter unten.
   if (api.istLeiter && api.olympiadeAnzahl) {
     kategorien = KATEGORIEN.map((k) => k.id);
     // v200-Fix: die lokale Zuweisung oben reicht NICHT - direkt nach starten()
@@ -239,10 +241,6 @@ export async function starten(uebergebeneApi) {
     try {
       await updateDoc(api.raumRef(), { sfKategorien: kategorien });
     } catch (e) { zeigeDebug("Fehler beim Vorbelegen der Olympiade-Kategorien: " + e.message); }
-    setTimeout(() => {
-      const feld = $("sf-anzahl");
-      if (feld) feld.value = String(api.olympiadeAnzahl);
-    }, 0);
   }
 }
 
@@ -563,14 +561,6 @@ function zeigeSetup() {
   const maximalSpielbar = maximaleFragenOhneKategorieNachbarn(fragen, kategorien);
   const anzahlFeld = $("sf-anzahl");
   const obergrenze = Math.max(1, maximalSpielbar);
-  const bisher = parseInt(anzahlFeld.value, 10);
-  const auswahl = anzahlManuellGesetzt && Number.isFinite(bisher)
-    ? Math.min(Math.max(1, bisher), obergrenze)
-    : obergrenze;
-  anzahlFeld.max = String(obergrenze);
-  anzahlFeld.value = String(auswahl);
-  $("sf-anzahl-max").textContent =
-    `Mit den gewählten Kategorien sind maximal ${obergrenze} möglich.`;
 
   // v200: in der Olympiade ist die Runde ohnehin schon vorab geplant - Wahl
   // der Kategorien sowie Dummkopf-/Team-Modus entfallen dafuer komplett,
@@ -583,8 +573,37 @@ function zeigeSetup() {
   $("sf-kategorien-aktionen").hidden = inOlympiade;
   $("sf-kategorien").hidden = inOlympiade;
 
+  if (inOlympiade) {
+    // v201-Fix: vorher wurde die Anzahl nur einmalig beim Leiter per
+    // setTimeout in starten() vorbelegt - jeder weitere zeigeSetup()-Aufruf
+    // (z. B. wenn ein Mitspieler auf "Bereit" tippt) hat den Wert danach
+    // wieder auf die Obergrenze zurueckgesetzt, weil anzahlManuellGesetzt
+    // nie gesetzt wurde. Dadurch sahen Mitspieler*innen die Obergrenze statt
+    // der geplanten Zahl, UND spielStarten() hat beim Auto-Start denselben
+    // (inzwischen zurueckgesetzten) Feldwert gelesen - es wurden also
+    // tatsaechlich alle verfuegbaren Fragen statt der geplanten Anzahl
+    // gespielt. Jetzt: api.olympiadeAnzahl ist bei ALLEN Clients (Leiter wie
+    // Mitspieler*innen) gleichermaßen verfuegbar - bei jedem Render fest
+    // darauf setzen und das Feld komplett sperren, statt es ueberhaupt
+    // lokal veraenderbar zu lassen.
+    const festgelegt = Math.min(Math.max(1, api.olympiadeAnzahl), obergrenze);
+    anzahlFeld.max = String(obergrenze);
+    anzahlFeld.value = String(festgelegt);
+    anzahlFeld.disabled = true;
+    $("sf-anzahl-max").textContent = `In der Olympiade festgelegt: ${festgelegt} Frage${festgelegt === 1 ? "" : "n"}.`;
+  } else {
+    const bisher = parseInt(anzahlFeld.value, 10);
+    const auswahl = anzahlManuellGesetzt && Number.isFinite(bisher)
+      ? Math.min(Math.max(1, bisher), obergrenze)
+      : obergrenze;
+    anzahlFeld.max = String(obergrenze);
+    anzahlFeld.value = String(auswahl);
+    $("sf-anzahl-max").textContent =
+      `Mit den gewählten Kategorien sind maximal ${obergrenze} möglich.`;
+    anzahlFeld.disabled = !api.istLeiter;
+  }
+
   $("sf-anzahl-zeile").hidden = false;
-  anzahlFeld.disabled = !api.istLeiter;
   $("sf-dummkopf-zeile").hidden = inOlympiade;
   $("sf-dummkopf").disabled = !api.istLeiter;
   $("sf-teammodus-zeile").hidden = inOlympiade;

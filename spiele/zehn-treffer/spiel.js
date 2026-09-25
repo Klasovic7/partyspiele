@@ -300,12 +300,10 @@ export async function starten(uebergebeneApi) {
   // vorbelegt (Tick warten, bis spielerListe gefuellt ist). Gestartet wird
   // trotzdem erst, wenn alle Mitspieler*innen "Bereit" geklickt haben - das
   // uebernimmt der Aufruf in zeigeSetup() weiter unten.
-  if (api.istLeiter && api.olympiadeAnzahl) {
-    setTimeout(() => {
-      const feld = $("zt-anzahl");
-      if (feld) feld.value = String(api.olympiadeAnzahl);
-    }, 0);
-  }
+  // v201: die Anzahl wird nicht mehr hier vorbelegt, sondern bei jedem
+  // Render in zeigeSetup() direkt aus api.olympiadeAnzahl gesetzt (siehe
+  // dort) - das war vorher nur einmalig hier passiert und ist danach beim
+  // naechsten Render wieder verlorengegangen.
 }
 
 function verdrahteBedienelemente() {
@@ -508,10 +506,24 @@ function zeigeSetup() {
 
   const anzahlFeld = $("zt-anzahl");
   anzahlFeld.max = karten.length;
-  if (!anzahlManuellGesetzt || !anzahlFeld.value) anzahlFeld.value = karten.length;
-  $("zt-anzahl-max").textContent = `Insgesamt ${karten.length} Begriffe verfügbar.`;
+  if (inOlympiade) {
+    // v201-Fix: vorher wurde die Anzahl nur einmalig beim Leiter per
+    // setTimeout in starten() vorbelegt - jeder weitere zeigeSetup()-Aufruf
+    // hat sie wieder auf "alle Begriffe" zurueckgesetzt (anzahlManuellGesetzt
+    // blieb false), wodurch beim Auto-Start dann tatsaechlich ALLE Begriffe
+    // statt der geplanten Anzahl gespielt wurden. api.olympiadeAnzahl ist
+    // bei allen Clients gleichermaßen verfuegbar - bei jedem Render fest
+    // darauf setzen und das Feld komplett sperren.
+    const festgelegt = Math.min(Math.max(1, api.olympiadeAnzahl), karten.length);
+    anzahlFeld.value = String(festgelegt);
+    $("zt-anzahl-max").textContent = `In der Olympiade festgelegt: ${festgelegt} Begriff${festgelegt === 1 ? "" : "e"}.`;
+    anzahlFeld.disabled = true;
+  } else {
+    if (!anzahlManuellGesetzt || !anzahlFeld.value) anzahlFeld.value = karten.length;
+    $("zt-anzahl-max").textContent = `Insgesamt ${karten.length} Begriffe verfügbar.`;
+    anzahlFeld.disabled = !api.istLeiter;
+  }
   $("zt-anzahl-zeile").hidden = false;
-  anzahlFeld.disabled = !api.istLeiter;
   $("zt-starten").hidden = !api.istLeiter;
   $("zt-setup-warten").hidden = api.istLeiter;
   bereitSystem?.render();

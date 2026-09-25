@@ -304,12 +304,10 @@ export async function starten(uebergebeneApi) {
   // vorbelegt (Tick warten, bis spielerListe gefuellt ist). Gestartet wird
   // trotzdem erst, wenn alle Mitspieler*innen "Bereit" geklickt haben - das
   // uebernimmt der Aufruf in zeigeSetup() weiter unten.
-  if (api.istLeiter && api.olympiadeAnzahl) {
-    setTimeout(() => {
-      const feld = $("bz-anzahl");
-      if (feld) feld.value = String(api.olympiadeAnzahl);
-    }, 0);
-  }
+  // v201: die Anzahl wird nicht mehr hier vorbelegt, sondern bei jedem
+  // Render in zeigeSetup() direkt aus api.olympiadeAnzahl gesetzt (siehe
+  // dort) - das war vorher nur einmalig hier passiert und ist danach beim
+  // naechsten Render wieder verlorengegangen.
 }
 
 function verdrahteBedienelemente() {
@@ -429,15 +427,32 @@ function alleVerstecken() {
 //  Setup
 // ============================================================================
 function zeigeSetup() {
-  if (gewuenschteAnzahl === 0) gewuenschteAnzahl = Math.min(STANDARD_ANZAHL, fragen.length);
-  $("bz-anzahl").max = String(Math.max(1, fragen.length));
-  $("bz-anzahl").value = String(gewuenschteAnzahl);
-  $("bz-anzahl-max").textContent = `Insgesamt ${fragen.length} Fragen verfügbar.`;
-  $("bz-anzahl-zeile").hidden = false;
-  $("bz-anzahl").disabled = !api.istLeiter;
+  // v201-Fix: vorher wurde die Anzahl nur einmalig beim Leiter per
+  // setTimeout in starten() vorbelegt - jeder weitere zeigeSetup()-Aufruf
+  // (z. B. wenn ein Mitspieler auf "Bereit" tippt) hat gewuenschteAnzahl NIE
+  // angepasst, wodurch das Feld (und die tatsaechlich gespielte Anzahl!)
+  // wieder auf den normalen Standardwert zurueckfiel, statt der in der
+  // Olympiade-Planung festgelegten Zahl. api.olympiadeAnzahl ist bei ALLEN
+  // Clients (Leiter wie Mitspieler*innen) gleichermaßen verfuegbar - bei
+  // jedem Render fest darauf setzen und das Feld komplett sperren.
+  const inOlympiade = Boolean(api.olympiadeAnzahl);
+  if (inOlympiade) {
+    gewuenschteAnzahl = Math.min(Math.max(1, api.olympiadeAnzahl), fragen.length);
+    $("bz-anzahl").max = String(Math.max(1, fragen.length));
+    $("bz-anzahl").value = String(gewuenschteAnzahl);
+    $("bz-anzahl-max").textContent = `In der Olympiade festgelegt: ${gewuenschteAnzahl} ${gewuenschteAnzahl === 1 ? "Frage" : "Fragen"}.`;
+    $("bz-anzahl-zeile").hidden = false;
+    $("bz-anzahl").disabled = true;
+  } else {
+    if (gewuenschteAnzahl === 0) gewuenschteAnzahl = Math.min(STANDARD_ANZAHL, fragen.length);
+    $("bz-anzahl").max = String(Math.max(1, fragen.length));
+    $("bz-anzahl").value = String(gewuenschteAnzahl);
+    $("bz-anzahl-max").textContent = `Insgesamt ${fragen.length} Fragen verfügbar.`;
+    $("bz-anzahl-zeile").hidden = false;
+    $("bz-anzahl").disabled = !api.istLeiter;
+  }
   // v200: in der Olympiade entfaellt der Team-Modus komplett - alle spielen
   // einzeln, damit sich niemand extra dafuer koordinieren muss.
-  const inOlympiade = Boolean(api.olympiadeAnzahl);
   if (inOlympiade) teammodus = false;
   $("bz-teammodus-zeile").hidden = inOlympiade;
   const teamSchalter = $("bz-teammodus");

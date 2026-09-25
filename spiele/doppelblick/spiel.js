@@ -379,12 +379,9 @@ export async function starten(uebergebeneApi) {
   // vorbelegt (Tick warten, bis spielerListe gefuellt ist). Gestartet wird
   // trotzdem erst, wenn alle Mitspieler*innen "Bereit" geklickt haben - das
   // uebernimmt der Aufruf in zeigeSetup() weiter unten.
-  if (api.istLeiter && api.olympiadeAnzahl) {
-    setTimeout(() => {
-      const feld = $("db-anzahl");
-      if (feld) feld.value = String(api.olympiadeAnzahl);
-    }, 0);
-  }
+  // v201: die Anzahl wird nicht mehr hier vorbelegt, sondern bei jedem
+  // Render in zeigeSetup() direkt aus api.olympiadeAnzahl gesetzt (siehe
+  // dort).
 }
 
 function verdrahteBedienelemente() {
@@ -527,13 +524,28 @@ function zeigeSetup() {
   $("db-modus-turm").disabled = !api.istLeiter;
 
   const istTurm = spielModus === "turm";
+  const inOlympiadeFuerAnzahl = Boolean(api.olympiadeAnzahl);
 
-  if (gewuenschteAnzahl === 0) gewuenschteAnzahl = Math.min(STANDARD_ANZAHL, MAX_RUNDEN);
   $("db-anzahl").max = String(MAX_RUNDEN);
-  $("db-anzahl").value = String(gewuenschteAnzahl);
-  $("db-anzahl-max").textContent = `Insgesamt ${MAX_RUNDEN} Runden möglich.`;
+  if (inOlympiadeFuerAnzahl) {
+    // v201-Fix: vorher wurde die Anzahl nur einmalig beim Leiter per
+    // setTimeout in starten() vorbelegt - jeder weitere zeigeSetup()-Aufruf
+    // hat gewuenschteAnzahl nie angepasst, wodurch das Feld (und die
+    // tatsaechlich gespielte Anzahl!) wieder auf den Standardwert
+    // zurueckfiel. api.olympiadeAnzahl ist bei allen Clients gleichermaßen
+    // verfuegbar - bei jedem Render fest darauf setzen und das Feld
+    // komplett sperren.
+    gewuenschteAnzahl = Math.min(Math.max(1, api.olympiadeAnzahl), MAX_RUNDEN);
+    $("db-anzahl").value = String(gewuenschteAnzahl);
+    $("db-anzahl-max").textContent = `In der Olympiade festgelegt: ${gewuenschteAnzahl} Runde${gewuenschteAnzahl === 1 ? "" : "n"}.`;
+    $("db-anzahl").disabled = true;
+  } else {
+    if (gewuenschteAnzahl === 0) gewuenschteAnzahl = Math.min(STANDARD_ANZAHL, MAX_RUNDEN);
+    $("db-anzahl").value = String(gewuenschteAnzahl);
+    $("db-anzahl-max").textContent = `Insgesamt ${MAX_RUNDEN} Runden möglich.`;
+    $("db-anzahl").disabled = !api.istLeiter;
+  }
   $("db-anzahl-zeile").hidden = istTurm;
-  $("db-anzahl").disabled = !api.istLeiter;
 
   const maxKpsp = maxKartenProSpieler();
   if (gewuenschteKartenProSpieler === 0) gewuenschteKartenProSpieler = Math.min(5, maxKpsp);
