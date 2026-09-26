@@ -2537,3 +2537,39 @@
   0% { opacity: 1; }
   100% { opacity: 0; }
 }
+
+/* ---------------------------------------------------------------------------
+   Merk's dir! - nummerierte Merkliste, Tipp-Gitter und die immer sichtbare
+   Status-Leiste (volle Helligkeit = noch dabei, gedimmt + rotes Kreuz =
+   in diesem Durchgang ausgeschieden). */
+.md-emoji-liste, .md-emoji-gitter {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 14px 0;
+}
+.md-emoji-eintrag {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  padding: 8px 4px; border-radius: 12px; background: rgba(127, 140, 141, .12);
+}
+.md-emoji-nr { font-size: .72rem; font-weight: 700; opacity: .65; }
+.md-emoji-symbol { font-size: 1.8rem; line-height: 1; }
+
+.md-emoji-btn {
+  font-size: 1.8rem; line-height: 1; padding: 14px 4px; border-radius: 14px; border: none;
+  background: rgba(127, 140, 141, .14); box-shadow: 0 3px 8px rgba(0, 0, 0, .08);
+}
+.md-emoji-btn:disabled { opacity: .4; }
+.md-emoji-btn:not(:disabled):active { transform: scale(.94); }
+.md-emoji-btn.md-eigene-wahl { outline: 3px solid var(--akzent); opacity: 1; }
+
+.md-status-liste {
+  list-style: none; display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 0; padding: 0;
+  justify-content: center;
+}
+.md-status-eintrag .spieler-karte { min-height: auto; width: auto; padding: 6px 10px; }
+.md-status-eintrag.md-ausgeschieden .spieler-karte { opacity: .4; filter: grayscale(.6); }
+.md-status-eintrag.md-ausgeschieden .spieler-icon { position: relative; }
+.md-status-eintrag.md-ausgeschieden .spieler-icon::after {
+  content: ""; position: absolute; inset: 0; border-radius: 50%;
+  background:
+    linear-gradient(45deg, transparent 44%, #e0261a 47%, #e0261a 53%, transparent 56%),
+    linear-gradient(-45deg, transparent 44%, #e0261a 47%, #e0261a 53%, transparent 56%);
+}

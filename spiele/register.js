@@ -18,7 +18,7 @@
 // in der Olympiade trotz Fix in v201/v202 teils noch bestehen lassen.
 // WICHTIG: bei jedem Versionssprung hier UND in app.js (Import von
 // register.js) mit hochzaehlen.
-const SPIEL_VERSION = "205";
+const SPIEL_VERSION = "206";
 
 export const SPIELE = [
   {
@@ -110,6 +110,15 @@ export const SPIELE = [
     beschreibung: "Blind mitzählen und zur richtigen Sekunde buzzern",
     minSpieler: 1,
     laden: () => import(`./zeitgefuehl/spiel.js?v=${SPIEL_VERSION}`)
+  },
+  {
+    id: "merks-dir",
+    name: "Merk's dir!",
+    emoji: "🧩",
+    farbe: "#84cc16",
+    beschreibung: "Merkt euch 20 Emojis - wer sich am längsten erinnert, gewinnt",
+    minSpieler: 2,
+    laden: () => import(`./merks-dir/spiel.js?v=${SPIEL_VERSION}`)
   },
   {
     id: "imposter",
