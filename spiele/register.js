@@ -18,7 +18,7 @@
 // in der Olympiade trotz Fix in v201/v202 teils noch bestehen lassen.
 // WICHTIG: bei jedem Versionssprung hier UND in app.js (Import von
 // register.js) mit hochzaehlen.
-const SPIEL_VERSION = "206";
+const SPIEL_VERSION = "207";
 
 export const SPIELE = [
   {
@@ -94,13 +94,13 @@ export const SPIELE = [
     laden: () => import(`./doppelblick/spiel.js?v=${SPIEL_VERSION}`)
   },
   {
-    id: "finto",
-    name: "Finto",
-    emoji: "🦉",
-    farbe: "#38bdf8",
-    beschreibung: "Bluffe mit einer erfundenen Antwort und errate die echte",
-    minSpieler: 3,
-    laden: () => import(`./finto/spiel.js?v=${SPIEL_VERSION}`)
+    id: "merks-dir",
+    name: "Merk's dir!",
+    emoji: "🧩",
+    farbe: "#84cc16",
+    beschreibung: "Merkt euch 20 Emojis - wer sich am längsten erinnert, gewinnt",
+    minSpieler: 2,
+    laden: () => import(`./merks-dir/spiel.js?v=${SPIEL_VERSION}`)
   },
   {
     id: "zeitgefuehl",
@@ -112,13 +112,13 @@ export const SPIELE = [
     laden: () => import(`./zeitgefuehl/spiel.js?v=${SPIEL_VERSION}`)
   },
   {
-    id: "merks-dir",
-    name: "Merk's dir!",
-    emoji: "🧩",
-    farbe: "#84cc16",
-    beschreibung: "Merkt euch 20 Emojis - wer sich am längsten erinnert, gewinnt",
-    minSpieler: 2,
-    laden: () => import(`./merks-dir/spiel.js?v=${SPIEL_VERSION}`)
+    id: "finto",
+    name: "Finto",
+    emoji: "🦉",
+    farbe: "#38bdf8",
+    beschreibung: "Bluffe mit einer erfundenen Antwort und errate die echte",
+    minSpieler: 3,
+    laden: () => import(`./finto/spiel.js?v=${SPIEL_VERSION}`)
   },
   {
     id: "imposter",

@@ -20,7 +20,7 @@ import { spielerKarte, renderWarteAvatare, zeigeDebug, initBereitSystem } from "
 import { speichereWertung } from "../../kern/wertung.js";
 
 const POSITIONEN = 20;
-const STANDARD_ZEIT_SEKUNDEN = 10;
+const STANDARD_ZEIT_SEKUNDEN = 15;
 const MIN_ZEIT = 3;
 const MAX_ZEIT = 60;
 const STANDARD_ANZAHL = 5;
