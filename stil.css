@@ -2551,6 +2551,10 @@
 }
 .md-emoji-nr { font-size: .72rem; font-weight: 700; opacity: .65; }
 .md-emoji-symbol { font-size: 1.8rem; line-height: 1; }
+.md-emoji-bild {
+  width: 40px; height: 40px; object-fit: cover; border-radius: 10px;
+  display: block; box-shadow: 0 2px 6px rgba(0, 0, 0, .18);
+}
 
 .md-emoji-btn {
   font-size: 1.8rem; line-height: 1; padding: 14px 4px; border-radius: 14px; border: none;

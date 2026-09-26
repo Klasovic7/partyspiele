@@ -16,7 +16,7 @@ import {
   doc, setDoc, updateDoc, deleteDoc, collection, getDocs, onSnapshot,
   serverTimestamp, increment, writeBatch
 } from "../../kern/firebase.js";
-import { spielerKarte, renderWarteAvatare, zeigeDebug, initBereitSystem } from "../../kern/ui.js";
+import { spielerKarte, renderWarteAvatare, zeigeDebug, initBereitSystem, escapeHtml } from "../../kern/ui.js";
 import { speichereWertung } from "../../kern/wertung.js";
 
 const POSITIONEN = 20;
@@ -30,14 +30,41 @@ const MAX_ANZAHL = 30;
 // naechsten Stelle (oder zum Durchgangs-Ergebnis) weiterschaltet.
 const RUNDENERGEBNIS_ANZEIGE_MS = 3500;
 
-// Pool von 40 klar unterscheidbaren Emojis - pro Durchgang werden daraus 20
-// zufaellig gezogen, damit sich nicht jeder Durchgang exakt gleich anfuehlt.
-const EMOJI_POOL = [
+// Pool aus 30 klar unterscheidbaren Emojis ...
+const EMOJI_TEXTE = [
   "🍕", "🍔", "🍟", "🌭", "🍩", "🍦", "🍪", "🍇", "🍉", "🍓",
   "🥑", "🍍", "🥕", "🌽", "🍄", "🐶", "🐱", "🐵", "🦁", "🐸",
-  "🐷", "🐧", "🦋", "🐢", "🐙", "🦄", "🐔", "⚽", "🏀", "🎾",
-  "🎱", "🎲", "🎮", "🎧", "📷", "🚀", "🚗", "✈️", "⛵", "🌈"
+  "🐷", "🐧", "🦋", "🐢", "🐙", "🦄", "🐔", "⚽", "🏀", "🎾"
 ];
+
+// ... gemischt mit selbst erstellten Freundebildern (freigestellte Fotos, als
+// eigene, kleinere Kopien unter bilder/merks-dir-emojis/ abgelegt statt der
+// Originale aus bilder/, damit die App offline nicht unnoetig viel cachen
+// muss). Jedes Bild wird ueber seinen Dateipfad identifiziert; "label" ist
+// nur die kurze, lesbare Bezeichnung fuer die Auswertungs-Anzeige ("Getippt:
+// Kevin"). Wird spaeter ergaenzt, sobald weitere Bilder dazukommen (Ziel laut
+// Absprache: 12 Freundebilder).
+const EMOJI_BILDER = [
+  { pfad: "bilder/merks-dir-emojis/kevin-rapper.png", label: "Kevin" }
+];
+
+function istBildPfad(wert) {
+  return typeof wert === "string" && wert.startsWith("bilder/");
+}
+
+function labelFuer(wert) {
+  if (!istBildPfad(wert)) return wert;
+  return EMOJI_BILDER.find((b) => b.pfad === wert)?.label ?? wert;
+}
+
+function inhaltHtmlFuer(wert) {
+  if (istBildPfad(wert)) {
+    return `<img class="md-emoji-bild" src="${wert}" alt="${escapeHtml(labelFuer(wert))}" loading="lazy">`;
+  }
+  return `<span class="md-emoji-symbol">${escapeHtml(wert)}</span>`;
+}
+
+const EMOJI_POOL = [...EMOJI_TEXTE, ...EMOJI_BILDER.map((b) => b.pfad)];
 
 const VORLAGE = `
   <div id="md-setup" class="bildschirm-karte" hidden>
@@ -437,11 +464,10 @@ export async function vorZurueck() {
 function zeigeMerken() {
   const liste = $("md-merken-liste");
   liste.innerHTML = "";
-  reihenfolge.forEach((emoji, i) => {
+  reihenfolge.forEach((wert, i) => {
     const eintrag = document.createElement("div");
     eintrag.className = "md-emoji-eintrag";
-    eintrag.innerHTML =
-      `<span class="md-emoji-nr">${i + 1}.</span><span class="md-emoji-symbol">${emoji}</span>`;
+    eintrag.innerHTML = `<span class="md-emoji-nr">${i + 1}.</span>${inhaltHtmlFuer(wert)}`;
     liste.appendChild(eintrag);
   });
 }
@@ -474,13 +500,13 @@ function zeigeRaten() {
   const eigeneEliminiert = ausgeschieden[api.spielerId] != null;
   const gitter = $("md-raten-gitter");
   gitter.innerHTML = "";
-  gitterReihenfolge.forEach((emoji) => {
+  gitterReihenfolge.forEach((wert) => {
     const knopf = document.createElement("button");
     knopf.type = "button";
     knopf.className = "md-emoji-btn";
-    knopf.textContent = emoji;
+    knopf.innerHTML = inhaltHtmlFuer(wert);
     knopf.disabled = eigeneEliminiert || eigeneAntwortGesetzt;
-    knopf.addEventListener("click", () => emojiGetippt(emoji, knopf));
+    knopf.addEventListener("click", () => emojiGetippt(wert, knopf));
     gitter.appendChild(knopf);
   });
   aktualisiereRatenStatus();
@@ -605,7 +631,7 @@ async function pruefeRatenAuswertung(elapsed) {
 
 function zeigeRundenergebnis() {
   const richtigesEmoji = reihenfolge[position - 1];
-  $("md-re-frage").textContent = `Stelle ${position} war: ${richtigesEmoji}`;
+  $("md-re-frage").innerHTML = `Stelle ${position} war: ${inhaltHtmlFuer(richtigesEmoji)}`;
   const antworten = [...antwortenDieserPosition()].sort((a, b) =>
     (a.spielerName || "").localeCompare(b.spielerName || "", "de")
   );
@@ -624,7 +650,7 @@ function zeigeRundenergebnis() {
     li.innerHTML = spielerKarte(
       antwort.spielerName, s?.farbe, s?.icon,
       richtig ? "✓" : "✗",
-      { extra: `Getippt: ${antwort.emoji}`, punkteRechts: s ? (s.punkte ?? 0) : "?" }
+      { extra: `Getippt: ${labelFuer(antwort.emoji)}`, punkteRechts: s ? (s.punkte ?? 0) : "?" }
     );
     liste.appendChild(li);
   });

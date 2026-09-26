@@ -4,7 +4,7 @@
 // Nur dann wirft der Browser den alten Zwischenspeicher weg und alle Spieler
 // bekommen zuverlässig die neue Version. Das ist der einzige Handgriff, den man
 // nach dem Bearbeiten von Dateien nicht vergessen darf.
-const CACHE_NAME = "trollhouse-v207";
+const CACHE_NAME = "trollhouse-v208";
 
 const DATEIEN = [
   "./",
@@ -35,6 +35,7 @@ const DATEIEN = [
   "spiele/finto/spiel.js",
   "spiele/finto/fragen.json",
   "spiele/merks-dir/spiel.js",
+  "bilder/merks-dir-emojis/kevin-rapper.png",
   "spiele/zeitgefuehl/spiel.js",
   "spiele/imposter/spiel.js",
   "spiele/imposter/woerter.json",
